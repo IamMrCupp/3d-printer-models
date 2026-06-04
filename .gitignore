@@ -21,4 +21,7 @@
 build/
 # Release artifacts (rendered into dist/ by tools/build_release.sh)
 dist/
+# Python venv for the mesh validator
+.venv/
+__pycache__/
 

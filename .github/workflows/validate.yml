@@ -10,6 +10,7 @@ on:
       - "**.scad"
       - "**.stl"
       - "tools/**"
+      - "requirements-dev.txt"
       - ".github/workflows/validate.yml"
   workflow_dispatch:
 
@@ -19,10 +20,16 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Install OpenSCAD
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install OpenSCAD + mesh validator
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends openscad xvfb
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
 
       - name: Render + validate models
         run: xvfb-run -a tools/render.sh

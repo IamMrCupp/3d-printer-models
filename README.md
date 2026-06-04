@@ -31,7 +31,13 @@ Models are authored in **OpenSCAD** (`.scad` = source of truth) and rendered to 
 tools/render.sh        # render every model .scad → build/ and validate each mesh
 ```
 
-`tools/validate_stl.py` checks a mesh is watertight / 2-manifold with a sane bounding box (zero dependencies). On every PR, the [`validate`](.github/workflows/validate.yml) workflow renders all models and runs the same check — a parameter edit that breaks geometry fails the build.
+`tools/validate_stl.py` checks a mesh is watertight / 2-manifold with a sane bounding box. It uses [trimesh](https://trimesh.org) when available (authoritative) and falls back to a zero-dependency stdlib check otherwise, so it runs even without a venv:
+
+```sh
+python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
+```
+
+On every PR, the [`validate`](.github/workflows/validate.yml) workflow renders all models and runs the trimesh check — a parameter edit that breaks geometry fails the build.
 
 ### Releases
 

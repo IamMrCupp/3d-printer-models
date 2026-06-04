@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Validate a binary STL mesh: watertight / 2-manifold + sane bounding box.
 
-Zero dependencies (stdlib only) so it runs anywhere without a pip install.
-Used by CI (.github/workflows/validate.yml) and handy locally:
-
     python3 tools/validate_stl.py path/to/model.stl
 
+Uses **trimesh** when available (authoritative — `is_watertight` /
+`is_winding_consistent`), and falls back to a zero-dependency stdlib edge check
+so the script still runs locally without a venv. CI installs trimesh
+(requirements-dev.txt) so the strong check gates merges.
+
 A mesh passes when:
-  * every undirected edge is shared by exactly two triangles (closed, 2-manifold)
+  * it is watertight (closed) and consistently wound — i.e. 2-manifold
   * the bounding box is non-degenerate (positive extent on all three axes)
 
 Exit code 0 on pass, 1 on failure (with diagnostics on stderr).
@@ -47,7 +49,35 @@ def _key(p, ndigits=4):
 
 
 def validate(path: str) -> list[str]:
-    """Return a list of problems; empty list means the mesh is valid."""
+    """Return a list of problems; empty list means the mesh is valid.
+
+    Prefers trimesh (authoritative); falls back to the stdlib edge check.
+    """
+    try:
+        import trimesh
+    except ImportError:
+        return _validate_stdlib(path)
+
+    mesh = trimesh.load(path, force="mesh")
+    problems = []
+    if mesh.is_empty or len(mesh.faces) == 0:
+        return ["mesh is empty (0 triangles)"]
+    if not mesh.is_watertight:
+        problems.append("not watertight (open edges) — mesh is not closed")
+    if not mesh.is_winding_consistent:
+        problems.append("inconsistent winding — non-manifold / flipped faces")
+    dims = tuple(mesh.extents)
+    if min(dims) <= 0:
+        problems.append(f"degenerate bounding box: {tuple(round(d, 3) for d in dims)}")
+    validate.last_summary = (
+        f"{len(mesh.faces)} triangles, "
+        f"bbox {tuple(round(float(d), 2) for d in dims)} mm [trimesh]"
+    )
+    return problems
+
+
+def _validate_stdlib(path: str) -> list[str]:
+    """Zero-dependency fallback: edge-manifold + bbox check from raw triangles."""
     tris = load_binary_stl(path)
     problems = []
 
@@ -77,7 +107,7 @@ def validate(path: str) -> list[str]:
 
     validate.last_summary = (
         f"{len(tris)} triangles, "
-        f"bbox {tuple(round(d, 2) for d in dims)} mm"
+        f"bbox {tuple(round(d, 2) for d in dims)} mm [stdlib]"
     )
     return problems
 
