@@ -16,3 +16,7 @@
 *.swo
 *~
 # claude-project-kit — managed block END
+
+# Rendered build artifacts (STLs are rendered into build/ by tools/render.sh)
+build/
+

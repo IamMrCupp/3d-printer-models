@@ -23,6 +23,16 @@ One directory per model. Each model directory aims to carry the full recommended
 
 Models are exported as STL in millimeters, oriented for printing where practical. Slice with your slicer of choice. Dimensions and orientation are noted per model.
 
+## Development
+
+Models are authored in **OpenSCAD** (`.scad` = source of truth) and rendered to STL; previews are rendered in **Blender**.
+
+```sh
+tools/render.sh        # render every model .scad → build/ and validate each mesh
+```
+
+`tools/validate_stl.py` checks a mesh is watertight / 2-manifold with a sane bounding box (zero dependencies). On every PR, the [`validate`](.github/workflows/validate.yml) workflow renders all models and runs the same check — a parameter edit that breaks geometry fails the build.
+
 ## License
 
 This repository is licensed under [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/) — see [`LICENSE`](LICENSE).
