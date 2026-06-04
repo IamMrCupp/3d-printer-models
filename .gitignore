@@ -19,4 +19,6 @@
 
 # Rendered build artifacts (STLs are rendered into build/ by tools/render.sh)
 build/
+# Release artifacts (rendered into dist/ by tools/build_release.sh)
+dist/
 

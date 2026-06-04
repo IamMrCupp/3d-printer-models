@@ -33,6 +33,17 @@ tools/render.sh        # render every model .scad → build/ and validate each m
 
 `tools/validate_stl.py` checks a mesh is watertight / 2-manifold with a sane bounding box (zero dependencies). On every PR, the [`validate`](.github/workflows/validate.yml) workflow renders all models and runs the same check — a parameter edit that breaks geometry fails the build.
 
+### Releases
+
+Models are released **independently**. Push a tag shaped `<model-slug>/vX.Y.Z` and the [`release`](.github/workflows/release.yml) workflow renders that model's STL(s) + a Blender preview and publishes a GitHub Release with them attached:
+
+```sh
+git tag sticker-holder-inserts/v1.0.0
+git push origin sticker-holder-inserts/v1.0.0
+```
+
+Build the same artifacts locally with `tools/build_release.sh <model-slug>` (writes to `dist/`).
+
 ## License
 
 This repository is licensed under [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/) — see [`LICENSE`](LICENSE).

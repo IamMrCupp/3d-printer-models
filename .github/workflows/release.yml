@@ -1,0 +1,45 @@
+name: release
+
+# Per-model releases. Push a tag shaped `<model-slug>/vX.Y.Z`
+# (e.g. `sticker-holder-inserts/v1.0.0`) to render that model's STL(s) and a
+# Blender preview, then publish a GitHub Release with the artifacts attached.
+
+on:
+  push:
+    tags:
+      - "*/v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse tag
+        id: tag
+        run: |
+          ref="${GITHUB_REF_NAME}"
+          echo "slug=${ref%/v*}"      >> "$GITHUB_OUTPUT"
+          echo "version=v${ref##*/v}" >> "$GITHUB_OUTPUT"
+
+      - name: Install OpenSCAD + Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends openscad blender xvfb
+
+      - name: Build release artifacts
+        run: xvfb-run -a tools/build_release.sh "${{ steps.tag.outputs.slug }}" dist
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "${{ steps.tag.outputs.slug }} ${{ steps.tag.outputs.version }}" \
+            --notes "Automated release of **${{ steps.tag.outputs.slug }}** ${{ steps.tag.outputs.version }}.
+
+          Rendered from OpenSCAD source; preview rendered with Blender. Licensed CC BY-NC 4.0." \
+            dist/*
