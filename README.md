@@ -1,27 +1,24 @@
 # 3d-printer-models
 
-A collection of 3D-printable models — both the finished meshes and, going forward, the source that generates them. Some designs may also be published to sharing sites (Printables, Thingiverse, etc.).
+A collection of 3D-printable models authored as **OpenSCAD source**. STLs are rendered from source and published as [release](https://github.com/IamMrCupp/3d-printer-models/releases) artifacts, not committed. Some designs may also be published to sharing sites (Printables, Thingiverse, etc.).
 
 ## Models
 
 | Model | What it is | Footprint |
 |---|---|---|
-| [`sticker-holder-inserts/`](sticker-holder-inserts/) | Drawer/box organizer inserts for sorting sheet stickers by size. Two grid layouts share one outer shell. | 183 × 180 × 30 mm |
+| [`sticker-holder-inserts/`](sticker-holder-inserts/) | Organizer trays with a grid of square pockets for square stickers (2″ and 3″ variants). | 183 × 180 × 30 mm |
 
 ## Repo layout
 
-One directory per model. Each model directory aims to carry the full recommended set:
+One directory per model. Each model directory carries:
 
-- **`*.stl`** — the printable mesh(es)
-- **source / CAD file** — the editable design it was exported from
-- **print settings** — recommended slicer settings (material, layer height, infill, supports)
-- **per-model notes / license** — anything specific to that model
+- **source `.scad`** — the editable, parametric design (source of truth)
+- **`README.md`** — variants, dimensions, recommended print settings
+- STLs are **not** committed — grab them from the model's GitHub Release (rendered + validated by CI)
 
-> Existing models predate this convention and may not yet have every item — they'll be backfilled as they're revisited.
+## Downloading prints
 
-## Printing
-
-Models are exported as STL in millimeters, oriented for printing where practical. Slice with your slicer of choice. Dimensions and orientation are noted per model.
+Each model is released independently. Printable STLs + a preview image are attached to the model's GitHub Release (tag `<model-slug>/vX.Y.Z`) — see [Releases](https://github.com/IamMrCupp/3d-printer-models/releases).
 
 ## Development
 
