@@ -1,33 +1,38 @@
 # Sticker-holder inserts
 
-Rectangular tray inserts with a centered grid of circular pockets that hold rolls/discs of stickers. Two layouts share one outer shell — pick the one that matches your sticker size and how many you want to sort.
+Rectangular tray inserts with a centered grid of square pockets that hold square stickers. Two layouts share one outer shell — pick the one that matches your sticker size.
 
-| File | Grid | Pockets | Pocket ⌀ |
-|---|---|---|---|
-| [`insert_2x2_stickers_3x3.stl`](insert_2x2_stickers_3x3.stl) | 3 × 3 | 9 | 16.5 mm |
-| [`insert_3x3_stickers_2x2.stl`](insert_3x3_stickers_2x2.stl) | 2 × 2 | 4 | 16.5 mm |
+| Model | Sticker | Grid | Pockets | Pocket (inner) |
+|---|---|---|---|---|
+| `insert_2x2_stickers_3x3` | 2″ (50.8 mm) | 3 × 3 | 9 | 51.3 mm sq, 3 mm rounded corners |
+| `insert_3x3_stickers_2x2` | 3″ (76.2 mm) | 2 × 2 | 4 | 76.7 mm sq, 3 mm rounded corners |
 
 - **Outer footprint:** 183 × 180 mm
 - **Height:** 30 mm (floor 2.9 mm, pocket depth ≈ 27 mm)
+- **Pocket fit:** sticker size + 0.5 mm clearance so squares drop in cleanly
+
+## Downloading
+
+Printable STLs (plus a preview image) are attached to each **[GitHub Release](https://github.com/IamMrCupp/3d-printer-models/releases)** — look for a tag like `sticker-holder-inserts/vX.Y.Z`. The repo itself holds the OpenSCAD source; STLs are rendered from it, not committed.
 
 ## Source
 
-The models are generated from OpenSCAD — `*.scad` is the source of truth, the `.stl` is a build artifact:
+The models are generated from OpenSCAD — `*.scad` is the source of truth:
 
 ```sh
 openscad -o insert_2x2_stickers_3x3.stl --export-format binstl insert_2x2_stickers_3x3.scad
 openscad -o insert_3x3_stickers_2x2.stl --export-format binstl insert_3x3_stickers_2x2.scad
 ```
 
-[`sticker_insert.scad`](sticker_insert.scad) is a shared, parametric module — change `cols`, `rows`, `spacing_x/y`, or `POCKET_DIA` to make new layouts.
+[`sticker_insert.scad`](sticker_insert.scad) is a shared, parametric module — change `cols`, `rows`, `spacing_x/y`, or `sticker` (nominal square size) to make new layouts. Pocket = `sticker + POCKET_CLEARANCE`, with `POCKET_CORNER_R` rounded corners.
 
-> **Note:** these are a *reconstruction*. The original CAD source wasn't preserved, so the parameters were recovered by measuring the original meshes. The geometry matches the originals; the models are now authored Z-up (correct print orientation — the originals were modeled with height on the Y axis).
+> **Note:** reconstructed from the original meshes (original CAD wasn't preserved). The grid spacing matches the originals; pockets are square (the early meshes had circular holes) and the models are authored Z-up.
 
 ## Recommended print settings
 
 | Setting | Value |
 |---|---|
-| Orientation | As modeled — flat on the bed, pockets up. No supports needed. |
+| Orientation | Flat on the bed, pockets up. No supports needed. |
 | Material | PLA or PETG |
 | Layer height | 0.2 mm |
 | Walls / perimeters | 3 |
@@ -35,4 +40,4 @@ openscad -o insert_3x3_stickers_2x2.stl --export-format binstl insert_3x3_sticke
 | Infill | 15 % |
 | Supports | None |
 
-Footprint is 183 × 180 mm — check it fits your bed (it does not fit a 180 × 180 bed without rotation; a 220 × 220 bed is comfortable).
+Footprint is 183 × 180 mm — fits a 220 × 220 bed comfortably; will not fit 180 × 180 without rotation.

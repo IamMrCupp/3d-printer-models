@@ -25,3 +25,5 @@ dist/
 .venv/
 __pycache__/
 
+# STLs are release artifacts, not committed (render from source)
+*.stl
