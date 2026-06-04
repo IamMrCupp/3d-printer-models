@@ -82,6 +82,9 @@ scene = bpy.context.scene
 scene.render.engine = "CYCLES"
 scene.cycles.samples = 32
 scene.cycles.device = "CPU"
+# Distro/CI Blender builds often ship without OpenImageDenoise; CYCLES defaults
+# to denoising on and errors with "no device available to denoise on". Off.
+scene.cycles.use_denoising = False
 scene.render.resolution_x = 1200
 scene.render.resolution_y = 900
 scene.render.image_settings.file_format = "PNG"
