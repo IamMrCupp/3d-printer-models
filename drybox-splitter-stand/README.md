@@ -1,38 +1,44 @@
 # Drybox splitter stand
 
-A stand that raises a [PolyDryer Splitter Mod](https://www.thingiverse.com/thing:7028485) assembly — two PolyDryer boxes on the splitter/dryer base — **~4.5″ off the desk**, with an open-front **storage cubby** underneath whose floor is an **integrated 6×6 Gridfinity baseplate**.
+A two-part stand that raises a [PolyDryer Splitter Mod](https://www.thingiverse.com/thing:7028485) assembly — the dryer + splitter mod with two PolyDryer boxes on top — **~4.5″ off the desk**, with an open-front **Gridfinity storage cubby** underneath.
 
-| | |
-|---|---|
-| **Overall size** | 260 × 260 × 126 mm (fits the Snapmaker U1 270³ bed in one piece) |
-| **Lift** | 114 mm (4.5″) — set `raise` to 101.6 for 4″ or 127 for 5″ |
-| **Storage** | 6×6 Gridfinity grid (36 cells), open front, side/back windows |
-| **Cradle** | Top platform holds the two-box footprint; front lip notched 110 mm for the dryer display; back lip notched for the power lead |
+It's two parts because the **dryer sits in the middle** of the assembly, so the top has to be a solid platform — which can't share a single bottom-up print with a hollow storage cubby (the top would be one big unsupported bridge). Splitting it makes both parts print support-free.
+
+| Part | File | Size | Prints |
+|---|---|---|---|
+| **Base** | `drybox_splitter_stand_base.scad` | 260 × 260 × 104 mm | as-is — Gridfinity floor on the bed, walls up, open top |
+| **Top** | `drybox_splitter_stand_top.scad` | 260 × 260 × 22 mm | flat — solid face on the bed, lip up |
+
+- Common geometry/parameters live in `drybox_splitter_stand_common.scad` (shared library).
+- **Lift:** 114 mm (4.5″) — change `base_wall_h` to retarget.
+- **Storage:** integrated 6×6 Gridfinity baseplate (36 cells), open front for bin access.
+- **Top:** solid platform with a retaining lip (display notch front, cable notch back) the assembly nests into.
+
+## Assembly
+
+Drop the top plate onto the base and drive **4 self-tapping M3 screws** through the countersunk corner holes into the post pilots. (The flat plate-on-posts contact also bonds well with plastic/filament glue if you'd rather make it permanent for the heavy load.)
 
 ## Gridfinity
 
-The cubby floor is a spec-correct Gridfinity baseplate (42 mm pitch, 41.5 mm bins, 0.7/1.8/2.15 = 4.65 mm socket profile, 4 mm corner fillet). Standard Gridfinity bins from any generator drop straight in.
+The cubby floor is a spec-correct Gridfinity baseplate (42 mm pitch, 41.5 mm bins, 0.7/1.8/2.15 = 4.65 mm socket, 4 mm fillet). Standard bins from any generator drop straight in.
 
 ## Source
 
-Generated from OpenSCAD — `drybox_splitter_stand.scad` is the source of truth:
-
 ```sh
-openscad -o drybox_splitter_stand.stl --export-format binstl drybox_splitter_stand.scad
+openscad -o drybox_splitter_stand_base.stl --export-format binstl drybox_splitter_stand_base.scad
+openscad -o drybox_splitter_stand_top.stl  --export-format binstl drybox_splitter_stand_top.scad
 ```
-
-Key parameters (top of the file): `gx`/`gy` (grid), `raise` (lift height), `disp_w` (display notch), `cable_w` (back notch). The Gridfinity baseplate is a self-contained module in the same file.
 
 ## Recommended print settings
 
 | Setting | Value |
 |---|---|
-| Orientation | As modeled — baseplate down, open front facing you. No supports needed (windows/notches bridge fine). |
+| Orientation | Base: as modeled. Top: flat, lip up. No supports either part. |
 | Material | PETG or PLA (PETG if it sits near a warm dryer) |
 | Layer height | 0.2 mm |
-| Walls / perimeters | 4 (it carries a heavy, top-heavy load) |
+| Walls / perimeters | 4 (carries a heavy, top-heavy load) |
 | Top / bottom layers | 5 |
 | Infill | 15–20 % |
 | Supports | None |
 
-Big single-piece print — budget several hours of filament. You'll typically want **two** (one per spool-pair on a 4-feeder U1).
+You'll typically print **two** sets (one per spool-pair on a 4-feeder U1).
