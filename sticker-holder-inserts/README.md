@@ -1,5 +1,7 @@
 # Sticker-holder inserts
 
+![Sticker-holder inserts](preview.png)
+
 Rectangular tray inserts with a centered grid of square pockets that hold square stickers. Two layouts share one outer shell — pick the one that matches your sticker size.
 
 | Model | Sticker | Grid | Pockets | Pocket (inner) |
