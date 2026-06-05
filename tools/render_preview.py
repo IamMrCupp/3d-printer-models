@@ -58,11 +58,11 @@ obj.data.materials.append(mat)
 # --- camera: orthographic isometric --------------------------------------
 cam_data = bpy.data.cameras.new("cam")
 cam_data.type = "ORTHO"
-cam_data.ortho_scale = size * 1.9
+cam_data.ortho_scale = size * 1.15   # tighter framing so detail reads
 cam = bpy.data.objects.new("cam", cam_data)
 bpy.context.scene.collection.objects.link(cam)
 bpy.context.scene.camera = cam
-cam.location = Vector((size, -size, size * 0.6))
+cam.location = Vector((size, -size, size * 0.7))
 cam.rotation_euler = (Vector((0, 0, 0)) - cam.location).to_track_quat("-Z", "Y").to_euler()
 
 # --- lighting + world ----------------------------------------------------
@@ -85,8 +85,8 @@ scene.cycles.device = "CPU"
 # Distro/CI Blender builds often ship without OpenImageDenoise; CYCLES defaults
 # to denoising on and errors with "no device available to denoise on". Off.
 scene.cycles.use_denoising = False
-scene.render.resolution_x = 1200
-scene.render.resolution_y = 900
+scene.render.resolution_x = 1500
+scene.render.resolution_y = 1125
 scene.render.image_settings.file_format = "PNG"
 scene.render.filepath = out_png
 bpy.ops.render.render(write_still=True)
