@@ -9,6 +9,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="sticker-holder-inserts/preview.png" width="150"> | [**Sticker-holder inserts**](sticker-holder-inserts/) | Organizer trays with a grid of square pockets for 2″ / 3″ square stickers. |
 | <img src="drybox-splitter-stand/preview.png" width="150"> | [**Drybox splitter stand**](drybox-splitter-stand/) | Two-part stand that raises a PolyDryer splitter assembly 4.5″ with a Gridfinity storage cubby underneath. |
 | <img src="vj-rig-stand/preview.png" width="150"> | [**VJ rig stand**](vj-rig-stand/) | iPad (TouchOSC) cradle + Magic Trackpad tray + cable holder for a VJ keyboard rig. |
+| <img src="apache-5800-cord-organizer/preview.png" width="150"> | [**Apache 5800 cord organizer**](apache-5800-cord-organizer/) | Modular Gridfinity baseplate tiles + cord bins for an Apache 5800 case interior. |
 
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
