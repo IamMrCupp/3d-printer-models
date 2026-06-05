@@ -1,5 +1,7 @@
 # Drybox splitter stand
 
+![Drybox splitter stand](preview.png)
+
 A two-part stand that raises a [PolyDryer Splitter Mod](https://www.thingiverse.com/thing:7028485) assembly — the dryer + splitter mod with two PolyDryer boxes on top — **~4.5″ off the desk**, with an open-front **Gridfinity storage cubby** underneath.
 
 It's two parts because the **dryer sits in the middle** of the assembly, so the top has to be a solid platform — which can't share a single bottom-up print with a hollow storage cubby (the top would be one big unsupported bridge). Splitting it makes both parts print support-free.
