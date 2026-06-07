@@ -11,8 +11,9 @@
 # Env: OPENSCAD, BLENDER override the binaries.
 set -euo pipefail
 
-in="${1:?usage: preview.sh <input.scad> <output.png>}"
-out="${2:?usage: preview.sh <input.scad> <output.png>}"
+in="${1:?usage: preview.sh <input.scad> <output.png> [#hexcolor]}"
+out="${2:?usage: preview.sh <input.scad> <output.png> [#hexcolor]}"
+color="${3:-}"
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 OPENSCAD="${OPENSCAD:-openscad}"
@@ -22,5 +23,5 @@ command -v "$BLENDER" >/dev/null 2>&1 || BLENDER="/Applications/Blender.app/Cont
 
 tmp="$(mktemp -d)/model.stl"
 "$OPENSCAD" -o "$tmp" --export-format binstl "$in"
-"$BLENDER" -b -P "$root/tools/render_preview.py" -- "$tmp" "$out"
+"$BLENDER" -b -P "$root/tools/render_preview.py" -- "$tmp" "$out" $color
 echo "preview → $out"
