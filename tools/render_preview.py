@@ -8,10 +8,18 @@ bounds, and AgX tone-mapping. Scale-robust (sun lights) so it works for a 40 mm
 bin or a 500 mm case. CYCLES on CPU; denoises when the build supports it.
 """
 import math
+import os
 import sys
 
 import bpy
 from mathutils import Vector
+
+# Quality knobs — high by default (committed README previews, rendered locally);
+# CI/release sets them low via env (tools/build_release.sh) so the per-part
+# render stays fast on a denoiser-less CPU runner.
+SAMPLES = int(os.environ.get("PREVIEW_SAMPLES", "160"))
+RES_X = int(os.environ.get("PREVIEW_RES_X", "1600"))
+RES_Y = int(os.environ.get("PREVIEW_RES_Y", "1200"))
 
 argv = sys.argv[sys.argv.index("--") + 1:]
 if len(argv) < 2:
@@ -117,7 +125,7 @@ cam.rotation_euler = (center - cam.location).to_track_quat("-Z", "Y").to_euler()
 
 # --- render --------------------------------------------------------------
 scene.render.engine = "CYCLES"
-scene.cycles.samples = 160
+scene.cycles.samples = SAMPLES
 scene.cycles.device = "CPU"
 scene.cycles.use_denoising = True               # clean locally; fallback below for denoiser-less builds
 try:
@@ -125,8 +133,8 @@ try:
 except Exception:
     pass
 scene.render.film_transparent = False
-scene.render.resolution_x = 1600
-scene.render.resolution_y = 1200
+scene.render.resolution_x = RES_X
+scene.render.resolution_y = RES_Y
 scene.render.image_settings.file_format = "PNG"
 scene.render.filepath = out_png
 
