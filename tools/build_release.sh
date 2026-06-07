@@ -29,6 +29,10 @@ command -v "$BLENDER" >/dev/null 2>&1 || BLENDER="/Applications/Blender.app/Cont
 mkdir -p "$out_dir"
 count=0
 
+# optional per-model render color (hex), e.g. "#d2741f"
+color=""
+[ -f "$model_dir/preview-color.txt" ] && color="$(tr -d '[:space:]' < "$model_dir/preview-color.txt")"
+
 while IFS= read -r -d '' scad; do
   base="$(basename "${scad%.scad}")"
   stl="$out_dir/$base.stl"
@@ -41,7 +45,7 @@ while IFS= read -r -d '' scad; do
 
   png="$out_dir/$base.png"
   echo "  preview → $png"
-  "$BLENDER" -b -P tools/render_preview.py -- "$stl" "$png" >/dev/null
+  "$BLENDER" -b -P tools/render_preview.py -- "$stl" "$png" $color >/dev/null
   count=$((count + 1))
 done < <(find "$model_dir" -name '*.scad' -print0)
 
