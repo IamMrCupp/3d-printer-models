@@ -119,10 +119,7 @@ cam.rotation_euler = (center - cam.location).to_track_quat("-Z", "Y").to_euler()
 scene.render.engine = "CYCLES"
 scene.cycles.samples = 160
 scene.cycles.device = "CPU"
-try:
-    scene.cycles.use_denoising = True          # clean when the build has a denoiser
-except Exception:
-    pass
+scene.cycles.use_denoising = True               # clean locally; fallback below for denoiser-less builds
 try:
     scene.view_settings.view_transform = "AgX"  # filmic tone-mapping (Blender 4.0+)
 except Exception:
@@ -132,5 +129,12 @@ scene.render.resolution_x = 1600
 scene.render.resolution_y = 1200
 scene.render.image_settings.file_format = "PNG"
 scene.render.filepath = out_png
-bpy.ops.render.render(write_still=True)
+
+# Denoising errors AT RENDER on builds without OpenImageDenoise (e.g. CI's
+# apt Blender). Try denoised; on failure, turn it off and re-render.
+try:
+    bpy.ops.render.render(write_still=True)
+except RuntimeError:
+    scene.cycles.use_denoising = False
+    bpy.ops.render.render(write_still=True)
 print(f"wrote {out_png}")
