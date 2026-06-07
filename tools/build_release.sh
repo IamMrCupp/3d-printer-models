@@ -33,6 +33,12 @@ count=0
 color=""
 [ -f "$model_dir/preview-color.txt" ] && color="$(tr -d '[:space:]' < "$model_dir/preview-color.txt")"
 
+# Release renders run on a denoiser-less CPU runner, once per part — keep them
+# fast/light. (Committed README previews are rendered locally at full quality.)
+export PREVIEW_SAMPLES="${PREVIEW_SAMPLES:-48}"
+export PREVIEW_RES_X="${PREVIEW_RES_X:-1100}"
+export PREVIEW_RES_Y="${PREVIEW_RES_Y:-825}"
+
 while IFS= read -r -d '' scad; do
   base="$(basename "${scad%.scad}")"
   stl="$out_dir/$base.stl"
