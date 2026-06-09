@@ -11,8 +11,9 @@
 //   head_comb()     — multi-cable comb
 //   head_velcro()   — velcro-strap slot
 //
-// On-Stage SS8800B+ upper shaft = 34.9 mm (1⅜") or 38.1 mm (1½" w/ sleeve).
-// Measure the crank-up column for a wider variant.
+// On-Stage SS8800B+ measured diameters: upper shaft ≈ 34.9 mm (1⅜") / 38.1 mm
+// (1½" w/ sleeve), tripod legs 35.38 mm, crank-up column 41.41 mm. Variant files
+// clamp_leg.scad (35.38) and clamp_column.scad (41.41) cover the latter two.
 
 TUBE_D = 35;        // pole outer diameter (set per stand)
 CLEAR  = 0.6;       // clamp bore clearance

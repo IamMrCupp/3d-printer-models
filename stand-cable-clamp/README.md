@@ -10,7 +10,9 @@ Sized for the **On-Stage SS8800B+** upper shaft (**34.9 mm** / 38.1 mm with slee
 
 | File | What |
 |---|---|
-| `clamp.scad` | Split C-clamp (set `tube_d`). Pops over the pole; M5 bolt + **wingnut** cinches it (bolt head captured in a hex pocket — only the wingnut turns). Dovetail mount on the face. |
+| `clamp.scad` | Split C-clamp, generic (set `tube_d`; default 35 mm ≈ universal speaker pole / SS8800B+ shaft). Pops over the pole; M5 bolt + **wingnut** cinches it (bolt head captured in a hex pocket — only the wingnut turns). Dovetail mount on the face. |
+| `clamp_leg.scad` | Clamp sized for the On-Stage SS8800B+ **tripod legs** (35.38 mm). |
+| `clamp_column.scad` | Clamp sized for the On-Stage SS8800B+ **crank-up column** (41.41 mm). |
 | `head_hook.scad` | Open J-hook — drape/loop cables |
 | `head_clip.scad` | Snap C-clip — grips a single cable (`CABLE_D`) |
 | `head_comb.scad` | Multi-cable comb — a row of cable slots |
