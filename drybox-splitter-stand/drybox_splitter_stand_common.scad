@@ -10,6 +10,8 @@
 //
 // Variants `drybox_splitter_stand_base.scad` / `_top.scad` `include` this file.
 
+include <../lib/gridfinity.scad>   // baseplate(nx, ny) + Gridfinity constants
+
 /* [Grid] */
 gx = 6; gy = 6;
 
@@ -29,33 +31,7 @@ screw_head  = 7;     // countersink diameter
 
 $fn = 48;
 
-// ---- Gridfinity baseplate (per spec; prints sockets-up on the bed) ----
-GF = 42; GF_FILLET = 4; GF_C_TOP = 2.15; GF_C_MID = 1.8; GF_C_BOT = 0.7;
-GF_LIP = GF_C_TOP + GF_C_MID + GF_C_BOT; GF_FLOOR = 1.2; GF_H = GF_LIP + GF_FLOOR;
-module gf_cell_2d(inset = 0) {
-    offset(r = -inset) offset(r = GF_FILLET) offset(r = -GF_FILLET) square(GF, center = true);
-}
-module gf_socket() {
-    eps = 0.01;
-    hull() {
-        translate([0, 0, GF_H - eps]) linear_extrude(eps) gf_cell_2d(0);
-        translate([0, 0, GF_H - GF_C_TOP]) linear_extrude(eps) gf_cell_2d(GF_C_TOP);
-    }
-    translate([0, 0, GF_H - GF_C_TOP - GF_C_MID]) linear_extrude(GF_C_MID) gf_cell_2d(GF_C_TOP);
-    hull() {
-        translate([0, 0, GF_H - GF_C_TOP - GF_C_MID - eps]) linear_extrude(eps) gf_cell_2d(GF_C_TOP);
-        translate([0, 0, GF_H - GF_LIP]) linear_extrude(eps) gf_cell_2d(GF_C_TOP + GF_C_BOT);
-    }
-}
-module gridfinity_baseplate(nx, ny) {
-    w = nx * GF; d = ny * GF;
-    difference() {
-        translate([0, 0, GF_H / 2]) linear_extrude(GF_H, center = true)
-            offset(r = GF_FILLET) offset(r = -GF_FILLET) square([w, d], center = true);
-        for (ix = [0 : nx - 1], iy = [0 : ny - 1])
-            translate([(ix - (nx - 1) / 2) * GF, (iy - (ny - 1) / 2) * GF, 0]) gf_socket();
-    }
-}
+// Gridfinity baseplate comes from lib/gridfinity.scad (baseplate, GF, GF_FILLET).
 
 // ---- Shared geometry ----
 bp_w = gx * GF; bp_d = gy * GF;
@@ -67,7 +43,7 @@ posts = [[post/2, post/2], [outer_w - post/2, post/2],
 module stand_base() {
     difference() {
         union() {
-            translate([outer_w/2, outer_d/2, 0]) gridfinity_baseplate(gx, gy);    // floor
+            translate([outer_w/2, outer_d/2, 0]) baseplate(gx, gy);               // floor (lib/gridfinity)
             cube([wall_t, outer_d, base_wall_h]);                                 // left wall
             translate([outer_w - wall_t, 0, 0]) cube([wall_t, outer_d, base_wall_h]); // right wall
             translate([0, outer_d - wall_t, 0]) cube([outer_w, wall_t, base_wall_h]); // back wall
