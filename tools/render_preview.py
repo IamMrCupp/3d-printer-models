@@ -23,58 +23,85 @@ RES_Y = int(os.environ.get("PREVIEW_RES_Y", "1200"))
 
 argv = sys.argv[sys.argv.index("--") + 1:]
 if len(argv) < 2:
-    raise SystemExit("usage: blender -b -P render_preview.py -- <in.stl> <out.png> [#hexcolor]")
-stl_path, out_png = argv[0], argv[1]
+    raise SystemExit(
+        "usage: blender -b -P render_preview.py -- <in.stl> <out.png> [#hexcolor]\n"
+        "   or: blender -b -P render_preview.py -- <out.png> <in.stl[,#hex]> ...")
 
 def _srgb_to_linear(c):
     return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
 
 def _hex_color(s, fallback=(0.82, 0.42, 0.14)):
-    s = s.lstrip("#")
+    s = (s or "").lstrip("#")
     if len(s) != 6:
         return (*fallback, 1.0)
     rgb = tuple(int(s[i:i+2], 16) / 255.0 for i in (0, 2, 4))
     return (*tuple(_srgb_to_linear(c) for c in rgb), 1.0)
 
-# optional 3rd arg: hex color (e.g. #d2741f). Default warm orange.
-OBJECT_COLOR = _hex_color(argv[2]) if len(argv) >= 3 else _hex_color("d26b1f")
+# Two calling conventions (backward compatible):
+#   legacy single: <in.stl> <out.png> [#hex]
+#   multi-part:    <out.png> <in.stl[,#hex]> <in.stl[,#hex]> ...  (parts share an
+#                  origin and keep their relative positions — for assembled or
+#                  two-colour models)
+DEFAULT_COLOR = "d26b1f"   # warm orange (legacy default)
+if argv[0].lower().endswith(".stl"):
+    out_png = argv[1]
+    parts = [(argv[0], argv[2] if len(argv) >= 3 else None)]
+else:
+    out_png = argv[0]
+    parts = [(tok.partition(",")[0], tok.partition(",")[2] or None) for tok in argv[1:]]
 
 # --- clean scene ---------------------------------------------------------
 bpy.ops.wm.read_factory_settings(use_empty=True)
 scene = bpy.context.scene
 
-# --- import STL (operator name varies by Blender version) ----------------
-imported = False
-for op in (lambda: bpy.ops.wm.stl_import(filepath=stl_path),
-           lambda: bpy.ops.import_mesh.stl(filepath=stl_path)):
-    try:
-        op(); imported = True; break
-    except (AttributeError, RuntimeError):
-        continue
-if not imported:
-    raise SystemExit("no working STL importer in this Blender build")
+def _import_stl(path):
+    """Import one STL (operator name varies by Blender version); return its mesh."""
+    for op in (lambda: bpy.ops.wm.stl_import(filepath=path),
+               lambda: bpy.ops.import_mesh.stl(filepath=path)):
+        before = set(scene.objects)
+        try:
+            op()
+        except (AttributeError, RuntimeError):
+            continue
+        new = [o for o in scene.objects if o not in before and o.type == "MESH"]
+        if new:
+            return new[0]
+    raise SystemExit(f"no working STL importer / import failed: {path}")
 
-obj = next(o for o in scene.objects if o.type == "MESH")
-bpy.context.view_layer.objects.active = obj
-obj.select_set(True)
-bpy.ops.object.origin_set(type="ORIGIN_GEOMETRY", center="BOUNDS")
-obj.location = (0.0, 0.0, obj.dimensions.z / 2.0)   # sit on the floor (z=0)
-size = max(obj.dimensions) or 1.0
+def _world_bounds(objects):
+    corners = [ob.matrix_world @ Vector(c) for ob in objects for c in ob.bound_box]
+    bb_min = Vector(min(c[i] for c in corners) for i in range(3))
+    bb_max = Vector(max(c[i] for c in corners) for i in range(3))
+    return bb_min, bb_max
+
+# --- import every part, assign its colour --------------------------------
+objs = []
+for path, hexc in parts:
+    o = _import_stl(path)
+    mat = bpy.data.materials.new("plastic")
+    mat.use_nodes = True
+    bsdf = mat.node_tree.nodes.get("Principled BSDF")
+    if bsdf:
+        bsdf.inputs["Base Color"].default_value = _hex_color(hexc or DEFAULT_COLOR)
+        if "Roughness" in bsdf.inputs:
+            bsdf.inputs["Roughness"].default_value = 0.45
+    o.data.materials.clear(); o.data.materials.append(mat)
+    objs.append(o)
+bpy.context.view_layer.update()
+
+# centre the group in XY and sit it on the floor (z=0), keeping relative poses
+bb_min, bb_max = _world_bounds(objs)
+delta = Vector((-(bb_min.x + bb_max.x) / 2, -(bb_min.y + bb_max.y) / 2, -bb_min.z))
+for o in objs:
+    o.location = o.location + delta
+bpy.context.view_layer.update()
+size = max(bb_max - bb_min) or 1.0
 
 # rounded edges so they catch light like a printed part
-bev = obj.modifiers.new("bevel", "BEVEL")
-bev.width = max(size * 0.0015, 0.3); bev.segments = 2
-bev.limit_method = "ANGLE"; bev.angle_limit = math.radians(35)
-
-# --- material ------------------------------------------------------------
-mat = bpy.data.materials.new("plastic")
-mat.use_nodes = True
-bsdf = mat.node_tree.nodes.get("Principled BSDF")
-if bsdf:
-    bsdf.inputs["Base Color"].default_value = OBJECT_COLOR
-    if "Roughness" in bsdf.inputs:
-        bsdf.inputs["Roughness"].default_value = 0.45
-obj.data.materials.clear(); obj.data.materials.append(mat)
+for o in objs:
+    bev = o.modifiers.new("bevel", "BEVEL")
+    bev.width = max(size * 0.0015, 0.3); bev.segments = 2
+    bev.limit_method = "ANGLE"; bev.angle_limit = math.radians(35)
 
 # --- shadow-catcher floor ------------------------------------------------
 bpy.ops.mesh.primitive_plane_add(size=size * 40, location=(0, 0, 0))
@@ -107,9 +134,7 @@ sun("rim",  3.0, (-50, 0, 200), 4)   # rim/back
 
 # --- perspective camera, framed from the world-space bounding sphere ------
 bpy.context.view_layer.update()
-corners = [obj.matrix_world @ Vector(c) for c in obj.bound_box]
-bb_min = Vector(min(c[i] for c in corners) for i in range(3))
-bb_max = Vector(max(c[i] for c in corners) for i in range(3))
+bb_min, bb_max = _world_bounds(objs)
 center = (bb_min + bb_max) / 2
 radius = (bb_max - bb_min).length / 2 or 1.0
 
