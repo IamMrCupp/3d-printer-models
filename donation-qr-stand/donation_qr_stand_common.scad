@@ -30,15 +30,18 @@ FUSE      = 0.02;  // module over-size so touching cells fuse (kills point-conta
 FRAME      = 8;    // outer margin around the artwork
 COL_GAP    = 12;   // gap between the two codes
 LABEL_GAP  = 5;    // gap below a code to its label
-HEADER_GAP = 7;    // gap above the codes to the header
-HEADER_H   = 9;    // header text cap height
+HEADER_GAP = 7;    // gap above the codes to the sub-headline
+TITLE_H    = 7.5;  // title cap height (top line) — sized so "DONATIONS ACCEPTED" fits the frame
+SUBHEAD_H  = 6;    // sub-headline cap height (second line)
+LINE_GAP   = 3;    // gap between the two header lines
 LABEL_H    = 7;    // label text cap height
 CORNER_R   = 5;    // faceplate corner radius
 LABELS     = true; // emboss header + per-code labels
 TEXT_FONT  = "Liberation Sans:style=Bold";
-HEADER_TXT = "SCAN TO TIP";
-LABEL_L    = "VENMO";
-LABEL_R    = "CASH APP";
+TITLE_TXT   = "DONATIONS ACCEPTED";  // top line (what it is)
+SUBHEAD_TXT = "SCAN TO DONATE";      // second line (what to do)
+LABEL_L     = "VENMO";
+LABEL_R     = "CASH APP";
 
 // ---- easel ----
 EASEL_D   = 72;   // base depth, front-back (stability)
@@ -57,7 +60,7 @@ $fn = 48;
 function qr_n(m) = len(m);
 TILE = (qr_n(venmo_qr) + 2 * QUIET) * MODULE_MM;     // both codes are the same size
 PW   = 2 * TILE + COL_GAP + 2 * FRAME;               // plate width
-PH   = SEAT_H + LABEL_H + LABEL_GAP + TILE + HEADER_GAP + HEADER_H + FRAME; // plate height
+PH   = SEAT_H + LABEL_H + LABEL_GAP + TILE + HEADER_GAP + SUBHEAD_H + LINE_GAP + TITLE_H + FRAME; // plate height
 TY   = SEAT_H + LABEL_H + LABEL_GAP;                 // bottom Y of the code tiles
 TX_L = FRAME;                                        // left tile X
 TX_R = FRAME + TILE + COL_GAP;                       // right tile X
@@ -84,8 +87,10 @@ module qr_art_2d() {
             text(LABEL_L, size = LABEL_H, halign = "center", valign = "center", font = TEXT_FONT);
         translate([TX_R + TILE / 2, SEAT_H + LABEL_H / 2])
             text(LABEL_R, size = LABEL_H, halign = "center", valign = "center", font = TEXT_FONT);
-        translate([PW / 2, PH - FRAME - HEADER_H / 2])
-            text(HEADER_TXT, size = HEADER_H, halign = "center", valign = "center", font = TEXT_FONT);
+        translate([PW / 2, PH - FRAME - TITLE_H / 2])
+            text(TITLE_TXT, size = TITLE_H, halign = "center", valign = "center", font = TEXT_FONT);
+        translate([PW / 2, PH - FRAME - TITLE_H - LINE_GAP - SUBHEAD_H / 2])
+            text(SUBHEAD_TXT, size = SUBHEAD_H, halign = "center", valign = "center", font = TEXT_FONT);
     }
 }
 

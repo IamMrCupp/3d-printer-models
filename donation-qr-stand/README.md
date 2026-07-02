@@ -56,7 +56,8 @@ Key dials at the top of `donation_qr_stand_common.scad`:
 | `QUIET` | 4 | Quiet-zone modules around each code (spec minimum is 4 — don't go lower). |
 | `INLAY_T` | 0.8 | Inlay depth / pocket depth. |
 | `PLATE_T` | 2.4 | Faceplate thickness. |
-| `HEADER_TXT` / `LABEL_L` / `LABEL_R` | "SCAN TO TIP" / "VENMO" / "CASH APP" | Embossed text. |
+| `TITLE_TXT` / `SUBHEAD_TXT` | "DONATIONS ACCEPTED" / "SCAN TO DONATE" | Two-line header. Shrink `TITLE_H` if you lengthen the title. |
+| `LABEL_L` / `LABEL_R` | "VENMO" / "CASH APP" | Per-code labels. |
 | `LABELS` | true | Set false for codes only, no text. |
 | `LEAN` | 18 | Faceplate lean-back from vertical (deg). |
 
