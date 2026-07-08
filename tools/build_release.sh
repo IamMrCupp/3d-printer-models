@@ -42,14 +42,20 @@ export PREVIEW_RES_Y="${PREVIEW_RES_Y:-825}"
 while IFS= read -r -d '' scad; do
   base="$(basename "${scad%.scad}")"
   stl="$out_dir/$base.stl"
+  png="$out_dir/$base.png"
   echo "▶ render $scad → $stl"
+  # Clear prior artifacts first. The library-skip check below keys on the STL's
+  # absence, so a stale STL makes a module-only source "pass" — validated and
+  # previewed as a mesh it never produced. A stale PNG outlives the skip
+  # entirely. Either would ship as a release asset (`gh release create dist/*`).
+  # (dist/ is fresh on the CI runner, but persists across local invocations.)
+  rm -f "$stl" "$png"
   "$OPENSCAD" -o "$stl" --export-format binstl "$scad" 2>&1 | grep -iE "error|warning" || true
   [ -f "$stl" ] || { echo "  ↳ skip (library file, no geometry)"; continue; }
 
   echo "  validate"
   python3 tools/validate_stl.py "$stl"
 
-  png="$out_dir/$base.png"
   echo "  preview → $png"
   "$BLENDER" -b -P tools/render_preview.py -- "$stl" "$png" $color >/dev/null
   count=$((count + 1))
