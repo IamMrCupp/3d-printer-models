@@ -29,8 +29,14 @@ skipped=0
 
 while IFS= read -r -d '' scad; do
   rel="${scad#./}"
-  out="$OUT_DIR/$(basename "${rel%.scad}").stl"
+  # Name outputs from the full relative path, not the basename — `gridfinity.scad`
+  # and `lib/gridfinity.scad` would otherwise collide on one `build/gridfinity.stl`.
+  out="$OUT_DIR/$(echo "${rel%.scad}" | tr '/' '_').stl"
   echo "▶ rendering $rel"
+  # Clear any prior artifact first: the library-skip check below keys on the
+  # output file's absence, and a stale file there would make a module-only
+  # source "pass" by validating a mesh it never produced.
+  rm -f "$out"
   "$OPENSCAD" -o "$out" --export-format binstl "$scad" 2>&1 | grep -iE "error|warning" || true
 
   # A library file (module-only, `use`d elsewhere) has no top-level geometry:
