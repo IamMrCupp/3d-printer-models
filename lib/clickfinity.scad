@@ -1,0 +1,224 @@
+// clickfinity.scad — magnet-free Gridfinity baseplate with flexible latch tongues.
+//
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Aaron Cupp
+//
+// >>> VENDORED SNAPSHOT — do not edit here. <<<
+// Upstream: IamMrCupp/clickfinity-openscad (lib/clickfinity.scad), MIT.
+// Pinned copy so models in this repo can build without an external checkout —
+// same pattern as lib/gridfinity.scad. This file stays MIT even though the repo
+// is CC BY-NC. Re-copy from upstream to update; fix bugs upstream, not here.
+//
+// Clean-room reimplementation of the Clickfinity concept (jerrymk → NoWarrenty
+// → John Hall's CLICKbase) from the published Gridfinity spec and physical
+// measurement of the CLICKbase-derivative (Printables 719455). No geometry is
+// ported from the upstream Fusion 360 sources.
+//
+//   clickfinity_baseplate(nx, ny)  — tiled SHALLOW baseplate with latch tongues
+//   click_arm()                    — one full-height cantilever tongue
+//   connector_clip()               — plate-to-plate joiner (Phase 4 — TODO)
+//
+// PRINT IN PETG / ABS / ASA / NYLON — **NOT PLA.** The tongues sit under
+// constant spring tension; PLA creeps and loses grip within weeks.
+//
+// DESIGN NOTES (hard-won across the print loop):
+//  * SHALLOW plate (like the reference). A full-depth Gridfinity socket flares
+//    wide open at the top to receive the bin foot's flared rim — that flare eats
+//    the wall where the latch needs material and collides with a full-height
+//    tongue. A ~4 mm plate keeps the foot's flare ABOVE the plate, so the socket
+//    walls stay straight and the latch has room.
+//  * LOCALIZED catch. The catch is a small bump on the tongue's compliant FREE
+//    END, in the mid-height band where the foot's vertical wall sits — NOT along
+//    the rigid root (which can't retract → jams the bin) and NOT full height
+//    (which pushes the seated bin back out). Root + rest stay flush with the
+//    socket wall.
+//  * Full-height solid tongue, freed on 3 sides by a slot cut through the floor
+//    (outboard + free end + base) so it swings about a vertical hinge at the one
+//    rooted end: in-plane bending, no delamination, prints solid on the bed.
+
+// `include`, not `use` — we need gridfinity.scad's spec constants.
+include <gridfinity.scad>
+
+// ---------------------------------------------------------------------------
+// Spec anchors (from the bin foot, per lib/gridfinity.scad)
+// ---------------------------------------------------------------------------
+// Foot: z 0.0–0.8 bottom chamfer (hw 17.8→18.6), z 0.8–2.6 vertical wall (hw
+// 18.6), z 2.6–4.75 top chamfer (hw 18.6→20.75, the flare). The latch grabs the
+// vertical band; the flare sits ABOVE this shallow plate.
+FOOT_VERT_HW = BIN_SZ/2 - _C_TOP;   // 18.60 — foot half-width at the vertical wall
+SOCK_HW      = GF/2 - _C_TOP;       // 18.85 — socket wall (0.25 clearance on the foot)
+SOCK_R       = 1.85;                // socket corner radius (foot corner + clearance)
+
+// ---------------------------------------------------------------------------
+// Plate
+// ---------------------------------------------------------------------------
+PLATE_H = 4.00;   // [3.50:0.10:5.00] mm total plate height (shallow — see notes)
+FLOOR   = 1.20;   // [0.60:0.10:1.60] mm floor under the socket. Sets base rigidity;
+                  //   also anchors the catch band (FLOOR+0.8 .. FLOOR+2.6), which
+                  //   must stay within PLATE_H — raise PLATE_H if you raise FLOOR far.
+LEADIN  = 1.20;   // [0.60:0.10:2.00] mm top opening chamfer — guides the foot in
+                  //   AND clears the start of the foot's flare at the rim.
+
+// ---------------------------------------------------------------------------
+// Edge joining (Phase 4) — built-in dovetails, no loose parts.
+// ---------------------------------------------------------------------------
+// +X and +Y edges get a MALE dovetail per cell; -X and -Y edges get the matching
+// FEMALE slot. Butt two plates edge-to-edge and slide along the shared edge to
+// lock them (the widening dovetail can't pull apart in-plane). Opt-in.
+JOIN        = false;  // enable edge dovetails
+JOIN_DEPTH  = 3.00;   // [2.00:0.50:5.00] mm how far the tab protrudes / slot cuts
+JOIN_WB     = 5.00;   // [3.00:0.50:8.00] mm dovetail width at the plate edge (neck)
+JOIN_WT     = 8.00;   // [5.00:0.50:11.00] mm width at the tip (wider = locks harder)
+JOIN_CLEAR  = 0.20;   // [0.05:0.05:0.40] mm slop in the female slot — tune to print
+
+// ---------------------------------------------------------------------------
+// Latch tunables — tune against a printed tile. Watch the root-stress echo.
+// ---------------------------------------------------------------------------
+ARM_ENGAGE = 0.60;  // [0.40:0.05:1.30] mm catch reach past the foot wall = the
+                    //   deflection every insertion. Drives root stress directly.
+ARM_THK    = 1.50;  // [1.00:0.10:2.40] mm tongue thickness (radial). Grip ~ thk^3,
+                    //   but root stress ~ thk — thicker grips harder AND cracks sooner.
+ARM_LEN    = 11.0;  // [6.00:0.50:16.00] mm tongue length along the wall (cantilever
+                    //   span). Longer = softer AND lower stress (~1/len^2). Safety knob.
+ARM_SLOT   = 0.90;  // [0.60:0.10:1.60] mm outboard flex gap. Must exceed ARM_ENGAGE.
+ARM_SKIN   = 0.80;  // [0.60:0.10:2.00] mm wall kept outboard of the slot.
+ARM_ROOT   = 2.00;  // [1.00:0.25:3.50] mm rooted (hinge) length — stays fused to wall.
+ARM_FILLET = 0.35;  // [0.00:0.05:0.60] mm root fillet — softens the crack-prone corner.
+CATCH_LEN  = 3.50;  // [2.00:0.50:6.00] mm length of the catch bump at the FREE end.
+                    //   Only this compliant portion protrudes; the root stays flush.
+CATCH_CHAMF= 0.60;  // [0.30:0.10:1.00] mm lead-in/out chamfer on the catch bump.
+CLEARANCE  = 0.00;  // [-0.20:0.01:0.20] mm global horizontal compensation (printer).
+
+ARMS_PER_CELL = 4;  // [2, 4] one per side. 2 = opposing pair.
+
+// Catch vertical band = the foot's vertical wall mapped into the plate.
+_CATCH_Z0 = FLOOR + 0.8;   // foot z 0.8 (top of bottom chamfer)
+_CATCH_Z1 = FLOOR + 2.6;   // foot z 2.6 (start of the flare)
+_T_IN     = FOOT_VERT_HW - ARM_ENGAGE + CLEARANCE;   // catch tip (into the cell)
+_T_OUT    = SOCK_HW + ARM_THK;                        // tongue outboard face
+_SLOT_O   = _T_OUT + ARM_SLOT;                        // outboard edge of the flex slot
+_THRU     = PLATE_H + 1;
+
+// ---------------------------------------------------------------------------
+// Root-stress echo — the number that predicts fracture (v3 8×1.6/0.9 hit ~67
+// MPa and snapped). Keep < ~30 MPa. sigma = 1.5·E·t·δ / L².
+// ---------------------------------------------------------------------------
+_E_PETG = 2000;
+_I  = PLATE_H * pow(ARM_THK,3) / 12;
+_K  = 3 * _E_PETG * _I / pow(ARM_LEN,3);
+_F  = _K * ARM_ENGAGE;
+_SIG = 1.5 * _E_PETG * ARM_THK * ARM_ENGAGE / pow(ARM_LEN,2);
+echo(str("[clickfinity] tongue ", ARM_LEN, "x", ARM_THK, " mm -> ",
+         round(_F*10)/10, " N/arm, ", round(_F*ARMS_PER_CELL*10)/10,
+         " N/cell; root stress ~", round(_SIG*10)/10, " MPa",
+         (_SIG > 30) ? "  <<< WILL CRACK - longer ARM_LEN / thinner ARM_THK / less ARM_ENGAGE" : ""));
+
+// ---------------------------------------------------------------------------
+// Shallow baseplate
+// ---------------------------------------------------------------------------
+module _sock_cell(shrink = 0) {
+    offset(-shrink) offset(SOCK_R) offset(-SOCK_R) square(2*SOCK_HW, center = true);
+}
+module _socket() {
+    e = 0.01;
+    translate([0,0,FLOOR]) linear_extrude(PLATE_H - FLOOR + e) _sock_cell(0);
+    hull() {
+        translate([0,0,PLATE_H - LEADIN - e]) linear_extrude(e) _sock_cell(0);
+        translate([0,0,PLATE_H])              linear_extrude(e) _sock_cell(-LEADIN);
+    }
+}
+module _plate_slab(nx, ny) {
+    w = nx*GF; d = ny*GF;
+    linear_extrude(PLATE_H) offset(GF_FILLET) offset(-GF_FILLET) square([w,d], center = true);
+}
+module _shallow_base(nx, ny) {
+    difference() {
+        _plate_slab(nx, ny);
+        for (ix=[0:nx-1], iy=[0:ny-1])
+            translate([(ix-(nx-1)/2)*GF, (iy-(ny-1)/2)*GF, 0]) _socket();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Latch tongue (+Y wall; clickfinity_baseplate rotates copies to the others)
+// ---------------------------------------------------------------------------
+// Beam: full-height, flush inner face (SOCK_HW) so it never obstructs. Catch:
+// a chamfered bump on the free (-X) end only, in the vertical-wall band.
+module click_arm() {
+    // structural beam, flush inner face, rooted +X. Inner face overlaps the
+    // socket wall by a hair (0.02) so it fuses volumetrically instead of leaving
+    // a coincident plane with the already-cut socket wall.
+    translate([-ARM_LEN/2, SOCK_HW - 0.02, 0]) cube([ARM_LEN, ARM_THK + 0.02, PLATE_H]);
+    // localized catch bump on the free end (-X), protruding to _T_IN, chamfered
+    // top+bottom so it prints without an overhang and cams the foot on the way in
+    catch = [
+        [SOCK_HW, _CATCH_Z0],
+        [_T_IN,   _CATCH_Z0 + CATCH_CHAMF],
+        [_T_IN,   _CATCH_Z1 - CATCH_CHAMF],
+        [SOCK_HW, _CATCH_Z1],
+    ];
+    translate([-ARM_LEN/2, 0, 0]) rotate([90,0,90]) linear_extrude(CATCH_LEN) polygon(catch);
+}
+
+// Freeing cut: L-shaped, full-depth trench (outboard + free-end + base legs) so
+// the tongue is anchored only at the +X root. The base leg severs the tongue's
+// base from the socket floor — without it the tongue renders correct but is
+// glued down and can't swing.
+module _arm_relief() {
+    e = 0.02;
+    len_free = ARM_LEN - ARM_ROOT + ARM_SLOT;
+    // outboard leg (fillet the root corner via offset)
+    translate([0,0,-1]) linear_extrude(_THRU + 1)
+        offset(ARM_FILLET) offset(-ARM_FILLET)
+            translate([-ARM_LEN/2 - ARM_SLOT, _T_OUT - e])
+                square([len_free, (_SLOT_O - _T_OUT) + e]);
+    // free-end leg
+    translate([-ARM_LEN/2 - ARM_SLOT, _T_IN - 0.5, -1])
+        cube([ARM_SLOT + e, (GF/2 - ARM_SKIN) - (_T_IN - 0.5), _THRU + 1]);
+    // base leg — sever the tongue base from the socket floor along the beam's
+    // inboard face. Overlaps into the beam (0.3) and tops out at an off-feature
+    // height (z = FLOOR + 1.2) inside the socket cavity so no cut face lands
+    // coplanar with the socket floor plane.
+    translate([-ARM_LEN/2 - ARM_SLOT, SOCK_HW - 1.4, -1])
+        cube([len_free, 1.4 + 0.3, 1 + FLOOR + 1.2]);
+}
+
+module _per_wall(nx, ny) {
+    for (ix=[0:nx-1], iy=[0:ny-1])
+        translate([(ix-(nx-1)/2)*GF, (iy-(ny-1)/2)*GF, 0])
+            for (a=[0:ARMS_PER_CELL-1]) rotate([0,0,a*360/ARMS_PER_CELL]) children();
+}
+// A dovetail in the XY plane: neck (WB) at the edge, widening to WT at the tip.
+// `over` extends the base back into the plate so a male tab fuses / a female
+// slot cuts cleanly through the edge. Extruded full plate height.
+module _dovetail(wb, wt, depth, over) {
+    linear_extrude(PLATE_H + (over > 0 ? 0 : 2))
+        polygon([[-over,-wb/2], [0,-wb/2], [depth,-wt/2],
+                 [depth,wt/2], [0,wb/2], [-over,wb/2]]);
+}
+// Male tabs on +X/+Y, female slots on -X/-Y. Females are the same dovetail
+// grown by JOIN_CLEAR and cut full-depth (z -1 .. PLATE_H+1).
+module _join_males(nx, ny) {
+    ex = nx*GF/2; ey = ny*GF/2;
+    for (iy=[0:ny-1]) translate([ex, (iy-(ny-1)/2)*GF, 0]) _dovetail(JOIN_WB, JOIN_WT, JOIN_DEPTH, 1);
+    for (ix=[0:nx-1]) translate([(ix-(nx-1)/2)*GF, ey, 0]) rotate([0,0,90]) _dovetail(JOIN_WB, JOIN_WT, JOIN_DEPTH, 1);
+}
+module _join_females(nx, ny) {
+    ex = nx*GF/2; ey = ny*GF/2; c = JOIN_CLEAR;
+    for (iy=[0:ny-1]) translate([-ex, (iy-(ny-1)/2)*GF, -1]) _dovetail(JOIN_WB+c, JOIN_WT+c, JOIN_DEPTH+0.3, 1);
+    for (ix=[0:nx-1]) translate([(ix-(nx-1)/2)*GF, -ey, -1]) rotate([0,0,90]) _dovetail(JOIN_WB+c, JOIN_WT+c, JOIN_DEPTH+0.3, 1);
+}
+module clickfinity_baseplate(nx, ny, arms = true) {
+    difference() {
+        union() {
+            _shallow_base(nx, ny);
+            if (arms) _per_wall(nx, ny) click_arm();
+            if (JOIN) _join_males(nx, ny);
+        }
+        if (arms) _per_wall(nx, ny) _arm_relief();
+        if (JOIN) _join_females(nx, ny);
+    }
+}
+
+// The old separate-clip joiner is superseded by built-in dovetails (JOIN).
+module connector_clip() { }
