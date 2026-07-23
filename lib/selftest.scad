@@ -13,6 +13,7 @@
 
 include <gridfinity.scad>
 include <vessel.scad>
+include <syringe.scad>
 use <label.scad>
 
 SPACING = 130;
@@ -40,3 +41,13 @@ translate([2 * SPACING, 0, 0]) {
     }
     translate([0, -50, 0]) label_inlay("0.45", size = 9);
 }
+
+// 6. Small-syringe rack — 5 × 2 = 10 bores for the UV mask (10.82) / paste
+//    (10.48) family. 6 columns here would leave a 0.84 mm outer wall and the
+//    assert in syringe_rack() rejects it; 5 leaves 2.24 mm.
+translate([3 * SPACING, 0, 0]) syringe_rack(2, 1, 5, 2, 10.82);
+
+// 7. Large-syringe rack — 2 × 2 for the AMTECH NC-559-V2-TF 30 cc (≈25.5).
+//    3 × 3 in the same footprint fails the wall assert (28 mm pitch vs a
+//    28.9 mm minimum), which is how the check earned its place.
+translate([4 * SPACING, 0, 0]) syringe_rack(2, 2, 2, 2, 25.5);
