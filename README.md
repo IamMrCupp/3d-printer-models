@@ -12,6 +12,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="apache-5800-cord-organizer/preview.png" width="150"> | [**Apache 5800 cord organizer**](apache-5800-cord-organizer/) | Modular Gridfinity baseplate tiles + cord bins for an Apache 5800 case interior. |
 | <img src="stand-cable-clamp/preview.png" width="150"> | [**Stand cable clamp**](stand-cable-clamp/) | Wingnut clamp for round stand poles + slide-on cable heads (hook / clip / comb / velcro). |
 | <img src="donation-qr-stand/preview.png" width="150"> | [**Donation QR stand**](donation-qr-stand/) | Desk stand with two-colour Venmo + CashApp QR codes for tips. Parametric — regenerate the codes for any URL. |
+| <img src="bench-cleaning-station/preview.png" width="150"> | [**Bench cleaning station**](bench-cleaning-station/) | Gridfinity cups + bins for an electronics bench's IPA corner — aerosols, wash bottle, dispenser pump, melamine sponges. |
 
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 

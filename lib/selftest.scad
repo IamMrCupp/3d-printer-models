@@ -25,7 +25,11 @@ translate([-2 * SPACING, 0, 0]) collar_cup(2, 2, 54.20, 45);
 translate([-SPACING, 0, 0]) collar_cup(1, 1, 19.66, 45, cord_w = 6);
 
 // 3. Row of bores — the three aerosols in one block instead of three 2×2 bins.
-translate([0, 0, 0]) collar_cup_row(4, 2, [56.0, 54.20, 51.75], 45);
+//    5×2, not 4×2: three cans measure 162 mm of *bore*, but they also need webs
+//    between them and a wall outside them. At 4×2 the first two bores overlap by
+//    0.10 mm and the outer one breaks through the side by 0.50 mm — and it still
+//    renders watertight, which is exactly why the assert in vessel.scad exists.
+translate([0, 0, 0]) collar_cup_row(5, 2, [56.0, 54.20, 51.75], 45);
 
 // 4. Lid for a 1×2 bin, print-ready orientation.
 translate([SPACING, 0, 0]) lid(1, 2);
