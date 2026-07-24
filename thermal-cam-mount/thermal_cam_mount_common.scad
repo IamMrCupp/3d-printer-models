@@ -27,14 +27,21 @@ TAB_W   = 49.65;   // measured across the tab
 TAB_T   = 14.0;    // ⚠ PLACEHOLDER — front-to-back thickness. MEASURE + replace.
 TAB_CLR = 0.6;     // clamp bore clearance around the tab
 
-// The rocker switch is ~18 mm from the tab's outer end (front face); the 12 V
-// barrel jack is on one side. The band grips near the ring ROOT, clear of both.
-// It must grip the rigid ABS control-box, NOT the frosted diffuser lip.
+// ⚠ CONTROL LAYOUT (corrected 2026-07-23): switch on ONE side, power cord on the
+// OTHER side, brightness WHEEL on the front. So three faces are occupied — both
+// sides + front. The current closed sleeve below is therefore WRONG: it buries
+// the switch and jack under its side walls.
+//
+// REDESIGN PENDING (with the thickness): grip TOP + BOTTOM only — a C that
+// pinches the tab thickness, open on both sides (clears switch + jack) and the
+// front (clears the wheel), braced against the rear/root. Confirm the tab's top
+// near the root is rigid ABS (grippable), not the frosted diffuser — if it's
+// diffuser, grip the bottom face + a rear hook against the root instead.
 BAND_Y0    = 2;    // start of the band, out from the ring root
 BAND_DEPTH = 12;   // radial length of tab the band grips
 BAND_WALL  = 3.2;
-PINCH_D    = 3.4;  // M3 pinch bolt — split sleeve tightens rather than sliding
-PINCH_AF   = 5.6;  // over the switch
+PINCH_D    = 3.4;  // M3 pinch bolt (reserved for the redesigned C-grip)
+PINCH_AF   = 5.6;
 
 // ---- Sipeed T256s (LOCKED) ----
 CAM_W = 42; CAM_H = 35; CAM_D = 14;   // horizontal × vertical × depth (body)
