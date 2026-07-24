@@ -14,6 +14,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="donation-qr-stand/preview.png" width="150"> | [**Donation QR stand**](donation-qr-stand/) | Desk stand with two-colour Venmo + CashApp QR codes for tips. Parametric — regenerate the codes for any URL. |
 | <img src="bench-cleaning-station/preview.png" width="150"> | [**Bench cleaning station**](bench-cleaning-station/) | Gridfinity cups + bins for an electronics bench's IPA corner — aerosols, wash bottle, dispenser pump, melamine sponges. |
 | <img src="rotary-tool-station/preview.png" width="150"> | [**Rotary tool station**](rotary-tool-station/) | Vertical cup for a HARDELL mini rotary tool + a drilled block for its 3/32″ bits. Includes a print-first hole-fit gauge. |
+| <img src="owon-spm8104-tray/preview.png" width="150"> | [**OWON SPM8104 top tray**](owon-spm8104-tray/) | Magnet-free Clickfinity tray that clamps onto an OWON SPM8104 PSU/DMM — 10 cells for the cord and barrel adapters. Screw-clamp rails, no adhesive. |
 
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
