@@ -1,103 +1,86 @@
-// thermal_cam_mount_common.scad — clamp a Sipeed T256s thermal camera onto the
-// LED-56S ring light's control-box tab, for the benchhud thermal-fusion HUD.
+// thermal_cam_mount_common.scad — sandwich clamp holding a Sipeed T256s thermal
+// camera on the LED-56S ring light's control-box tab, for the benchhud HUD.
 //
 // WHY: the T256s is registered onto the scope's visible feed so a hot component's
 // bloom labels that component. The registration transform is computed once and
-// must HOLD every session — so the mount is rigid, non-drifting, fixed-angle.
-// Wobble = re-calibrate every sit-down. This is the physical half of registration.
+// must HOLD every session → rigid, non-drifting, fixed-angle mount.
 //
-// TAB (LED-56S control box) — all three axes measured 2026-07-23:
-//   X width (tangential) .... 49.65   sides carry the SWITCH and the JACK
-//   Y front-to-back ......... 32.51   FRONT face carries the brightness WHEEL;
-//                                     REAR meets the ring (the root)
-//   Z thickness (top↔bottom)  26.42   the axis the clamp pinches
+// TAB (control box, measured 2026-07-23): 49.65 W (X) × 32.51 front-to-back (Y)
+// × 26.42 thick (Z). The tab is a BOSS on top of the ring, so five of its faces
+// are unusable: REAR merges into the ring, FRONT has the brightness wheel, the
+// two SIDES have the switch and the jack, and the BOTTOM has a center screw.
+// Only the TOP (scope-facing) face is fully clear.
 //
-// CLAMP APPROACH: three faces are occupied (both sides + front), so the clamp
-// can't wrap the tab. It's a C-channel gripping TOP + BOTTOM + REAR only — open
-// on both sides (clears switch + jack) and the front (clears the wheel). It
-// slides on from the front until the rear wall seats against the root, then a
-// single set-screw through the TOP pad preloads the joint. The screw and every
-// wall stay off all three control faces.
-//   ⚠ The set-screw presses the tab's TOP face — confirm that face is rigid ABS,
-//     not the frosted diffuser. If it's diffuser, move the screw to a rigid rim
-//     or add a bottom-pad screw instead.
+// SANDWICH: a TOP plate and a BOTTOM plate grip the tab's top and bottom faces
+// over the front ~28 mm; two screws at the FRONT CORNERS pass outboard of the
+// tab (clear of the mid-side switch/jack, either side of the front wheel) and
+// draw the plates together. No rear wall (misses the ring), no side walls (miss
+// the controls). The bottom plate has a pocket for the center screw and carries
+// the cam cradle. Long top+bottom grip = the moment arm that resists nose-down
+// tilt from the cam's weight. TWO printed parts: mount_top + mount_bottom.
 //
-// CAM hangs below the bottom face: screen toward +Y (the user), lens angled down
-// at the board, USB-C exiting straight down (female/bottom port). CABLE_DIR flips
-// the cradle's cable channel to a side if a right-angle adapter is added later.
+//   ⚠ First-print fit checks: FIT (plate-to-tab gap) and the front-corner screw
+//     clearance. Confirm the top face is rigid ABS before trusting the grip.
 
-$fn = 64;
+$fn = 48;
 EPS = 0.1;
 
 // ---- tab (measured) ----
 TAB_W  = 49.65;   // X width
-TAB_FB = 32.51;   // Y front-to-back
-TAB_T  = 26.42;   // Z thickness (pinch axis)
-TAB_CLR = 0.5;    // bore clearance around the tab
+TAB_FB = 32.51;   // Y front-to-back (front = +Y, away from ring)
+TAB_T  = 26.42;   // Z thickness (top = +Z)
+FIT    = 0.3;     // gap between each plate and the tab face
 
-// ---- C-clamp ----
-PAD_T    = 5;     // top/bottom pad thickness
-REAR_T   = 5;     // rear wall (braces the root)
-GRIP_LEN = 22;    // how far forward the pads reach (leaves the front ~10 mm + wheel clear)
-WALL     = 3;
-SCREW_D  = 4.2;   // M4 set-screw clearance / self-tap pilot through the top pad
-SCREW_HEAD = 8;   // counterbore so the head sits flush-ish on the top pad
+// ---- plates / fasteners ----
+PLATE_T   = 5;    // each plate thickness
+GRIP_LEN  = 28;   // how far back from the front the plates cover (of 32.51 → 4.5 rear clear)
+BOSS_GAP  = 1.2;  // clearance from the tab side to the screw boss
+BOSS_R    = 4.5;  // front-corner boss radius (M3 heat-set insert)
+BOSS_INSET_Y = 6; // boss centre back from the front edge
+INSERT_D  = 4.6;  // M3 heat-set insert bore (bottom-plate bosses)
+SCREW_D   = 3.4;  // M3 clearance (top plate)
+SCREW_CB  = 6.4;  // counterbore for the screw head
+CENTER_POCKET_D = 13;   // clearance pocket over the tab's bottom center screw
+CENTER_POCKET_H = 3.5;
 
 // ---- Sipeed T256s (LOCKED) ----
-CAM_W = 42; CAM_H = 35; CAM_D = 14;   // width × height × depth
+CAM_W = 42; CAM_H = 35; CAM_D = 14;
 CAM_CLR   = 0.6;
-CAM_ANGLE = 30;   // tilt from vertical → lens looks roughly down at the board
+CAM_ANGLE = 30;   // tilt from vertical → lens looks down at the board
 
 // ---- cradle ----
-LIP      = 4.5;   // bottom-edge catch the cam sits into
-SIDE_H   = 16;    // side-wall rise up the 35 mm cam height
-CORNER   = 6;     // top-front corner catches
-CABLE_W  = 12;    // cable slot
+LIP=4.5; SIDE_H=16; CORNER=6; CABLE_W=12; WALL=3; ARM_DROP=7;
 CABLE_DIR = "down";   // "down" (female/bottom port) | "side" (right-angle adapter)
-ARM_DROP = 7;     // cradle sits just below the tab
 
 // ============================================================================
-// FRAME: X = tab width, Y = front(+)/rear(-) , Z = top(+)/bottom(-). Tab centred.
+// derived
+half    = TAB_T/2 + FIT/2;                 // inner half-gap (plate face to centre)
+y_front = TAB_FB/2;
+y_back  = y_front - GRIP_LEN;
+PW      = 2*(TAB_W/2 + BOSS_GAP + 2*BOSS_R);   // plate width (spans to the bosses)
+boss_x  = TAB_W/2 + BOSS_GAP + BOSS_R;
+boss_y  = y_front - BOSS_INSET_Y;
+bot_z0  = -half - PLATE_T;                  // underside of the bottom plate
 
-// C-channel gripping top + bottom + rear. Open front and both sides.
-module _tab_clip() {
-    it = TAB_T + TAB_CLR;                 // inner gap (thickness)
-    ow = TAB_W + TAB_CLR + 2*WALL;        // outer width (pads overhang the sides a touch)
-    y_rear = -TAB_FB/2 - TAB_CLR/2;       // rear inner face
-    difference() {
-        union() {
-            // top + bottom pads
-            translate([-ow/2, y_rear, it/2])          cube([ow, GRIP_LEN, PAD_T]);
-            translate([-ow/2, y_rear, -it/2 - PAD_T]) cube([ow, GRIP_LEN, PAD_T]);
-            // rear wall joining them (overlaps both pads in z)
-            translate([-ow/2, y_rear - REAR_T, -it/2 - PAD_T])
-                cube([ow, REAR_T + EPS, it + 2*PAD_T]);
-        }
-        // set-screw through the top pad, ~⅔ forward, pressing the tab top
-        translate([0, y_rear + GRIP_LEN*0.6, it/2 - EPS]) {
-            cylinder(d = SCREW_D, h = PAD_T + 2*EPS);
-            translate([0, 0, PAD_T - 1.5]) cylinder(d = SCREW_HEAD, h = 1.6 + EPS);
-        }
-    }
+module _plate() {                            // flat footprint in X-Y, unit thickness at z=0
+    translate([-PW/2, y_back, 0]) cube([PW, GRIP_LEN, PLATE_T]);
 }
 
-// Open cradle (upright frame, pre-tilt): back plate + bottom lip + two side walls
-// + top-front corner catches. Grips bottom edge, both sides, top corners; the
-// lens face (front) and most of the screen (back) stay open, alu body heatsinks.
+// Open cradle (upright frame, pre-tilt) — grips the cam bottom edge, both sides,
+// top-front corners; lens (front) and most of the screen (back) stay open.
 module _cradle() {
     iw = CAM_W + CAM_CLR; id = CAM_D + CAM_CLR;
     ow = iw + 2*WALL; oy = id + 2*WALL;
     difference() {
         union() {
-            translate([-ow/2, 0, 0]) cube([ow, oy, LIP]);                 // bottom tray
-            translate([-ow/2, 0, 0]) cube([WALL, oy, SIDE_H]);            // left wall
-            translate([ iw/2, 0, 0]) cube([WALL, oy, SIDE_H]);            // right wall
-            translate([-ow/2, oy - WALL, 0]) cube([ow, WALL, SIDE_H+WALL]); // back plate
-            for (sx = [-ow/2, iw/2 - CORNER])                             // top-front catches
+            translate([-ow/2, 0, 0]) cube([ow, oy, LIP]);
+            translate([-ow/2, 0, 0]) cube([WALL, oy, SIDE_H]);
+            translate([ iw/2, 0, 0]) cube([WALL, oy, SIDE_H]);
+            translate([-ow/2, oy - WALL, 0]) cube([ow, WALL, SIDE_H + WALL]);
+            for (sx = [-ow/2, iw/2 - CORNER])
                 translate([sx, 0, SIDE_H - EPS]) cube([WALL + CORNER, WALL + 2, WALL + EPS]);
         }
-        translate([-iw/2, WALL, LIP]) cube([iw, id, CAM_H + CAM_CLR + 10]); // cam cavity
-        // cable slot: straight down, or out a side for a right-angle adapter
+        translate([-iw/2, WALL, LIP]) cube([iw, id, CAM_H + CAM_CLR + 10]);
         if (CABLE_DIR == "down")
             translate([-CABLE_W/2, -EPS, -EPS]) cube([CABLE_W, oy + 2*EPS, LIP + 2*EPS]);
         else
@@ -105,21 +88,38 @@ module _cradle() {
     }
 }
 
-module thermal_cam_mount() {
-    it = TAB_T + TAB_CLR;
-    ow = TAB_W + TAB_CLR + 2*WALL;
-    y_rear = -TAB_FB/2 - TAB_CLR/2;
-    bottom_z = -it/2 - PAD_T;             // underside of the bottom pad
+// ---- part 1: bottom plate + bosses + cradle ----
+module mount_bottom() {
     union() {
-        _tab_clip();
-        // arm: a block under the bottom pad, inset from the pad width so their
-        // side faces don't coincide, dropping to the cradle at the front.
-        aw = ow - WALL;
-        arm_y = y_rear + GRIP_LEN - WALL;
-        translate([-aw/2, arm_y, bottom_z - ARM_DROP])
-            cube([aw, WALL + 2, ARM_DROP + PAD_T + EPS]);
-        // cradle, tilted so the lens aims down-and-out toward the board
-        translate([0, arm_y + WALL + EPS, bottom_z - ARM_DROP])
+        difference() {
+            union() {
+                translate([0,0,bot_z0]) _plate();                         // plate
+                for (sx = [-boss_x, boss_x])                              // front-corner bosses
+                    translate([sx, boss_y, -half]) cylinder(r = BOSS_R, h = 2*half);
+            }
+            // heat-set inserts down into the bosses from the top
+            for (sx = [-boss_x, boss_x])
+                translate([sx, boss_y, half - 8]) cylinder(d = INSERT_D, h = 8 + EPS);
+            // clearance pocket over the tab's bottom center screw
+            translate([0, 0, -half - CENTER_POCKET_H])
+                cylinder(d = CENTER_POCKET_D, h = CENTER_POCKET_H + EPS);
+        }
+        // arm from the plate underside down to the tilted cradle at the front
+        aw = CAM_W + 2*WALL;
+        translate([-aw/2, y_front - WALL, bot_z0 - ARM_DROP])
+            cube([aw, WALL + 2, ARM_DROP + PLATE_T + EPS]);
+        translate([0, y_front + EPS, bot_z0 - ARM_DROP])
             rotate([-(90 - CAM_ANGLE), 0, 0]) _cradle();
+    }
+}
+
+// ---- part 2: top plate ----
+module mount_top() {
+    difference() {
+        translate([0,0,half]) _plate();
+        for (sx = [-boss_x, boss_x]) translate([sx, boss_y, half - EPS]) {
+            cylinder(d = SCREW_D, h = PLATE_T + 2*EPS);
+            translate([0,0,PLATE_T - 1.6]) cylinder(d = SCREW_CB, h = 1.6 + EPS);
+        }
     }
 }
