@@ -9,6 +9,7 @@
 //   bin(nx, ny, h, wall, floor)            — open Gridfinity bin
 //   divided_bin(nx, ny, h, cols, rows, …)  — bin with internal compartments
 //   lid(nx, ny, …)                         — friction lid for a bin of the same footprint
+//   stack_base(nx, ny, h, …)               — baseplate-topped base; a bin socket-stacks on it
 
 GF = 42; GF_FILLET = 4;
 _C_TOP = 2.15; _C_MID = 1.8; _C_BOT = 0.7;
@@ -58,6 +59,32 @@ module _bin_shell(nx, ny, h, wall, floor) {
     }
 }
 module bin(nx, ny, h, wall = 1.2, floor = 1.4) { _bin_shell(nx, ny, h, wall, floor); }
+
+// ---- stacking base ----
+// A bin whose TOP is a Gridfinity baseplate, so a standard bin socket-stacks on
+// it (two-tier towers: instrument on top, cords/jig/adapters in the base). The
+// base is open at the FRONT (−Y) by default so the lower item is reachable while
+// the top tier stays socketed — same idea as drybox-splitter-stand's open cubby.
+// The whole tower foots on the bench baseplate via this base's own foot.
+//
+//   h = interior height of the lower compartment (floor to the baseplate cap).
+module stack_base(nx, ny, h, wall = 1.2, floor = 1.4, open_front = true) {
+    W = nx*GF - 0.5; D = ny*GF - 0.5;
+    z0 = BIN_BASE_H + floor;
+    iw = W - 2*wall; id = D - 2*wall;
+    difference() {
+        union() {
+            bin_blank(nx, ny, h);                    // solid foot + block to h
+            translate([0,0,h]) baseplate(nx, ny);    // baseplate cap (sockets up)
+        }
+        // lower cavity, floor up to the cap underside
+        translate([0,0,z0]) linear_extrude(h - z0 + 0.01)
+            offset(BIN_R-wall) offset(-(BIN_R-wall)) square([iw, id], center=true);
+        // open front: cut the −Y wall so you reach in under the cap
+        if (open_front)
+            translate([-iw/2, -D, z0]) cube([iw, D/2 + 0.01, h - z0 + 0.01]);
+    }
+}
 
 module divided_bin(nx, ny, h, cols = 1, rows = 1, wall = 1.2, floor = 1.4, div = 1.2) {
     W = nx*GF - 0.5; D = ny*GF - 0.5;
