@@ -51,10 +51,14 @@ module rail() {
             // extrudes along -Y; the translate re-centres it.
             translate([0, RAIL_LEN/2, 0]) rotate([90, 0, 0])
                 linear_extrude(RAIL_LEN) polygon(_rail_profile());
-            // bosses on the outer skirt face — depth for the heat-set insert
+            // bosses on the outer skirt face — depth for the heat-set insert.
+            // Start 1 mm INSIDE the skirt so the boss base fuses volumetrically
+            // instead of leaving a circle of faces coincident with the skirt
+            // plane (that coincidence renders as non-manifold edges on some
+            // OpenSCAD builds — 64 per boss — and fails strict validation).
             for (y = [-SCREW_Y, SCREW_Y])
-                translate([SKIRT_OUT, y, SCREW_Z]) rotate([0, 90, 0])
-                    cylinder(h = BOSS_EXT, d = BOSS_OD);
+                translate([SKIRT_OUT - 1, y, SCREW_Z]) rotate([0, 90, 0])
+                    cylinder(h = BOSS_EXT + 1, d = BOSS_OD);
         }
         // insert bore: HS_D from the OUTER boss face, HS_L deep (heat the insert
         // in here). Continues at HS_D through the rest so the screw tip exits the
