@@ -51,28 +51,25 @@ def _key(p, ndigits=4):
 def validate(path: str) -> list[str]:
     """Return a list of problems; empty list means the mesh is valid.
 
-    Prefers trimesh (authoritative); falls back to the stdlib edge check.
+    ALWAYS runs the raw-triangle stdlib check (open + non-manifold edges read
+    from the actual STL bytes) and then adds trimesh's winding-consistency test
+    when trimesh is installed.
+
+    Why always stdlib: trimesh merges near-coincident vertices when it loads a
+    mesh, which silently heals coincident-face non-manifold edges — so a mesh
+    can pass `trimesh.is_watertight` yet still have 2+ faces sharing an edge in
+    the actual STL. The release pipeline runs the stdlib check (no trimesh), so
+    PR validation must run it too, or non-manifold meshes pass CI and only blow
+    up at release time. (This exact gap shipped a bad owon-tray rail.)
     """
+    problems = _validate_stdlib(path)
     try:
         import trimesh
     except ImportError:
-        return _validate_stdlib(path)
-
+        return problems
     mesh = trimesh.load(path, force="mesh")
-    problems = []
-    if mesh.is_empty or len(mesh.faces) == 0:
-        return ["mesh is empty (0 triangles)"]
-    if not mesh.is_watertight:
-        problems.append("not watertight (open edges) — mesh is not closed")
-    if not mesh.is_winding_consistent:
-        problems.append("inconsistent winding — non-manifold / flipped faces")
-    dims = tuple(mesh.extents)
-    if min(dims) <= 0:
-        problems.append(f"degenerate bounding box: {tuple(round(d, 3) for d in dims)}")
-    validate.last_summary = (
-        f"{len(mesh.faces)} triangles, "
-        f"bbox {tuple(round(float(d), 2) for d in dims)} mm [trimesh]"
-    )
+    if not mesh.is_empty and len(mesh.faces) and not mesh.is_winding_consistent:
+        problems.append("inconsistent winding — flipped faces [trimesh]")
     return problems
 
 

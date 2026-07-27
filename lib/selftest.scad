@@ -55,3 +55,7 @@ translate([3 * SPACING, 0, 0]) syringe_rack(2, 1, 5, 2, 10.82);
 //    3 × 3 in the same footprint fails the wall assert (28 mm pitch vs a
 //    28.9 mm minimum), which is how the check earned its place.
 translate([4 * SPACING, 0, 0]) syringe_rack(2, 2, 2, 2, 25.5);
+
+// 8. Stacking base — a 2×2 base (open front) with a baseplate cap, for the
+//    two-tier instrument towers (DSLogic / T48 / BGA). Placeholder height.
+translate([5 * SPACING, 0, 0]) stack_base(2, 2, 40);
