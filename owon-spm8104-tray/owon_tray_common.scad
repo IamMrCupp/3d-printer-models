@@ -30,7 +30,21 @@ SKIRT_D     = 20.0;  // how far the skirt drops down the case side.
 // upstand beside it.
 LIP_IN   = 2.00;   // how far the lip reaches inward under the plate edge
 LIP_T    = 1.50;   // lip thickness — the plate rides this far above the lid
-RAIL_LEN    = GY*42; // rail runs the full plate length
+
+// Rails run the full front-to-back length of the case TOP (~9", measured ≈225 mm
+// rear edge → front bezel), NOT just the 210 mm plate — so the shallow end-lips
+// below can reach the actual front/back edges. A little slide is fine, so a hair
+// long is intentional; drop MOUNT_L if it binds.
+MOUNT_L  = 228.0;  // [200:1:240] rail length front-to-back (~9")
+RAIL_LEN = MOUNT_L;
+
+/* [Front/back end-lips] */
+// SHALLOW downturn at each end that hooks the front/back top edge so the tray
+// can't slide off lengthwise. Short on purpose — a deep skirt here would cover
+// the front display / rear fan+connectors. Sides keep the deep 20 mm skirt.
+END_LIP_D = 5.00;  // [3:0.5:12] how far the front/back lip drops over the edge
+END_LIP_T = 3.00;  // end-lip wall thickness (along the length)
+END_LIP_W = 16.0;  // end-lip width across the case, per corner
 
 /* [Clamp screws — M4 heat-set insert + M4 machine screw] */
 // The boss takes a brass M4 heat-set insert (you have the M2–M6 kit); an M4
