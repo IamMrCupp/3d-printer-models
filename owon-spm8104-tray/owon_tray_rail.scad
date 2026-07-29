@@ -59,6 +59,16 @@ module rail() {
             for (y = [-SCREW_Y, SCREW_Y])
                 translate([SKIRT_OUT - 1, y, SCREW_Z]) rotate([0, 90, 0])
                     cylinder(h = BOSS_EXT + 1, d = BOSS_OD);
+            // shallow front/back end-lips — a short downturn at each mount end
+            // that hooks the front/back top edge (anti-slide). Sits over the case
+            // near this rail; drops only END_LIP_D so it clears the display/fan.
+            // Overlaps into the rail (X into the upstand, Y into the body, Z below
+            // the upstand top) so it fuses volumetrically — no coincident planes.
+            for (s = [-1, 1])
+                translate([SKIRT_IN - END_LIP_W,
+                           s > 0 ? RAIL_LEN/2 - (END_LIP_T + 4) : -RAIL_LEN/2,
+                           -END_LIP_D])
+                    cube([END_LIP_W + 0.5, END_LIP_T + 4, END_LIP_D + _TOP - 0.5]);
         }
         // insert bore: HS_D from the OUTER boss face, HS_L deep (heat the insert
         // in here). Continues at HS_D through the rest so the screw tip exits the
