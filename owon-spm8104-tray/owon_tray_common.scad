@@ -38,13 +38,14 @@ LIP_T    = 1.50;   // lip thickness — the plate rides this far above the lid
 MOUNT_L  = 228.0;  // [200:1:240] rail length front-to-back (~9")
 RAIL_LEN = MOUNT_L;
 
-/* [Front/back end-lips] */
-// SHALLOW downturn at each end that hooks the front/back top edge so the tray
-// can't slide off lengthwise. Short on purpose — a deep skirt here would cover
-// the front display / rear fan+connectors. Sides keep the deep 20 mm skirt.
+/* [Front/back end-bars] */
+// The two side jaws are TIED TOGETHER by a bar across each end — this is what
+// makes the screw clamp work at all: the bar carries the screw reaction from one
+// jaw to the other (closed loop). Without it, a side screw just shoves its own
+// jaw off the case. Each bar also carries a SHALLOW downturn lip that hooks the
+// front/back top edge (short, so it clears the front display / rear fan).
+END_BAR_T = 5.00;  // [3:0.5:10] end-bar thickness along the length (rigidity)
 END_LIP_D = 5.00;  // [3:0.5:12] how far the front/back lip drops over the edge
-END_LIP_T = 3.00;  // end-lip wall thickness (along the length)
-END_LIP_W = 16.0;  // end-lip width across the case, per corner
 
 /* [Clamp screws — M4 heat-set insert + M4 machine screw] */
 // The boss takes a brass M4 heat-set insert (you have the M2–M6 kit); an M4
