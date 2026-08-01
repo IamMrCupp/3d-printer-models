@@ -48,7 +48,9 @@ END_BAR_T = 5.00;  // [3:0.5:10] end-bar thickness along the length (rigidity)
 END_LIP_D = 5.00;  // [3:0.5:12] how far the front/back lip drops over the edge
 
 // (No clamp hardware — this is a passive drop-over frame. Side walls hug the
-// case, front/back lips stop the slide, gravity holds it down.)
+// case, front/back lips stop the slide, gravity holds it down. The plate is
+// permanent — you swap BINS, not the plate — so it's simply bonded into the
+// frame at assembly. No retention mechanism needed.)
 
 // Derived
 PLATE_W  = GX*42;
