@@ -40,20 +40,22 @@ Two bins fill all ten cells exactly — 2×3 + 2×2 = 126 + 84 = 210 mm.
 
 | Part | File | Size | Print |
 |---|---|---|---|
-| **Fit gauge** | `owon_tip_fit_gauge.scad` | 152 × 30 × 12 mm | ×1 — **print this first** |
+| **Fit gauge** | `owon_tip_fit_gauge.scad` | 152 × 30 × 12 mm | ×1 — only for a different adapter kit |
 | **Tip block** | `owon_bin_tips.scad` | 84 × 126 × 16 mm | ×1 — flat, foot down |
 | **Cord well** | `owon_bin_cords.scad` | 84 × 84 × 55 mm | ×1 — flat, foot down |
 | **Cord well label** | `owon_bin_cords_label.scad` | inlay | ×1 — optional, dark toolhead |
 
 Shared numbers live in `owon_bins_common.scad`.
 
-> ⚠️ **The tip block's bore is a placeholder (12.0 mm) and has never been measured.** Print `owon_tip_fit_gauge.scad` first and set `TIP_BORE` from it — the tip block is a ~2 hour print, and getting the hole wrong costs you all forty at once.
+> The tip block’s 40 bores are **13.0 mm**, measured off `owon_tip_fit_gauge.scad`. The kit holds two populations (a ~12 mm class and a ~13 mm class); one bore at the larger reading takes both, so any tip goes in any hole. The smaller tips sit with ~0.5 mm of slop — about 5° of lean in a 10 mm bore.
 
-The gauge is eight through-holes, 8–15 mm, each engraved with its size. It reports the *finished hole* a tip actually drops into, which is the number you want: calipers give you the tip's OD but not this printer's hole shrinkage, and small vertical holes come off an FDM machine undersize by 0.15–0.3 mm depending on nozzle and filament.
+The gauge is eight through-holes, 8–15 mm, each engraved with its size. Print it before the block if you are building this for a different adapter kit — it reports the *finished hole* a tip drops into, folding the tip OD and your printer’s hole shrinkage into one number.
 
 **The low bin goes at the front.** The tip block is 16 mm and the cord well is 55 — reversed, you'd reach over a 55 mm wall to pick a 12 mm tip. It also gives the warning label a home: the cord well's front wall stands ~39 mm proud of the tip block, so it reads across the top of it.
 
-Tips stand **tip-up** in 40 bores (5 × 8), captured 10 mm so they stand proud enough to pluck one-handed. The kit is 41 tips, so this is deliberately one short — the fat proprietary tips (Dell / HP / Lenovo) are the ones most likely to bust the pitch, and the odd one out rides in the cord well.
+Tips stand **tip-up** — female end down in the bore, male barrel up where you can grab it — in 40 bores (5 × 8), captured 10 mm so they stand proud enough to pluck one-handed. Any overflow past 40 rides in the cord well.
+
+The row pitch (`TIP_PITCH_Y = 15.5`) is deliberate, not incidental. At a 13 mm bore the two guards in `lib/` pull in opposite directions — `syringe_rack` wants pitch ≥ 15.40, `collar_cup_multi` wants ≤ 15.73 — and the even auto-pitch lands at 15.75, missing the outer-wall floor by 0.02 mm. Widen the bore and that window shuts; drop to 7 rows rather than shaving `min_wall`.
 
 The cord well's divider is not decoration. Every tip in the kit is female, so the harvested master barrel lead is a single point of failure — it gets the rear compartment rather than going missing in the bulk. Set `CORD_ROWS = 1` for one undivided 84 × 84 well if the mains lead won't coil into 84 × 40.
 

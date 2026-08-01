@@ -20,28 +20,27 @@ include <../lib/syringe.scad>     // pulls in vessel.scad → gridfinity.scad
 include <../lib/label.scad>       // include, not use — the label parts need LABEL_T
 
 // ===========================================================================
-// UNMEASURED — the one number everything below is built on
+// MEASURED — from owon_tip_fit_gauge.scad, printed 2026-08-01
 // ===========================================================================
-// TIP_D is the outside diameter of an adapter tip's BODY (the part that sits
-// down in the hole), not the metal barrel sticking out of it.
+// The gauge read a MIX of 12 and 13: some tips fall through the 13 and seat
+// nicely in the 12, others won't enter the 12 at all and seat nicely in the 13.
+// Two populations, and the tips were gauged FEMALE-END-DOWN — which is the way
+// they stand in the block, male barrel up where you can grab it.
 //
-// >>> 12.0 IS A PLACEHOLDER. It has never been measured. <<<
+// One bore size for both, at the LARGER reading. Three reasons:
 //
-// Do NOT reach for calipers to fix it. Print owon_tip_fit_gauge.scad and read
-// the answer off the coupon instead — the gauge reports the *finished hole
-// size* a tip actually drops into, which folds the tip's true OD and this
-// printer's hole shrinkage into a single number. Measuring the tip gives you
-// only half of that, and small vertical holes come off an FDM printer undersize
-// by 0.15–0.3 mm in a way that is specific to the machine, nozzle and filament.
+//  1. "Falls through the 13" is an artefact of the gauge, which is drilled
+//     through so a stuck tip can be pushed back out. The block's bores are
+//     blind, so a 12-class tip in a 13 bore doesn't fall anywhere — it sits
+//     with ~0.5 mm of radial slop.
+//  2. That slop is ~5° of lean in a 10 mm bore. Invisible in a block of forty.
+//  3. Mixed bores would mean counting the two populations and then remembering
+//     which region of the block takes which tip. One size means any tip goes in
+//     any hole, which is the whole point of an indexed block.
 //
-// Set TIP_BORE from the gauge and TIP_D/TIP_CLR stop mattering.
-TIP_D   = 12.0;   // [6:0.1:16] placeholder body OD — see above
-TIP_CLR = 0.60;   // slip clearance, per diameter (not per side)
-
-// The finished hole. Once the gauge is printed, hard-set this to the winning
-// size and ignore the two lines above:
-//     TIP_BORE = 12.0;   // ← from the gauge, e.g. the hole marked 12.0
-TIP_BORE = TIP_D + TIP_CLR;
+// If the lean does turn out to bother you, the fix is a deeper TIP_CAPTURE, not
+// a second bore size.
+TIP_BORE = 13.0;
 
 // ---------------------------------------------------------------------------
 // Tip block — 2×3
@@ -52,12 +51,24 @@ TIP_BORE = TIP_D + TIP_CLR;
 // plug it pairs with.
 //
 // Both counts are parametric because they are downstream of TIP_BORE, and
-// syringe_rack() asserts on them: at 2×3 the auto-pitch is 16.80 across and
-// 15.75 deep, so a bore over ~13.3 mm makes 8 rows fail at render time rather
-// than on the printer. If that assert fires, drop TIP_ROWS to 7 (35 slots) —
-// don't silence it.
+// syringe_rack() asserts on them.
 TIP_COLS = 5;
 TIP_ROWS = 8;
+
+// Explicit row pitch, and it is load-bearing. A 13 mm bore at 8 rows only fits
+// inside a narrow window:
+//
+//   >= 15.40   syringe_rack()'s pitch assert: bore + 2*min_wall.
+//   <= 15.73   collar_cup_multi()'s edge assert. The auto-pitch (15.75) spreads
+//              rows evenly across the block, pushing the outermost centre to
+//              55.13 and leaving 1.13 mm of outer wall — just under the 1.2 mm
+//              floor. The default misses by 0.02 mm.
+//
+// 15.5 sits mid-window: 2.5 mm webs between bores, 2.0 mm of outer wall. Note
+// the two asserts pull in OPPOSITE directions here, so this is not a number to
+// nudge casually — widen the bore and the window closes entirely, at which
+// point drop TIP_ROWS to 7 (35 slots) rather than shaving min_wall.
+TIP_PITCH_Y = 15.5;
 
 // Capture depth, NOT tip length. Tips must stand proud enough to pluck with
 // finger and thumb — that is the whole point of storing them tip-up — so this

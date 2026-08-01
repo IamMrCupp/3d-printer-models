@@ -8,9 +8,7 @@
 // proud, so you pick one out by the part you're about to plug in rather than
 // tipping the block out to see what's in it.
 //
-// >>> The bore is a PLACEHOLDER until owon_tip_fit_gauge.scad is printed. <<<
-// Don't commit filament to this part first — it's a ~2 hour print pitched on a
-// number nobody has measured.
+// Bore is 13.0 mm, measured off owon_tip_fit_gauge.scad — see owon_bins_common.
 //
 // PRINT: flat, foot-down, no supports. The bores are vertical, so there is
 // nothing to bridge.
@@ -22,4 +20,5 @@ $fn = 48;
 // TIP_BORE is already the finished hole, so clearance is passed as zero rather
 // than applied twice. syringe_rack()'s asserts still guard the webs and the
 // outer wall against it.
-syringe_rack(2, 3, TIP_COLS, TIP_ROWS, TIP_BORE, TIP_CAPTURE, clr = 0);
+syringe_rack(2, 3, TIP_COLS, TIP_ROWS, TIP_BORE, TIP_CAPTURE, clr = 0,
+             pitch_y = TIP_PITCH_Y);
