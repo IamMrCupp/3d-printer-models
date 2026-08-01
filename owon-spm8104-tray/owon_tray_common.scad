@@ -38,27 +38,19 @@ LIP_T    = 1.50;   // lip thickness — the plate rides this far above the lid
 MOUNT_L  = 228.0;  // [200:1:240] rail length front-to-back (~9")
 RAIL_LEN = MOUNT_L;
 
-/* [Front/back end-lips] */
-// SHALLOW downturn at each end that hooks the front/back top edge so the tray
-// can't slide off lengthwise. Short on purpose — a deep skirt here would cover
-// the front display / rear fan+connectors. Sides keep the deep 20 mm skirt.
+/* [Front/back end-bars] */
+// The two side jaws are TIED TOGETHER by a bar across each end — this is what
+// makes the screw clamp work at all: the bar carries the screw reaction from one
+// jaw to the other (closed loop). Without it, a side screw just shoves its own
+// jaw off the case. Each bar also carries a SHALLOW downturn lip that hooks the
+// front/back top edge (short, so it clears the front display / rear fan).
+END_BAR_T = 5.00;  // [3:0.5:10] end-bar thickness along the length (rigidity)
 END_LIP_D = 5.00;  // [3:0.5:12] how far the front/back lip drops over the edge
-END_LIP_T = 3.00;  // end-lip wall thickness (along the length)
-END_LIP_W = 16.0;  // end-lip width across the case, per corner
 
-/* [Clamp screws — M4 heat-set insert + M4 machine screw] */
-// The boss takes a brass M4 heat-set insert (you have the M2–M6 kit); an M4
-// machine screw threads through it and its tip presses the case. VERIFY HS_D
-// against your actual inserts — install diameter varies by brand (a common M4
-// heat-set wants ~5.6 mm; measure yours or check the insert datasheet).
-HS_D       = 5.60;   // heat-set insert install hole diameter (M4) — VERIFY
-HS_L       = 8.00;   // insert length (bore depth from the outer boss face)
-BOSS_OD    = 10.0;   // boss outer diameter
-BOSS_EXT   = 6.00;   // how far the boss stands off the outer skirt face
-SCREW_Z    = -11.0;  // screw height on the skirt (below the lid line)
-SCREW_Y    = 62.0;   // +/- screw position along the rail
-// Use an M4 machine screw ~16–20 mm long. A stick-on rubber/felt dot on the tip
-// keeps it from marring the case.
+// (No clamp hardware — this is a passive drop-over frame. Side walls hug the
+// case, front/back lips stop the slide, gravity holds it down. The plate is
+// permanent — you swap BINS, not the plate — so it's simply bonded into the
+// frame at assembly. No retention mechanism needed.)
 
 // Derived
 PLATE_W  = GX*42;
