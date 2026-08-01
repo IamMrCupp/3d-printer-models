@@ -34,6 +34,29 @@ The plate must print **latches-up** so the Clickfinity spring tongues come out s
 1. Drop the plate into the frame — it rests on the frame's inner ledge.
 2. Run a bead of CA or plastic cement around the seam. One solid unit.
 
+## Bins
+
+Two bins fill all ten cells exactly — 2×3 + 2×2 = 126 + 84 = 210 mm.
+
+| Part | File | Size | Print |
+|---|---|---|---|
+| **Fit gauge** | `owon_tip_fit_gauge.scad` | 152 × 30 × 12 mm | ×1 — **print this first** |
+| **Tip block** | `owon_bin_tips.scad` | 84 × 126 × 16 mm | ×1 — flat, foot down |
+| **Cord well** | `owon_bin_cords.scad` | 84 × 84 × 55 mm | ×1 — flat, foot down |
+| **Cord well label** | `owon_bin_cords_label.scad` | inlay | ×1 — optional, dark toolhead |
+
+Shared numbers live in `owon_bins_common.scad`.
+
+> ⚠️ **The tip block's bore is a placeholder (12.0 mm) and has never been measured.** Print `owon_tip_fit_gauge.scad` first and set `TIP_BORE` from it — the tip block is a ~2 hour print, and getting the hole wrong costs you all forty at once.
+
+The gauge is eight through-holes, 8–15 mm, each engraved with its size. It reports the *finished hole* a tip actually drops into, which is the number you want: calipers give you the tip's OD but not this printer's hole shrinkage, and small vertical holes come off an FDM machine undersize by 0.15–0.3 mm depending on nozzle and filament.
+
+**The low bin goes at the front.** The tip block is 16 mm and the cord well is 55 — reversed, you'd reach over a 55 mm wall to pick a 12 mm tip. It also gives the warning label a home: the cord well's front wall stands ~39 mm proud of the tip block, so it reads across the top of it.
+
+Tips stand **tip-up** in 40 bores (5 × 8), captured 10 mm so they stand proud enough to pluck one-handed. The kit is 41 tips, so this is deliberately one short — the fat proprietary tips (Dell / HP / Lenovo) are the ones most likely to bust the pitch, and the odd one out rides in the cord well.
+
+The cord well's divider is not decoration. Every tip in the kit is female, so the harvested master barrel lead is a single point of failure — it gets the rear compartment rather than going missing in the bulk. Set `CORD_ROWS = 1` for one undivided 84 × 84 well if the mains lead won't coil into 84 × 40.
+
 ## Clickfinity
 
 The tray uses the magnet-free [Clickfinity latch generator](https://github.com/IamMrCupp/clickfinity-openscad) (vendored as `lib/clickfinity.scad`). It holds any standard 42 mm Gridfinity bin with spring tongues instead of magnets — **print bins in PETG, not PLA.**
