@@ -47,19 +47,8 @@ RAIL_LEN = MOUNT_L;
 END_BAR_T = 5.00;  // [3:0.5:10] end-bar thickness along the length (rigidity)
 END_LIP_D = 5.00;  // [3:0.5:12] how far the front/back lip drops over the edge
 
-/* [Clamp screws — M4 heat-set insert + M4 machine screw] */
-// The boss takes a brass M4 heat-set insert (you have the M2–M6 kit); an M4
-// machine screw threads through it and its tip presses the case. VERIFY HS_D
-// against your actual inserts — install diameter varies by brand (a common M4
-// heat-set wants ~5.6 mm; measure yours or check the insert datasheet).
-HS_D       = 5.60;   // heat-set insert install hole diameter (M4) — VERIFY
-HS_L       = 8.00;   // insert length (bore depth from the outer boss face)
-BOSS_OD    = 10.0;   // boss outer diameter
-BOSS_EXT   = 6.00;   // how far the boss stands off the outer skirt face
-SCREW_Z    = -11.0;  // screw height on the skirt (below the lid line)
-SCREW_Y    = 62.0;   // +/- screw position along the rail
-// Use an M4 machine screw ~16–20 mm long. A stick-on rubber/felt dot on the tip
-// keeps it from marring the case.
+// (No clamp hardware — this is a passive drop-over frame. Side walls hug the
+// case, front/back lips stop the slide, gravity holds it down.)
 
 // Derived
 PLATE_W  = GX*42;

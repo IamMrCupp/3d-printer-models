@@ -1,22 +1,16 @@
-// owon_tray_frame.scad — one-piece clamp frame for the OWON SPM8104 tray.
+// owon_tray_frame.scad — one-piece drop-over frame for the OWON SPM8104 tray.
 //
 // Part 1 of 2 (the stock Clickfinity plate drops into it). **Print ONE.**
 //
-// WHY ONE PIECE — this is physics, not styling. A screw clamp needs two jaws
-// joined by a rigid frame: you tighten a screw, the case is driven against the
-// OPPOSITE jaw, and the reaction closes around the frame. The earlier two-loose-
-// rails version could not work — each screw was threaded into the same jaw it
-// pushed against, so it just shoved that jaw off the case (a jack screw with no
-// anvil). The frame IS the anvil.
+// NO CLAMP, NO HARDWARE. For a coiled cord and some barrel adapters on a supply
+// that never moves, retention is passive: the side walls hug the case sides so
+// it can't slide off sideways, the shallow front/back lips catch the top edges
+// so it can't slide off front/back, and gravity holds it down. It drops on and
+// lifts off. (An earlier version added a screw clamp — pointless overkill for
+// this load, and mechanically wrong besides.)
 //
-// FORCE PATH (verified): side screw tip -> pushes case wall inward -> case bears
-// on the far jaw's screw tips -> that reaction runs through the front/back END-
-// BARS (in tension) back to the near jaw. Closed loop -> the case is clamped
-// BETWEEN the two jaws. The bars are load-bearing structure, not trim.
-//
-// PRINT: flat, skirts DOWN as modelled, no supports except optionally a brief
-// one under the two screw bosses (short overhang). PETG or PLA — not a spring.
-// Rubber/felt dot on each screw tip so it won't mar the case.
+// PRINT: flat, skirts DOWN as modelled. No supports, no bridges.
+// PETG or PLA — this part carries no load and isn't a spring.
 
 include <owon_tray_common.scad>
 $fn = 48;
@@ -36,22 +30,11 @@ function _jaw_profile() = [
     [SKIRT_IN,            0],
 ];
 
-// One side jaw (+X side): extruded hook + two heat-set screw bosses. The screw
-// threads through the insert and its tip presses the case; the reaction is taken
-// by the frame (via the end-bars), NOT by this jaw alone.
+// One side wall (+X side): just the extruded hook — lip under the plate, upstand
+// that captures the plate, and the skirt that hugs the case side. No bosses.
 module _jaw() {
-    difference() {
-        union() {
-            translate([0, RAIL_LEN/2, 0]) rotate([90,0,0])
-                linear_extrude(RAIL_LEN) polygon(_jaw_profile());
-            for (y = [-SCREW_Y, SCREW_Y])
-                translate([SKIRT_OUT - 1, y, SCREW_Z]) rotate([0,90,0])
-                    cylinder(h = BOSS_EXT + 1, d = BOSS_OD);
-        }
-        for (y = [-SCREW_Y, SCREW_Y])
-            translate([SKIRT_IN - 1, y, SCREW_Z]) rotate([0,90,0])
-                cylinder(h = SKIRT_T + BOSS_EXT + 2, d = HS_D);
-    }
+    translate([0, RAIL_LEN/2, 0]) rotate([90,0,0])
+        linear_extrude(RAIL_LEN) polygon(_jaw_profile());
 }
 
 // Front/back end-bar: spans the full width and fuses into BOTH jaws, closing the
