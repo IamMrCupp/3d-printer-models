@@ -47,7 +47,7 @@ module _end_bar(s) {
         cube([2*SKIRT_OUT + 0.02, END_BAR_T, END_LIP_D + _TOP]);
 }
 
-// The complete one-piece frame.
+// The complete one-piece frame (modelled as-used: walls down).
 module frame() {
     _jaw();
     mirror([1,0,0]) _jaw();
@@ -55,4 +55,7 @@ module frame() {
     _end_bar(-1);
 }
 
-frame();
+// Rendered WALLS-UP for printing: the frame outline + end-bars sit on the bed,
+// walls rise, and the only overhang is the ~2.3 mm inner lip (bridges — NO
+// supports). Flip back walls-down to use it on the unit.
+rotate([180, 0, 0]) frame();
