@@ -33,6 +33,21 @@ module baseplate(nx, ny) {
 }
 
 // ---- bin ----
+// The foot's cross-section at inset i: a rounded square of side BIN_SZ - 2i,
+// nominal corner radius BIN_R - i.
+//
+// Known deviation, left in deliberately. offset(r = -i) insets the outline
+// after it has been tessellated, so it eats into the facet chords rather than
+// the true curve and the corner radius lands under nominal by roughly the arc's
+// sagitta — at inset 2.15 the radius measures 1.5896 at $fn = 32 and 1.5974 at
+// $fn = 64 against a nominal 1.60. The flats are exact; only the corners move,
+// by at most 0.014 mm, and the error shrinks as $fn rises.
+//
+// Building the profile as a hull of four circles at radius BIN_R - i hits
+// nominal exactly at every $fn and would retire both the deviation and its
+// $fn-dependence. Not done here: it shifts the printed foot on parts already
+// fit-tested against a 0.25 mm clearance band, and it does nothing for the
+// sliver bug below — measured, not assumed. See lib/selftest_fn.scad.
 module _bin_cell(i = 0) { offset(r = -i) offset(r = BIN_R) offset(r = -BIN_R) square(BIN_SZ, center = true); }
 // Each hull's end slab sits *inside* the span it defines — `0.8-e` and
 // `BIN_BASE_H-e`, never `0.8` and `BIN_BASE_H`. Don't "tidy" the `-e` away.
