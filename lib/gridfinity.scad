@@ -72,6 +72,16 @@ module _bin_shell(nx, ny, h, wall, floor) {
 module bin(nx, ny, h, wall = 1.2, floor = 1.4) { _bin_shell(nx, ny, h, wall, floor); }
 
 // ---- stacking base ----
+
+// The lower compartment's 2D profile: a rounded rect, swept `front` mm toward
+// −Y when the front is open (front = 0 leaves the plain closed pocket).
+module _stack_pocket(iw, id, r, front) {
+    hull() {
+        offset(r) offset(-r) square([iw, id], center = true);
+        translate([0, -front]) offset(r) offset(-r) square([iw, id], center = true);
+    }
+}
+
 // A bin whose TOP is a Gridfinity baseplate, so a standard bin socket-stacks on
 // it (two-tier towers: instrument on top, cords/jig/adapters in the base). The
 // base is open at the FRONT (−Y) by default so the lower item is reachable while
@@ -88,12 +98,19 @@ module stack_base(nx, ny, h, wall = 1.2, floor = 1.4, open_front = true) {
             bin_blank(nx, ny, h);                    // solid foot + block to h
             translate([0,0,h]) baseplate(nx, ny);    // baseplate cap (sockets up)
         }
-        // lower cavity, floor up to the cap underside
+        // Lower cavity, floor up to the cap underside. An open front is swept
+        // into the same 2D profile rather than cut by a second solid, so the
+        // pocket is one prism.
+        //
+        // The old code cut the front with its own cube, and got it wrong twice
+        // over: the cube spanned −D to −D/2 + 0.01, which shaved 0.01 mm off
+        // the outside and left the wall standing (11.7 mm³ removed where the
+        // opening wants ~1590). Widening it to reach the cavity then put the
+        // cube's side walls exactly on the cavity's, and coincident walls are
+        // what leave slivers behind — see _bin_foot above. Sweeping the profile
+        // sidesteps both: there's only ever one wall to be on.
         translate([0,0,z0]) linear_extrude(h - z0 + 0.01)
-            offset(BIN_R-wall) offset(-(BIN_R-wall)) square([iw, id], center=true);
-        // open front: cut the −Y wall so you reach in under the cap
-        if (open_front)
-            translate([-iw/2, -D, z0]) cube([iw, D/2 + 0.01, h - z0 + 0.01]);
+            _stack_pocket(iw, id, BIN_R - wall, open_front ? D : 0);
     }
 }
 
