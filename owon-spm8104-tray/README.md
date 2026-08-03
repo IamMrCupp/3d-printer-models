@@ -10,10 +10,13 @@ The SPM8104's top vents nowhere (rear fan only), so a tray over the lid is therm
 
 | Part | File | Size | Print |
 |---|---|---|---|
-| **Frame** | `owon_tray_frame.scad` | 90 × 228 × 25.5 mm | ×1 — flat, walls down, no supports |
+| **Frame** | `owon_tray_frame.scad` | 90 × 237.5 × 25.5 mm | ×1 — flat, walls up, no supports |
 | **Plate** | `owon_tray_plate.scad` | 84 × 210 × 4 mm | ×1 — flat, latches up, **PETG** |
+| **Fit gauge** | `owon_fit_gauge.scad` | 91 × 94 × 13 mm | optional — check clearance before committing to the frame |
 
 Shared dimensions live in `owon_tray_common.scad`.
+
+The frame's **clear span is 227.5 mm** — that's the number the case has to fit into, and it's derived from `CASE_L`, not set by hand. The overall 237.5 mm is that span plus an end-bar at each end.
 
 ## How it mounts — no hardware
 
@@ -59,4 +62,17 @@ openscad -o owon_tray_plate.stl --export-format binstl owon_tray_plate.scad
 
 ## Fit
 
-Built for the measured unit (84.30 mm wide, ~225 mm deep top, side vents low on the case) and confirmed on it with print gauges. If your unit differs, the top three knobs in `owon_tray_common.scad` cover it: `CASE_W` (width), `MOUNT_L` (front-to-back length), `SKIRT_D` (side-wall depth vs. your vents).
+Built for the measured unit: **84.30 mm** wide, **226 mm** front-to-back across the flat top (rear edge → front bezel), side vents low on the case. Width is confirmed on the real unit; measure your own top length before printing.
+
+Everything is driven by four knobs at the top of `owon_tray_common.scad`:
+
+| Knob | What it sets |
+|---|---|
+| `CASE_W` | lid width — drives the skirt opening |
+| `CASE_L` | lid length — drives the **clear span**, the dimension that has to clear your case |
+| `CASE_CLR` / `CASE_L_CLR` | slip clearance across width / length |
+| `SKIRT_D` | how far the side walls drop, vs. where your vents start |
+
+`RAIL_LEN` is derived — don't hand-set it. v1.0.3 did, as an *outer* length, which left a clear span 8 mm shorter than the case; the frame perched on the lid instead of dropping over it.
+
+**Print the fit gauge first.** It's five stepped clearances in one short print, in the same filament as the frame, so shrinkage is included in what you measure.

@@ -9,7 +9,10 @@
 // lifts off. (An earlier version added a screw clamp — pointless overkill for
 // this load, and mechanically wrong besides.)
 //
-// PRINT: flat, skirts DOWN as modelled. No supports, no bridges.
+// PRINT: flat, WALLS UP — the file already rotates it (see the bottom). Bed
+// contact is the frame outline + end-bars; the only overhang is the ~2.3 mm
+// inner lip, which bridges. NO SUPPORTS — the slicer will try to fill the frame
+// interior for that lip; turn them off.
 // PETG or PLA — this part carries no load and isn't a spring.
 
 include <owon_tray_common.scad>

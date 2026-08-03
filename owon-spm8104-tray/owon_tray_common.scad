@@ -12,7 +12,13 @@
 
 /* [Case] */
 CASE_W   = 84.30;  // measured lid width
-CASE_CLR = 0.40;   // total slip clearance so the clamp drops on
+CASE_CLR = 0.40;   // total slip clearance across the WIDTH. Confirmed on the
+                   //   printed part — the width fit is fine, leave it alone.
+CASE_L   = 226.00; // measured lid LENGTH, rear edge -> front bezel. THE frame
+                   //   must clear this between its end lips. CONFIRM BY HAND
+                   //   before printing — see the note on RAIL_LEN below.
+CASE_L_CLR = 1.50; // total slip clearance along the LENGTH. Generous on purpose:
+                   //   a little front-to-back slide is fine, seizing is not.
 
 /* [Tray] */
 GX = 2;            // cells across (84.00 mm — flush on the lid)
@@ -31,12 +37,16 @@ SKIRT_D     = 20.0;  // how far the skirt drops down the case side.
 LIP_IN   = 2.00;   // how far the lip reaches inward under the plate edge
 LIP_T    = 1.50;   // lip thickness — the plate rides this far above the lid
 
-// Rails run the full front-to-back length of the case TOP (~9", measured ≈225 mm
-// rear edge → front bezel), NOT just the 210 mm plate — so the shallow end-lips
-// below can reach the actual front/back edges. A little slide is fine, so a hair
-// long is intentional; drop MOUNT_L if it binds.
-MOUNT_L  = 228.0;  // [200:1:240] rail length front-to-back (~9")
-RAIL_LEN = MOUNT_L;
+// RAIL_LEN is DERIVED (see bottom) — do not hand-set it.
+//
+// v1.0.3 shipped MOUNT_L = 228 as the frame's OUTER length, sized against the
+// ~9" case. That was the wrong end of the part: the two end-bars eat END_BAR_T
+// each, so the CLEAR SPAN the case actually has to fit into was only
+// 228 - 2*5 = 218 mm, against a 226 mm case. The end lips came down flat on the
+// case top ~4 mm in from each end and the frame perched instead of dropping over.
+//
+// The clear span is now driven by CASE_L, and the end-bars are added OUTSIDE it,
+// so the lips land past the case edges by construction.
 
 /* [Front/back end-bars] */
 // The two side jaws are TIED TOGETHER by a bar across each end — this is what
@@ -57,3 +67,7 @@ PLATE_W  = GX*42;
 PLATE_L  = GY*42;
 SKIRT_IN = CASE_W/2 + CASE_CLR/2;   // inner face of the skirt
 SKIRT_OUT= SKIRT_IN + SKIRT_T;
+
+INNER_L  = CASE_L + CASE_L_CLR;     // clear span between the end lips
+RAIL_LEN = INNER_L + 2*END_BAR_T;   // overall frame length
+MOUNT_L  = RAIL_LEN;                // back-compat alias; RAIL_LEN is the truth
