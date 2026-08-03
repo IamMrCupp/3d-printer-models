@@ -24,13 +24,27 @@ include <shortkiller_common.scad>
 
 _TOP = LEDGE_T + PLATE_T_;
 
-// One side jaw's cross-section (x, z): shelf under the plate edge, upstand that
-// captures the plate, and the short skirt down the case side.
+// One side jaw's cross-section (x, z), inner edge outward:
+//
+//   * a LEDGE_IN-wide lip that catches the plate edge
+//   * a solid border, full height, from the plate edge out to the case wall
+//   * the short skirt down the case side
+//
+// The border is SOLID rather than a shelf, and that is a printability decision,
+// not a styling one. The plate (84) is much narrower than the lid (102), so the
+// gap between them is ~9 mm per side. Carried at ledge height that would be a
+// 9 mm one-sided cantilever running the full 217 mm — printed walls-up it hangs
+// in air and needs support for its whole length. Full height, it is a wall
+// sitting on the bed, and the ONLY overhang left is the LEDGE_IN lip, which
+// bridges exactly like the OWON's does.
+//
+// It is also far stiffer, which this frame wants — it spans 217 mm on 2.5 mm
+// skirts.
 function _jaw_profile() = [
     [PLATE_W_/2 - LEDGE_IN,  0],
     [PLATE_W_/2 - LEDGE_IN,  LEDGE_T],
-    [SKIRT_IN,               LEDGE_T],
-    [SKIRT_IN,               _TOP],
+    [PLATE_W_/2,             LEDGE_T],
+    [PLATE_W_/2,             _TOP],
     [SKIRT_OUT,              _TOP],
     [SKIRT_OUT,             -SKIRT_D],
     [SKIRT_IN,              -SKIRT_D],
