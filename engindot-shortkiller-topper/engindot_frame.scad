@@ -41,10 +41,10 @@ _TOP = LEDGE_T + PLATE_T_;
 // It is also far stiffer, which this frame wants — it spans 217 mm on 2.5 mm
 // skirts.
 function _jaw_profile() = [
-    [PLATE_W_/2 - LEDGE_IN,  0],
-    [PLATE_W_/2 - LEDGE_IN,  LEDGE_T],
-    [PLATE_W_/2,             LEDGE_T],
-    [PLATE_W_/2,             _TOP],
+    [POCKET_HW - LEDGE_IN,   0],
+    [POCKET_HW - LEDGE_IN,   LEDGE_T],
+    [POCKET_HW,              LEDGE_T],
+    [POCKET_HW,              _TOP],
     [SKIRT_OUT,              _TOP],
     [SKIRT_OUT,             -SKIRT_D],
     [SKIRT_IN,              -SKIRT_D],
@@ -61,8 +61,11 @@ module _jaw() {
 // into the jaws so it merges without coincident planes.
 module _end_bar(s) {
     y0 = s > 0 ? MOUNT_L/2 - END_BAR_T : -MOUNT_L/2;
+    // Tops out at LEDGE_T, not _TOP: the plate rests OVER the bar rather than
+    // butting into it. Enclosing the plate would demand MOUNT_L >= 220 on a
+    // ~216 mm lid.
     translate([-SKIRT_OUT - EPS, y0, -END_LIP_D])
-        cube([2*SKIRT_OUT + 2*EPS, END_BAR_T, END_LIP_D + _TOP]);
+        cube([2*SKIRT_OUT + 2*EPS, END_BAR_T, END_LIP_D + LEDGE_T]);
 }
 
 module frame() {

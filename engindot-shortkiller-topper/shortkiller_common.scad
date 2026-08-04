@@ -169,6 +169,11 @@ SKIRT_D   =   6.0;  // [1:0.5:25]   ⚠️ how far the skirt drops down the case
                     //   short — it only resists sideways slide; the end lips do
                     //   the real retention.
 LEDGE_IN  =   2.0;  // [1:0.5:5]    how far the ledge reaches under the plate edge
+PLATE_CLR =   0.6;  // [0:0.1:2]    ⚠️ slip clearance around the plate. The OWON
+                    //   frame has none of its own — its upstands sit at the CASE
+                    //   half-width, which happens to be wider than its plate. Put
+                    //   them on the PLATE half-width, as here, and zero clearance
+                    //   means the plate will not go in. Do not set this to 0.
 LEDGE_T   =   3.0;  // [1.5:0.5:6]  ledge thickness. Thicker than the OWON's
                     //   because the plate (84) is much narrower than the case
                     //   (102), so this shelf spans ~9 mm instead of ~0.
@@ -211,6 +216,18 @@ PLATE_L_  = GY * GF;                 // 210
 PLATE_T_  = 4.00;                    // must match PLATE_H in lib/clickfinity.scad
 SKIRT_IN  = CASE_W / 2 + CASE_CLR / 2;
 SKIRT_OUT = SKIRT_IN + SKIRT_T;
+POCKET_HW = PLATE_W_ / 2 + PLATE_CLR / 2;   // upstand position — NOT PLATE_W_/2
+
+// The end bars CARRY the plate rather than enclosing it: their top sits at
+// ledge height so the plate rests over them. Enclosing would need
+// MOUNT_L >= PLATE_L_ + 2*END_BAR_T = 220, and the lid is only ~216 — the frame
+// would hang off the supply and the lips would grip nothing.
+assert(MOUNT_L >= PLATE_L_,
+       "MOUNT_L shorter than the plate — the ledge cannot carry it");
+assert(POCKET_HW * 2 > PLATE_W_,
+       "plate pocket has no clearance — raise PLATE_CLR");
+assert(SKIRT_IN > POCKET_HW,
+       "case is narrower than the plate pocket — skirts would foul the plate");
 
 // Body must be long enough for the box PLUS both lips. Whatever the foot does
 // not provide is added at the front as a ramped extension.
