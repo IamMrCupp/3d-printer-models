@@ -41,14 +41,17 @@ _TOP = LEDGE_T + PLATE_T_;
 // It is also far stiffer, which this frame wants — it spans 217 mm on 2.5 mm
 // skirts.
 function _jaw_profile() = [
-    [POCKET_HW - LEDGE_IN,   0],
-    [POCKET_HW - LEDGE_IN,   LEDGE_T],
-    [POCKET_HW,              LEDGE_T],
-    [POCKET_HW,              _TOP],
-    [SKIRT_OUT,              _TOP],
-    [SKIRT_OUT,             -SKIRT_D],
-    [SKIRT_IN,              -SKIRT_D],
-    [SKIRT_IN,               0],
+    [POCKET_HW - LEDGE_IN,  0],
+    [POCKET_HW - LEDGE_IN,  LEDGE_T],
+    [POCKET_HW,             LEDGE_T],
+    [POCKET_HW,             _TOP],
+    [TOP_OUT,               _TOP],
+    [TOP_OUT,               0],
+    [SKIRT_OUT,             0],
+    [SKIRT_OUT,            -SKIRT_D],
+    [SKIRT_IN,             -SKIRT_D],
+    [SKIRT_IN,             -RAMP],
+    [POCKET_HW,             0],
 ];
 
 module _jaw(len) {
@@ -61,11 +64,12 @@ module _jaw(len) {
 // into the jaws so it merges without coincident planes.
 module _end_bar(s, len) {
     y0 = s > 0 ? len/2 - END_BAR_T : -len/2;
-    // Tops out at LEDGE_T, not _TOP: the plate rests OVER the bar rather than
-    // butting into it. Enclosing the plate would demand MOUNT_L >= 220 on a
-    // ~216 mm lid.
-    translate([-SKIRT_OUT - EPS, y0, -END_LIP_D])
-        cube([2*SKIRT_OUT + 2*EPS, END_BAR_T, END_LIP_D + LEDGE_T]);
+    // FULL HEIGHT to _TOP. This is a printability constraint, not a fit one:
+    // walls-up, the frame stands on its skirt tops, and a bar stopping short of
+    // that plane bridges ~85 mm across the opening and sags. The plate clears it
+    // by fitting BETWEEN the bars — hence the MOUNT_L assert.
+    translate([-TOP_OUT - EPS, y0, -END_LIP_D])
+        cube([2*TOP_OUT + 2*EPS, END_BAR_T, END_LIP_D + _TOP]);
 }
 
 // len defaults to the real MOUNT_L. A short len gives a genuine slice of this
