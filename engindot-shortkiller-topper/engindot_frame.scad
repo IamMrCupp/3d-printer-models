@@ -51,16 +51,16 @@ function _jaw_profile() = [
     [SKIRT_IN,               0],
 ];
 
-module _jaw() {
-    translate([0, MOUNT_L/2, 0]) rotate([90, 0, 0])
-        linear_extrude(MOUNT_L) polygon(_jaw_profile());
+module _jaw(len) {
+    translate([0, len/2, 0]) rotate([90, 0, 0])
+        linear_extrude(len) polygon(_jaw_profile());
 }
 
 // Front/back end-bar: spans the full width, fuses into BOTH jaws to close the
 // frame, and carries the lip that hooks the front/back top edge. Overlapped
 // into the jaws so it merges without coincident planes.
-module _end_bar(s) {
-    y0 = s > 0 ? MOUNT_L/2 - END_BAR_T : -MOUNT_L/2;
+module _end_bar(s, len) {
+    y0 = s > 0 ? len/2 - END_BAR_T : -len/2;
     // Tops out at LEDGE_T, not _TOP: the plate rests OVER the bar rather than
     // butting into it. Enclosing the plate would demand MOUNT_L >= 220 on a
     // ~216 mm lid.
@@ -68,11 +68,13 @@ module _end_bar(s) {
         cube([2*SKIRT_OUT + 2*EPS, END_BAR_T, END_LIP_D + LEDGE_T]);
 }
 
-module frame() {
-    _jaw();
-    mirror([1, 0, 0]) _jaw();
-    _end_bar(1);
-    _end_bar(-1);
+// len defaults to the real MOUNT_L. A short len gives a genuine slice of this
+// same geometry for fit-testing — see frame_test_section.scad.
+module frame(len = MOUNT_L) {
+    _jaw(len);
+    mirror([1, 0, 0]) _jaw(len);
+    _end_bar(1, len);
+    _end_bar(-1, len);
 }
 
 // Rendered WALLS-UP for printing. Flip walls-down to use it on the supply.
