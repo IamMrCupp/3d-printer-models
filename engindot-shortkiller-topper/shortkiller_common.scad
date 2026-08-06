@@ -161,8 +161,16 @@ BACKSTOP_T  = LIP_T;
 // Cross-section of one side jaw, from the middle out: a ledge that carries the
 // plate edge, an upstand beside it, then the short skirt down the case side.
 // Front/back end-bars tie the two jaws together and carry the hooking lips.
-CASE_W    = 102.0;  // [80:0.5:140] measured ENGINDOT lid width
-CASE_CLR  =   0.6;  // [0:0.1:2]    total slip clearance so it drops on
+CASE_W    =  84.0;  // [70:0.5:140] MEASURED via frame_fit_gauge: the 86 collar
+                    //   showed ~1 mm of gap per side. Within a hair of the OWON's
+                    //   84.30 — and of the user's own first description, "a tad
+                    //   smaller than the OWON". An earlier 102 here came from a
+                    //   tape-photo misread and produced a frame that fell straight
+                    //   over the case. Do not "correct" this without a gauge.
+CASE_CLR  =   1.2;  // [0.4:0.1:3]  total slip clearance. Doing double duty now:
+                    //   at CASE_W 84 the skirt wall and the plate pocket are the
+                    //   SAME wall, so this is also what gives the 84 mm plate
+                    //   room to drop in. Below ~0.8 the plate will not seat.
 SKIRT_T   =   2.5;  // [1.5:0.5:5]  skirt wall thickness
 SKIRT_D   =   6.0;  // [1:0.5:25]   ⚠️ how far the skirt drops down the case SIDE.
                     //   The sides are ALL vent, so this covers intake. Keep it
@@ -179,12 +187,14 @@ LEDGE_T   =   3.0;  // [1.5:0.5:6]  ledge thickness. Thicker than the OWON's
                     //   (102), so this shelf spans ~9 mm instead of ~0.
 END_BAR_T =   5.0;  // [3:0.5:10]   end-bar thickness front-to-back
 END_LIP_D =   7.0;  // [3:0.5:14]   how far the front/back lip drops over the edge
-// ⚠️ MOUNT_L IS THE FIT DIMENSION. The end lips have to land ON the front and
-// rear top edges. Too short and it will not drop on; too long and the lips hang
-// in space and nothing stops fore-aft slide. Lid measured ~216 mm.
-// CHEAP CHECK: set the printed 210 mm plate on the lid and see how much lid
-// shows at each end — that gives you the depth exactly, with a part in hand.
-MOUNT_L   = 217.0;  // [190:1:240]
+// MOUNT_L is no longer critical. At CASE_W 84 the side skirts grip a case the
+// same width as the OWON's, so THEY locate the frame; the end lips became a
+// bonus rather than the retention. 212 is chosen to just clear the 210 mm plate
+// and to sit inside a lid of any plausible depth — short of the edges it simply
+// rests on the lid, past them it overhangs slightly. Neither failure mode loses
+// anything, which is why the lid depth (never reliably measured, and read off
+// the same bad tape photo that gave 102 for the width) no longer gates a print.
+MOUNT_L   = 212.0;  // [190:1:240]
 
 /* [General] */
 EPS = 0.01;
@@ -216,7 +226,10 @@ PLATE_L_  = GY * GF;                 // 210
 PLATE_T_  = 4.00;                    // must match PLATE_H in lib/clickfinity.scad
 SKIRT_IN  = CASE_W / 2 + CASE_CLR / 2;
 SKIRT_OUT = SKIRT_IN + SKIRT_T;
-POCKET_HW = PLATE_W_ / 2 + PLATE_CLR / 2;   // upstand position — NOT PLATE_W_/2
+// At an 84 mm case holding an 84 mm plate there is no room for a separate
+// pocket wall — the skirt IS the plate upstand, exactly as on the OWON. Plate
+// clearance therefore comes from CASE_CLR, not PLATE_CLR.
+POCKET_HW = SKIRT_IN;
 
 // The end bars CARRY the plate rather than enclosing it: their top sits at
 // ledge height so the plate rests over them. Enclosing would need
@@ -226,8 +239,8 @@ assert(MOUNT_L >= PLATE_L_,
        "MOUNT_L shorter than the plate — the ledge cannot carry it");
 assert(POCKET_HW * 2 > PLATE_W_,
        "plate pocket has no clearance — raise PLATE_CLR");
-assert(SKIRT_IN > POCKET_HW,
-       "case is narrower than the plate pocket — skirts would foul the plate");
+assert(SKIRT_IN > PLATE_W_ / 2 + 0.3,
+       "case too narrow to hold the plate inside the skirts — raise CASE_CLR");
 
 // Body must be long enough for the box PLUS both lips. Whatever the foot does
 // not provide is added at the front as a ramped extension.
