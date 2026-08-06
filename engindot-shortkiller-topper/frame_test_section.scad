@@ -11,8 +11,8 @@
 //      at an 84 mm case the skirt wall and the plate upstand are the same wall.
 //   3. Does the 6 mm skirt sit where you want it against the side vents?
 //
-// PRINT: as rendered — walls UP, no supports. Same orientation as the frame.
+// PRINT: as rendered — walls DOWN, no supports. Same orientation as the frame.
 include <shortkiller_common.scad>
 use <engindot_frame.scad>
 
-rotate([180, 0, 0]) frame(30);
+frame(30);

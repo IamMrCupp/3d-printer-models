@@ -46,7 +46,7 @@ function _jaw_profile() = [
     [POCKET_HW,             LEDGE_T],
     [POCKET_HW,             _TOP],
     [TOP_OUT,               _TOP],
-    [TOP_OUT,               0],
+    [TOP_OUT,               RAMP],
     [SKIRT_OUT,             0],
     [SKIRT_OUT,            -SKIRT_D],
     [SKIRT_IN,             -SKIRT_D],
@@ -69,7 +69,7 @@ module _end_bar(s, len) {
     // that plane bridges ~85 mm across the opening and sags. The plate clears it
     // by fitting BETWEEN the bars — hence the MOUNT_L assert.
     translate([-TOP_OUT - EPS, y0, -END_LIP_D])
-        cube([2*TOP_OUT + 2*EPS, END_BAR_T, END_LIP_D + _TOP]);
+        cube([2*TOP_OUT + 2*EPS, END_BAR_T, END_LIP_D + LEDGE_T]);
 }
 
 // len defaults to the real MOUNT_L. A short len gives a genuine slice of this
@@ -81,5 +81,7 @@ module frame(len = MOUNT_L) {
     _end_bar(-1, len);
 }
 
-// Rendered WALLS-UP for printing. Flip walls-down to use it on the supply.
-rotate([180, 0, 0]) frame();
+// Rendered WALLS-DOWN — as used AND as printed. Skirt bottoms and end-lip
+// bottoms share the bed; the only overhangs are the two 45-degree ramps and the
+// 2 mm plate ledge. Do NOT flip this: walls-up leaves the end bars in mid-air.
+frame();

@@ -62,7 +62,9 @@ SK_H =  55.0;  // [35:0.5:80]  ⚠️ ESTIMATE — cosmetic, informs BIN_H only
 // the supply — see the Overhang body section below. GY is the one still-unread
 // number: the lid measured ~216 mm front to back, so 210 fits with ~6 mm spare.
 GX = 2;  // [2:1:5] plate cells across — 84 mm, hugs the lid like the OWON
-GY = 4;  // [3:1:7] plate cells deep
+GY = 5;  // [3:1:7] plate cells deep — 210 mm, deliberately LONGER than
+         //   the 193 mm lid so a rear cell survives for the probe bucket.
+         //   The plate overhangs the frame ~8.5 mm at each end.
 
 NX_CRADLE = 2;  // [2:1:5] Shortkiller bin, across — must clear SK_W
 NY_CRADLE = 4;  // [2:1:6] Shortkiller bin, deep — box may overhang this
@@ -179,7 +181,7 @@ TOP_WALL  =   2.5;  // [2:0.5:5]    wall outboard of the plate pocket. The frame
 // RAMP is DERIVED, not set — see the bottom of this file. It is exactly the
 // step between pocket wall and skirt wall, giving a 45-degree transition.
 SKIRT_T   =   2.5;  // [1.5:0.5:5]  skirt wall thickness
-SKIRT_D   =   6.0;  // [1:0.5:25]   ⚠️ how far the skirt drops down the case SIDE.
+SKIRT_D   =   7.0;  // [1:0.5:25]   ⚠️ how far the skirt drops down the case SIDE.
                     //   The sides are ALL vent, so this covers intake. Keep it
                     //   short — it only resists sideways slide; the end lips do
                     //   the real retention.
@@ -192,10 +194,11 @@ PLATE_CLR =   0.6;  // [0:0.1:2]    ⚠️ slip clearance around the plate. The 
 LEDGE_T   =   3.0;  // [1.5:0.5:6]  ledge thickness. Thicker than the OWON's
                     //   because the plate (84) is much narrower than the case
                     //   (102), so this shelf spans ~9 mm instead of ~0.
-END_BAR_T =   3.0;  // [2:0.5:10]   end-bar thickness front-to-back. Thin so the
-                    //   plate still fits BETWEEN the bars while they run full
-                    //   height — see the bridging note on MOUNT_L.
-END_LIP_D =   7.0;  // [3:0.5:14]   how far the front/back lip drops over the edge
+END_BAR_T =   5.0;  // [2:0.5:10]   end-bar thickness front-to-back
+END_LIP_D =   7.0;  // [3:0.5:14]   how far the front/back lip drops over the edge.
+                    //   ⚠️ MUST EQUAL SKIRT_D. The frame prints WALLS DOWN, so the
+                    //   skirt bottoms and the end-lip bottoms are both bed contact.
+                    //   If they differ, whichever is shorter starts in mid-air.
 // ⚠️ MOUNT_L MUST EXCEED PLATE_L_ + 2*END_BAR_T. Not for fit — for PRINTABILITY.
 //
 // The frame prints WALLS UP, standing on the tops of its two skirt walls. The
@@ -250,14 +253,18 @@ RAMP      = POCKET_HW - SKIRT_IN;           // 45-degree step, pocket wall to sk
 // ledge height so the plate rests over them. Enclosing would need
 // MOUNT_L >= PLATE_L_ + 2*END_BAR_T = 220, and the lid is only ~216 — the frame
 // would hang off the supply and the lips would grip nothing.
-assert(MOUNT_L >= PLATE_L_ + 2 * END_BAR_T + 1,
-       "MOUNT_L too short — end bars would have to be cut down, and then they bridge");
+// NOTE: there is deliberately NO "MOUNT_L >= PLATE_L_" rule any more. The plate
+// is longer than the frame and rests ON the end bars, overhanging both ends.
+// The bridging that rule used to guard against is now handled by printing
+// walls-down instead — see the END_LIP_D == SKIRT_D assert below.
+assert(MOUNT_L > 2 * END_BAR_T + 20,
+       "MOUNT_L absurdly short — nothing left between the end bars");
 assert(POCKET_HW * 2 > PLATE_W_,
        "plate pocket has no clearance — raise PLATE_CLR");
 assert(TOP_OUT > SKIRT_OUT,
        "upper block narrower than the skirt — skirt would overhang unsupported");
-assert(MOUNT_L >= PLATE_L_ + 2 * END_BAR_T + 1,
-       "MOUNT_L too short for the plate — drop GY");
+assert(END_LIP_D == SKIRT_D,
+       "END_LIP_D must equal SKIRT_D — walls-down, both are bed contact");
 
 // Body must be long enough for the box PLUS both lips. Whatever the foot does
 // not provide is added at the front as a ramped extension.
