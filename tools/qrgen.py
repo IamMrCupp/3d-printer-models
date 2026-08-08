@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+#
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Aaron Cupp
 """Generate an OpenSCAD data file of QR-code matrices from URLs.
 
 The 3D models read the committed `qr_data.scad`, so CI/OpenSCAD never need a QR

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Aaron Cupp
 # Render every model .scad in the repo to a binary STL and validate each one.
 #
 # Shared by CI (.github/workflows/validate.yml) and local dev:

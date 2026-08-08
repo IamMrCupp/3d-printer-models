@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+#
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Aaron Cupp
 """Validate a binary STL mesh: watertight / 2-manifold + sane bounding box.
 
     python3 tools/validate_stl.py path/to/model.stl

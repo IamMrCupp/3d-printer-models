@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Aaron Cupp
+//
 // gridfinity.scad — shared Gridfinity baseplate + bin library (per spec).
 //
 // 42 mm pitch, 41.5 mm bins, baseplate socket 0.7/1.8/2.15 = 4.65 mm, 4 mm

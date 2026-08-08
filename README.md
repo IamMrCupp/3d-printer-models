@@ -57,7 +57,18 @@ git push origin sticker-holder-inserts/v1.0.0
 
 ## License
 
-[CC BY-NC 4.0](LICENSE) — share and adapt with attribution, non-commercial. See [`LICENSE`](LICENSE).
+Two licenses, split by what the thing *is*:
+
+| What | License | Why |
+|---|---|---|
+| **The models** — every `<model>/` directory, the `.scad` files that produce a printable object, and the previews | [CC BY-NC 4.0](LICENSE) | share and adapt with attribution, non-commercial |
+| **The code** — [`lib/`](lib/) and [`tools/`](tools/) | [MIT](LICENSE-MIT) | it's a software library; reuse it however you like, commercially included |
+
+Creative Commons [recommends against using CC licenses for software](https://creativecommons.org/faq/#can-i-apply-a-creative-commons-license-to-software) — they don't address source vs. object code and carry no patent grant. So the parametric library and the build tooling are MIT, and the finished designs stay NC.
+
+Every file in `lib/` and `tools/` carries an `SPDX-License-Identifier: MIT` header, so the split is machine-readable and travels with the file if you vendor it.
+
+Some of these modules are also vendored into [`clickfinity-openscad`](https://github.com/IamMrCupp/clickfinity-openscad) (MIT throughout). Same author, same terms — take the library from either.
 
 ## Attribution / AI disclosure
 
