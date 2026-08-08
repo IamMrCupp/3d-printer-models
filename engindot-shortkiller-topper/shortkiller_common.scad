@@ -182,6 +182,11 @@ TOP_WALL  =   2.5;  // [2:0.5:5]    wall outboard of the plate pocket. The frame
                     //   the bin uses, rotated onto the frame.
 // RAMP is DERIVED, not set — see the bottom of this file. It is exactly the
 // step between pocket wall and skirt wall, giving a 45-degree transition.
+SKIRT_CLR =   0.0;  // [0:0.1:2]    WIDTH slip only. Separate from CASE_CLR, which
+                    //   sets the LENGTH span — that one measured perfect on the
+                    //   gauge and must not move. At +0.8 the width gauge showed
+                    //   ~1 mm of slop, so the skirt span is now the measured case
+                    //   width exactly; print tolerance supplies the fit.
 SKIRT_T   =   2.5;  // [1.5:0.5:5]  skirt wall thickness
 SKIRT_D   =   7.0;  // [1:0.5:25]   ⚠️ how far the skirt drops down the case SIDE.
                     //   The sides are ALL vent, so this covers intake. Keep it
@@ -251,7 +256,7 @@ SIDE_WALL = BODY_WALL;
 PLATE_W_  = GX * GF;                 // 84  — plate footprint the ledge carries
 PLATE_L_  = GY * GF;                 // 210
 PLATE_T_  = 4.00;                    // must match PLATE_H in lib/clickfinity.scad
-SKIRT_IN  = CASE_W / 2 + CASE_CLR / 2;
+SKIRT_IN  = CASE_W / 2 + SKIRT_CLR / 2;
 SKIRT_OUT = SKIRT_IN + SKIRT_T;
 POCKET_HW = PLATE_W_ / 2 + PLATE_CLR / 2;   // plate pocket, independent of the case
 TOP_OUT   = POCKET_HW + TOP_WALL;           // frame's outer half-width up top
