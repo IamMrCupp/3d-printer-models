@@ -6,9 +6,10 @@
 //
 // Answers, for about 15 minutes and ~15 g:
 //   1. Does the skirt drop over the lid snugly at the measured CASE_W = 84?
-//   2. Does the plate seat in the pocket? Slide this onto the printed plate's
-//      long edge — 0.6 mm clearance per side is the whole margin here, because
-//      at an 84 mm case the skirt wall and the plate upstand are the same wall.
+//   2. ⚠️ IT DOES **NOT** TEST THE PLATE POCKET. This is a closed loop — end
+//      bars at both ends with ~20 mm of pocket between them — so a 210 mm plate
+//      can never enter it. An earlier version of this comment claimed otherwise
+//      and was wrong. Use frame_width_gauge (6 g) if all you want is the span.
 //   3. Does the 6 mm skirt sit where you want it against the side vents?
 //
 // PRINT: as rendered — walls DOWN, no supports. Same orientation as the frame.
