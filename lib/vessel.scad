@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Aaron Cupp
+//
 // vessel.scad — parametric collar cups for bottles, cans, and pen-form tools.
 //
 // A collar cup is a solid Gridfinity block with cylindrical bores sunk into it.

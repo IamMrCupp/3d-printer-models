@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Aaron Cupp
 # Build release artifacts for one model: rendered STL(s) + a preview PNG each.
 #
 #     tools/build_release.sh <model-slug> [out-dir]
