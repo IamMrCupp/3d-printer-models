@@ -5,17 +5,17 @@
 //
 // MEASURED 2026-07-27 (some low-confidence, flagged):
 //   platform  131.84 (W) × 130.54 (D)   raised-platform outline, front→pole
-//   step      ~11 mm ⚠ (dark display)   platform height above the rim → skirt grab
+//   step      17.76 mm                  platform height above the rim → skirt grab
 //   kimwipe   119.60 × 122.86           box footprint (fits the 3×3)
 include <../lib/gridfinity.scad>
 
 PLAT_W = 131.84;   // platform width  (X)
 PLAT_D = 130.54;   // platform depth  (Y, front edge → pole)
-STEP_H = 11;       // ⚠ estimate — skirt depth must stay under this
+STEP_H = 17.76;   // measured — platform height above rim → skirt grab
 CORNER = 12;       // ⚠ estimate — platform corner radius
 
 GRID_NX = 3; GRID_NY = 3;
-SKIRT_DEPTH = 7;   // < STEP_H
+SKIRT_DEPTH = 12;  // < STEP_H (17.76), deep grip with margin
 SKIRT_WALL  = 2.5;
 FIT         = 0.4; // slip clearance skirt-to-platform (interference-ish)
 EPS = 0.1;
