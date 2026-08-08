@@ -165,6 +165,8 @@ BACKSTOP_T  = LIP_T;
 // Cross-section of one side jaw, from the middle out: a ledge that carries the
 // plate edge, an upstand beside it, then the short skirt down the case side.
 // Front/back end-bars tie the two jaws together and carry the hooking lips.
+CASE_L    = 196.85; // [120:1:280] MEASURED lid length = 7 3/4". This is the CASE,
+                    //   not the frame. MOUNT_L is derived from it — see below.
 CASE_W    =  80.0;  // [70:0.5:140] MEASURED via frame_fit_gauge: the 86 collar
                     //   showed ~1 mm of gap per side. Within a hair of the OWON's
                     //   MEASURED BY THE USER at 80. (Gauge collars first put it
@@ -220,7 +222,6 @@ END_LIP_D =   7.0;  // [3:0.5:14]   how far the front/back lip drops over the ed
 // bonus. Short of the lid edges it rests on the lid; past them it sits slightly
 // proud. Neither loses retention, which is why the lid depth — never reliably
 // measured — does not gate a print.
-MOUNT_L   = 193.0;  // [150:1:240]
 
 /* [General] */
 EPS = 0.01;
@@ -254,6 +255,7 @@ SKIRT_IN  = CASE_W / 2 + CASE_CLR / 2;
 SKIRT_OUT = SKIRT_IN + SKIRT_T;
 POCKET_HW = PLATE_W_ / 2 + PLATE_CLR / 2;   // plate pocket, independent of the case
 TOP_OUT   = POCKET_HW + TOP_WALL;           // frame's outer half-width up top
+MOUNT_L    = CASE_L + 2 * END_BAR_T + CASE_CLR;  // clear span = CASE_L + CASE_CLR
 RAMP       = POCKET_HW - SKIRT_IN;               // 45-degree step, pocket to skirt
 OVERHANG_Y = max(0, (PLATE_L_ - MOUNT_L) / 2);   // plate cantilever past each end
 SHELF_OUT  = min(OVERHANG_Y, END_LIP_D);         // 45-degree gusset limit
@@ -266,8 +268,8 @@ SHELF_OUT  = min(OVERHANG_Y, END_LIP_D);         // 45-degree gusset limit
 // is longer than the frame and rests ON the end bars, overhanging both ends.
 // The bridging that rule used to guard against is now handled by printing
 // walls-down instead — see the END_LIP_D == SKIRT_D assert below.
-assert(MOUNT_L > 2 * END_BAR_T + 20,
-       "MOUNT_L absurdly short — nothing left between the end bars");
+assert(MOUNT_L - 2 * END_BAR_T >= CASE_L,
+       "clear span between the end lips is shorter than the case — will not go on");
 assert(POCKET_HW * 2 > PLATE_W_,
        "plate pocket has no clearance — raise PLATE_CLR");
 assert(TOP_OUT > SKIRT_OUT,

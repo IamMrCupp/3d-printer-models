@@ -93,7 +93,9 @@ module frame(len = MOUNT_L) {
     mirror([1, 0, 0]) _jaw(len);
     _end_bar(1, len);
     _end_bar(-1, len);
-    if (END_SHELF && SHELF_OUT > 0) {
+    // Below ~2 mm the shelf is a sliver wedge that adds nothing and goes
+    // non-manifold against the end bar. The plate barely overhangs at that point.
+    if (END_SHELF && SHELF_OUT >= 2) {
         _end_shelf(1, len);
         _end_shelf(-1, len);
     }
