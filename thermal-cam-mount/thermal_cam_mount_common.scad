@@ -49,8 +49,22 @@ CAM_CLR   = 0.6;
 CAM_ANGLE = 30;   // tilt from vertical → lens looks down at the board
 
 // ---- cradle ----
-LIP=4.5; SIDE_H=16; CORNER=6; CABLE_W=12; WALL=3; ARM_DROP=7;
+LIP=4.5; SIDE_H=16; CORNER=6; CABLE_W=12; WALL=3;
 CABLE_DIR = "down";   // "down" (female/bottom port) | "side" (right-angle adapter)
+
+// ---- cradle placement — ABOVE the plate, looking DOWN and INWARD -----------
+// The tab is COPLANAR with the ring light's disc. So everything below the tab
+// is the working volume between the objective and the board — the cam must
+// never go there. It rides ABOVE the top plate, just outboard of the tab's
+// front face, and sights down past the plate's front-top corner at the board.
+//
+// FIXED 2026-08-08: the cradle used to hang BELOW the bottom plate, rotated
+// -(90-CAM_ANGLE). That put the cam in the working volume AND aimed the lens
+// 60 deg UP into the objective. Both are corrected here; verify_aim.py checks
+// the lens vector and the corner clearance so this can't regress silently.
+TILT    = 90 - CAM_ANGLE;   // +60 -> lens points DOWN and inward (sign was inverted)
+ARM_FWD = 19.5;             // cradle origin forward of the tab's front face
+ARM_UP  = 0;                // cradle base above the top plate's top face
 
 // ============================================================================
 // derived
@@ -61,6 +75,9 @@ PW      = 2*(TAB_W/2 + BOSS_GAP + 2*BOSS_R);   // plate width (spans to the boss
 boss_x  = TAB_W/2 + BOSS_GAP + BOSS_R;
 boss_y  = y_front - BOSS_INSET_Y;
 bot_z0  = -half - PLATE_T;                  // underside of the bottom plate
+top_z1  = half + PLATE_T;                   // top face of the top plate
+cr_y    = y_front + ARM_FWD;                // cradle origin, pre-rotation
+cr_z    = top_z1 + ARM_UP;
 
 module _plate() {                            // flat footprint in X-Y, unit thickness at z=0
     translate([-PW/2, y_back, 0]) cube([PW, GRIP_LEN, PLATE_T]);
@@ -88,7 +105,20 @@ module _cradle() {
     }
 }
 
-// ---- part 1: bottom plate + bosses + cradle ----
+// Arm: carries the cradle up off the TOP plate, forward of the tab's front
+// face. Hulled from a patch of the plate's top face to the cradle's underside
+// so the cradle is fully backed, not hanging off a single edge.
+module _arm() {
+    aw = CAM_W + 2*WALL;
+    oy = CAM_D + CAM_CLR + 2*WALL;
+    hull() {
+        translate([-aw/2, y_front - 10, top_z1 - EPS]) cube([aw, 10, EPS]);
+        translate([0, cr_y, cr_z]) rotate([TILT, 0, 0])
+            translate([-aw/2, 0, -EPS]) cube([aw, oy, EPS]);
+    }
+}
+
+// ---- part 1: bottom plate + bosses ----
 module mount_bottom() {
     union() {
         difference() {
@@ -104,22 +134,20 @@ module mount_bottom() {
             translate([0, 0, -half - CENTER_POCKET_H])
                 cylinder(d = CENTER_POCKET_D, h = CENTER_POCKET_H + EPS);
         }
-        // arm from the plate underside down to the tilted cradle at the front
-        aw = CAM_W + 2*WALL;
-        translate([-aw/2, y_front - WALL, bot_z0 - ARM_DROP])
-            cube([aw, WALL + 2, ARM_DROP + PLATE_T + EPS]);
-        translate([0, y_front + EPS, bot_z0 - ARM_DROP])
-            rotate([-(90 - CAM_ANGLE), 0, 0]) _cradle();
     }
 }
 
-// ---- part 2: top plate ----
+// ---- part 2: top plate + arm + cradle ----
 module mount_top() {
-    difference() {
-        translate([0,0,half]) _plate();
-        for (sx = [-boss_x, boss_x]) translate([sx, boss_y, half - EPS]) {
-            cylinder(d = SCREW_D, h = PLATE_T + 2*EPS);
-            translate([0,0,PLATE_T - 1.6]) cylinder(d = SCREW_CB, h = 1.6 + EPS);
+    union() {
+        difference() {
+            translate([0,0,half]) _plate();
+            for (sx = [-boss_x, boss_x]) translate([sx, boss_y, half - EPS]) {
+                cylinder(d = SCREW_D, h = PLATE_T + 2*EPS);
+                translate([0,0,PLATE_T - 1.6]) cylinder(d = SCREW_CB, h = 1.6 + EPS);
+            }
         }
+        _arm();
+        translate([0, cr_y, cr_z]) rotate([TILT, 0, 0]) _cradle();
     }
 }
