@@ -195,6 +195,13 @@ LEDGE_T   =   3.0;  // [1.5:0.5:6]  ledge thickness. Thicker than the OWON's
                     //   because the plate (84) is much narrower than the case
                     //   (102), so this shelf spans ~9 mm instead of ~0.
 END_BAR_T =   5.0;  // [2:0.5:10]   end-bar thickness front-to-back
+END_SHELF = true;   // support the plate's overhang past each end of the frame.
+                    //   The plate is LONGER than the lid, so its last ~8.5 mm at
+                    //   each end cantilever into free air with a bin sitting on
+                    //   them — a shim underneath has nothing to rest on. This
+                    //   carries it on a shelf off the end bar, with a 45-degree
+                    //   gusset so it still prints walls-down. Reach is capped at
+                    //   END_LIP_D to hold that gusset at 45 degrees.
 END_LIP_D =   7.0;  // [3:0.5:14]   how far the front/back lip drops over the edge.
                     //   ⚠️ MUST EQUAL SKIRT_D. The frame prints WALLS DOWN, so the
                     //   skirt bottoms and the end-lip bottoms are both bed contact.
@@ -247,7 +254,9 @@ SKIRT_IN  = CASE_W / 2 + CASE_CLR / 2;
 SKIRT_OUT = SKIRT_IN + SKIRT_T;
 POCKET_HW = PLATE_W_ / 2 + PLATE_CLR / 2;   // plate pocket, independent of the case
 TOP_OUT   = POCKET_HW + TOP_WALL;           // frame's outer half-width up top
-RAMP      = POCKET_HW - SKIRT_IN;           // 45-degree step, pocket wall to skirt
+RAMP       = POCKET_HW - SKIRT_IN;               // 45-degree step, pocket to skirt
+OVERHANG_Y = max(0, (PLATE_L_ - MOUNT_L) / 2);   // plate cantilever past each end
+SHELF_OUT  = min(OVERHANG_Y, END_LIP_D);         // 45-degree gusset limit
 
 // The end bars CARRY the plate rather than enclosing it: their top sits at
 // ledge height so the plate rests over them. Enclosing would need

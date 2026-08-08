@@ -74,11 +74,29 @@ module _end_bar(s, len) {
 
 // len defaults to the real MOUNT_L. A short len gives a genuine slice of this
 // same geometry for fit-testing — see frame_test_section.scad.
+// Shelf carrying the plate's overhang past the end of the frame, 45-degree
+// gusset underneath. Walls-down that gusset is self-supporting; a square shelf
+// would be an 8.5 mm overhang running the full width.
+module _end_shelf(s, len) {
+    y0 = s > 0 ? len/2 : -len/2;
+    pts = s > 0
+        ? [[y0, -END_LIP_D], [y0 + SHELF_OUT, -END_LIP_D + SHELF_OUT],
+           [y0 + SHELF_OUT, LEDGE_T], [y0, LEDGE_T]]
+        : [[y0, -END_LIP_D], [y0, LEDGE_T],
+           [y0 - SHELF_OUT, LEDGE_T], [y0 - SHELF_OUT, -END_LIP_D + SHELF_OUT]];
+    translate([-TOP_OUT - EPS, 0, 0])
+        rotate([90, 0, 90]) linear_extrude(2*TOP_OUT + 2*EPS) polygon(pts);
+}
+
 module frame(len = MOUNT_L) {
     _jaw(len);
     mirror([1, 0, 0]) _jaw(len);
     _end_bar(1, len);
     _end_bar(-1, len);
+    if (END_SHELF && SHELF_OUT > 0) {
+        _end_shelf(1, len);
+        _end_shelf(-1, len);
+    }
 }
 
 // Rendered WALLS-DOWN — as used AND as printed. Skirt bottoms and end-lip
