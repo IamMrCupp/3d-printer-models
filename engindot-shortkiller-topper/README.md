@@ -16,7 +16,7 @@ this one holds one instrument and its leads.
 
 | Part | File | Size | Print |
 |---|---|---|---|
-| **Frame** | `engindot_frame.scad` | 107.6 × 217 × 14 mm | ×1 — flat, **walls up** as rendered, no supports |
+| **Frame** | `engindot_frame.scad` | 89.6 × 207.65 × 14 mm | ×1 — flat, **walls DOWN** as rendered, no supports |
 | **Plate** | `engindot_plate.scad` | 84 × 210 × 4 mm | ×1 — flat, **latches up**, **PETG** |
 | **Shortkiller bin** | `bin_shortkiller.scad` | 113 × 180 × 42 mm | ×1 — flat, foot down, no supports |
 | **Probe + leads bucket** | `bin_probe_leads.scad` | 41.5 × 41.5 × 42 mm | ×1 — flat, foot down |
@@ -27,15 +27,26 @@ Shared dimensions live in `shortkiller_common.scad`.
 
 The frame **drops over the top** of the supply and is held passively:
 
-- **Front/back lips** (7 mm) hook the top edges → can't slide fore-aft. This is
-  what actually holds it on.
-- **Short side skirts** (6 mm) hug the case sides → can't slide sideways.
+- **The ledge bears 2 mm on the lid** down both sides → it seats at a fixed
+  depth instead of sliding down the skirts. This is the part that is easy to
+  leave out; the OWON has 2.15 mm of it, and a revision here that sized the
+  ledge off the plate instead of the case ended up with none.
+- **Front/back lips** (7 mm) hook the top edges → can't slide fore-aft.
+- **Short side skirts** (7 mm) hug the case sides → can't slide sideways.
 - **Gravity** does the rest.
 
 The skirts are deliberately short. The ENGINDOT vents the **full height of both
-sides**, so the OWON's 20 mm skirt would have sat over the intake. Since the lips
-carry the retention and the skirts only locate, 6 mm is enough. `SKIRT_D` takes
-it lower if you want.
+sides**, so the OWON's 20 mm skirt would have sat over the intake. 7 mm is
+enough to locate it. `SKIRT_D` takes it lower if you want — but it must stay
+equal to `END_LIP_D`, since walls-down they are both bed contact.
+
+**Measured, print-confirmed fits:** lid 80 × 196.85 mm (7¾″). Skirt span 80.0,
+lip-to-lip span 197.65. Both verified with `frame_width_gauge` and
+`frame_length_gauge` before the frame was cut.
+
+⚠️ `MOUNT_L` is **derived**, not set. The end lips project inward by `END_BAR_T`,
+so the clear span is `MOUNT_L − 2×END_BAR_T`. Setting `MOUNT_L` to the case
+length gives a span 10 mm too small — that cost two frames.
 
 The top is solid — rear fan only — so a tray over the lid is thermally free.
 
@@ -128,12 +139,12 @@ Print-first parts, not bench parts. Each answers something a photo can't:
 | Setting | Value |
 |---|---|
 | Material | **Plate: PETG** (Clickfinity latches creep in PLA). Bins: PETG. Frame: either. |
-| Orientation | Plate flat, latches up. Frame flat, walls up. Bins flat, foot down. No supports anywhere. |
+| Orientation | Plate flat, latches up. Frame flat, **walls down**. Bins flat, foot down. No supports anywhere. |
 | Layer height | 0.2 mm |
 | Walls | Plate: Arachne, ≥ 2 loops (thin tongues). Bins: 3+. |
 | Cooling | Plate: modest — the tongues need layer bonding. |
 | Infill | 15 % |
-| Brim | Plate: outer-only, 5 mm, 0.15 mm gap. Everything else: none. |
+| Brim | Plate: outer-only, 5 mm, 0.15 mm gap. Frame: mouse ear (bed contact is two thin skirt rails). Bins: none. |
 
 ## Fit
 
@@ -141,6 +152,6 @@ Built for the measured unit — lid 102 × 216 mm, Shortkiller 98 × 171 mm. If 
 differs, the knobs are `CASE_W`, `MOUNT_L` and `SKIRT_D` for the frame, and
 `SK_W` / `SK_D` for the bin.
 
-**`MOUNT_L` is the frame's fit dimension.** The end lips must land on the front
-and rear top edges: too short and it won't drop on, too long and they hang in
-space with nothing resisting fore-aft slide.
+**Set `CASE_W` and `CASE_L` from the case, never the frame dimensions from the
+case.** `SKIRT_IN`, `MOUNT_L` and `LEDGE_IN` all derive from them, and asserts
+catch a span that cannot fit or a ledge with no bearing.
