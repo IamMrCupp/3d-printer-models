@@ -192,7 +192,13 @@ SKIRT_D   =   7.0;  // [1:0.5:25]   ⚠️ how far the skirt drops down the case
                     //   The sides are ALL vent, so this covers intake. Keep it
                     //   short — it only resists sideways slide; the end lips do
                     //   the real retention.
-LEDGE_IN  =   2.0;  // [1:0.5:5]    how far the ledge reaches under the plate edge
+BEAR      =   2.0;  // [1:0.5:5]    how far the ledge reaches INBOARD of the case
+                    //   edge, resting on the lid. THIS IS THE DEPTH STOP — it is
+                    //   what stops the frame sliding down the sides. The OWON has
+                    //   2.15 mm of it and that is why it seats. An earlier version
+                    //   here had ZERO: the ledge stopped 0.3 mm outboard of the
+                    //   case edge, so the frame hung entirely off its skirts.
+                    // LEDGE_IN is derived from it — see the bottom of the file.
 PLATE_CLR =   0.6;  // [0:0.1:2]    ⚠️ slip clearance around the plate. The OWON
                     //   frame has none of its own — its upstands sit at the CASE
                     //   half-width, which happens to be wider than its plate. Put
@@ -261,7 +267,9 @@ SKIRT_OUT = SKIRT_IN + SKIRT_T;
 POCKET_HW = PLATE_W_ / 2 + PLATE_CLR / 2;   // plate pocket, independent of the case
 TOP_OUT   = POCKET_HW + TOP_WALL;           // frame's outer half-width up top
 MOUNT_L    = CASE_L + 2 * END_BAR_T + CASE_CLR;  // clear span = CASE_L + CASE_CLR
-RAMP       = POCKET_HW - SKIRT_IN;               // 45-degree step, pocket to skirt
+LEDGE_IN   = POCKET_HW - SKIRT_IN + BEAR;        // ledge reach: clears the step,
+                                                 //   then BEAR onto the lid
+RAMP       = POCKET_HW - SKIRT_IN;               // 45-degree OUTER step chamfer
 OVERHANG_Y = max(0, (PLATE_L_ - MOUNT_L) / 2);   // plate cantilever past each end
 SHELF_OUT  = min(OVERHANG_Y, END_LIP_D);         // 45-degree gusset limit
 
@@ -279,6 +287,8 @@ assert(POCKET_HW * 2 > PLATE_W_,
        "plate pocket has no clearance — raise PLATE_CLR");
 assert(TOP_OUT > SKIRT_OUT,
        "upper block narrower than the skirt — skirt would overhang unsupported");
+assert(POCKET_HW - LEDGE_IN < SKIRT_IN,
+       "ledge does not reach the lid — frame has no depth stop and will slide down");
 assert(END_LIP_D == SKIRT_D,
        "END_LIP_D must equal SKIRT_D — walls-down, both are bed contact");
 

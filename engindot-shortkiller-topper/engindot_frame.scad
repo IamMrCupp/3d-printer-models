@@ -50,9 +50,11 @@ function _jaw_profile() = [
     [SKIRT_OUT,             0],
     [SKIRT_OUT,            -SKIRT_D],
     [SKIRT_IN,             -SKIRT_D],
-    [SKIRT_IN,             -RAMP],
-    [POCKET_HW,             0],
+    [SKIRT_IN,              0],
 ];
+// No inner ramp any more: the ledge now reaches inboard of the skirt to bear on
+// the lid, so the old ramp would sit inside the case volume. Its 2 mm inward
+// cantilever bridges, exactly as the OWON's does.
 
 module _jaw(len) {
     translate([0, len/2, 0]) rotate([90, 0, 0])
