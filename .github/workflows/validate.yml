@@ -24,21 +24,12 @@ jobs:
         with:
           python-version: "3.x"
 
-      # Ubuntu ships openscad 2021.01, which is ~5 years and one CGAL major
-      # behind what anyone actually models with. Its CGAL emits non-manifold
-      # meshes for geometry that is clean on a current build, so CI was failing
-      # valid models — and worse, nothing reproduced locally. Use the nightly
-      # PPA so CI matches a modern renderer.
       - name: Install OpenSCAD + mesh validator
         run: |
-          sudo add-apt-repository -y ppa:openscad/releases
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends openscad-nightly xvfb
-          openscad-nightly --version
+          sudo apt-get install -y --no-install-recommends openscad xvfb
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
       - name: Render + validate models
-        env:
-          OPENSCAD: openscad-nightly
         run: xvfb-run -a tools/render.sh
