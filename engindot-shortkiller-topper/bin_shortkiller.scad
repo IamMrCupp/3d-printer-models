@@ -67,7 +67,16 @@ module bin_shortkiller(ny = NY_CRADLE, foot = true, lips = true) {
         difference() {
             union() {
                 if (foot) {
-                    bin_blank(NX_CRADLE, ny, BIN_BASE_H + CHAMF);
+                    // Feet only — deliberately NOT bin_blank(). bin_blank builds
+                    // its block with offset(R) offset(-R) square(), while the
+                    // flare below uses _rrect (hull of circles). Unioning two
+                    // nominally identical rectangles built different ways leaves
+                    // faces coincident to within tessellation error, and the mesh
+                    // goes non-manifold on some OpenSCAD builds but not others —
+                    // it passed locally and failed in CI. One construction only.
+                    for (ix = [0 : NX_CRADLE-1], iy = [0 : ny-1])
+                        translate([(ix - (NX_CRADLE-1)/2) * GF,
+                                   (iy - (ny-1)/2) * GF, 0]) _bin_foot();
 
                     // 45-degree flare, grid footprint out to body footprint
                     hull() {
