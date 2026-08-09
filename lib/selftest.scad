@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Aaron Cupp
+//
 // selftest — instantiates every shared module so CI has real geometry to check.
 //
 // NOT a model. Nothing here is meant to be printed; it exists because

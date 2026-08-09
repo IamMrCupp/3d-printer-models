@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Aaron Cupp
+#
 """Render a studio-style product preview of an STL with Blender, headless.
 
     blender -b -P tools/render_preview.py -- <input.stl> <output.png>

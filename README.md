@@ -15,6 +15,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="bench-cleaning-station/preview.png" width="150"> | [**Bench cleaning station**](bench-cleaning-station/) | Gridfinity cups + bins for an electronics bench's IPA corner — aerosols, wash bottle, dispenser pump, melamine sponges. |
 | <img src="rotary-tool-station/preview.png" width="150"> | [**Rotary tool station**](rotary-tool-station/) | Vertical cup for a HARDELL mini rotary tool + a drilled block for its 3/32″ bits. Includes a print-first hole-fit gauge. |
 | <img src="owon-spm8104-tray/preview.png" width="150"> | [**OWON SPM8104 top tray**](owon-spm8104-tray/) | Magnet-free Clickfinity tray that clamps onto an OWON SPM8104 PSU/DMM — 10 cells for the cord and barrel adapters. Screw-clamp rails, no adhesive. |
+| <img src="engindot-shortkiller-topper/preview.png" width="150"> | [**ENGINDOT Shortkiller topper**](engindot-shortkiller-topper/) | Drop-over Clickfinity topper for an ENGINDOT bench supply, holding a Shortkiller where you can operate it plus a tip-down bucket for its probe and lead. Bin body flares past its own foot to carry a box wider than the grid. |
 
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
@@ -57,7 +58,18 @@ git push origin sticker-holder-inserts/v1.0.0
 
 ## License
 
-[CC BY-NC 4.0](LICENSE) — share and adapt with attribution, non-commercial. See [`LICENSE`](LICENSE).
+Two licenses, split by what the thing *is*:
+
+| What | License | Why |
+|---|---|---|
+| **The models** — every `<model>/` directory, the `.scad` files that produce a printable object, and the previews | [CC BY-NC 4.0](LICENSE) | share and adapt with attribution, non-commercial |
+| **The code** — [`lib/`](lib/) and [`tools/`](tools/) | [MIT](LICENSE-MIT) | it's a software library; reuse it however you like, commercially included |
+
+Creative Commons [recommends against using CC licenses for software](https://creativecommons.org/faq/#can-i-apply-a-creative-commons-license-to-software) — they don't address source vs. object code and carry no patent grant. So the parametric library and the build tooling are MIT, and the finished designs stay NC.
+
+Every file in `lib/` and `tools/` carries an `SPDX-License-Identifier: MIT` header, so the split is machine-readable and travels with the file if you vendor it.
+
+Some of these modules are also vendored into [`clickfinity-openscad`](https://github.com/IamMrCupp/clickfinity-openscad) (MIT throughout). Same author, same terms — take the library from either.
 
 ## Attribution / AI disclosure
 

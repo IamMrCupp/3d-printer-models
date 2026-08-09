@@ -1,3 +1,11 @@
+SCOPE: This CC BY-NC 4.0 license covers the MODELS in this repository —
+the per-model directories and the printable designs they produce.
+
+The code in lib/ and tools/ is MIT licensed instead; see LICENSE-MIT.
+Each of those files carries an SPDX-License-Identifier: MIT header.
+
+=======================================================================
+
 Attribution-NonCommercial 4.0 International
 
 =======================================================================
