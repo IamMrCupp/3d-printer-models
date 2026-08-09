@@ -10,9 +10,6 @@ on:
       - "**.scad"
       - "**.stl"
       - "tools/**"
-      # Without this, a change to CI itself does not run CI — you can break or
-      # fix the pipeline and get a green PR either way.
-      - ".github/workflows/validate.yml"
       - "requirements-dev.txt"
       - ".github/workflows/validate.yml"
   workflow_dispatch:
