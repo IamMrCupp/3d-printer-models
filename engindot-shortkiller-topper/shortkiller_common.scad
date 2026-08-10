@@ -167,12 +167,12 @@ BACKSTOP_T  = LIP_T;
 // Front/back end-bars tie the two jaws together and carry the hooking lips.
 CASE_L    = 196.85; // [120:1:280] MEASURED lid length = 7 3/4". This is the CASE,
                     //   not the frame. MOUNT_L is derived from it — see below.
-CASE_W    =  80.0;  // [70:0.5:140] MEASURED via frame_fit_gauge: the 86 collar
-                    //   showed ~1 mm of gap per side. Within a hair of the OWON's
-                    //   MEASURED BY THE USER at 80. (Gauge collars first put it
-                    //   under 86; an even earlier 102 was a tape-photo misread that
-                    //   produced a frame falling straight over the case.) 80 is
-                    //   NARROWER than the 84 mm plate — see TOP_WALL below.
+CASE_W    =  80.0;  // [70:0.5:140] MEASURED by the user, then PRINT-CONFIRMED by
+                    //   frame_width_gauge at an 80.0 mm skirt span.
+                    //   ⚠️ My own tape-photo reads gave 102 and then 84 — both
+                    //   wrong, both printed. Do not "correct" this from a photo.
+                    //   80 is NARROWER than the 84 mm plate, which is why the
+                    //   frame's top flares past its skirt — see TOP_WALL below.
 CASE_CLR  =   0.8;  // [0.3:0.1:3]  slip clearance on the CASE only. The plate no
                     //   longer depends on it — at 80 the case is narrower than the
                     //   plate, so the pocket sits outboard of the skirt entirely.
