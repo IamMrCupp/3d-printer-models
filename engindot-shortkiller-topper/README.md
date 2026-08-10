@@ -132,6 +132,8 @@ Print-first parts, not bench parts. Each answers something a photo can't:
 | `bin_shortkiller_testfit.scad` | Does the box fit the pocket, does the foot seat in a plate |
 | `bin_shortkiller_griptest.scad` | Do the flexures grip at their **real span** — a third of the material, no Gridfinity base |
 | `wrap_test_bands.scad` | Brackets the box height 45/50/55/60 |
+| `frame_width_gauge.scad` | Skirt span against the case — 6 g |
+| `frame_length_gauge.scad` | Lip-to-lip span against the case — 14 g |
 | `shortkiller_fit_gauge.scad` | Staircase gauge, reads a case width without calipers |
 
 ## Recommended print settings

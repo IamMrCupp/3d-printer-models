@@ -28,15 +28,27 @@ include <../lib/gridfinity.scad>
 include <shortkiller_common.scad>
 
 GRIP_BASE_T = 3.0;   // flat base thickness when foot = false
+FUSE        = 0.05;  // overlap between the feet and the flare above them.
+                     //   The feet top out at BIN_BASE_H and the flare used to
+                     //   START there — coplanar faces, which the two OpenSCAD
+                     //   builds this repo must satisfy resolve differently:
+                     //   2021.01 (CI) and 2026.06 (dev) each produced a
+                     //   non-manifold mesh for one rounding construction and a
+                     //   clean one for the other, in OPPOSITE directions.
+                     //   Overlapping them sidesteps the disagreement entirely.
 
-// Rounded rect as a hull of four circles — deliberately NOT the
-// offset(r) offset(-r) idiom lib/gridfinity.scad uses. That chain emits
-// near-coincident vertices at some $fn values and the mesh goes non-manifold;
-// this construction is stable at every $fn tested.
-module _rrect(w, d) {
-    hull() for (x = [-1, 1], y = [-1, 1])
-        translate([x * (w / 2 - BIN_R), y * (d / 2 - BIN_R)]) circle(r = BIN_R);
-}
+// Rounded rect via the SAME offset idiom lib/gridfinity.scad uses. Verified on
+// both engines this repo has to satisfy:
+//
+//   construction        OpenSCAD 2021.01 (CI)   OpenSCAD 2026.06 (dev)
+//   hull of circles     NON-MANIFOLD            clean
+//   offset(R) offset(-R) clean                  clean  (at $fn = 40)
+//
+// An earlier revision used a hull of four circles, on the theory that the offset
+// round-trip was the fragile one. That was backwards: it is clean here and it is
+// what 2021.01 chokes on. Matching lib/gridfinity.scad's own construction also
+// means the union with bin_blank's block never mixes two roundings.
+module _rrect(w, d) { offset(r = BIN_R) offset(r = -BIN_R) square([w, d], center = true); }
 
 module grip_bump(side, len, top_z, yc) {
     // Ridge running fore-aft on the flexure's inner face. Horizontal axis so the
@@ -80,7 +92,7 @@ module bin_shortkiller(ny = NY_CRADLE, foot = true, lips = true) {
 
                     // 45-degree flare, grid footprint out to body footprint
                     hull() {
-                        translate([0, 0, BIN_BASE_H])
+                        translate([0, 0, BIN_BASE_H - FUSE])
                             linear_extrude(EPS) _rrect(FOOT_W, D);
                         translate([0, yc, BIN_BASE_H + CHAMF])
                             linear_extrude(EPS) _rrect(BODY_W, BD);
