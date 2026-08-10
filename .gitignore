@@ -21,6 +21,11 @@
 build/
 # Release artifacts (rendered into dist/ by tools/build_release.sh)
 dist/
+# ...and into a version-named dir when someone passes the version as the out-dir.
+# build_release.sh takes <model> [out-dir], NOT <model> <version> — `build_release.sh
+# foo v1.0.4` creates ./v1.0.4/. Harmless except the PNGs aren't covered by *.stl
+# below, so `git add -A` sweeps them into the repo (see 2ce8dc7, and again 2026-08-08).
+v[0-9]*/
 # Python venv for the mesh validator
 .venv/
 __pycache__/
