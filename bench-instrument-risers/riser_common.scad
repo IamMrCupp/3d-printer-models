@@ -5,8 +5,8 @@
 // of skating. Put one under each instrument foot and the instrument's own
 // footprint becomes open grid underneath.
 //
-//   hot air station  4 pedestals @ 6"
-//   oscilloscope     2 pedestals @ 2"
+//   hot air station  4 pedestals @ 8"
+//   oscilloscope     2 pedestals @ 4"
 //
 // WHY A LIP AND NOT A FOOT POCKET
 //   The top is a shallow tray — a raised rim all the way round a recessed pad.
@@ -51,17 +51,26 @@ GX = 2;   // [1:1:4] cells across
 GY = 2;   // [1:1:4] cells deep
 
 /* [Heights] */
-// Nominal, from the bench layout — both are "about", not measured constraints,
-// so tune them freely. The pedestal height IS the clear height under the
-// instrument, measured from the same datum a bin sits on (the desk plate's
-// socket floor), so it compares directly against a bin's total height.
+// Both measured at the bench, and note they are set by DIFFERENT constraints —
+// which matters if either ever gets revisited.
 //
-// Clickfinity's latch GRIPS: a bin comes out by pulling straight up against four
-// arms per cell. Budget the bin height PLUS release travel PLUS room to get a
-// hand in — sizing to bin height alone builds a shelf whose bins you cannot
-// extract. Rule of thumb: usable bin height is roughly RISER_H minus 40.
-SCOPE_RISE  =  50.8;  // 2" — fits shallow trays underneath (~10 mm bins)
-HOTAIR_RISE = 152.4;  // 6" — takes the tallest bins in the repo with room over
+// SCOPE_RISE is a SIGHTLINE number. The scope has to clear the trays standing in
+// front of it (logic analyzer, programmers), so this is driven by what is in the
+// way, not by what fits underneath. Shrink it and the screen disappears behind
+// the trays; the storage underneath is a by-product.
+//
+// HOTAIR_RISE is a working-height number off the station itself.
+//
+// What fits UNDERNEATH follows from whichever number lands. The pedestal height
+// IS the clear height under the instrument, measured from the same datum a bin
+// sits on (the desk plate's socket floor), so it compares directly against a
+// bin's total height. Clickfinity's latch GRIPS: a bin comes out by pulling
+// straight up against four arms per cell, so budget the bin height PLUS release
+// travel PLUS room to get a hand in. Rule of thumb: usable bin height is roughly
+// RISER_H minus 40 — so 4" takes a 60 mm bin and 8" takes a 160 mm one, both
+// past the 55 mm cord well that is currently the tallest bin in the repo.
+SCOPE_RISE  = 101.6;  // 4" — sightline over the front trays
+HOTAIR_RISE = 203.2;  // 8" — working height for the station
 
 // Either height can be overridden without editing this file:
 //   openscad -o r.stl --export-format binstl -D RISER_H=90 riser_pedestal_scope.scad
@@ -74,14 +83,25 @@ LIP_W = 2.50;   // [1:0.5:6] rim width, measured inward from the outer edge
 LIP_H = 2.00;   // [0:0.5:6] rim height above the pad. 0 = flat top, no lip.
 
 /* [Shell] */
-HOLLOW  = true;   // false gives the old solid prism — expect ~9 h for a 6"
-SHELL_T = 3.00;   // [2:0.5:6] perimeter wall thickness
-RIB_T   = 2.40;   // [1.6:0.2:4] internal rib thickness. Ribs sit on the cell
+// SHELL_T started at 3.00 and that was too thick to be worth it. A 3 mm wall is
+// wider than the perimeters can pack, so the slicer fills it SOLID — meaning the
+// model's own volume is very close to what you actually extrude. At 8" that made
+// each pedestal 415 g, WORSE than the 249 g the solid version sliced at with
+// sparse infill. Hollowing wins on time, not automatically on material, and only
+// if the shell stays thin enough to be pure perimeter.
+//
+// 1.60 is four 0.4 mm lines. Structurally it is still absurd overkill: ~585 mm2
+// of load path, ~3,000 kg crushing, ~21,000 kg Euler buckling at 8", against
+// ~1.5 kg per pedestal.
+HOLLOW  = true;   // false gives a solid prism — do not, at these heights
+SHELL_T = 1.60;   // [1.2:0.2:4] perimeter wall thickness
+RIB_T   = 1.60;   // [1.2:0.2:4] internal rib thickness. Ribs sit on the cell
                   //   boundaries, so they also restore the internal foot walls
                   //   the cavity would otherwise thin out.
 CAP_T   = 6.00;   // [4:0.5:12] solid material under the pad. This is what the
                   //   instrument's weight lands on, and what bridges the cavity
-                  //   during the print — do not go thin here.
+                  //   during the print. CAP_T - LIP_H is what actually remains
+                  //   under the pad floor — see the assert.
 VENT_D  = 10.00;  // [0:1:20] vent hole per cell through the floor. 0 seals the
                   //   cavity, which traps air and reads as a second connected
                   //   component. Leave it on.
@@ -117,6 +137,12 @@ module riser_pedestal(h, gx = GX, gy = GY, lip_w = LIP_W, lip_h = LIP_H) {
 
     assert(lip_h < h - BIN_BASE_H,
            "Lip is taller than the solid material above the feet.");
+
+    // The lip recess is cut INTO the cap, so what is left under the pad floor is
+    // CAP_T - LIP_H, not CAP_T. That remainder is what bridges the cavity during
+    // the print and what a foot's weight lands on — thin it and the pad dishes.
+    assert(!HOLLOW || CAP_T - lip_h >= 3,
+           str("Only ", CAP_T - lip_h, " mm would remain under the pad (CAP_T - LIP_H). Raise CAP_T."));
 
     // Deliberately echoes rather than asserts, and it is checking a pedestal in
     // ISOLATION — which is pessimistic once several are latched into one shared

@@ -13,8 +13,14 @@ Current bench:
 
 | Instrument | Pedestals | Height |
 |---|---|---|
-| Hot air station | ×4 | 6″ (152.4 mm) |
-| Oscilloscope ([OWON ADS1014D](https://www.owon.com.hk/)) | ×2 | 2″ (50.8 mm) |
+| Hot air station | ×4 | 8″ (203.2 mm) |
+| Oscilloscope ([OWON ADS1014D](https://www.owon.com.hk/)) | ×2 | 4″ (101.6 mm) |
+
+The two heights are set by **different constraints**, which matters if either is
+ever revisited. The scope's 4″ is a **sightline** number — it has to clear the
+trays standing in front of it (logic analyzer, programmers), so it's driven by
+what's in the way, not by what fits underneath. The station's 8″ is a working
+height off the station itself. Storage underneath is a by-product of both.
 
 The scope only needs to be *seen* — it's the instrument you stare at and rarely
 touch — which makes it the one thing on the bench that can afford to give up
@@ -24,8 +30,8 @@ prime desk real estate and go up.
 
 | Part | File | Size | Print |
 |---|---|---|---|
-| **Hot air pedestal** | `riser_pedestal_hotair.scad` | 83.5 × 83.5 × 152.4 mm | ×4 — feet down, no supports |
-| **Scope pedestal** | `riser_pedestal_scope.scad` | 83.5 × 83.5 × 50.8 mm | ×2 — feet down, no supports |
+| **Hot air pedestal** | `riser_pedestal_hotair.scad` | 83.5 × 83.5 × 203.2 mm | ×4 — feet down, no supports |
+| **Scope pedestal** | `riser_pedestal_scope.scad` | 83.5 × 83.5 × 101.6 mm | ×2 — feet down, no supports |
 
 Both are the same module at different heights. Shared dimensions live in
 `riser_common.scad`.
@@ -62,9 +68,8 @@ four arms per cell. The clearance has to cover the bin, the release travel, and
 room to get a hand in. Sizing to bin height alone builds a shelf whose bins you
 can't extract. Rule of thumb — usable bin height is about `RISER_H − 40`:
 
-- **6″ under the station** takes the tallest bin in the repo (the 55 mm OWON cord
-  well) with room to spare
-- **2″ under the scope** is shallow trays only, roughly 10 mm
+- **8″ under the station** leaves ~160 mm — far past any bin in the repo
+- **4″ under the scope** leaves ~60 mm, which clears the 55 mm OWON cord well
 
 Neither height is a hard constraint. Override without editing anything:
 
@@ -72,33 +77,49 @@ Neither height is a hard constraint. Override without editing anything:
 openscad -o r.stl --export-format binstl -D RISER_H=90 riser_pedestal_scope.scad
 ```
 
-## Hollow, because solid was unprintable
+## Hollow, and why the shell is thin
 
 These were modelled solid at first, on the theory that infill percentage is the
-right place to decide how much material a part uses. That doesn't survive a 6″
+right place to decide how much material a part uses. That doesn't survive a tall
 pedestal. A solid 2×2 × 152 mm block is **1043 cm³**, and sliced four-up it came
-out at **36 hours and 995 g** — with **85% of that time in sparse infill alone**.
+out at **36 hours and 995 g — with 85% of that time in sparse infill alone.**
 Walls were 3h40m of the job; infill was over thirty hours.
 
 So the interior is removed in the model instead. What's left:
 
 - the **Gridfinity feet, fully solid** — every latch surface untouched
-- a 3 mm perimeter shell
-- **ribs on the cell boundaries**, which do double duty: they carry load up the
+- a **1.6 mm** perimeter shell (four 0.4 mm lines)
+- **ribs on the cell boundaries**, which do triple duty: they carry load up the
   middle, they put material back exactly where the cavity would otherwise thin
   the internal foot walls, and they cut the cap's bridge span down to one cell,
   which is what makes a solid top printable over a hollow
 - a 6 mm solid cap under the pad
 - a **vent hole per cell** through the floor, so nothing is a sealed void
 
-That's **242 cm³** — 77% less material, same outside geometry.
+**The shell thickness matters more than it looks.** It started at 3 mm, and that
+was a mistake worth recording: a 3 mm wall is wider than the perimeters can pack,
+so the slicer fills it *solid* — which means the model's own volume is very close
+to what you actually extrude. At 8″ that made each pedestal **415 g, worse than
+the 249 g the solid version sliced at**. Hollowing wins on time, not
+automatically on material, and only if the shell stays thin enough to be pure
+perimeter:
+
+| Shell / rib | Volume | Per pedestal @ 8″ | ×4 |
+|---|---|---|---|
+| 1.2 mm | 167 cm³ | 213 g | 0.85 kg |
+| **1.6 mm** | **204 cm³** | **259 g** | **1.03 kg** |
+| 2.4 mm | 275 cm³ | 349 g | 1.40 kg |
+| 3.0 mm | 327 cm³ | 415 g | 1.66 kg |
+
+1.6 mm is the default. Drop to 1.2 with `-D SHELL_T=1.2 -D RIB_T=1.2` if you want
+the material back — it's still ~2,000 kg of crush capacity.
 
 The cavity is structural, not usable storage. Storage goes in the open grid
 *between* the pedestals, which is the point of raising anything.
 
-## Cell budget — why the 6″ pedestals stay 2×2
+## Cell budget — why the 8″ pedestals stay 2×2
 
-At 152.4 mm on an 84 mm square footprint the hot air pedestals are **1.81:1**
+At 203.2 mm on an 84 mm square footprint the hot air pedestals are **2.42:1**
 tall against wide, past the `MAX_ASPECT` guideline of 1.6. Rendering echoes a
 note rather than failing, and the obvious fix — widen to 3×3 — **doesn't work**:
 
@@ -122,11 +143,11 @@ A hot air station is 3–6 kg, so ~1.5 kg per pedestal. The hollow 2×2 section:
 
 | Check | Capacity |
 |---|---|
-| Load-bearing cross-section | 1349 mm² (shell + ribs) |
-| Crushing | 67 kN ≈ 6,875 kg |
-| Crushing, derated 80% for print voids | 1,375 kg |
-| Euler buckling of the column | 888 kN ≈ 90,500 kg |
-| Cap dishing under a foot mid-cell | 0.62 MPa vs 50 MPa yield |
+| Load-bearing cross-section | 778 mm² (shell + ribs) |
+| Crushing | 39 kN ≈ 3,968 kg |
+| Crushing, derated 80% for print voids | 794 kg |
+| Euler buckling of the column at 8″ | 280 kN ≈ 28,567 kg |
+| Cap dishing under a foot mid-cell | 1.41 MPa vs 50 MPa yield |
 
 Three reasons the shell is enough. The load is **pure compression along the print
 Z axis** — FDM's strong direction, since layer adhesion only matters in tension
@@ -147,16 +168,16 @@ the Gridfinity foot, anything past the 270 mm bed.
 | Setting | Value |
 |---|---|
 | Material | PETG |
-| Layer height | 0.2 mm — 0.3 mm on the 6″ is fine, there's no fine detail above the foot |
+| Layer height | 0.2 mm — 0.3 mm on the 8″ is fine, there's no fine detail above the foot |
 | Walls | 3–4 |
 | Infill | **5–10%** |
 | Infill pattern | Lines or Grid |
 | Supports | none |
 | Orientation | as emitted, feet down |
 
-**Don't raise the infill.** The 3 mm shell is thicker than the perimeters can
-fit, so the slicer fills it solid regardless — infill percentage only reaches the
-cap. Turning it up re-creates the 36-hour problem the hollow was cut to solve.
+**Don't raise the infill.** With a 1.6 mm shell there is barely any enclosed
+volume left for infill to reach — it only touches the cap. Turning it up buys
+nothing and re-creates the 36-hour problem the hollow was cut to solve.
 
 ## Still open
 
