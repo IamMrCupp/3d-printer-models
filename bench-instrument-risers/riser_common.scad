@@ -118,13 +118,19 @@ module riser_pedestal(h, gx = GX, gy = GY, lip_w = LIP_W, lip_h = LIP_H) {
     assert(lip_h < h - BIN_BASE_H,
            "Lip is taller than the solid material above the feet.");
 
-    // Deliberately echoes rather than asserts: a tall-and-narrow pedestal is a
-    // handling nuisance, not a broken part, and the call on whether to widen it
-    // depends on foot spacing this file does not know.
+    // Deliberately echoes rather than asserts, and it is checking a pedestal in
+    // ISOLATION — which is pessimistic once several are latched into one shared
+    // baseplate, because the plate ties their bases together and no single post
+    // can tip on its own.
+    //
+    // Note before reaching for a wider footprint: plate capacity usually binds
+    // first, not foot spacing. Four 3x3 pedestals are 36 cells — an entire 6x6
+    // plate, edge to edge, leaving no open grid at all. Four 2x2 are 16 of 36
+    // and leave 20 cells free, which is the whole point of raising anything.
     if (h > MAX_ASPECT * narrow)
-        echo(str("WARNING: pedestal is ", h / narrow,
-                 ":1 tall vs wide (limit ", MAX_ASPECT,
-                 "). Widen GX/GY if the instrument's foot spacing allows it."));
+        echo(str("NOTE: pedestal is ", h / narrow, ":1 tall vs wide (guideline ",
+                 MAX_ASPECT, "). Fine if several share one baseplate; ",
+                 "check cell budget before widening — 4x 3x3 fills a 6x6."));
 
     // The number to check a foot against — it has to sit INSIDE this.
     if (lip_h > 0)

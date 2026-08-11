@@ -96,25 +96,44 @@ That's **242 cm³** — 77% less material, same outside geometry.
 The cavity is structural, not usable storage. Storage goes in the open grid
 *between* the pedestals, which is the point of raising anything.
 
-## Aspect ratio on the 6″ pedestal
+## Cell budget — why the 6″ pedestals stay 2×2
 
-At 152.4 mm on an 84 mm square footprint, the hot air pedestals are **1.81:1**
-tall against wide. That's past the `MAX_ASPECT` guideline of 1.6, and rendering
-echoes a warning rather than failing — whether it can be widened depends on the
-station's foot spacing, which the model doesn't know.
+At 152.4 mm on an 84 mm square footprint the hot air pedestals are **1.81:1**
+tall against wide, past the `MAX_ASPECT` guideline of 1.6. Rendering echoes a
+note rather than failing, and the obvious fix — widen to 3×3 — **doesn't work**:
 
-It's a handling concern, not a structural one. A Gridfinity foot in a socket
-resists sideways load well, and once the station is on top its own chassis ties
-the four pedestals together. The awkward moment is placing a heavy station on
-four tall posts single-handed.
+| Footprint | Cells each | ×4 | On a 6×6 plate (36 cells) |
+|---|---|---|---|
+| 2×2 | 4 | 16 | 20 cells free |
+| 3×3 | 9 | **36** | **zero free — fills the plate edge to edge** |
 
-If the station's feet are far enough apart to take 126 mm pedestals:
+Four 3×3 pedestals tile an entire 6×6 baseplate, which removes every cell the
+riser exists to create. **Plate capacity binds before foot spacing does.**
 
-```bash
-openscad -o hotair.stl --export-format binstl -D GX=3 -D GY=3 riser_pedestal_hotair.scad
-```
+The aspect ratio is fine anyway, because the guideline checks a pedestal in
+isolation and that isn't the situation. All four latch into **one shared plate**,
+so their bases are tied together rigidly — no single post can tip, and they can't
+splay relative to each other. Once the station is on, its chassis ties the tops
+too. Structurally there was never a question: see the load numbers below.
 
-That drops the ratio to a comfortable 1.21:1.
+## Load
+
+A hot air station is 3–6 kg, so ~1.5 kg per pedestal. The hollow 2×2 section:
+
+| Check | Capacity |
+|---|---|
+| Load-bearing cross-section | 1349 mm² (shell + ribs) |
+| Crushing | 67 kN ≈ 6,875 kg |
+| Crushing, derated 80% for print voids | 1,375 kg |
+| Euler buckling of the column | 888 kN ≈ 90,500 kg |
+| Cap dishing under a foot mid-cell | 0.62 MPa vs 50 MPa yield |
+
+Three reasons the shell is enough. The load is **pure compression along the print
+Z axis** — FDM's strong direction, since layer adhesion only matters in tension
+and peel. A **closed box section** is enormously stiff in bending, and hollowing
+removes material from the middle where it contributes almost nothing to `I`.
+And the **ribs sit under the cap's bridge span**, so a foot anywhere on the pad is
+at most ~18 mm from supported material.
 
 ## Source
 
@@ -128,11 +147,16 @@ the Gridfinity foot, anything past the 270 mm bed.
 | Setting | Value |
 |---|---|
 | Material | PETG |
-| Layer height | 0.2 mm |
-| Walls | 4 |
-| Infill | 20% — 40% under the hot air station if you want it dead solid |
+| Layer height | 0.2 mm — 0.3 mm on the 6″ is fine, there's no fine detail above the foot |
+| Walls | 3–4 |
+| Infill | **5–10%** |
+| Infill pattern | Lines or Grid |
 | Supports | none |
 | Orientation | as emitted, feet down |
+
+**Don't raise the infill.** The 3 mm shell is thicker than the perimeters can
+fit, so the slicer fills it solid regardless — infill percentage only reaches the
+cap. Turning it up re-creates the 36-hour problem the hollow was cut to solve.
 
 ## Still open
 
@@ -141,8 +165,9 @@ the Gridfinity foot, anything past the 270 mm bed.
   that foot's own length. If a foot overhangs its pedestal you've *shortened* the
   effective base by raising it. Over ~80 mm, use the 2×3 (`-D GY=3`, pad
   78.5 × 120.5); under ~55 mm the 2×2 is fine.
-- **Hot air station foot spacing** — decides whether the 6″ pedestals can go 3×3
-  and shed the aspect-ratio warning.
+- **Hot air station foot spacing** — the pedestals have to land under its feet,
+  and where they land decides whether the 20 free cells end up reachable at the
+  plate edges or stranded under the middle of the station.
 - Whether the station's underside vents. Four corner pedestals *improve*
   under-chassis airflow, so this is likely a bonus rather than a problem, but
   worth a look before committing.
