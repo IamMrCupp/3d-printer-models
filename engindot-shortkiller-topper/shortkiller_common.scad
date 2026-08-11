@@ -19,30 +19,31 @@
 // the front/back LIPS hook the top edges and do the retention; the skirts only
 // stop sideways slide. So here the skirts are SHORT (SKIRT_D, default 6 mm),
 // covering a sliver of the intake instead of 20 mm of it, and the lips do the
-// work. Set SKIRT_D lower, or the frame narrower, if that sliver still bothers
-// you — the frame stays on either way.
+// work. Set SKIRT_D lower if that sliver still bothers you — the frame stays on
+// either way. SKIRT_D must equal END_LIP_D: printed walls-down, both are bed
+// contact, and the shorter one would start in mid-air.
 //
 // THE BIN IS OPEN AT BOTH ENDS
 // ----------------------------
 // The Shortkiller is operated in place. Its FRONT carries the A/V displays,
 // the V+/V- buttons and the GX12 output connector; its REAR carries the DC
-// input jack and the power rocker. So the bin's front wall is removed outright
-// and the rear is cut down to a low backstop.
-//
-// Because both ends are open, the box may be LONGER than its bin and simply
-// overhang — the bin grips the middle. That is why NY_CRADLE is not a fit.
+// input jack and the power rocker. So BOTH ends carry only a low 9 mm lip —
+// enough to stop the box sliding out, low enough to clear everything on those
+// faces. The box is captive fore-aft but nothing is covered.
 //
 // WHAT IS AND ISN'T MEASURED
 // --------------------------
-// SK_W = 98  — read off a tape photo, CONFIRMED by printing bin_shortkiller_testfit
-// SK_D = 171 — read off a tape photo. Not a fit: both ends are open.
-// SK_H = 55  — still an estimate. Only matters if the wrap frame happens;
-//              wrap_test_bands.scad settles it.
-// ENGINDOT lid = 80 x 193 — MEASURED by the user. Every earlier figure here
-//              (102x216, then 84) was mine, off tape photos, and wrong. The lid
-//              is NARROWER than the 84 mm plate and SHORTER than a 5-cell one,
-//              which is why GY is 4 and the frame's top flares past its skirt.
-//              Full list with confidence marks: survey/MEASUREMENTS.md.
+// SK_W = 98        — tape photo, PRINT-CONFIRMED by a coupon
+// SK_D = 171       — tape photo. Not a fit: both ends are open
+// SK_H = 55        — ESTIMATE, never measured. Nothing built depends on it
+// PROBE_D = 13     — ESTIMATE, never measured
+// ENGINDOT lid     = 80 x 196.85 (7 3/4"), MEASURED and PRINT-CONFIRMED with
+//                    frame_width_gauge and frame_length_gauge.
+//
+// ⚠️ Every earlier lid figure here (102 x 216, then 84) was mine, read off tape
+// photos, and wrong — they cost two printed frames. Set CASE_W and CASE_L from
+// the case itself; do not "correct" them from a photograph.
+// Full list with confidence marks: survey/MEASUREMENTS.md.
 
 include <../lib/gridfinity.scad>
 
@@ -55,16 +56,13 @@ SK_D = 171.0;  // [120:1:220] read off the tape photo at just under 7in. Not a
 SK_H =  55.0;  // [35:0.5:80]  ⚠️ ESTIMATE — cosmetic, informs BIN_H only
 
 /* [Grid] */
-// GX x GY = 2 x 5 = 84 x 210 mm. The plate is deliberately kept NARROWER than
-// the lid (measured 102 mm) so it hugs the supply the way
-// owon-spm8104-tray does, rather than overhanging it. The Shortkiller is wider
-// than 84 mm, so the BIN overhangs the grid instead of the plate overhanging
-// the supply — see the Overhang body section below. GY is the one still-unread
-// number: the lid measured ~216 mm front to back, so 210 fits with ~6 mm spare.
+// GX x GY = 2 x 5 = 84 x 210 mm, on an 80 x 196.85 lid — the plate is LARGER
+// than the supply in both axes. Across, 84 vs 80 is why the frame's top flares
+// out past its skirt. Along, 210 vs 196.85 is deliberate: a 4-cell plate would
+// fit the lid but the Shortkiller bin alone fills it, leaving no rear cell for
+// the DC cord's route. The plate overhangs the frame ~1.2 mm at each end.
 GX = 2;  // [2:1:5] plate cells across — 84 mm, hugs the lid like the OWON
-GY = 5;  // [3:1:7] plate cells deep — 210 mm, deliberately LONGER than
-         //   the 193 mm lid so a rear cell survives for the probe bucket.
-         //   The plate overhangs the frame ~8.5 mm at each end.
+GY = 5;  // [3:1:7] plate cells deep — 210 mm, longer than the lid on purpose
 
 NX_CRADLE = 2;  // [2:1:5] Shortkiller bin, across — must clear SK_W
 NY_CRADLE = 4;  // [2:1:6] Shortkiller bin, deep — box may overhang this
@@ -83,20 +81,23 @@ FLOOR_T     = 2.4;   // [1.4:0.2:4] bin floor over the Gridfinity base
 // alligator lead drapes into the well around it. Leads stay plugged into the
 // Shortkiller's GX12 connector and loop over to here.
 //
-// This bin sits BEHIND the Shortkiller (rear cell of the plate). That puts a
-// 42 mm wall right up against the box's REAR panel — the one carrying the DC
-// jack and the power rocker. So the wall on that side is cut down to
-// LEADS_FACE_H, low enough to still corral a lead but not to shadow the panel.
+// In use this bin ended up sitting BETWEEN the two supplies rather than on this
+// plate — easier to reach, and it keeps a ~160 mm probe down at bench level
+// instead of standing it up where it fouls anything mounted above. It is a stock
+// 1x1 Gridfinity bin, so that move cost nothing.
+//
+// One wall is cut down to LEADS_FACE_H. That was originally to clear the
+// Shortkiller's rear panel when the bin sat behind it; between the supplies the
+// low side faces the operator, which is a better reason than the original.
 //
 // TIP-DOWN, deliberately. The tube is blind, so the sharp end is buried in
 // plastic and you grab the handle — same reasoning as the UV lamp holster in
 // phase-2 (B.5). Tip-up would put a needle at eye level and make you grab it
 // by the business end.
 //
-// 1x1, not 2x1. The rear row of the plate is two cells wide, and the
-// Shortkiller's DC power cord is NOT detachable — it has to leave the back of
-// the tray somewhere. So one rear cell is this bucket and the other stays
-// EMPTY as the cord's route. Do not fill it.
+// 1x1, not 2x1. Whether or not this bin lives on the plate, ONE rear cell stays
+// EMPTY — the Shortkiller's DC cord is not detachable and has to leave the back
+// of the tray somewhere. Do not fill it.
 //
 // ⚠️ Accepted tradeoff: a ~150 mm probe standing in a 42 mm footprint is a real
 // tipping moment on the latch tongues. The alligator lead coiling in beside it
@@ -111,9 +112,8 @@ PROBE_OFFSET =  8.0;  // [0:0.5:12] tube centre from the bin centre, along +Y �
                       //   left over sits at the front by the cut-down wall,
                       //   where you actually drop the lead in.
 LEADS_WALL   =  1.6;  // [1.2:0.2:3] bin wall thickness
-LEADS_FACE_H = 13.0;  // [0:0.5:35] height of the wall FACING the Shortkiller,
-                      //   measured from the bin floor. Keep low — it is the
-                      //   only thing between this bin and the rear panel.
+LEADS_FACE_H = 13.0;  // [0:0.5:35] height of the ONE cut-down wall, from the bin
+                      //   floor. Low on purpose — you drop the lead over it.
 
 /* [Overhang body] */
 // The FOOT is NX_CRADLE cells (84 mm) so it clicks into a plate that hugs the
@@ -236,16 +236,10 @@ END_LIP_D =   7.0;  // [3:0.5:14]   how far the front/back lip drops over the ed
 
 /* [General] */
 EPS = 0.01;
-// ⚠️ DO NOT CHANGE THIS CASUALLY. lib/gridfinity.scad's _bin_cell offset() chain
-// emits non-manifold edges at some ($fn, bin-width) combinations. Which ones is
-// neither intuitive nor monotonic — higher is NOT safer. Measured on this repo:
-//     1-wide: 16,24,40,56 clean | 32,48,64,128 BAD
-//     2-wide: 32,40,48,56,128 clean | 64,72,80,96 BAD
-//     3-wide: 16,24,32,64 clean | 48 BAD
-// This model builds 1-wide and 2-wide bins, so it needs a value clean in BOTH
-// of the first two rows. 40 and 56 qualify; 40 is used. Note 32 — the obvious
-// pick from the 2- and 3-wide rows alone — is BAD for 1-wide.
-// Re-run the sweep before changing it. Tracked as a lib bug.
+// An earlier revision pinned this with a long "$fn failure map" and a warning
+// never to raise it. That map was real but it was measuring the wrong thing —
+// coincident faces where two solids met at the same height, not $fn. See the
+// FUSE note in bin_shortkiller.scad. Ordinary value, change it freely.
 $fn = 40;
 
 // Derived — do not edit
@@ -275,7 +269,7 @@ SHELF_OUT  = min(OVERHANG_Y, END_LIP_D);         // 45-degree gusset limit
 
 // The end bars CARRY the plate rather than enclosing it: their top sits at
 // ledge height so the plate rests over them. Enclosing would need
-// MOUNT_L >= PLATE_L_ + 2*END_BAR_T = 220, and the lid is only ~216 — the frame
+// MOUNT_L >= PLATE_L_ + 2*END_BAR_T = 220, and the lid is only 196.85 — the frame
 // would hang off the supply and the lips would grip nothing.
 // NOTE: there is deliberately NO "MOUNT_L >= PLATE_L_" rule any more. The plate
 // is longer than the frame and rests ON the end bars, overhanging both ends.
