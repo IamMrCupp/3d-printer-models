@@ -54,8 +54,8 @@ The top is solid — rear fan only — so a tray over the lid is thermally free.
 
 The Shortkiller is **98 × 171 mm**. Neither number fits the grid:
 
-- **98 mm wide** needs a 3-cell bin (125.5), but a 3-cell plate is 126 mm on a
-  102 mm lid — the plate would overhang the supply.
+- **98 mm wide** needs a 3-cell bin (125.5), but a 3-cell plate is 126 mm on an
+  80 mm lid — the plate would hang well off the supply.
 - **171 mm long** exceeds a 4-cell foot (167.5), leaving nothing for an end lip
   to stand on.
 
@@ -86,9 +86,17 @@ the V+/V− buttons.
 
 ## The probe bucket is 1×1 on purpose
 
-The rear row of the plate is two cells. One is this bucket; **the other stays
-empty** — the Shortkiller's DC cord isn't detachable and has to leave the back of
-the tray somewhere. Don't fill it.
+The rear row of the plate is two cells, and **one of them stays empty** — the
+Shortkiller's DC cord isn't detachable and has to leave the back of the tray
+somewhere. Don't fill it.
+
+In use the bucket ended up **between the two supplies** rather than on this
+plate: easier to reach, and it keeps a ~160 mm probe down at bench level instead
+of standing it up where it fouls anything mounted above. It's a stock 1×1
+Gridfinity bin, so it drops into any baseplate — that move cost nothing. Its one
+cut-down wall was originally aimed at clearing the Shortkiller's rear panel; sat
+between the supplies that low side faces the operator, which is a better reason
+than the one it was designed for.
 
 The probe stands **tip-down** in a blind tube so the sharp end is buried in
 plastic and you grab the handle. The alligator lead drapes into the well around
@@ -118,10 +126,28 @@ openscad -o bin_shortkiller.stl --export-format binstl bin_shortkiller.scad
 openscad -o bin_probe_leads.stl --export-format binstl bin_probe_leads.scad
 ```
 
-⚠️ **Don't raise `$fn`.** `lib/gridfinity.scad`'s `_bin_cell` emits non-manifold
-edges at some `$fn`/bin-width combinations, and it isn't monotonic — higher is
-not safer. Measured: 1-wide bins fail at 32/48/64/128, 2-wide fail at 64/72/80/96,
-3-wide fail at 48. This model pins **40**, clean for the widths it builds.
+⚠️ **Two solids must never meet at exactly the same height.** The feet top out at
+`BIN_BASE_H` and the flare above them starts `FUSE` (0.05 mm) lower, on purpose.
+Butt them together and the coincident faces leave sliver triangles that read as
+non-manifold — and the two OpenSCAD builds this repo has to satisfy disagree
+about *which* rounding construction triggers it, in opposite directions:
+
+| construction | OpenSCAD 2021.01 (CI) | OpenSCAD 2026.06 (dev) |
+|---|---|---|
+| hull of four circles | non-manifold | clean |
+| `offset(R) offset(-R)` | clean | non-manifold |
+
+So neither rounding is at fault and chasing `$fn` is a dead end — an earlier
+version of this file had a whole `$fn` failure map that was really measuring this.
+`lib/gridfinity.scad` had the same bug in its own foot hulls; fixed in #58.
+
+Reproduce CI's exact renderer before blaming a model:
+
+```sh
+docker run --rm -v "$PWD":/w -w /w ubuntu:24.04 bash -c \
+  'apt-get update -qq && apt-get install -y -qq --no-install-recommends \
+   openscad xvfb python3 && xvfb-run -a tools/render.sh'
+```
 
 ## Test coupons
 
@@ -129,7 +155,6 @@ Print-first parts, not bench parts. Each answers something a photo can't:
 
 | File | Answers |
 |---|---|
-| `bin_shortkiller_testfit.scad` | Does the box fit the pocket, does the foot seat in a plate |
 | `bin_shortkiller_griptest.scad` | Do the flexures grip at their **real span** — a third of the material, no Gridfinity base |
 | `wrap_test_bands.scad` | Brackets the box height 45/50/55/60 |
 | `frame_width_gauge.scad` | Skirt span against the case — 6 g |
@@ -150,9 +175,9 @@ Print-first parts, not bench parts. Each answers something a photo can't:
 
 ## Fit
 
-Built for the measured unit — lid 102 × 216 mm, Shortkiller 98 × 171 mm. If yours
-differs, the knobs are `CASE_W`, `MOUNT_L` and `SKIRT_D` for the frame, and
-`SK_W` / `SK_D` for the bin.
+Built for the measured unit — **lid 80 × 196.85 mm (7¾″)**, Shortkiller
+98 × 171 mm. If yours differs, set `CASE_W` and `CASE_L` for the frame and
+`SK_W` / `SK_D` for the bin; everything else derives.
 
 **Set `CASE_W` and `CASE_L` from the case, never the frame dimensions from the
 case.** `SKIRT_IN`, `MOUNT_L` and `LEDGE_IN` all derive from them, and asserts

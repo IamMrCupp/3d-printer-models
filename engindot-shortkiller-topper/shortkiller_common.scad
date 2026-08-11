@@ -236,16 +236,10 @@ END_LIP_D =   7.0;  // [3:0.5:14]   how far the front/back lip drops over the ed
 
 /* [General] */
 EPS = 0.01;
-// ⚠️ DO NOT CHANGE THIS CASUALLY. lib/gridfinity.scad's _bin_cell offset() chain
-// emits non-manifold edges at some ($fn, bin-width) combinations. Which ones is
-// neither intuitive nor monotonic — higher is NOT safer. Measured on this repo:
-//     1-wide: 16,24,40,56 clean | 32,48,64,128 BAD
-//     2-wide: 32,40,48,56,128 clean | 64,72,80,96 BAD
-//     3-wide: 16,24,32,64 clean | 48 BAD
-// This model builds 1-wide and 2-wide bins, so it needs a value clean in BOTH
-// of the first two rows. 40 and 56 qualify; 40 is used. Note 32 — the obvious
-// pick from the 2- and 3-wide rows alone — is BAD for 1-wide.
-// Re-run the sweep before changing it. Tracked as a lib bug.
+// An earlier revision pinned this with a long "$fn failure map" and a warning
+// never to raise it. That map was real but it was measuring the wrong thing —
+// coincident faces where two solids met at the same height, not $fn. See the
+// FUSE note in bin_shortkiller.scad. Ordinary value, change it freely.
 $fn = 40;
 
 // Derived — do not edit
