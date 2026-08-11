@@ -9,6 +9,8 @@ on:
     paths:
       - "**.scad"
       - "**.stl"
+      - "**.png"
+      - "**README.md"
       - "tools/**"
       - "requirements-dev.txt"
       - ".github/workflows/validate.yml"
@@ -38,6 +40,11 @@ jobs:
           openscad --version
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
+
+      # Runs before the render so a missing README or catalog row is reported in
+      # seconds rather than after a full model render.
+      - name: Check the catalog matches the model dirs
+        run: python3 tools/check_catalog.py
 
       - name: Render + validate models
         run: xvfb-run -a tools/render.sh
