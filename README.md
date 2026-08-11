@@ -60,7 +60,7 @@ git push origin sticker-holder-inserts/v1.0.0
 
 ### Adding a model
 
-1. Create `<model-slug>/` with the parametric `.scad` source (one shared `_common.scad` + part variants for multi-part models, like the existing ones).
+1. Create `<model-slug>/` with the parametric `.scad` source (one shared `_common.scad` + part variants for multi-part models, like the existing ones). Put print-first **test coupons** — fit gauges, grip tests, calibration strips — in `<model-slug>/coupons/`. They still get rendered and validated by CI, but `build_release.sh` skips them, so a release stays a set of bench parts you can print without reading anything first.
 2. Add a per-model `README.md` (dimensions, print settings, parameters) and a Blender `preview.png` (`tools/preview.sh <scad> <out.png> [#hexcolor]`). Optionally drop a `preview-color.txt` (a hex like `#2BB3A3`) in the model dir — the release workflow uses it to tint that model's renders.
 3. **Add a row to the Models table above** so the catalog stays current.
 4. Open a PR (CI validates), merge, then tag `<model-slug>/v1.0.0` to release.

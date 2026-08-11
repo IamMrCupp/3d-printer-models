@@ -149,17 +149,20 @@ docker run --rm -v "$PWD":/w -w /w ubuntu:24.04 bash -c \
    openscad xvfb python3 && xvfb-run -a tools/render.sh'
 ```
 
-## Test coupons
+## Test coupons — `coupons/`
 
-Print-first parts, not bench parts. Each answers something a photo can't:
+Print-first parts, **not** bench parts, so they live in `coupons/` and are left
+out of the release. Each answers something a photograph can't — and on this model
+that mattered: every lid figure taken from a photo was wrong, and every one taken
+from a coupon was right.
 
 | File | Answers |
 |---|---|
-| `bin_shortkiller_griptest.scad` | Do the flexures grip at their **real span** — a third of the material, no Gridfinity base |
-| `wrap_test_bands.scad` | Brackets the box height 45/50/55/60 |
-| `frame_width_gauge.scad` | Skirt span against the case — 6 g |
-| `frame_length_gauge.scad` | Lip-to-lip span against the case — 14 g |
-| `shortkiller_fit_gauge.scad` | Staircase gauge, reads a case width without calipers |
+| `coupons/bin_shortkiller_griptest.scad` | Do the flexures grip at their **real span** — a third of the material, no Gridfinity base |
+| `coupons/wrap_test_bands.scad` | Brackets the box height 45/50/55/60 |
+| `coupons/frame_width_gauge.scad` | Skirt span against the case — 6 g |
+| `coupons/frame_length_gauge.scad` | Lip-to-lip span against the case — 14 g |
+| `coupons/shortkiller_fit_gauge.scad` | Staircase gauge, reads a case width without calipers |
 
 ## Recommended print settings
 

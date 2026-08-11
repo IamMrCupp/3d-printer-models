@@ -16,8 +16,8 @@
 //
 // A band is only BAND_T thick along the box, so this is a cross-section test:
 // it tells us the wrap CLOSES, not how the full-length frame behaves.
-include <shortkiller_common.scad>
-use <../lib/label.scad>
+include <../shortkiller_common.scad>
+use <../../lib/label.scad>
 
 HEIGHTS = [45, 50, 55, 60];
 BAND_T  = 10.0;   // thickness along the box axis — keep thin, it's a coupon

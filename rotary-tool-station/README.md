@@ -14,7 +14,7 @@
 
 ## ⚠️ Print the fit gauge first
 
-`bit_fit_gauge.scad` is a calibration coupon, **not** a bench part. Small vertical holes come off an FDM printer undersize — inner-perimeter over-extrusion, typically 0.15–0.3 mm, and the exact amount is specific to your printer, nozzle, and filament.
+`coupons/bit_fit_gauge.scad` is a calibration coupon, **not** a bench part. Small vertical holes come off an FDM printer undersize — inner-perimeter over-extrusion, typically 0.15–0.3 mm, and the exact amount is specific to your printer, nozzle, and filament.
 
 The gauge is a strip of five holes (2.5–2.9 mm), each engraved with its modelled diameter. Print it, try a 3/32″ shank in each, find the one that slides in cleanly, and set `BIT_CLR` in `rotary_station_common.scad` so `BIT_SHANK (2.381) + BIT_CLR` matches it. Then print `bin_bits.scad`.
 
@@ -24,7 +24,7 @@ Skip this and you get a block of 70 holes that are all the same amount wrong.
 
 | File | What | Size |
 |---|---|---|
-| `bit_fit_gauge.scad` | **Print first** — five test holes, 2.5–2.9 mm, engraved | 95 × 24 × 9 mm |
+| `coupons/bit_fit_gauge.scad` | **Print first** — five test holes, 2.5–2.9 mm, engraved | 95 × 24 × 9 mm |
 | `bin_tool.scad` | 1 × 1 cup, tool vertical, cord slot | 42 × 42 × 51 mm |
 | `bin_bits.scad` | 2 × 1 block, 14 × 5 grid of 3/32″ holes | 84 × 42 × 24 mm |
 

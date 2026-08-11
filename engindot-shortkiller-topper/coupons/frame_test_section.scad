@@ -13,7 +13,7 @@
 //   3. Does the 6 mm skirt sit where you want it against the side vents?
 //
 // PRINT: as rendered — walls DOWN, no supports. Same orientation as the frame.
-include <shortkiller_common.scad>
-use <engindot_frame.scad>
+include <../shortkiller_common.scad>
+use <../engindot_frame.scad>
 
 frame(30);

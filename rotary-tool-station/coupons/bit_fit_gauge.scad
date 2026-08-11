@@ -7,8 +7,8 @@
 // equals the one that slides in cleanly.
 //
 // Cheaper than discovering the error 70 holes at a time.
-include <rotary_station_common.scad>
-use <../lib/label.scad>
+include <../rotary_station_common.scad>
+use <../../lib/label.scad>
 
 SIZES = [2.5, 2.6, 2.7, 2.8, 2.9];
 PITCH = 17; PLATE_W = 95; PLATE_D = 24; PLATE_H = 9;
