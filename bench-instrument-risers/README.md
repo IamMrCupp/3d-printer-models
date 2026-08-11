@@ -1,7 +1,7 @@
 # Bench instrument risers
 
 > **Status: in progress.** Geometry is real and CI-validated, and the pedestals
-> are printable as they stand. Two things are still unconfirmed — see
+> are printable as they stand. One check outstanding — see
 > [Still open](#still-open). No preview, catalog row, or release yet.
 
 Pedestals that lift bench instruments off the desk and give their footprint back
@@ -26,10 +26,30 @@ prime desk real estate and go up.
 |---|---|---|---|
 | **Hot air pedestal** | `riser_pedestal_hotair.scad` | 83.5 × 83.5 × 152.4 mm | ×4 — feet down, no supports |
 | **Scope pedestal** | `riser_pedestal_scope.scad` | 83.5 × 83.5 × 50.8 mm | ×2 — feet down, no supports |
-| **Foot gauge** | `riser_foot_gauge.scad` | 168 × 34 × 4.1 mm | only if you want locating pockets |
 
-Both pedestals are the same module at different heights. Shared dimensions live
-in `riser_common.scad`.
+Both are the same module at different heights. Shared dimensions live in
+`riser_common.scad`.
+
+## The lip
+
+The top is a shallow tray — a raised rim all the way round a recessed pad. It
+captures whatever sits on it sideways **without knowing anything about that
+instrument's feet**, so every pedestal stays interchangeable. A pocket or a slot
+has to be cut where one specific foot lands, which makes the part bespoke and
+throws that away.
+
+Defaults are `LIP_W = 2.5` mm wide, `LIP_H = 2.0` mm tall — slight on purpose.
+It only has to stop the instrument walking, and a taller rim risks fouling a
+chassis that overhangs its own feet. `LIP_H = 0` gives a flat top.
+
+**The one thing to check: the foot has to fit inside the pad.** A foot wider or
+longer than the recess perches on the rim instead of sitting in the tray, which
+is worse than no lip at all. The pad size is echoed at render time:
+
+| Footprint | Pad |
+|---|---|
+| 2×2 | 78.5 × 78.5 mm |
+| 2×3 | 78.5 × 120.5 mm |
 
 ## Height is what goes underneath
 
@@ -52,24 +72,6 @@ Neither height is a hard constraint. Override without editing anything:
 openscad -o r.stl --export-format binstl -D RISER_H=90 riser_pedestal_scope.scad
 ```
 
-## Flat tops, on purpose
-
-A locating pocket has to be cut where that instrument's foot lands, which makes
-the part bespoke — and the value here is that every pedestal is interchangeable.
-The pedestal is latched to the plate and can't move; the instrument sits on it on
-its own rubber feet, which grip PETG fine.
-
-`riser_foot_gauge.scad` is there if something does creep in use — six blind
-pockets, 10–20 mm, notch-tallied. It exists because calipers measure the wrong
-thing: the number that matters is the **finished pocket** a foot drops into,
-folding the foot's diameter, its rubber compliance, and this printer's hole
-shrinkage into one reading. The pockets are blind rather than through-holes for
-the same reason the OWON tip gauge should have been — a tip "falling through" a
-through-hole reads as loose when the real blind bore holds it fine.
-
-Set `POCKET_D` above 0 to use it, and accept that those pedestals stop being
-interchangeable.
-
 ## Modelled solid
 
 No cavity, no walls, no open front. The slicer's infill decides how much material
@@ -87,8 +89,8 @@ station's foot spacing, which the model doesn't know.
 
 It's a handling concern, not a structural one. A Gridfinity foot in a socket
 resists sideways load well, and once the station is on top its own chassis ties
-the four pedestals together. The awkward moment is placing the station on four
-tall posts single-handed.
+the four pedestals together. The awkward moment is placing a heavy station on
+four tall posts single-handed.
 
 If the station's feet are far enough apart to take 126 mm pedestals:
 
@@ -101,9 +103,9 @@ That drops the ratio to a comfortable 1.21:1.
 ## Source
 
 Parametric OpenSCAD, on `lib/gridfinity.scad`. The asserts in `riser_common.scad`
-catch what a mesh check can't — a pocket deeper than the material above the feet,
-a pocket wider than the pedestal, a height that doesn't clear the Gridfinity
-foot, anything past the 270 mm bed.
+catch what a mesh check can't — a lip taller than the material above the feet, a
+rim wider than the corner radius it's offset from, a height that doesn't clear
+the Gridfinity foot, anything past the 270 mm bed.
 
 ## Recommended print settings
 
@@ -118,10 +120,11 @@ foot, anything past the 270 mm bed.
 
 ## Still open
 
-- **Does the scope really need only two pedestals?** Two under a four-footed
-  scope only works if each pedestal catches *both* feet on its side — that needs
-  a front-to-back foot span of roughly 84 mm minus the foot diameter. If the span
-  is wider, this wants four pedestals or two 2×3 rails instead.
+- **Scope foot length, front to back.** The scope has two feet, one per side, so
+  each pedestal carries one foot and all the front-to-back stability comes from
+  that foot's own length. If a foot overhangs its pedestal you've *shortened* the
+  effective base by raising it. Over ~80 mm, use the 2×3 (`-D GY=3`, pad
+  78.5 × 120.5); under ~55 mm the 2×2 is fine.
 - **Hot air station foot spacing** — decides whether the 6″ pedestals can go 3×3
   and shed the aspect-ratio warning.
 - Whether the station's underside vents. Four corner pedestals *improve*

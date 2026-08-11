@@ -8,13 +8,16 @@
 //   hot air station  4 pedestals @ 6"
 //   oscilloscope     2 pedestals @ 2"
 //
-// WHY THE TOP IS FLAT BY DEFAULT
-//   A locating pocket has to be cut where that instrument's foot actually lands,
-//   which makes the part bespoke — and the value here is that every pedestal is
-//   interchangeable. The pedestal is latched to the plate and cannot move; the
-//   instrument sits on it on its own rubber feet, which grip PETG fine. Set
-//   POCKET_D above 0 only if something actually creeps in use, and accept that
-//   those pedestals stop being interchangeable when you do.
+// WHY A LIP AND NOT A FOOT POCKET
+//   The top is a shallow tray — a raised rim all the way round a recessed pad.
+//   It captures whatever sits on it sideways without knowing anything about that
+//   instrument's feet, so every pedestal stays interchangeable. A pocket or a
+//   slot has to be cut where one specific foot lands, which makes the part
+//   bespoke and throws that away.
+//
+//   The one thing to check: the foot must fit INSIDE the pad. A foot wider or
+//   longer than the recess perches on the rim instead of sitting in the tray,
+//   which is worse than no lip at all. The pad size is echoed at render time.
 //
 // WHY IT IS MODELLED SOLID
 //   No cavity, no walls, no open front — the slicer's infill decides how much
@@ -53,16 +56,12 @@ HOTAIR_RISE = 152.4;  // 6" — takes the tallest bins in the repo with room ove
 // Either height can be overridden without editing this file:
 //   openscad -o r.stl --export-format binstl -D RISER_H=90 riser_pedestal_scope.scad
 
-/* [Foot pocket — OPTIONAL] */
-POCKET_D = 0.00;   // finished pocket diameter. 0 = flat top (default).
-                   //   If you do want pockets, get this from riser_foot_gauge —
-                   //   NOT from calipers on the foot. The number that matters is
-                   //   the finished hole a foot drops into, which folds the
-                   //   foot's size, its rubber compliance, and this printer's
-                   //   hole shrinkage into one reading.
-POCKET_H = 2.50;   // [1:0.5:6] pocket depth. Shallow on purpose — it only has to
-                   //   stop creep. Deep pockets on rubber feet make the
-                   //   instrument awkward to lift off and add nothing.
+/* [Retaining lip] */
+// A rim around the whole top edge, leaving a shallow recessed pad in the middle.
+// Deliberately slight: it only has to stop the instrument walking, and a tall rim
+// would foul a chassis that overhangs its own feet.
+LIP_W = 2.50;   // [1:0.5:6] rim width, measured inward from the outer edge
+LIP_H = 2.00;   // [0:0.5:6] rim height above the pad. 0 = flat top, no lip.
 
 /* [Stability] */
 // Height-to-width ratio past which a pedestal is tippy while you are placing the
@@ -75,22 +74,28 @@ MAX_ASPECT = 1.60;  // [1:0.1:2.5]
 // Geometry
 // ---------------------------------------------------------------------------
 
-module riser_pedestal(h, gx = GX, gy = GY, pocket_d = POCKET_D, pocket_h = POCKET_H) {
+module riser_pedestal(h, gx = GX, gy = GY, lip_w = LIP_W, lip_h = LIP_H) {
     narrow = min(gx, gy) * GF;
+    W = gx * GF - 0.5;
+    D = gy * GF - 0.5;
+    pad_w = W - 2 * lip_w;   // usable pad inside the rim
+    pad_d = D - 2 * lip_w;
 
-    assert(h > BIN_BASE_H + 2,
+    assert(h > BIN_BASE_H + lip_h + 2,
            "Riser height barely clears the Gridfinity foot — there is no pedestal left above it.");
 
     assert(h <= 270 && gx * GF <= 270 && gy * GF <= 270,
            "Pedestal exceeds the U1's 270 mm build volume.");
 
-    assert(pocket_d == 0 || pocket_h < h - BIN_BASE_H,
-           "Foot pocket is deeper than the solid material above the feet.");
+    // The rim is rounded by offsetting the body outline inward, so it cannot be
+    // wider than the corner radius it is being offset from.
+    assert(lip_h == 0 || (lip_w > 0 && lip_w < BIN_R),
+           str("LIP_W must be between 0 and the corner radius (", BIN_R, ")."));
 
-    assert(pocket_d == 0 || pocket_d + 4 <= narrow - 0.5,
-           "Foot pocket is wider than the pedestal it is cut into.");
+    assert(lip_h < h - BIN_BASE_H,
+           "Lip is taller than the solid material above the feet.");
 
-    // Deliberately an echo and not an assert: a tall-and-narrow pedestal is a
+    // Deliberately echoes rather than asserts: a tall-and-narrow pedestal is a
     // handling nuisance, not a broken part, and the call on whether to widen it
     // depends on foot spacing this file does not know.
     if (h > MAX_ASPECT * narrow)
@@ -98,11 +103,16 @@ module riser_pedestal(h, gx = GX, gy = GY, pocket_d = POCKET_D, pocket_h = POCKE
                  ":1 tall vs wide (limit ", MAX_ASPECT,
                  "). Widen GX/GY if the instrument's foot spacing allows it."));
 
+    // The number to check a foot against — it has to sit INSIDE this.
+    if (lip_h > 0)
+        echo(str("PAD (usable area inside the lip): ", pad_w, " x ", pad_d, " mm"));
+
     difference() {
         bin_blank(gx, gy, h);
 
-        if (pocket_d > 0)
-            translate([0, 0, h - pocket_h])
-                cylinder(h = pocket_h + 0.01, d = pocket_d);
+        if (lip_h > 0)
+            translate([0, 0, h - lip_h]) linear_extrude(lip_h + 0.01)
+                offset(BIN_R - lip_w) offset(-(BIN_R - lip_w))
+                    square([pad_w, pad_d], center = true);
     }
 }
