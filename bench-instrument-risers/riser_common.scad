@@ -41,9 +41,12 @@
 
 include <../lib/gridfinity.scad>
 
-// Standardised across this repo after the OpenSCAD 2026.06.12 tessellation
-// gotcha (scattered height/$fn combinations emit non-manifold edges). Do not
-// raise this without re-rendering and checking the validator.
+// 48 is the repo default. It used to be load-bearing: bins emitted non-manifold
+// edges for scattered height/$fn combinations, and pinning $fn was the
+// workaround. That was root-caused in #57/#58 — a hull end-slab in _bin_foot()
+// overshot the next solid by e, and CGAL's computed split vertex left sliver
+// triangles. The slivers were always there; which $fn happened to expose one was
+// luck. Fixed in lib/gridfinity.scad, so this is now just a smoothness choice.
 $fn = 48;
 
 /* [Footprint] */
