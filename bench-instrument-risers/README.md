@@ -54,8 +54,12 @@ is worse than no lip at all. The pad size is echoed at render time:
 
 | Footprint | Pad |
 |---|---|
-| 2×2 | 78.5 × 78.5 mm |
-| 2×3 | 78.5 × 120.5 mm |
+| **2×2** — what both instruments use | 78.5 × 78.5 mm |
+| 2×3 (`-D GY=3`) | 78.5 × 120.5 mm |
+
+**The scope is settled at 2×2.** Its feet land on one cell and part of the next,
+so two cells covers a foot with the pad to spare. The 2×3 stays available as a
+flag for anything with a longer foot, but nothing on the bench needs it today.
 
 ## Height is what goes underneath
 
@@ -181,11 +185,6 @@ nothing and re-creates the 36-hour problem the hollow was cut to solve.
 
 ## Still open
 
-- **Scope foot length, front to back.** The scope has two feet, one per side, so
-  each pedestal carries one foot and all the front-to-back stability comes from
-  that foot's own length. If a foot overhangs its pedestal you've *shortened* the
-  effective base by raising it. Over ~80 mm, use the 2×3 (`-D GY=3`, pad
-  78.5 × 120.5); under ~55 mm the 2×2 is fine.
 - **Hot air station foot spacing** — the pedestals have to land under its feet,
   and where they land decides whether the 20 free cells end up reachable at the
   plate edges or stranded under the middle of the station.
