@@ -64,13 +64,21 @@ module scope_wipe_plate() {
         union() {
             // 3×3 grid, centred
             baseplate(GRID_NX, GRID_NY);
-            // border frame: a ring OUTSIDE the grid out to the skirt's outer face
-            // (overlaps the grid edge by ~1 mm so the union fuses; must NOT cover
-            // the grid or it fills the sockets).
+            // Border frame: a ring from the grid's outer edge out to the skirt's
+            // outer face.
+            //
+            // Its inner boundary is the EXACT expression baseplate() uses for its
+            // own outline — _rrect(nx*GF, ny*GF, GF_FILLET) — so the two curves are
+            // bit-identical and CGAL merges them. The earlier version cut at
+            // nx*GF - 2 to "overlap the grid by ~1 mm", which put two rounded rects
+            // 1 mm apart with the SAME corner radius: near-parallel arcs whose facet
+            // vertices land close enough to stitch sub-micron sliver triangles.
+            // Identical beats nearly-identical. Cranking $fn hid it on one renderer
+            // and not on CI's.
             difference() {
                 linear_extrude(BP_H) _rrect(SKIRT_OUT_W, SKIRT_OUT_D, CORNER);
                 translate([0,0,-EPS]) linear_extrude(BP_H + 2*EPS)
-                    _rrect(GRID_NX*GF - 2, GRID_NY*GF - 2, GF_FILLET);
+                    _rrect(GRID_NX*GF, GRID_NY*GF, GF_FILLET);
             }
             // click skirt, full plate height so it is volumetrically embedded in
             // the border above z=0 rather than merely touching it on one face.
