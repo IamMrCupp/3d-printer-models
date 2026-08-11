@@ -72,13 +72,29 @@ Neither height is a hard constraint. Override without editing anything:
 openscad -o r.stl --export-format binstl -D RISER_H=90 riser_pedestal_scope.scad
 ```
 
-## Modelled solid
+## Hollow, because solid was unprintable
 
-No cavity, no walls, no open front. The slicer's infill decides how much material
-this uses, which is the right place for that decision — a hollow shell would need
-an opening to be useful, and an opening on a load-bearing pedestal puts a weak
-axis under an instrument. Storage goes in the open grid *between* the pedestals,
-which is the point of raising anything.
+These were modelled solid at first, on the theory that infill percentage is the
+right place to decide how much material a part uses. That doesn't survive a 6″
+pedestal. A solid 2×2 × 152 mm block is **1043 cm³**, and sliced four-up it came
+out at **36 hours and 995 g** — with **85% of that time in sparse infill alone**.
+Walls were 3h40m of the job; infill was over thirty hours.
+
+So the interior is removed in the model instead. What's left:
+
+- the **Gridfinity feet, fully solid** — every latch surface untouched
+- a 3 mm perimeter shell
+- **ribs on the cell boundaries**, which do double duty: they carry load up the
+  middle, they put material back exactly where the cavity would otherwise thin
+  the internal foot walls, and they cut the cap's bridge span down to one cell,
+  which is what makes a solid top printable over a hollow
+- a 6 mm solid cap under the pad
+- a **vent hole per cell** through the floor, so nothing is a sealed void
+
+That's **242 cm³** — 77% less material, same outside geometry.
+
+The cavity is structural, not usable storage. Storage goes in the open grid
+*between* the pedestals, which is the point of raising anything.
 
 ## Aspect ratio on the 6″ pedestal
 
