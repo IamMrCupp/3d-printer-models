@@ -19,8 +19,8 @@
 // bin_shortkiller_testfit already covered that.
 //
 // PRINT: flat, slab down, no supports.
-include <../lib/gridfinity.scad>
-include <shortkiller_common.scad>
-use <bin_shortkiller.scad>
+include <../../lib/gridfinity.scad>
+include <../shortkiller_common.scad>
+use <../bin_shortkiller.scad>
 
 bin_shortkiller(NY_CRADLE, foot = false);

@@ -14,7 +14,7 @@
 //
 // Span here is MOUNT_L - 2*END_BAR_T, derived from CASE_L. It is the same
 // expression the real frame uses, so this cannot disagree with it.
-include <shortkiller_common.scad>
+include <../shortkiller_common.scad>
 
 GAUGE_W = 10.0;   // strip width — just enough to be rigid
 SPINE_T =  5.0;   // spine thickness

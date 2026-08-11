@@ -6,7 +6,8 @@
 #
 #     tools/build_release.sh <model-slug> [out-dir]
 #
-# Renders every .scad in <model-slug>/ to a binary STL (skipping library files
+# Renders every top-level .scad in <model-slug>/ to a binary STL (skipping
+# <model-slug>/coupons/ and library files
 # with no top-level geometry), then renders a Blender preview PNG for each STL.
 # Artifacts land in <out-dir> (default: dist/).
 #
@@ -76,7 +77,11 @@ while IFS= read -r -d '' scad; do
   echo "  preview → $png"
   "$BLENDER" -b -P tools/render_preview.py -- "$stl" "$png" $color >/dev/null
   count=$((count + 1))
-done < <(find "$model_dir" -name '*.scad' -print0)
+# -maxdepth 1: release the BENCH PARTS only. Print-first test coupons live in
+# <model>/coupons/ and are deliberately excluded — a release should be a set of
+# STLs you can print without reading anything first, not a pile where half the
+# files are gauges. They are still rendered and validated by tools/render.sh.
+done < <(find "$model_dir" -maxdepth 1 -name '*.scad' -print0)
 
 echo "—"
 echo "release artifacts for '$slug' in $out_dir/:"

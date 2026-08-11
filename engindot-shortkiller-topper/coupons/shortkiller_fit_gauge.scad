@@ -17,8 +17,8 @@
 // measured lid is 84.30 and the ENGINDOT is reportedly smaller, but the earlier
 // photo estimate of the Shortkiller was 110. Those cannot all be true. One
 // print settles it.
-include <shortkiller_common.scad>
-use <../lib/label.scad>
+include <../shortkiller_common.scad>
+use <../../lib/label.scad>
 
 WIDTHS  = [for (w = [70 : 5 : 150]) w];
 LANE    = 6.0;    // per-step lane width

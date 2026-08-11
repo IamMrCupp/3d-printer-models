@@ -11,7 +11,7 @@ A **3×3 Gridfinity baseplate** that drops onto the raised platform of a microsc
 | Part | File | Size | Print |
 |---|---|---|---|
 | **Baseplate** | `scope_wipe_plate.scad` | 138 × 133.6 × 17.9 mm | ×1 — grid up, no supports |
-| **Corner gauge** | `scope_corner_gauge.scad` | 192 × 94 × 3 mm | optional — only if your platform differs |
+| **Corner gauge** | `coupons/scope_corner_gauge.scad` | 192 × 94 × 3 mm | optional — only if your platform differs |
 
 Shared dimensions live in `scope_plate_common.scad`.
 
@@ -30,7 +30,7 @@ Measured on the actual stand:
 | Corner radius | ~15 mm | **gauged**, not calipered |
 | Kimwipe box | 119.60 × 122.86 mm | fits the 3×3 |
 
-**The corner radius came from a gauge, because calipers can't read a fillet.** `scope_corner_gauge.scad` prints eight female corners from 6 to 20 mm; gauges 5 (14 mm) and 6 (16 mm) both seated.
+**The corner radius came from a gauge, because calipers can't read a fillet.** `coupons/scope_corner_gauge.scad` prints eight female corners from 6 to 20 mm; gauges 5 (14 mm) and 6 (16 mm) both seated.
 
 `CORNER` is set to **14, not the midpoint 15** — the error is asymmetric. A larger `CORNER` rounds the skirt opening more, making it *smaller* at the corners, so it binds:
 

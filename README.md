@@ -19,6 +19,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="syringe-holders/preview.png" width="150"> | [**Syringe holders**](syringe-holders/) | Gridfinity rack for rework syringes — two 30 cc flux barrels behind four 10 cc, vertical bores, no supports. |
 | <img src="uv-mask-station/preview.png" width="150"> | [**UV mask station**](uv-mask-station/) | Deep-bore opaque rack + slip-over cap for UV-curable solder mask, plus a head-down cup for the 365 nm lamp. Print the rack and cap opaque — ambient light skins the mask. |
 | <img src="scope-baseplate/preview.png" width="150"> | [**Microscope base platform baseplate**](scope-baseplate/) | 3×3 Gridfinity baseplate that drops onto a microscope boom stand's weighted base, reclaiming that footprint for storage. Three-sided skirt, open at the back for the pole. Includes a print-first corner-radius gauge. |
+| <img src="bench-instrument-risers/preview.png" width="150"> | [**Bench instrument risers**](bench-instrument-risers/) | Gridfinity-footed pedestals that lift an oscilloscope (4″) and a hot air station (8″) off the desk, turning their footprints back into open grid. Hollow 1.6 mm shell, retaining lip instead of a foot pocket, so every pedestal is interchangeable. |
 
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
@@ -60,7 +61,7 @@ git push origin sticker-holder-inserts/v1.0.0
 
 ### Adding a model
 
-1. Create `<model-slug>/` with the parametric `.scad` source (one shared `_common.scad` + part variants for multi-part models, like the existing ones).
+1. Create `<model-slug>/` with the parametric `.scad` source (one shared `_common.scad` + part variants for multi-part models, like the existing ones). Put print-first **test coupons** — fit gauges, grip tests, calibration strips — in `<model-slug>/coupons/`. They still get rendered and validated by CI, but `build_release.sh` skips them, so a release stays a set of bench parts you can print without reading anything first.
 2. Add a per-model `README.md` (dimensions, print settings, parameters) and a Blender `preview.png` (`tools/preview.sh <scad> <out.png> [#hexcolor]`). Optionally drop a `preview-color.txt` (a hex like `#2BB3A3`) in the model dir — the release workflow uses it to tint that model's renders.
 3. **Add a row to the Models table above** so the catalog stays current.
 4. Open a PR (CI validates), merge, then tag `<model-slug>/v1.0.0` to release.

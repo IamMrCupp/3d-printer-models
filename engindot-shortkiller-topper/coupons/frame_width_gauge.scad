@@ -10,7 +10,7 @@
 // frame_test_section does that, at the cost of being a full four-sided slice.
 //
 // PRINT: flat as rendered. Profile extruded in Z: no overhangs, no supports.
-include <shortkiller_common.scad>
+include <../shortkiller_common.scad>
 
 GAUGE_D = 10.0;   // strip depth along the case
 SPINE_T =  5.0;
