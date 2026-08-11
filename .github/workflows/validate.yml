@@ -24,10 +24,18 @@ jobs:
         with:
           python-version: "3.x"
 
+      # Stock Ubuntu openscad (2021.01). An attempt to use ppa:openscad/releases
+      # for a newer build landed here by accident and broke every PR — that PPA
+      # has no noble (24.04) archive and apt 404s. Reproduce this exact renderer
+      # locally before blaming a model:
+      #   docker run --rm -v "$PWD":/w -w /w ubuntu:24.04 bash -c \
+      #     'apt-get update -qq && apt-get install -y -qq --no-install-recommends \
+      #      openscad xvfb python3 && xvfb-run -a tools/render.sh'
       - name: Install OpenSCAD + mesh validator
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends openscad xvfb
+          openscad --version
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 

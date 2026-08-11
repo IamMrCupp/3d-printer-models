@@ -22,6 +22,20 @@ slug="${1:?usage: build_release.sh <model-slug> [out-dir]}"
 out_dir="${2:-dist}"
 model_dir="$slug"
 
+# The second argument is an OUT-DIR, not a version — this script doesn't tag
+# anything. Passing "v1.0.4" quietly creates ./v1.0.4/ in the repo root, whose
+# PNGs then get swept in by `git add -A` (happened 2026-07-31 and again
+# 2026-08-08). Catch it instead of silently obeying.
+case "$out_dir" in
+  v[0-9]*)
+    echo "refusing: out-dir '$out_dir' looks like a version." >&2
+    echo "  build_release.sh takes <model-slug> [out-dir] — it does not tag." >&2
+    echo "  Did you mean:  tools/build_release.sh $slug" >&2
+    echo "  (artifacts go to dist/; tag separately with git tag / gh release)" >&2
+    exit 2
+    ;;
+esac
+
 [ -d "$model_dir" ] || { echo "no such model directory: $model_dir" >&2; exit 1; }
 
 OPENSCAD="${OPENSCAD:-openscad}"
