@@ -19,6 +19,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="syringe-holders/preview.png" width="150"> | [**Syringe holders**](syringe-holders/) | Gridfinity rack for rework syringes — two 30 cc flux barrels behind four 10 cc, vertical bores, no supports. |
 | <img src="uv-mask-station/preview.png" width="150"> | [**UV mask station**](uv-mask-station/) | Deep-bore opaque rack + slip-over cap for UV-curable solder mask, plus a head-down cup for the 365 nm lamp. Print the rack and cap opaque — ambient light skins the mask. |
 | <img src="scope-baseplate/preview.png" width="150"> | [**Scope baseplate**](scope-baseplate/) | Gridfinity platform over a microscope boom's weighted base. **Gauge only so far** — the corner-radius gauge that has to be printed before the plate can be cut. |
+| <img src="bench-instrument-risers/preview.png" width="150"> | [**Bench instrument risers**](bench-instrument-risers/) | Gridfinity-footed pedestals that lift an oscilloscope (4″) and a hot air station (8″) off the desk, turning their footprints back into open grid. Hollow 1.6 mm shell, retaining lip instead of a foot pocket, so every pedestal is interchangeable. |
 
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 

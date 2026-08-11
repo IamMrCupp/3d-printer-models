@@ -1,8 +1,11 @@
 # Bench instrument risers
 
-> **Status: in progress.** Geometry is real and CI-validated, and the pedestals
-> are printable as they stand. One check outstanding — see
-> [Still open](#still-open). No preview, catalog row, or release yet.
+![Bench instrument risers](preview.png)
+
+> **Status: not yet released.** Geometry is real and CI-validated, and the
+> pedestals are printable as they stand. One check outstanding — see
+> [Still open](#still-open). No `bench-instrument-risers/v1.0.0` tag until a
+> pedestal has been printed and seated.
 
 Pedestals that lift bench instruments off the desk and give their footprint back
 as storage. Each one stands on **Gridfinity feet**, so it latches into a

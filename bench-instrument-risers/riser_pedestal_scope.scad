@@ -1,4 +1,4 @@
-// riser_pedestal_scope.scad — 2" pedestal, ×2 under the oscilloscope.
+// riser_pedestal_scope.scad — 4" pedestal, ×2 under the oscilloscope.
 //
 // PRINT: as emitted, feet down. No supports. ×2.
 
