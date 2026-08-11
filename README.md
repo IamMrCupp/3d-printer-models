@@ -41,7 +41,13 @@ tools/preview.sh <model.scad> <out.png>   # render a Blender preview PNG
 python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 ```
 
-On every PR, the [`validate`](.github/workflows/validate.yml) workflow renders all models and runs the trimesh check — a parameter edit that breaks geometry fails the build.
+`tools/check_catalog.py` checks the other half — that every model directory carries a `README.md`, a `preview.png`, and a row in the Models table above:
+
+```sh
+python3 tools/check_catalog.py
+```
+
+On every PR, the [`validate`](.github/workflows/validate.yml) workflow runs both — a parameter edit that breaks geometry fails the build, and so does a model directory that shows up undocumented.
 
 ### Releases
 
@@ -58,6 +64,8 @@ git push origin sticker-holder-inserts/v1.0.0
 2. Add a per-model `README.md` (dimensions, print settings, parameters) and a Blender `preview.png` (`tools/preview.sh <scad> <out.png> [#hexcolor]`). Optionally drop a `preview-color.txt` (a hex like `#2BB3A3`) in the model dir — the release workflow uses it to tint that model's renders.
 3. **Add a row to the Models table above** so the catalog stays current.
 4. Open a PR (CI validates), merge, then tag `<model-slug>/v1.0.0` to release.
+
+Steps 2 and 3 are enforced — `tools/check_catalog.py` fails the PR if a model directory is missing its README, its preview, or its catalog row. There's no exemption list on purpose: a model that isn't ready to be catalogued isn't ready to be on `main`. Run it locally before you push.
 
 ## License
 
