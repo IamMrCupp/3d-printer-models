@@ -16,6 +16,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="rotary-tool-station/preview.png" width="150"> | [**Rotary tool station**](rotary-tool-station/) | Vertical cup for a HARDELL mini rotary tool + a drilled block for its 3/32″ bits. Includes a print-first hole-fit gauge. |
 | <img src="owon-spm8104-tray/preview.png" width="150"> | [**OWON SPM8104 top tray**](owon-spm8104-tray/) | Magnet-free Clickfinity tray that clamps onto an OWON SPM8104 PSU/DMM — 10 cells for the cord and barrel adapters. Screw-clamp rails, no adhesive. |
 | <img src="engindot-shortkiller-topper/preview.png" width="150"> | [**ENGINDOT Shortkiller topper**](engindot-shortkiller-topper/) | Drop-over Clickfinity topper for an ENGINDOT bench supply, holding a Shortkiller where you can operate it plus a tip-down bucket for its probe and lead. Bin body flares past its own foot to carry a box wider than the grid. |
+| <img src="scope-baseplate/preview.png" width="150"> | [**Microscope base platform baseplate**](scope-baseplate/) | 3×3 Gridfinity baseplate that drops onto a microscope boom stand's weighted base, reclaiming that footprint for storage. Three-sided skirt, open at the back for the pole. Includes a print-first corner-radius gauge. |
 
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
