@@ -185,6 +185,14 @@ nothing and re-creates the 36-hour problem the hollow was cut to solve.
 
 ## Still open
 
+- **Scope tilt is deliberately undecided, and doesn't gate anything.** Its front
+  bails still work sitting on the pedestals — deploy them for the same tilt 4″
+  higher, stow them and it sits flat. No reprint either way. The only check if
+  you deploy: a deployed bail contacts the pad further forward than a stowed
+  foot, so it has to stay inside the 78.5 mm pad; if it creeps toward the rim,
+  slide the pedestal a cell forward. Printing the front pair taller is a third
+  option, only worth it if you want *more* tilt than the bails give.
+
 - **Hot air station foot spacing** — the pedestals have to land under its feet,
   and where they land decides whether the 20 free cells end up reachable at the
   plate edges or stranded under the middle of the station.
