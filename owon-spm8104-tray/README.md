@@ -12,7 +12,7 @@ The SPM8104's top vents nowhere (rear fan only), so a tray over the lid is therm
 |---|---|---|---|
 | **Frame** | `owon_tray_frame.scad` | 90 × 237.5 × 25.5 mm | ×1 — flat, walls up, no supports |
 | **Plate** | `owon_tray_plate.scad` | 84 × 210 × 4 mm | ×1 — flat, latches up, **PETG** |
-| **Fit gauge** | `owon_fit_gauge.scad` | 91 × 94 × 13 mm | optional — check clearance before committing to the frame |
+| **Fit gauge** | `coupons/owon_fit_gauge.scad` | 91 × 94 × 13 mm | optional — check clearance before committing to the frame |
 
 Shared dimensions live in `owon_tray_common.scad`.
 

@@ -16,7 +16,7 @@ The plate is a slip-fit skirt at 0.4 mm clearance around a 131.84 × 130.54 mm p
 
 That's the dimension that decides whether the skirt seats. A corner radius that's wrong by a couple of millimetres hangs the part up on the corners while all four flats look perfect — which reads as "the plate is too small" and sends you re-cutting the wrong number.
 
-`scope_corner_gauge.scad` is eight female corners, 6 → 20 mm in 2 mm steps, each tallied with notches (1 notch = 6 mm, +2 mm per notch). Print it flat in anything — it's a measuring tool, not a bench part — press each onto a corner of the platform with both legs flat against the straight edges, and read it against a light:
+`coupons/scope_corner_gauge.scad` is eight female corners, 6 → 20 mm in 2 mm steps, each tallied with notches (1 notch = 6 mm, +2 mm per notch). Print it flat in anything — it's a measuring tool, not a bench part — press each onto a corner of the platform with both legs flat against the straight edges, and read it against a light:
 
 | What you see | What it means |
 |---|---|
@@ -30,14 +30,14 @@ If it lands between two gauges, note which two — the fix is either the midpoin
 
 | File | What | Size |
 |---|---|---|
-| `scope_corner_gauge.scad` | **Print first** — 8 female corner gauges, 6–20 mm, notch-tallied | 192 × 94 × 3 mm |
+| `coupons/scope_corner_gauge.scad` | **Print first** — 8 female corner gauges, 6–20 mm, notch-tallied | 192 × 94 × 3 mm |
 
 `$fn = 96` here is load-bearing, not cosmetic: the arc *is* the measurement, and a coarse one measures a polygon.
 
 ## Source
 
 ```sh
-openscad -o scope_corner_gauge.stl --export-format binstl scope_corner_gauge.scad
+openscad -o scope_corner_gauge.stl --export-format binstl coupons/scope_corner_gauge.scad
 ```
 
 ## Recommended print settings
