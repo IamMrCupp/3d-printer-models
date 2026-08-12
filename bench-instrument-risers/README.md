@@ -16,11 +16,11 @@ Current bench:
 
 | Instrument | Pedestals | Height |
 |---|---|---|
-| Hot air station | ×4 | 8″ (203.2 mm) |
-| Oscilloscope ([OWON ADS1014D](https://www.owon.com.hk/)) | ×2 | 4″ (101.6 mm) |
+| Hot air station | ×4 | 4″ (101.6 mm) |
+| Oscilloscope ([OWON ADS1014D](https://www.owon.com.hk/)) | ×2 | 2″ (50.8 mm) |
 
 The two heights are set by **different constraints**, which matters if either is
-ever revisited. The scope's 4″ is a **sightline** number — it has to clear the
+ever revisited. The scope's 2″ is a **sightline** number — it has to clear the
 trays standing in front of it (logic analyzer, programmers), so it's driven by
 what's in the way, not by what fits underneath. The station's 8″ is a working
 height off the station itself. Storage underneath is a by-product of both.
@@ -33,8 +33,8 @@ prime desk real estate and go up.
 
 | Part | File | Size | Print |
 |---|---|---|---|
-| **Hot air pedestal** | `riser_pedestal_hotair.scad` | 83.5 × 83.5 × 203.2 mm | ×4 — feet down, no supports |
-| **Scope pedestal** | `riser_pedestal_scope.scad` | 83.5 × 83.5 × 101.6 mm | ×2 — feet down, no supports |
+| **Hot air pedestal** | `riser_pedestal_hotair.scad` | 83.5 × 83.5 × 101.6 mm | ×4 — feet down, no supports |
+| **Scope pedestal** | `riser_pedestal_scope.scad` | 83.5 × 83.5 × 50.8 mm | ×2 — feet down, no supports |
 
 Both are the same module at different heights. Shared dimensions live in
 `riser_common.scad`.
@@ -124,11 +124,14 @@ the material back — it's still ~2,000 kg of crush capacity.
 The cavity is structural, not usable storage. Storage goes in the open grid
 *between* the pedestals, which is the point of raising anything.
 
-## Cell budget — why the 8″ pedestals stay 2×2
+## Cell budget — why the pedestals stay 2×2
 
-At 203.2 mm on an 84 mm square footprint the hot air pedestals are **2.42:1**
-tall against wide, past the `MAX_ASPECT` guideline of 1.6. Rendering echoes a
-note rather than failing, and the obvious fix — widen to 3×3 — **doesn't work**:
+At 101.6 mm on an 84 mm square footprint the hot air pedestals are **1.21:1**
+tall against wide, inside the `MAX_ASPECT` guideline of 1.6 — so nothing warns.
+(The 8″ version they replaced measured 2.42:1 and echoed a note on every render.)
+
+The footprint still stays 2×2, and that constraint is independent of height —
+widening to 3×3 **doesn't work at any height**:
 
 | Footprint | Cells each | ×4 | On a 6×6 plate (36 cells) |
 |---|---|---|---|

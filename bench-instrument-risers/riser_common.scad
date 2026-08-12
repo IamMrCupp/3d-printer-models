@@ -70,10 +70,16 @@ GY = 2;   // [1:1:4] cells deep
 // bin's total height. Clickfinity's latch GRIPS: a bin comes out by pulling
 // straight up against four arms per cell, so budget the bin height PLUS release
 // travel PLUS room to get a hand in. Rule of thumb: usable bin height is roughly
-// RISER_H minus 40 — so 4" takes a 60 mm bin and 8" takes a 160 mm one, both
-// past the 55 mm cord well that is currently the tallest bin in the repo.
-SCOPE_RISE  = 101.6;  // 4" — sightline over the front trays
-HOTAIR_RISE = 203.2;  // 8" — working height for the station
+// RISER_H minus 40 — so 4" takes a 60 mm bin, 8" a 160 mm one, and 2" takes
+// NOTHING. Below about 95 mm the space under a pedestal stops being storage and
+// becomes clearance. That is a fine trade when the height is set by sightline or
+// reach, but it means a short pedestal buys back desk area, not shelf space.
+//
+// Halved at the bench on 2026-08-11 (both were one size up). The constraints
+// above are unchanged — these are re-reads of them against the reorganised desk,
+// not a change of intent.
+SCOPE_RISE  = 50.8;   // 2" — sightline over the front trays; carries no bin
+HOTAIR_RISE = 101.6;  // 4" — working height for the station; ~60 mm of bin
 
 // Either height can be overridden without editing this file:
 //   openscad -o r.stl --export-format binstl -D RISER_H=90 riser_pedestal_scope.scad
