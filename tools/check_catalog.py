@@ -27,11 +27,18 @@ ROOT = Path(__file__).resolve().parent.parent
 NOT_MODELS = {"lib", "tools", "build", "node_modules"}
 
 
+def has_source(p):
+    """Any .scad at any depth. Recursive on purpose: print-first coupons live in
+    `<model>/coupons/`, so a directory can legitimately hold no top-level source
+    and still be a model."""
+    return any(p.rglob("*.scad"))
+
+
 def model_dirs():
     for p in sorted(ROOT.iterdir()):
         if not p.is_dir() or p.name.startswith(".") or p.name in NOT_MODELS:
             continue
-        if any(p.glob("*.scad")):
+        if has_source(p):
             yield p
 
 
@@ -68,7 +75,7 @@ def main():
     # running the other way.
     for slug in sorted(linked):
         target = ROOT / slug
-        if target.is_dir() and not any(target.glob("*.scad")) and slug not in NOT_MODELS:
+        if target.is_dir() and not has_source(target) and slug not in NOT_MODELS:
             problems.append(f"main README links `{slug}/`, which holds no .scad source")
         elif not target.exists():
             problems.append(f"main README links `{slug}/`, which doesn't exist")
