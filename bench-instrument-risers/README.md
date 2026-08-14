@@ -2,10 +2,12 @@
 
 ![Bench instrument risers](preview.png)
 
-> **Status: not yet released.** Geometry is real and CI-validated, and the
-> pedestals are printable as they stand. One check outstanding — see
-> [Still open](#still-open). No `bench-instrument-risers/v1.0.0` tag until a
-> pedestal has been printed and seated.
+> **Print-tested.** A 4″ pedestal is printed and in service: the Gridfinity foot
+> seats in a Clickfinity socket, the cap bridges the cavity without dishing, and
+> the 78.5 mm pad has taken every instrument foot tried on it so far. That last
+> one is the design working as intended — the top is a lip around a flat pad
+> rather than a pocket cut for one specific foot, so pedestals stay
+> interchangeable between instruments.
 
 Pedestals that lift bench instruments off the desk and give their footprint back
 as storage. Each one stands on **Gridfinity feet**, so it latches into a
@@ -196,6 +198,10 @@ nothing and re-creates the 36-hour problem the hollow was cut to solve.
   slide the pedestal a cell forward. Printing the front pair taller is a third
   option, only worth it if you want *more* tilt than the bails give.
 
+- **The 8″ pedestals aren't printed yet.** Only the 4″ has been through a
+  printer. Nothing about the taller one is different except `RISER_H`, so the
+  seating and bridging results carry over — but it's 203.7 cm³ of model each,
+  roughly 250 g and four of them, so it's worth being sure of placement first.
 - **Hot air station foot spacing** — the pedestals have to land under its feet,
   and where they land decides whether the 20 free cells end up reachable at the
   plate edges or stranded under the middle of the station.
