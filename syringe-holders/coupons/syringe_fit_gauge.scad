@@ -11,21 +11,31 @@
 //   uv_light_holder   lamp head 37.83   → bore 38.83  (self-centres on the head,
 //                                          so a tight bore JAMS, not leans)
 //
-// Three staircases, one per family, each a row of blind bores at increasing
-// clearance. Bores are GAUGE_DEPTH deep, deliberately shallower than any real
-// bin: this is a diameter test, and 12 mm is plenty to feel a fit and stand a
-// syringe up. A first cut at CAPTURE (40 mm) depth sliced at ~5 hours, which is
-// no coupon at all. Caveat that comes with the shortcut: a deep bore reads a
-// touch tighter than a shallow one (a syringe leans in a shallow bore, jams in a
-// deep one), so if a notch reads BORDERLINE here, go one looser for the real
-// bin — and two looser for bin_uv_mask, which is 65 mm deep.
+// One flat plate with THROUGH holes, three rows at increasing clearance. This
+// is a diameter test and nothing else — it does not tell you whether a syringe
+// stands up straight, only whether it passes. That is what the real bin is for.
+//
+// KEEP IT. A through-hole plate at known diameters is a permanent gauge, not a
+// one-shot coupon: anything cylindrical that turns up later gets sized by
+// dropping it through until it stops. It joins bit_fit_gauge, owon_fit_gauge and
+// scope_corner_gauge on the shelf. That is why every hole is ENGRAVED with its
+// actual diameter as well as notched — a notch count only means something next
+// to this file; a number means the plate explains itself in six months.
+//
+// It got here by trimming: a first cut with 40 mm blind bores (the flux bin's
+// depth) sliced at ~5 hours; 12 mm bores at ~2 hours; a coupon that costs a
+// fifth of the print it's testing is not a coupon. Caveat that comes with the
+// shortcut: a deep bore reads a touch tighter than a through hole (a syringe
+// leans in a shallow bore and jams in a deep one), so if a notch reads
+// BORDERLINE here, go one looser for the real bin — and two looser for
+// bin_uv_mask, which is 65 mm deep.
 //
 // HOW TO USE
 //   1. Print flat, as modelled. No supports. SAME filament and profile as the
 //      real bin — shrinkage is what you're measuring.
-//   2. Count the notches on the rim beside each bore: 1 = tightest.
-//   3. Drop the syringe into each bore in order.
-//   4. Keep the TIGHTEST one it drops into and lifts out of freely — no twist,
+//   2. Read the diameter engraved beside each hole (or count notches: 1 = tightest).
+//   3. Pass the syringe / lamp head through each hole in order.
+//   4. Keep the TIGHTEST one it passes through and back out of freely — no twist,
 //      no push. A rack you have to fight to load gets left loaded.
 //   5. Tell me the notch count for each of the three rows and I'll set CLR (or
 //      a per-family clearance) and re-cut whichever bins need it.
@@ -40,45 +50,70 @@ $fn = 48;
 /* [Gauge] */
 // Total added clearance per bore (on diameter), tightest first. Notch = index.
 CLEARS   = [0.4, 0.7, 1.3, 1.6];   // 1.0 (what the bins ship with) sits between 2 and 3
-GAUGE_DEPTH = 12;  // [8:1:20] mm — a diameter test, not a depth test
+// The small row has room to spare, so it carries on past the syringe question
+// as a general small-cylinder ladder — pens, probes, tips, standoffs. These are
+// ABSOLUTE diameters, not clearances, appended after the four syringe steps.
+SMALL_EXTRA = [13, 14, 15, 16, 18, 20];
+PLATE_T  = 4;     // [3:0.5:8] mm — through holes; thick enough that a hole is
+                  //   a hole and not a chamfer, thin enough to print fast
 D_LAMP   = 37.83; // TrixHub TH007 head — from uv_light_holder.scad
 PITCH_H  = 45;    // [40:1:52] mm centre spacing, lamp-head row
 PITCH_L  = 32;    // [28:1:40] mm centre spacing, large row
-PITCH_S  = 17;    // [14:1:24] mm centre spacing, small row
-WALL     = 2.0;   // [1.2:0.2:4] mm material outboard of the outermost bore
-FLOOR    = 1.4;   // [1:0.2:3] mm under each bore
+PITCH_S  = 24;    // [18:1:30] mm centre spacing, small row — clears the 20 mm extra
+WALL     = 3.0;   // [2:0.5:5] mm web between holes and to the plate edge
 NOTCH    = 1.2;   // [0.8:0.1:2] mm
-ROW_GAP  = 6;     // [4:1:12] mm between the two staircases
+LABEL_H  = 4.5;   // [3:0.5:7] mm text height for the engraved diameters
+LABEL_D  = 0.6;   // [0.3:0.1:1.2] mm engrave depth — two layers at 0.3
+ROW_GAP  = 4;     // [3:1:8] mm between rows
 
 n = len(CLEARS);
-h = FLOOR + GAUGE_DEPTH;
+h = PLATE_T;
 
-module staircase(d, pitch, y) {
-    W = (n - 1) * pitch + d + 1.6 + 2 * WALL;
-    D = d + 1.6 + 2 * WALL;
-    translate([0, y, 0]) difference() {
-        // block, corners rounded so it sits flat and doesn't catch
-        linear_extrude(h) offset(3) offset(-3) square([W, D], center = true);
-        for (i = [0 : n - 1]) {
-            x = -W/2 + WALL + (d + 1.6)/2 + i * pitch;
-            translate([x, 0, FLOOR]) cylinder(d = d + CLEARS[i], h = h);
-            // notches on the +Y rim, count = i + 1
-            for (k = [0 : i])
-                translate([x - i * (NOTCH + 0.8)/2 + k * (NOTCH + 0.8) - NOTCH/2,
-                           D/2 - 1.5, h - 1.0])
-                    cube([NOTCH, 2, 1.1]);
-        }
+// One row of through-holes at y. Beside each: its diameter engraved on the
+// +Y side (the number you actually read), and a notch count on the -Y side
+// (a fallback that survives a worn engraving). `dias` is the list of absolute
+// hole diameters for the row; notches only go on the first n (the clearance
+// steps), the extras are read by their label.
+module hole_row(dias, pitch, y, x0) {
+    for (i = [0 : len(dias) - 1]) {
+        x   = x0 + i * pitch;
+        dia = dias[i];
+        translate([x, y, -1]) cylinder(d = dia, h = h + 2);
+        // engraved diameter, one decimal, above the hole
+        translate([x, y + dia/2 + 1.2, h - LABEL_D])
+            linear_extrude(LABEL_D + 0.1)
+                text(str(round(dia * 10) / 10), size = LABEL_H,
+                     halign = "center", valign = "bottom", font = "Liberation Sans:style=Bold");
+        // notch count below the hole — clearance steps only
+        if (i < n) for (k = [0 : i])
+            translate([x - i * (NOTCH + 0.8)/2 + k * (NOTCH + 0.8) - NOTCH/2,
+                       y - dia/2 - 3.0, h - 1.0])
+                cube([NOTCH, 2, 1.1]);
     }
 }
+function steps(d) = [for (c = CLEARS) d + c];
+DIAS_H = steps(D_LAMP);
+DIAS_L = steps(D_LARGE);
+DIAS_S = concat(steps(D_SMALL), SMALL_EXTRA);
 
-// Three rows, biggest at the back so nothing crowds. Y positions stack the
-// row depths plus gaps.
-D_H = D_LAMP  + 1.6 + 2 * WALL;
-D_L = D_LARGE + 1.6 + 2 * WALL;
-D_S = D_SMALL + 1.6 + 2 * WALL;
-y_L = 0;
-y_H = y_L + D_L/2 + ROW_GAP + D_H/2;
-y_S = y_L - D_L/2 - ROW_GAP - D_S/2;
-staircase(D_LAMP,  PITCH_H, y_H);
-staircase(D_LARGE, PITCH_L, y_L);
-staircase(D_SMALL, PITCH_S, y_S);
+// One plate, three rows. Each row's width is its own hole run; the plate is
+// as wide as the widest row plus margin, rows stacked in Y with the biggest at
+// the back so its holes don't crowd the small ones.
+row_w = function(dias, pitch) (len(dias) - 1) * pitch + max(dias);
+W = max(row_w(DIAS_H, PITCH_H), row_w(DIAS_L, PITCH_L), row_w(DIAS_S, PITCH_S)) + 2 * WALL;
+// Row band = biggest hole + label above (LABEL_H + gap) + notches below (~5) + web.
+band = function(dias) max(dias) + LABEL_H + 1.2 + 5 + 2 * WALL;
+r_H = band(DIAS_H); r_L = band(DIAS_L); r_S = band(DIAS_S);
+D   = r_H + r_L + r_S + 2 * ROW_GAP;
+// hole centre sits below the band centre by half the label allowance
+off = (LABEL_H + 1.2 - 5)/2;
+y_S = -D/2 + r_S/2 - off;
+y_L = -D/2 + r_S + ROW_GAP + r_L/2 - off;
+y_H = -D/2 + r_S + ROW_GAP + r_L + ROW_GAP + r_H/2 - off;
+
+difference() {
+    linear_extrude(h) offset(3) offset(-3) square([W, D], center = true);
+    hole_row(DIAS_H, PITCH_H, y_H, -W/2 + WALL + DIAS_H[0]/2);
+    hole_row(DIAS_L, PITCH_L, y_L, -W/2 + WALL + DIAS_L[0]/2);
+    hole_row(DIAS_S, PITCH_S, y_S, -W/2 + WALL + DIAS_S[0]/2);
+}
