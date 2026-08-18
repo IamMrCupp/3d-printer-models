@@ -11,11 +11,14 @@
 //   uv_light_holder   lamp head 37.83   → bore 38.83  (self-centres on the head,
 //                                          so a tight bore JAMS, not leans)
 //
-// Three staircases, one per family. Each is a row of blind bores at increasing
-// clearance. Bores are CAPTURE deep — the flux bin's depth — because a shallow
-// test hole reads looser than a deep one (a syringe leans in a shallow bore and
-// jams in a deep one). The UV mask bin is deeper still (65), so if the 10 cc
-// row reads snug here, go one notch looser for that bin.
+// Three staircases, one per family, each a row of blind bores at increasing
+// clearance. Bores are GAUGE_DEPTH deep, deliberately shallower than any real
+// bin: this is a diameter test, and 12 mm is plenty to feel a fit and stand a
+// syringe up. A first cut at CAPTURE (40 mm) depth sliced at ~5 hours, which is
+// no coupon at all. Caveat that comes with the shortcut: a deep bore reads a
+// touch tighter than a shallow one (a syringe leans in a shallow bore, jams in a
+// deep one), so if a notch reads BORDERLINE here, go one looser for the real
+// bin — and two looser for bin_uv_mask, which is 65 mm deep.
 //
 // HOW TO USE
 //   1. Print flat, as modelled. No supports. SAME filament and profile as the
@@ -27,15 +30,17 @@
 //   5. Tell me the notch count for each of the three rows and I'll set CLR (or
 //      a per-family clearance) and re-cut whichever bins need it.
 //
-// If it drops through every bore including notch 1, the current CLR = 1.0 is
-// already loose enough — print the bins as released.
+// The released bins use CLR = 1.0, which sits BETWEEN notches 2 and 3 here.
+// If notch 2 (0.7) already drops in and lifts out freely, the bins print fine
+// as released. If it takes notch 3 or 4, tell me which.
 
 include <../syringe_holders_common.scad>
 $fn = 48;
 
 /* [Gauge] */
 // Total added clearance per bore (on diameter), tightest first. Notch = index.
-CLEARS   = [0.4, 0.7, 1.0, 1.3, 1.6];   // 1.0 is what bin_flux ships with
+CLEARS   = [0.4, 0.7, 1.3, 1.6];   // 1.0 (what the bins ship with) sits between 2 and 3
+GAUGE_DEPTH = 12;  // [8:1:20] mm — a diameter test, not a depth test
 D_LAMP   = 37.83; // TrixHub TH007 head — from uv_light_holder.scad
 PITCH_H  = 45;    // [40:1:52] mm centre spacing, lamp-head row
 PITCH_L  = 32;    // [28:1:40] mm centre spacing, large row
@@ -46,7 +51,7 @@ NOTCH    = 1.2;   // [0.8:0.1:2] mm
 ROW_GAP  = 6;     // [4:1:12] mm between the two staircases
 
 n = len(CLEARS);
-h = FLOOR + CAPTURE;
+h = FLOOR + GAUGE_DEPTH;
 
 module staircase(d, pitch, y) {
     W = (n - 1) * pitch + d + 1.6 + 2 * WALL;
