@@ -53,18 +53,18 @@ CLEARS   = [0.4, 0.7, 1.3, 1.6];   // 1.0 (what the bins ship with) sits between
 // The small row has room to spare, so it carries on past the syringe question
 // as a general small-cylinder ladder — pens, probes, tips, standoffs. These are
 // ABSOLUTE diameters, not clearances, appended after the four syringe steps.
-SMALL_EXTRA = [13, 14, 15, 16, 18, 20];
-PLATE_T  = 4;     // [3:0.5:8] mm — through holes; thick enough that a hole is
-                  //   a hole and not a chamfer, thin enough to print fast
+SMALL_EXTRA = [13, 14, 15, 16];   // trimmed from 20 — the width was costing more time than the holes were worth
+PLATE_T  = 3;     // [2.5:0.5:8] mm — through holes; a hole is still a hole at 3,
+                  //   and every 0.5 mm here is a whole extra skin's worth of time
 D_LAMP   = 37.83; // TrixHub TH007 head — from uv_light_holder.scad
-PITCH_H  = 45;    // [40:1:52] mm centre spacing, lamp-head row
-PITCH_L  = 32;    // [28:1:40] mm centre spacing, large row
-PITCH_S  = 24;    // [18:1:30] mm centre spacing, small row — clears the 20 mm extra
-WALL     = 3.0;   // [2:0.5:5] mm web between holes and to the plate edge
+PITCH_H  = 43;    // [40:1:52] mm centre spacing, lamp-head row
+PITCH_L  = 30;    // [28:1:40] mm centre spacing, large row
+PITCH_S  = 20;    // [16:1:30] mm centre spacing, small row — clears the 16 mm extra
+WALL     = 2.5;   // [2:0.5:5] mm web between holes and to the plate edge
 NOTCH    = 1.2;   // [0.8:0.1:2] mm
-LABEL_H  = 4.5;   // [3:0.5:7] mm text height for the engraved diameters
+LABEL_H  = 4.0;   // [3:0.5:7] mm text height for the engraved diameters
 LABEL_D  = 0.6;   // [0.3:0.1:1.2] mm engrave depth — two layers at 0.3
-ROW_GAP  = 4;     // [3:1:8] mm between rows
+ROW_GAP  = 2;     // [1:1:8] mm between rows
 
 n = len(CLEARS);
 h = PLATE_T;
