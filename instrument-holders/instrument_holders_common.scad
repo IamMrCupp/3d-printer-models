@@ -42,16 +42,17 @@ NOTCH_D = 12;    // [4:1:30]  depth down from the rim
 // Port offset from each instrument's centreline along the rear wall, +X right
 // as viewed from the front. Measure to the CENTRE of the port opening.
 //
-// ⚠ T48: its USB is visibly off centre toward the `IC`-arrow side — the printed
-// bin's centred slot is wrong and pulls the lead against the wall. A photo
-// scales to roughly 11 mm, which is an ESTIMATE and deliberately not used here.
-// Set this from calipers, then rebuild.
-// Left at 0 (centred) ONLY so the repo keeps rendering for everyone else. 0 is
-// known-wrong for the T48. `rear_cord_notch` echoes a warning whenever a bin is
-// rendered with an unmeasured offset — do not print one that warns.
-T48_NOTCH_X     = 0;   // ⚠ KNOWN WRONG — measure, then set
-DSLOGIC_NOTCH_X = 0;   // ⚠ UNVERIFIED — shared module, same check owed
-NOTCH_X_MEASURED = false;   // flip to true in the same commit as a real offset
+// MEASURED 2026-08-19 with coupons/t48_port_gauge.scad: the T48's USB port sits
+// 10 mm off the device centreline. The bin's slot is 10 mm wide and was cut dead
+// centre, spanning -5 to +5 — so the port sat at or past the slot's edge, which
+// is what dragged the lead against the wall.
+//
+// SIGN: negative is toward the POW/RUN LED end, positive toward the `IC` arrow.
+// The magnitude is measured; confirm the SIDE against the physical part before
+// printing, because a sign error here is a 20 mm miss, worse than the original.
+T48_NOTCH_X     = -10.0;  // measured, 10 mm off centre
+DSLOGIC_NOTCH_X = 0;      // ⚠ UNVERIFIED — shared module, same check owed
+NOTCH_X_MEASURED = true;   // T48 measured; DSLogic still owed
 
 /* [Interior heights] */
 // Bin height h relates to usable interior as: interior = h - BIN_BASE_H - floor
