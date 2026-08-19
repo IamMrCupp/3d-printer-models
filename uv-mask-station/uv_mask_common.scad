@@ -28,6 +28,18 @@ DET_PROUD = 0.6;  // [0.3:0.1:1.2] how far it stands into the gap.
                   //   this printer — print coupons/cap_detent_gauge.scad first.
 DET_UP    = 6.0;  // [3:0.5:12] bump centre, measured UP from the cap's mouth
 
+// The block's dimple is cut DEEPER than the bump stands proud, on purpose.
+//
+// The rack is 309 cm3 of opaque filament; the cap is 48. Only the cap's bump
+// needs tuning, so the rack must not constrain it — cut the dimple to the
+// deepest bump anyone would want and the cap becomes the only part that is ever
+// reprinted. A dimple matched to the nominal bump would drag the expensive half
+// into every adjustment.
+DET_DIMPLE = 1.0; // [0.6:0.1:1.5] dimple depth. Keep >= the largest DET_PROUD
+                  //   you would try; the bump can then grow to it untouched.
+assert(DET_DIMPLE >= DET_PROUD,
+       "Dimple is shallower than the bump — the cap could not seat.");
+
 // Block height, derived — do not hardcode 71.15.
 UVM_BLOCK_H = UVM_DEPTH + BIN_BASE_H + 1.4;
 
@@ -77,4 +89,4 @@ module uvm_cap() {
 }
 
 // The block's matching dimples. Subtracted by bin_uv_mask.
-module uvm_block_detents() { uvm_detents(BLOCK_W, BLOCK_DET_Z); }
+module uvm_block_detents() { uvm_detents(BLOCK_W, BLOCK_DET_Z, proud = DET_DIMPLE); }

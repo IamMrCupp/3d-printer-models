@@ -23,10 +23,17 @@ dimples near the top of the rack. Before this the cap was a plain box over a pla
 0.25 mm per side with nothing holding it: for a cap whose only job is keeping UV off the mask,
 lifting off unnoticed is the failure that costs you the syringes.
 
-Catch depth is `DET_PROUD - CAP_CLR/2`, 0.35 mm at the defaults, and the bump rubs the block by
-that same amount for the whole 36 mm of insertion. **That is unverified on any real printer** —
-print [`coupons/cap_detent_gauge.scad`](coupons/cap_detent_gauge.scad) (~27 g, two rings at full
-83.5 mm span) and tune `DET_PROUD` before committing 384 cm³ of opaque filament.
+Catch depth is `DET_PROUD - CAP_CLR/2` — **0.34 mm** at the defaults, and the bump rubs the block
+by that same amount for the whole 36 mm of insertion. **That is unverified on a real printer.**
+
+Rather than gate it behind a coupon, the rack is built so it never needs reprinting: its dimples
+are cut **0.99 mm deep against a 0.59 mm bump**, leaving 0.65 mm of headroom. `DET_PROUD` can go
+as high as **1.25** before the rack is involved at all. So if the click is wrong, reprint the cap
+— 48 cm³ — and leave the 309 cm³ rack alone.
+
+A coupon was written for this and then deleted: at 22 cm³ it was 45 % of the cap it was
+protecting, and nearly as long to print. Making the expensive half tuning-proof is the better
+trade.
 
 **The cap prints top-down, mouth up** — which is how it's emitted, so print it as exported. The solid 2 mm top lies on the bed and the walls rise from it.
 
