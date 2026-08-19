@@ -19,6 +19,10 @@ on:
 jobs:
   render-validate:
     runs-on: ubuntu-latest
+    # A stalled apt mirror once wedged this job for over an hour on the install
+    # step, and without a cap it would have run to the 6-hour default. A whole
+    # run is ~6 minutes, so 25 fails loudly while leaving plenty of headroom.
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v5
 
@@ -34,9 +38,15 @@ jobs:
       #     'apt-get update -qq && apt-get install -y -qq --no-install-recommends \
       #      openscad xvfb python3 && xvfb-run -a tools/render.sh'
       - name: Install OpenSCAD + mesh validator
+        # Its own tighter cap: this step is ~1 minute healthy, so 10 separates
+        # "mirror is stalling" from "a model is slow to render" without reading
+        # logs. DEBIAN_FRONTEND stops apt blocking on a prompt nobody can answer.
+        timeout-minutes: 10
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends openscad xvfb
+          sudo apt-get update -o Acquire::Retries=3
+          sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 openscad xvfb
           openscad --version
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
