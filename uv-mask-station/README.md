@@ -16,7 +16,7 @@ That's also why the bores are 65 mm deep for a ~100 mm syringe: the tip and most
 
 **The lamp is stored head-down** in a 2 × 2 cup, ⌀37.83 mm bore. Two reasons, and the second is the one that matters: the head is the widest part, so dropping it in self-centres the lamp — and a lamp knocked on in a head-down cup shines into the well instead of across the bench. 365 nm is an eye hazard, not just an inconvenience.
 
-**Eight slots for seven syringes.** 4 × 2 grid: 2 green mask + 5 others, with one spare. Set `UVM_COLS` / `UVM_ROWS` in `uv_mask_common.scad` if your set is a different size.
+**Nine slots for seven syringes.** 3 × 3 grid: 2 green mask + 5 others, with two spare. The rack is a 2 × 2, not the 2 × 1 it started as — at the real 18.8 mm barrel a 2 × 1 fits **three** bores, not eight. Set `UVM_COLS` / `UVM_ROWS` in `uv_mask_common.scad` if your set is a different size.
 
 **The cap prints open-side down** — no supports, and the one surface that needs to be flat and square (the rim that meets the block) is the one on the bed.
 
@@ -24,8 +24,8 @@ That's also why the bores are 65 mm deep for a ~100 mm syringe: the tip and most
 
 | File | What | Size |
 |---|---|---|
-| `bin_uv_mask.scad` | 2 × 1 rack, 4 × 2 bores at ⌀10.8 × 65 mm deep — **print opaque** | 83.5 × 41.5 × 71.2 mm |
-| `uv_mask_cap.scad` | Slip-over cap for the protruding stubs, 0.5 mm clearance — **print opaque** | 88.5 × 46.5 × 44.0 mm |
+| `bin_uv_mask.scad` | 2 × 2 rack, 3 × 3 bores at ⌀18.8 × 65 mm deep — **print opaque** | 83.5 × 83.5 × 71.2 mm |
+| `uv_mask_cap.scad` | Slip-over cap for the protruding stubs, 0.5 mm clearance — **print opaque** | 88.5 × 88.5 × 44.0 mm |
 | `uv_light_holder.scad` | 2 × 2 cup for a TrixHub TH007 365 nm lamp, head-down | 83.5 × 83.5 × 56.2 mm |
 
 Built on [`lib/syringe.scad`](../lib/syringe.scad) (the bore grid) and [`lib/vessel.scad`](../lib/vessel.scad) (the lamp cup).
