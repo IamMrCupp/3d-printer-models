@@ -6,9 +6,9 @@
 
 ## Design notes
 
-**Two barrel sizes, one block.** Working syringes here are 10 cc (⌀10.8 mm) except the 30 cc flux (⌀25.5 mm). Rather than a rack per size, the bores are a position list — `[x, y, diameter]` — so one 2 × 2 block carries both.
+**Two barrel sizes, one block.** There is one small barrel size here — the 10 ml at ⌀18.80 mm — plus the 30 cc AMTECH flux at ⌀25.5 mm. Rather than a rack per size, the bores are a position list — `[x, y, diameter]` — so one 2 × 2 block carries both.
 
-**Big ones at the back.** The two 30 cc bores sit in the back row, the four 10 cc in front of them. A 30 cc barrel is nearly two and a half times the diameter and correspondingly taller; in front it blocks the view of everything behind it.
+**Big ones at the back.** The two 30 cc bores sit in the back row, the four 10 ml in front of them. The 30 cc barrel is wider (25.5 vs 18.8) and noticeably taller — 125.6 mm against the 10 ml — so in front it blocks the view of everything behind it.
 
 **The bore locates, it doesn't grip.** Clearance, not interference — same rule as [`lib/vessel.scad`](../lib/vessel.scad)'s collar cups. A bore that grips harder than the bin weighs lifts the bin out of the baseplate when you grab a syringe one-handed.
 
@@ -18,9 +18,11 @@
 
 | File | What | Size |
 |---|---|---|
-| `bin_flux.scad` | 2 × 2 rack — 2 × 30 cc (⌀25.5) + 4 × 10 cc (⌀10.8), 40 mm bores | 83.5 × 83.5 × 46.2 mm |
+| `bin_flux.scad` | 2 × 2 rack — 2 × 30 cc (⌀25.5) + 4 × 10 ml (⌀18.8), 40 mm bores | 83.5 × 83.5 × 46.2 mm |
 
 Bore diameters and positions live in `syringe_holders_common.scad` (`D_LARGE`, `D_SMALL`, `FLUX_BORES`). Adding a size is a row in that list, not new geometry.
+
+> **Print the bore gauge before this block.** A 46 mm block of wrong-sized holes is an expensive way to discover a diameter — this model already shipped one, cut for a 10.8 mm barrel that doesn't exist on this bench.
 
 Built on [`lib/vessel.scad`](../lib/vessel.scad).
 
