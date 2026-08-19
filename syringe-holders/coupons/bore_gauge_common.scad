@@ -26,12 +26,17 @@
 use <../../lib/label.scad>
 
 /* [Geometry] */
-WALL   = 3.0;   // [2:0.5:5] minimum collar wall, at the LARGEST bore
-RING_H = 6.0;   // [4:0.5:12] collar height — enough engagement to feel bind vs slop
-BAR_H  = 4.0;   // [3:0.5:8] backbone thickness
-BAR_D  = 11.0;  // [8:1:16] backbone depth, carries the engraved numbers
-GAP    = 3.0;   // [2:0.5:6] between collars
-TEXT   = 4.5;   // [3:0.5:7] engraved digit height
+// Nothing here is structural — it is a thing you push a syringe into once. Every
+// dimension is the smallest that still reads, because a coupon that costs more
+// than a fraction of the part it protects does not get printed.
+//   wall 3.0 -> 1.6  (four 0.4 mm lines; pure perimeter, no infill)
+//   height 6 -> 4    (still ample engagement to feel bind vs slop on a ~19 mm bore)
+WALL   = 1.6;   // [1.2:0.4:4] collar wall, at the LARGEST bore
+RING_H = 4.0;   // [3:0.5:12] collar height
+BAR_H  = 2.4;   // [1.6:0.4:8] backbone thickness — six layers at 0.4 mm
+BAR_D  = 8.0;   // [6:1:16] backbone depth, carries the engraved numbers
+GAP    = 2.0;   // [1:0.5:6] between collars
+TEXT   = 4.0;   // [3:0.5:7] engraved digit height
 
 /* [Quality] */
 $fn = 64;       // the bore IS the measurement
@@ -63,7 +68,7 @@ module bore_gauge(barrel, clearances) {
             x = (i - (len(bores)-1)/2) * pitch;
             translate([x, 0, -0.1]) cylinder(d = bores[i], h = RING_H + 0.2);
             translate([x, bar_y + BAR_D/2 - 0.5, BAR_H])
-                label_pocket(_1dp(clearances[i]), size = TEXT);
+                label_pocket(_1dp(clearances[i]), size = TEXT, depth = 0.6);
         }
     }
 }
