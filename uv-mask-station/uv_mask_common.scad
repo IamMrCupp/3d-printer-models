@@ -26,7 +26,16 @@ DET_PROUD = 0.6;  // [0.3:0.1:1.2] how far it stands into the gap.
                   //   CATCH DEPTH = DET_PROUD - CAP_CLR/2, and the bump rubs the
                   //   block by that same amount all the way down. UNVERIFIED on
                   //   this printer — print coupons/cap_detent_gauge.scad first.
-DET_UP    = 6.0;  // [3:0.5:12] bump centre, measured UP from the cap's mouth
+// Position the detent by how far it sits BELOW THE BLOCK'S TOP — that is where
+// you look at it, and it is the number that has to be right. Deriving it from
+// the cap's mouth instead put the dimple at 35 mm on a 71 mm block, halfway
+// down, which is both wrong to look at and the worst case for insertion:
+// the bump then rubs the block for CAP_H - DET_UP = 36 mm of travel.
+//
+// Measuring from the top makes that ride distance equal DET_BELOW_TOP itself,
+// so a dimple near the top is also the one that scrapes least.
+DET_BELOW_TOP = 8.0;  // [4:1:20] dimple centre, below the block's top face
+DET_UP    = CAP_H - DET_BELOW_TOP;  // derived: bump height above the cap's mouth
 
 // The block's dimple is cut DEEPER than the bump stands proud, on purpose.
 //
@@ -49,7 +58,12 @@ BLOCK_W   = UVM_NX*GF - 0.5;
 // Detent centres. The two must agree or the cap simply will not click, so both
 // are derived from the same DET_UP rather than written down twice.
 CAP_DET_Z   = CAP_TOP + CAP_H - DET_UP;          // in the cap's own emitted frame
-BLOCK_DET_Z = UVM_BLOCK_H - CAP_H + DET_UP;      // in the block's frame
+BLOCK_DET_Z = UVM_BLOCK_H - DET_BELOW_TOP;       // in the block's frame
+
+assert(DET_BELOW_TOP > DET_R + 1,
+       "Dimple would break the block's top edge — raise DET_BELOW_TOP.");
+assert(DET_UP > DET_R + 1,
+       "Bump sits too close to the cap's mouth to have wall around it.");
 
 // Male bumps for the cap, female dimples for the block: same call, different
 // offset, so they cannot drift apart.

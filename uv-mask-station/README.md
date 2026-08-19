@@ -18,13 +18,15 @@ That's also why the bores are 65 mm deep for a ~100 mm syringe: the tip and most
 
 **Nine slots for seven syringes.** 3 × 3 grid: 2 green mask + 5 others, with two spare. The rack is a 2 × 2, not the 2 × 1 it started as — at the real 18.8 mm barrel a 2 × 1 fits **three** bores, not eight. Set `UVM_COLS` / `UVM_ROWS` in `uv_mask_common.scad` if your set is a different size.
 
-**The cap clicks on — it isn't friction.** Four detents, one centred on each wall, drop into
-dimples near the top of the rack. Before this the cap was a plain box over a plain block at
+**The cap clicks on — it isn't friction.** Four detents, one centred on each wall, drop into dimples **8 mm below the rack's top face** (`DET_BELOW_TOP`). Before this the cap was a plain box over a plain block at
 0.25 mm per side with nothing holding it: for a cap whose only job is keeping UV off the mask,
 lifting off unnoticed is the failure that costs you the syringes.
 
-Catch depth is `DET_PROUD - CAP_CLR/2` — **0.34 mm** at the defaults, and the bump rubs the block
-by that same amount for the whole 36 mm of insertion. **That is unverified on a real printer.**
+Catch depth is `DET_PROUD - CAP_CLR/2` — **0.34 mm** at the defaults — and the bump rubs the block
+by that amount for `DET_BELOW_TOP` of travel, i.e. **8 mm**. Positioning the detent from the top
+rather than from the cap's mouth is what keeps that short: measured the other way it landed
+35 mm up a 71 mm block, halfway down, and dragged for 36 mm. **The catch depth itself is still
+unverified on a real printer.**
 
 Rather than gate it behind a coupon, the rack is built so it never needs reprinting: its dimples
 are cut **0.99 mm deep against a 0.59 mm bump**, leaving 0.65 mm of headroom. `DET_PROUD` can go
