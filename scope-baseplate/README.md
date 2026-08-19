@@ -10,7 +10,7 @@ A **3×3 Gridfinity baseplate** that drops onto the raised platform of a microsc
 
 | Part | File | Size | Print |
 |---|---|---|---|
-| **Baseplate** | `scope_wipe_plate.scad` | 138 × 133.6 × 17.9 mm | ×1 — grid up, no supports |
+| **Baseplate** | `scope_wipe_plate.scad` | 138 × 133.6 × 17.9 mm | ×1 — grid up, **with supports** |
 | **Corner gauge** | `coupons/scope_corner_gauge.scad` | 192 × 94 × 3 mm | optional — only if your platform differs |
 
 Shared dimensions live in `scope_plate_common.scad`.
@@ -63,4 +63,9 @@ openscad -o scope_wipe_plate.stl --export-format binstl scope_wipe_plate.scad
 | Layer height | 0.2 mm |
 | Walls | 3+ |
 | Infill | 15 % |
-| Supports | None |
+| Supports | **Yes for `scope_wipe_plate`** — the gauge needs none |
+
+> **The supports line was wrong until 2026-08-19** — this README said "no supports" and it was
+> corrected off an actual slicing pass, not from reading the model. Grid up puts the skirt's
+> inner face over air. Slice it and look before you trust a print-settings table; that table is
+> a claim, and this one had never been checked against a slicer.
