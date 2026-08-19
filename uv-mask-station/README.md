@@ -18,7 +18,9 @@ That's also why the bores are 65 mm deep for a ~100 mm syringe: the tip and most
 
 **Nine slots for seven syringes.** 3 × 3 grid: 2 green mask + 5 others, with two spare. The rack is a 2 × 2, not the 2 × 1 it started as — at the real 18.8 mm barrel a 2 × 1 fits **three** bores, not eight. Set `UVM_COLS` / `UVM_ROWS` in `uv_mask_common.scad` if your set is a different size.
 
-**The cap prints open-side down** — no supports, and the one surface that needs to be flat and square (the rim that meets the block) is the one on the bed.
+**The cap prints top-down, mouth up** — which is how it's emitted, so print it as exported. The solid 2 mm top lies on the bed and the walls rise from it.
+
+Not mouth-down. The cavity is 84 mm across, so closing the top last means bridging 84 mm of open air, and the sag lands on the face that has to sit flat over the rack. The sealing rim does come out marginally crisper against the bed — that is not worth an 84 mm bridge. *(This README recommended mouth-down until 2026-08-19. It was wrong.)*
 
 ## Parts
 
@@ -44,4 +46,4 @@ openscad -o bin_uv_mask.stl --export-format binstl bin_uv_mask.scad
 | Layer height | 0.2 mm |
 | Walls | 3 perimeters (don't drop below 2 on the rack — thin walls leak light) |
 | Infill | 15 % |
-| Supports | **None** — bores are vertical, the cap prints open-side down |
+| Supports | **None** — bores are vertical; the cap prints top-down as emitted, so nothing bridges |
