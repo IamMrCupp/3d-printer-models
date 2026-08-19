@@ -22,7 +22,16 @@
 
 Bore diameters and positions live in `syringe_holders_common.scad` (`D_LARGE`, `D_SMALL`, `FLUX_BORES`). Adding a size is a row in that list, not new geometry.
 
-> **Print the bore gauge before this block.** A 46 mm block of wrong-sized holes is an expensive way to discover a diameter — this model already shipped one, cut for a 10.8 mm barrel that doesn't exist on this bench.
+> **Print [`coupons/bore_gauge_10ml.scad`](coupons/bore_gauge_10ml.scad) before this block.**
+> ~17 g and a few minutes against ~250 g for the bin. A 46 mm block of wrong-sized holes is an
+> expensive way to discover a diameter — this model already shipped one, cut for a 10.8 mm
+> barrel that doesn't exist on this bench.
+>
+> The gauge tests **clearance**, not the barrel: even with the right 18.80 mm figure, small
+> vertical holes print undersize by an amount specific to your printer, nozzle and filament.
+> `lib/vessel.scad` assumes `CLR = 1.0` and that has never been checked against a real syringe.
+> Print it flat as emitted — the bores must print vertically, the same way the bin's do, or the
+> reading transfers nothing.
 
 Built on [`lib/vessel.scad`](../lib/vessel.scad).
 
