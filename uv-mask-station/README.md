@@ -18,6 +18,16 @@ That's also why the bores are 65 mm deep for a ~100 mm syringe: the tip and most
 
 **Nine slots for seven syringes.** 3 × 3 grid: 2 green mask + 5 others, with two spare. The rack is a 2 × 2, not the 2 × 1 it started as — at the real 18.8 mm barrel a 2 × 1 fits **three** bores, not eight. Set `UVM_COLS` / `UVM_ROWS` in `uv_mask_common.scad` if your set is a different size.
 
+**The cap clicks on — it isn't friction.** Four detents, one centred on each wall, drop into
+dimples near the top of the rack. Before this the cap was a plain box over a plain block at
+0.25 mm per side with nothing holding it: for a cap whose only job is keeping UV off the mask,
+lifting off unnoticed is the failure that costs you the syringes.
+
+Catch depth is `DET_PROUD - CAP_CLR/2`, 0.35 mm at the defaults, and the bump rubs the block by
+that same amount for the whole 36 mm of insertion. **That is unverified on any real printer** —
+print [`coupons/cap_detent_gauge.scad`](coupons/cap_detent_gauge.scad) (~27 g, two rings at full
+83.5 mm span) and tune `DET_PROUD` before committing 384 cm³ of opaque filament.
+
 **The cap prints top-down, mouth up** — which is how it's emitted, so print it as exported. The solid 2 mm top lies on the bed and the walls rise from it.
 
 Not mouth-down. The cavity is 84 mm across, so closing the top last means bridging 84 mm of open air, and the sag lands on the face that has to sit flat over the rack. The sealing rim does come out marginally crisper against the bed — that is not worth an 84 mm bridge. *(This README recommended mouth-down until 2026-08-19. It was wrong.)*
