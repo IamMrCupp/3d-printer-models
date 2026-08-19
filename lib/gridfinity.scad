@@ -9,6 +9,7 @@
 //
 //   baseplate(nx, ny)                      — tiled receiving baseplate
 //   bin_blank(nx, ny, h)                   — solid bin body (feet + block, no cavity)
+//   filler_tile(nx, ny)                    — flat lid over empty grid (corner feet + ribs)
 //   bin(nx, ny, h, wall, floor)            — open Gridfinity bin
 //   divided_bin(nx, ny, h, cols, rows, …)  — bin with internal compartments
 //   lid(nx, ny, …)                         — friction lid for a bin of the same footprint
@@ -32,6 +33,84 @@ module baseplate(nx, ny) {
     difference() {
         translate([0,0,BP_H/2]) linear_extrude(BP_H, center=true) offset(GF_FILLET) offset(-GF_FILLET) square([w,d], center=true);
         for (ix=[0:nx-1], iy=[0:ny-1]) translate([(ix-(nx-1)/2)*GF, (iy-(ny-1)/2)*GF, 0]) _bp_socket();
+    }
+}
+
+// ---- filler tile ----
+// A flat lid over empty grid, so a run of unused cells becomes a working
+// surface — mouse, drink, parts tray, wrist rest.
+//
+// TWO THINGS DRIVE THIS DESIGN, both measured rather than assumed:
+//
+// 1. FEET GO IN THE CORNERS ONLY, never every cell. Each Clickfinity cell holds
+//    with ~12.2 N (4 arms x 3.04 N). A foot in every cell of a 6x6 needs
+//    ~438 N — 45 kgf — to lift: not a tile, a permanent fixture, and you break
+//    something removing it. Four corner feet cap the release force at ~49 N
+//    (5 kgf) at ANY tile size, which is firm enough not to wander and light
+//    enough to lift by hand.
+// 2. RIBS CARRY THE MIDDLE. With only corner feet, a large tile would sag, so
+//    the underside drops ribs onto the plate's grid walls (they bear, they do
+//    not latch). Rib depth is BIN_BASE_H - plate_top, which is exactly the
+//    height a bin stands proud of that plate.
+//
+// PLATE_TOP is the plate's top surface above its socket floor, and it differs
+// by plate:
+//     Clickfinity shallow (PLATE_H 4.00, FLOOR 1.20) -> 2.80   <- the desk
+//     standard full-depth  (BP_H 5.85, _BP_FLOOR 1.20) -> 4.65
+// Get it wrong and the ribs either float (tile flexes) or hold the feet out of
+// the sockets (tile rocks and will not latch).
+//
+// PRINT UPSIDE DOWN — top face on the bed. Every foot surface then tapers
+// inward going up, so the whole part is self-supporting with no overhangs, and
+// the working surface comes off the build plate glass-flat instead of as top
+// solid infill.
+FILLER_TOP_T     = 1.60;   // [1.20:0.20:3.00] top skin. 1.60 = 4 x 0.4 lines, pure perimeter
+FILLER_RIB_T     = 1.60;   // [1.20:0.20:3.00] rib + perimeter wall thickness
+FILLER_CHAMF     = 1.00;   // [0:0.25:2.00] chamfer on the outer top edge — kills the trip lip
+FILLER_PLATE_TOP = 2.80;   // [2.00:0.05:5.00] plate top above socket floor. 2.80 Clickfinity, 4.65 standard
+
+// Corner cells only, de-duplicated so 1xN and 1x1 don't stack feet on themselves.
+function _filler_corners(nx, ny) =
+    [ for (ix = (nx > 1 ? [0, nx-1] : [0]), iy = (ny > 1 ? [0, ny-1] : [0])) [ix, iy] ];
+
+module filler_tile(nx, ny, plate_top = FILLER_PLATE_TOP, top_t = FILLER_TOP_T,
+                   rib = FILLER_RIB_T, chamf = FILLER_CHAMF) {
+    W = nx*GF - 0.5; D = ny*GF - 0.5;
+    e = 0.01;
+    assert(plate_top < BIN_BASE_H, "FILLER_PLATE_TOP must be below the foot top (4.75)");
+    union() {
+        // latching feet — corners only
+        for (c = _filler_corners(nx, ny))
+            translate([(c[0]-(nx-1)/2)*GF, (c[1]-(ny-1)/2)*GF, 0]) _bin_foot();
+
+        // Top skin, with a chamfered outer edge.
+        //
+        // The skin ends EXACTLY where the chamfer hull starts — no `+e` overlap.
+        // Poking e past that plane duplicates the chamfer's outer wall for e of
+        // height and CGAL splits it at a computed vertex ~1e-4 off the arc, which
+        // reads as a sliver. Same trap _bin_foot() documents above; it cost a
+        // render here before the comment was taken at its word.
+        translate([0,0,BIN_BASE_H]) linear_extrude(top_t - chamf)
+            offset(BIN_R) offset(-BIN_R) square([W,D], center=true);
+        if (chamf > 0)
+            hull() {
+                translate([0,0,BIN_BASE_H + top_t - chamf]) linear_extrude(e)
+                    offset(BIN_R) offset(-BIN_R) square([W,D], center=true);
+                translate([0,0,BIN_BASE_H + top_t - e]) linear_extrude(e)
+                    offset(BIN_R) offset(-BIN_R) square([W-2*chamf, D-2*chamf], center=true);
+            }
+
+        // perimeter wall + ribs on the cell lines, bearing on the plate's grid walls
+        translate([0,0,plate_top]) linear_extrude(BIN_BASE_H - plate_top) {
+            difference() {
+                offset(BIN_R) offset(-BIN_R) square([W,D], center=true);
+                offset(BIN_R) offset(-BIN_R) square([W-2*rib, D-2*rib], center=true);
+            }
+            for (ix = [1:max(nx-1,0)]) if (nx > 1)
+                translate([(ix-nx/2)*GF, 0]) square([rib, D], center=true);
+            for (iy = [1:max(ny-1,0)]) if (ny > 1)
+                translate([0, (iy-ny/2)*GF]) square([W, rib], center=true);
+        }
     }
 }
 
