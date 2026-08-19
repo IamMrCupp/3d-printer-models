@@ -12,5 +12,5 @@ include <instrument_holders_common.scad>
 
 difference() {
     bin(2, 3, H_T48);
-    rear_cord_notch(2, 3, H_T48);
+    rear_cord_notch(2, 3, H_T48, x_off = T48_NOTCH_X);
 }
