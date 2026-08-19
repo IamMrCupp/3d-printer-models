@@ -13,5 +13,5 @@ include <instrument_holders_common.scad>
 
 difference() {
     open_front_bin(2, 3, H_DSLOGIC);
-    rear_cord_notch(2, 3, H_DSLOGIC);
+    rear_cord_notch(2, 3, H_DSLOGIC, x_off = DSLOGIC_NOTCH_X);
 }
