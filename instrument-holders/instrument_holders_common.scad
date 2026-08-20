@@ -51,8 +51,9 @@ NOTCH_D = 12;    // [4:1:30]  depth down from the rim
 // The magnitude is measured; confirm the SIDE against the physical part before
 // printing, because a sign error here is a 20 mm miss, worse than the original.
 T48_NOTCH_X     = -10.0;  // measured, 10 mm off centre
-DSLOGIC_NOTCH_X = 0;      // ⚠ UNVERIFIED — shared module, same check owed
-NOTCH_X_MEASURED = true;   // T48 measured; DSLogic still owed
+DSLOGIC_NOTCH_X = 0;      // ✅ VERIFIED 2026-08-19 — printed, device seats and the
+                          //   centred slot works. Its port really is centred, unlike the T48's.
+NOTCH_X_MEASURED = true;   // both docks confirmed against printed parts
 
 /* [Interior heights] */
 // Bin height h relates to usable interior as: interior = h - BIN_BASE_H - floor
