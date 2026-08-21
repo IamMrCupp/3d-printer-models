@@ -25,10 +25,11 @@ include <../lib/vessel.scad>
 // and G5 are the same can, so one bore serves all three.
 BORE_DEOXIT = 57.00;   // ✅ proven by the printed part
 
-// Freeze spray is a DIFFERENT, LARGER can — it does not enter 57.00. Its bore is
-// the one number still unknown, and it is the easy caliper case.
-D_FREEZE_SPRAY = 56.00;   // ⚠️ WRONG, known too small — the can does not fit 57.00
-FREEZE_MEASURED = false;  // flip in the same commit as a real reading
+// Freeze spray is a DIFFERENT, LARGER can — 13 mm wider than a DeoxIT, which is
+// why it never fitted a shared block.
+D_FREEZE_SPRAY = 69.00;   // ✅ measured 2026-08-20 (was 56.00, badly wrong)
+FREEZE_CLR     = 2.0;     // [1:0.5:4] -> 71.00 bore
+FREEZE_MEASURED = true;
 
 D_DISPENSER    = 53.50;   // 200 ml push-down alcohol pump, square base across flats
 D_FLOOD_BOTTLE = 75.50;   // Labvida 500 ml LDPE wash bottle
