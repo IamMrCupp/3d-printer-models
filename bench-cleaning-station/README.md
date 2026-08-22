@@ -16,6 +16,18 @@ Every dimension here was taken off the actual item with calipers. Nothing is a n
 
 > ⚠️ **The aerosols are flammable and this bench has a 400 °C iron on it.** These cups are for *working* cans. Bulk stock belongs away from the hood and away from the iron.
 
+## Two-tier swab / sponge tower
+
+`base_swabs` and `bin_sponges` stack: the base's **top is a Gridfinity baseplate**, so the sponge
+bin's feet socket straight into it. Swabs underneath behind an open front so they roll out;
+sponges above, taken from the top. One 3×2 footprint on the grid instead of two.
+
+Total height ≈ **114 mm** (base 50.9 including its cap, sponge bin 67.9, less foot engagement).
+
+The base is 3×2, not the 2×2 a swab bin would want alone — the footprint has to match whatever
+stacks on it, and a 100.1 mm sponge doesn't fit a 2×2's 81 mm interior. `bin_swabs` (2×2) stays
+as the standalone option if you'd rather not stack.
+
 ## Parts
 
 | File | What | Size |
