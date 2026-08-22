@@ -1,8 +1,9 @@
-// bin_aerosols — 5×2 three-can block: freeze spray + DeoxIT D5 + F5.
+// bin_aerosols — 5×2 block for the three DeoxIT cans. D5, F5 and G5 are the same
+// can, so all three bores are the same: any can, any slot.
 //
-// 5×2, not 4×2. The three cans are 162 mm of bore, which looks like it fits 168,
-// but bores also need webs between them and a wall outside them — at 4×2 two of
-// them merge and the outer one breaks through the side. Still cheaper than three
-// separate 2×2 cups (210 mm vs 252 mm).
+// The bore is BORE_DEOXIT, lifted straight from the bore that fits on the printed
+// part. The freeze spray is a larger can and lives in bin_freeze_spray.
+//
+// PRINT: as emitted, feet down. No supports.
 include <cleaning_station_common.scad>
-collar_cup_row(5, 2, [D_FREEZE_SPRAY, D_DEOXIT_D5, D_DEOXIT_F5], CAPTURE);
+collar_cup_row(5, 2, [BORE_DEOXIT, BORE_DEOXIT, BORE_DEOXIT], CAPTURE, clr = 0);
