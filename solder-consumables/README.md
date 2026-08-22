@@ -15,16 +15,17 @@ rosin, tip tinner.
 would only earn its place if the tube had to sit in one particular orientation, and it doesn't.
 `TUBE_H` is the only parameter — raise it if the tube stands proud of the rim.
 
-## Still to come — the rosin tin
+## On the rosin tin — retired
 
-Measured: the **tip tinner tin is 42.5 mm ⌀ × 17 mm tall, lid on** — see `bin_tip_tinner`.
+There isn't one. The old tin went off and isn't being replaced; flux now comes from Blackhorse
+(in-house rosin flux), in a different container.
 
-The **rosin tin** is still unmeasured (outer ⌀ + height). 42.5 is an awkward diameter: with
-clearance the bore is 43.5, which does not fit a 1×1 (41.5) *or* a 2×1 — a 2×1's short interior
-is also 41.5. So one tin needs a 2×2, and **two tins side by side need 105 mm, i.e. a 3×2**.
+That settles a sizing question that was open: 42.5 mm is awkward, because with clearance the bore
+is 43.5, which fits neither a 1×1 (41.5) nor a 2×1 — a 2×1's short interior is also 41.5. So a
+single tin costs a 2×2. Two tins would have shared a 3×2 more efficiently, but with the rosin
+gone the solo cup is right.
 
-If the rosin tin is a similar size, the better part is a single 3×2 holding both, which is
-20 mm² of grid cheaper than two 2×2 cups. Worth measuring before printing the solo cup.
+Whatever the Blackhorse flux arrives in will need its own measurement.
 
 ## Source
 
