@@ -23,6 +23,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="bench-instrument-risers/preview.png" width="150"> | [**Bench instrument risers**](bench-instrument-risers/) | Gridfinity-footed pedestals that lift an oscilloscope (4″) and a hot air station (8″) off the desk, turning their footprints back into open grid. Hollow 1.6 mm shell, retaining lip instead of a foot pocket, so every pedestal is interchangeable. |
 | <img src="gridfinity-fillers/preview.png" width="150"> | [**Gridfinity filler tiles**](gridfinity-fillers/) | Flat lids that turn empty grid into a working surface — mouse, drink, wrist rest. 1×1 to 6×6, in flat / coaster / mousepad tops. Corner feet only, so a 6×6 lifts out with 5 kgf instead of 45. |
 
+| <img src="psu-plates/preview.png" width="150"> | [**PSU plates**](psu-plates/) | 2×5 and 2×6 Gridfinity plates with a short retaining lip, for power supplies to stand on — the unit stops sliding and its footprint rejoins the grid. |
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
 ## Downloading prints
