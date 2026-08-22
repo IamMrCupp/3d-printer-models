@@ -1,18 +1,28 @@
-// bin_tip_tinner — 2×2 cup for the tip tinner tin, lid on.
+// bin_tip_tinner — 1×1 bin for the tip tinner tin.
 //
-// 42.5 mm tin + 1.0 clearance = a 43.5 bore, and that will not fit a 1×1 (41.5)
-// or a 2×1 — a 2×1's short interior is 41.5 as well. So a single tin costs a
-// 2×2, with 20 mm of wall all round it.
+// The tin measures 42.5 across the LID and 38.38 across the BODY. The lid is the
+// number that misleads: 42.5 is wider than a 1×1's entire 41.5 mm footprint, so
+// sized off it this looked like a 2×2 part. The body is what goes inside.
 //
-// If the rosin tin turns out similar, a 3×2 holding BOTH is the better part:
-// two 43.5 bores need 105 mm, which a 3×2's 125.5 takes comfortably. Measure the
-// rosin before committing to this solo cup.
+// Stored lid-on, the body drops in and the lid's rim rests on the bin's rim, so
+// the tin sits slightly proud and lifts out by the lid. That also means the
+// bin only has to be deep enough for the body, not the whole 17 mm tin.
+//
+// Wall is 1.0 rather than the usual 1.2: at 1.2 the interior is 39.1 against a
+// 38.38 tin, which is 0.36 mm a side — tight enough that a slightly thick-walled
+// print would refuse it. 1.0 gives 39.5 and a comfortable drop-in.
 //
 // PRINT: as emitted, feet down. No supports.
-include <../lib/vessel.scad>
+include <../lib/gridfinity.scad>
 
-D_TIP_TINNER = 42.50;   // measured 2026-08-20, lid on
-H_TIP_TINNER = 17.00;   // measured, lid on
-CAPTURE      = 10;      // [6:1:16] leaves ~7 mm proud to pinch
+D_TIP_TINNER_LID  = 42.50;   // measured 2026-08-20 — does NOT set the bin size
+D_TIP_TINNER_BODY = 38.38;   // measured — this is the one that matters
+H_TIP_TINNER      = 17.00;   // lid on
 
-collar_cup(2, 2, D_TIP_TINNER, CAPTURE);
+WALL  = 1.0;
+DEPTH = 12;   // [8:1:18] body sits in, lid rides on the rim
+
+assert(41.5 - 2*WALL > D_TIP_TINNER_BODY,
+       "Tin body is wider than the 1x1 interior — thin the wall or go 2x2.");
+
+bin(1, 1, BIN_BASE_H + 1.4 + DEPTH, wall = WALL);

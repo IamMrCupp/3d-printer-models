@@ -20,10 +20,10 @@ would only earn its place if the tube had to sit in one particular orientation, 
 There isn't one. The old tin went off and isn't being replaced; flux now comes from Blackhorse
 (in-house rosin flux), in a different container.
 
-That settles a sizing question that was open: 42.5 mm is awkward, because with clearance the bore
-is 43.5, which fits neither a 1×1 (41.5) nor a 2×1 — a 2×1's short interior is also 41.5. So a
-single tin costs a 2×2. Two tins would have shared a 3×2 more efficiently, but with the rosin
-gone the solo cup is right.
+**The lid diameter nearly cost a 2×2.** Sized off 42.5 the tin looks impossible in a 1×1 — it's
+wider than the unit's whole 41.5 mm footprint. But 42.5 is the lid; the body is 38.38 and drops
+straight into a 1×1, with the lid's rim resting on the bin rim so the tin lifts out by the lid.
+Measure the part that goes *inside*, not the widest point.
 
 Whatever the Blackhorse flux arrives in will need its own measurement.
 
