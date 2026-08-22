@@ -16,17 +16,20 @@ Every dimension here was taken off the actual item with calipers. Nothing is a n
 
 > ⚠️ **The aerosols are flammable and this bench has a 400 °C iron on it.** These cups are for *working* cans. Bulk stock belongs away from the hood and away from the iron.
 
-## Two-tier swab / sponge tower
+## Two-tier swab / sponge tower — 2×2
 
 `base_swabs` and `bin_sponges` stack: the base's **top is a Gridfinity baseplate**, so the sponge
 bin's feet socket straight into it. Swabs underneath behind an open front so they roll out;
-sponges above, taken from the top. One 3×2 footprint on the grid instead of two.
+sponges above, taken from the top. Assembled height ≈ **114 mm** on one 2×2 footprint.
 
-Total height ≈ **114 mm** (base 50.9 including its cap, sponge bin 67.9, less foot engagement).
+**Cut the sponges.** A full 100.1 mm block doesn't fit a 2×2, and this whole tower was 3×2 until
+the sponges got quartered. Melamine is consumed by abrasion, so a full block is far more than any
+bench task needs — halve it across and lengthwise for 50 × 30 × 20 mm pieces, four uses out of
+one block, and small enough to reach between connectors. Bulk stock stays in the bag under the
+desk where it isn't competing for grid.
 
-The base is 3×2, not the 2×2 a swab bin would want alone — the footprint has to match whatever
-stacks on it, and a 100.1 mm sponge doesn't fit a 2×2's 81 mm interior. `bin_swabs` (2×2) stays
-as the standalone option if you'd rather not stack.
+The bin's height still clears a **full block on edge**, so one uncut reserve can ride along with
+the trimmed pieces.
 
 ## Parts
 
