@@ -24,6 +24,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="gridfinity-fillers/preview.png" width="150"> | [**Gridfinity filler tiles**](gridfinity-fillers/) | Flat lids that turn empty grid into a working surface — mouse, drink, wrist rest. 1×1 to 6×6, in flat / coaster / mousepad tops. Corner feet only, so a 6×6 lifts out with 5 kgf instead of 45. |
 
 | <img src="solder-consumables/preview.png" width="150"> | [**Solder consumables**](solder-consumables/) | Bins for the small consumables beside the iron — a 1×5 trough for chip-removal alloy tube, with rosin and tip-tinner tins to follow. |
+| <img src="psu-plates/preview.png" width="150"> | [**PSU plates**](psu-plates/) | 2×5 and 2×6 Gridfinity plates with a short retaining lip, for power supplies to stand on — the unit stops sliding and its footprint rejoins the grid. |
 | <img src="bga-rack/preview.png" width="150"> | [**BGA rack**](bga-rack/) | 3×3 for the reballing kit — the AMAOE jig lying flat, four stencil bags standing on end in slots beside it, one per ball size. |
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
