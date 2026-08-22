@@ -32,7 +32,13 @@ FREEZE_CLR     = 2.0;     // [1:0.5:4] -> 71.00 bore
 FREEZE_MEASURED = true;
 
 D_DISPENSER    = 53.50;   // 200 ml push-down alcohol pump, square base across flats
-D_FLOOD_BOTTLE = 75.50;   // Labvida 500 ml LDPE wash bottle
+D_FLOOD_BOTTLE = 75.50;
+
+// DeoxIT D100 / F100 / G100 concentrate droppers — bare bottles, out of their
+// kit boxes. The boxes are a full 2×1 EACH; the three bare bottles share one.
+D_DROPPER   = 20.00;   // measured 2026-08-20
+H_DROPPER   = 39.00;   // measured — capture is a third of it
+CAP_DROPPER = 15;      // [8:1:25] capture depth   // Labvida 500 ml LDPE wash bottle
 
 // ---- melamine sponges (mm) — 3.94 × 2.35 × 0.79 in ----
 // Full block as sold. Bulk stock lives in the bag under the desk, ~100 of them;
