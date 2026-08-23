@@ -16,20 +16,19 @@ Every dimension here was taken off the actual item with calipers. Nothing is a n
 
 > ⚠️ **The aerosols are flammable and this bench has a 400 °C iron on it.** These cups are for *working* cans. Bulk stock belongs away from the hood and away from the iron.
 
-## Two-tier swab / sponge tower — 2×2
+## Swabs and sponges — separate units
 
-`base_swabs` and `bin_sponges` stack: the base's **top is a Gridfinity baseplate**, so the sponge
-bin's feet socket straight into it. Swabs underneath behind an open front so they roll out;
-sponges above, taken from the top. Assembled height ≈ **114 mm** on one 2×2 footprint.
+They were briefly a two-tier tower (swab base with a baseplate top, sponge bin socketed on).
+Separate bins turned out to be wanted, and stacking cost the swab bin its **open top** — which is
+how you reload it. So: two independent 2×2s.
 
-**Cut the sponges.** A full 100.1 mm block doesn't fit a 2×2, and this whole tower was 3×2 until
-the sponges got quartered. Melamine is consumed by abrasion, so a full block is far more than any
-bench task needs — halve it across and lengthwise for 50 × 30 × 20 mm pieces, four uses out of
-one block, and small enough to reach between connectors. Bulk stock stays in the bag under the
-desk where it isn't competing for grid.
+`bin_swabs` is open at the **front** so buds roll out instead of being lifted over a rim, and
+open at the **top** so a fresh box tips straight in.
 
-The bin's height still clears a **full block on edge**, so one uncut reserve can ride along with
-the trimmed pieces.
+**Cut the sponges.** A full 100.1 mm block doesn't fit a 2×2 — quarter them to 50 × 30 × 20.
+Melamine is consumed by abrasion, so a whole block is far more than any bench task needs, and the
+smaller piece reaches between connectors. Bulk stock stays in the bag under the desk. The bin's
+height still clears a **full block on edge**, so one uncut reserve can ride along.
 
 ## Parts
 

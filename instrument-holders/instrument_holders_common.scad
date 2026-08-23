@@ -67,29 +67,9 @@ H_T48_TOOLS = 28;   // extractor tools lie flat
 H_DSLOGIC_KIT = 51; // coiled harness needs real volume
 H_LCR_KIT   = 31;
 
-// A plain bin with its FRONT (-Y) wall swept away, so a front-facing connector
-// panel stays reachable while the instrument sits docked.
-//
-// The opening is made by hulling the cavity profile with a copy of itself
-// translated -D, exactly as lib's _stack_pocket does. That matters: cutting the
-// front with a second solid puts the cutter's side walls onto the cavity's own
-// walls, and coincident walls are what leave the sliver triangles documented on
-// _bin_foot. Sweeping one profile means there is only ever one wall to be on.
-//
-// Local rather than in lib/ on purpose — the repo's rule is that a shared module
-// earns its place at two consumers. Promote it if a second model wants one.
-module open_front_bin(nx, ny, h, wall = 1.2, floor = 1.4) {
-    W = nx*GF - 0.5; D = ny*GF - 0.5;
-    iw = W - 2*wall; id = D - 2*wall; r = BIN_R - wall;
-    difference() {
-        bin_blank(nx, ny, h);
-        translate([0, 0, BIN_BASE_H + floor]) linear_extrude(h)
-            hull() {
-                offset(r) offset(-r) square([iw, id], center = true);
-                translate([0, -D]) offset(r) offset(-r) square([iw, id], center = true);
-            }
-    }
-}
+// open_front_bin moved to lib/gridfinity.scad on 2026-08-20 — it earned its
+// place there on a second consumer (the cleaning station's swab bin).
+
 
 // Slot down through the rear (+Y) wall for a cable that stays connected.
 // Cut wider than the wall in Y so neither face of the cutter lands on a wall

@@ -12,6 +12,7 @@
 //   filler_tile(nx, ny)                    — flat lid over empty grid (corner feet + ribs)
 //   bin(nx, ny, h, wall, floor)            — open Gridfinity bin
 //   divided_bin(nx, ny, h, cols, rows, …)  — bin with internal compartments
+//   open_front_bin(nx, ny, h, …)           — bin with the front wall swept away
 //   lid(nx, ny, …)                         — friction lid for a bin of the same footprint
 //   stack_base(nx, ny, h, …)               — baseplate-topped base; a bin socket-stacks on it
 
@@ -208,6 +209,28 @@ module stack_base(nx, ny, h, wall = 1.2, floor = 1.4, open_front = true) {
         // sidesteps both: there's only ever one wall to be on.
         translate([0,0,z0]) linear_extrude(h - z0 + 0.01)
             _stack_pocket(iw, id, BIN_R - wall, open_front ? D : 0);
+    }
+}
+
+// A plain bin with its FRONT (-Y) wall swept away, so contents roll or slide out
+// rather than being lifted over a rim — and the top stays open for reloading.
+//
+// The opening is made by hulling the cavity profile with a copy of itself
+// translated -D, NOT by cutting the front with a second solid. That matters:
+// a second cutter puts its side walls exactly on the cavity's own walls, and
+// coincident walls are what leave the sliver triangles documented on _bin_foot.
+// Sweeping one profile means there is only ever one wall to be on.
+//
+// Promoted here from instrument-holders 2026-08-20 on its second consumer
+// (bench-cleaning-station's swab bin), per the rule that a shared module earns
+// its place at two.
+module open_front_bin(nx, ny, h, wall = 1.2, floor = 1.4) {
+    W = nx*GF - 0.5; D = ny*GF - 0.5;
+    iw = W - 2*wall; id = D - 2*wall; r = BIN_R - wall;
+    difference() {
+        bin_blank(nx, ny, h);
+        translate([0, 0, BIN_BASE_H + floor]) linear_extrude(h)
+            _stack_pocket(iw, id, r, D);
     }
 }
 
