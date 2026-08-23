@@ -36,9 +36,13 @@ D_FLOOD_BOTTLE = 75.50;
 
 // DeoxIT D100 / F100 / G100 concentrate droppers — bare bottles, out of their
 // kit boxes. The boxes are a full 2×1 EACH; the three bare bottles share one.
-D_DROPPER   = 20.00;   // measured 2026-08-20
-H_DROPPER   = 39.00;   // measured — capture is a third of it
-CAP_DROPPER = 15;      // [8:1:25] capture depth   // Labvida 500 ml LDPE wash bottle
+// NOT ROUND — 39 × 20 is a flattened cross-section, not a diameter and a height.
+D_DROPPER_L = 39.00;   // measured 2026-08-20, long axis of the footprint
+D_DROPPER_W = 20.00;   // measured, short axis
+DROPPER_CLR = 1.00;    // per dimension, matching the CLR convention
+CAP_DROPPER = 15;      // [8:1:25] capture depth. ⚠️ bottle HEIGHT is unmeasured —
+                       //   39 turned out to be a footprint, so the height nobody
+                       //   has taken. 15 is a judgement call.   // Labvida 500 ml LDPE wash bottle
 
 // ---- melamine sponges (mm) — 3.94 × 2.35 × 0.79 in ----
 // Full block as sold. Bulk stock lives in the bag under the desk, ~100 of them;
