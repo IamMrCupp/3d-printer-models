@@ -26,6 +26,10 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="solder-consumables/preview.png" width="150"> | [**Solder consumables**](solder-consumables/) | Bins for the small consumables beside the iron — a 1×5 trough for chip-removal alloy tube, with rosin and tip-tinner tins to follow. |
 | <img src="psu-plates/preview.png" width="150"> | [**PSU plates**](psu-plates/) | 2×5 and 2×6 Gridfinity plates with a short retaining lip, for power supplies to stand on — the unit stops sliding and its footprint rejoins the grid. |
 | <img src="bga-rack/preview.png" width="150"> | [**BGA rack**](bga-rack/) | 3×3 for the reballing kit — the AMAOE jig lying flat, four stencil bags standing on end in slots beside it, one per ball size. |
+| <img src="remote-tray/preview.png" width="150"> | [**Remote tray**](remote-tray/) | 6×1 tray holding five remotes on end, each slot cut to that remote — 8 mm to 35 mm thick, so a shared well would let the thin ones lie down. |
+| <img src="heat-gun-holder/preview.png" width="150"> | [**Heat gun holder**](heat-gun-holder/) | 2×2 plate the heat gun's magnetic bracket screws onto. Four cells because pulling the gun off the magnet beats what two cells will hold. |
+| <img src="soldering-station/preview.png" width="150"> | [**Soldering station mounts**](soldering-station/) | 2×5 plate anchoring the iron/desoldering stand. Tapered side rails wedge it, so the base's unmeasured rounded end never has to be known. |
+| <img src="reel-brackets/preview.png" width="150"> | [**Reel brackets**](reel-brackets/) | Shelf-edge clamps carrying an 8 mm rod of tape or wire reels. Print two; any rod length works. Hooks rather than sticks, so the load tightens the grip. |
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
 ## Downloading prints
