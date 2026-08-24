@@ -43,13 +43,32 @@ Melamine is consumed by abrasion, so a whole block is far more than any bench ta
 smaller piece reaches between connectors. Bulk stock stays in the bag under the desk. The bin's
 height still clears a **full block on edge**, so one uncut reserve can ride along.
 
+## The dropper caddy got taller, and that is only half a fix
+
+`bin_deoxit_droppers` went from 21 mm to **32 mm** overall (capture depth 15 → 26) because the
+brushes and swabs fell over in their slots.
+
+Depth is what resists an applicator tipping, so more of it genuinely helps — but be clear how
+much. A slot is 11.9 × 20 mm and **no brush or swab has ever been on calipers.** Assuming a 4 mm
+handle:
+
+| Capture depth | Lean across the slot | Lean along it |
+|---|---|---|
+| 15 mm | 27.8° | 46.8° |
+| **26 mm** | **16.9°** | **31.6°** |
+
+Better, not fixed. The slots are sized from *leftover space between the bottle pockets*, not
+from the thing that goes in them. **The number this part needs is the handle diameter of a brush
+and of a swab, and how many of each ship with a bottle.** With those the slot becomes handle plus
+clearance and the lean goes to nothing. Without them, depth is the only lever and it's a weak one.
+
 ## Parts
 
 | File | What | Size |
 |---|---|---|
 | `bin_aerosols.scad` | 5 × 2 three-can block — DeoxIT D5 + F5 + G5, one shared bore | 210 × 84 × 56 mm |
 | `bin_freeze_spray.scad` | 2 × 2 cup — freeze spray, ⌀69 mm can | 84 × 84 × 56 mm |
-| `bin_deoxit_droppers.scad` | 5 × 1 block — 3 × 39 × 20 mm dropper bottle + 2 applicators each | 210 × 42 × 21 mm |
+| `bin_deoxit_droppers.scad` | 5 × 1 block — 3 × 39 × 20 mm dropper bottle + 2 applicators each | 210 × 42 × 32 mm |
 | `bin_swabs.scad` | 3 × 2 bin — cotton buds, dished floor + feed dam | 126 × 84 × 42 mm |
 | `bin_flood_bottle.scad` | 2 × 2 cup — Labvida 500 ml IPA wash bottle | 84 × 84 × 56 mm |
 | `bin_dispenser.scad` | 2 × 2 cup — 200 ml push-down IPA pump | 84 × 84 × 56 mm |

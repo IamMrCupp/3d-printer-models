@@ -14,9 +14,22 @@
 // bottle — D, F and G are different chemicals and a shared applicator carries
 // one into the next.
 //
-// ⚠️ SLOT SIZE IS NOT MEASURED. No brush or swab has been on calipers; the slots
-// are sized from what is left over, which is generous. If they rattle badly,
-// N_SLOT up or SLOT_D down.
+// ⚠️ THE SLOTS ARE STILL OVERSIZED, AND DEPTH ALONE DOES NOT FIX THAT.
+//
+// The applicators fell over at CAP_DROPPER = 15, so it is now 26 and the block is
+// half again as tall. That helps, but be clear about how much: a slot is
+// 11.9 × 20 mm and nothing has ever put calipers on a brush handle. Assuming a
+// 4 mm handle, the lean it can still take is
+//
+//       depth 15 → 27.8° across the slot, 46.8° along it
+//       depth 26 → 16.9° across the slot, 31.6° along it
+//
+// Better, not fixed. The slots are sized from LEFTOVER SPACE, not from the thing
+// going in them — they are whatever was between the bottle pockets. THE NUMBER
+// THIS PART NEEDS is the handle diameter of a brush and of a swab, and how many
+// of each ship with a bottle. With those the slot becomes handle + clearance and
+// the lean goes to nothing; without them, more depth is the only lever and it is
+// a weak one.
 //
 // PRINT: as emitted, feet down. No supports.
 include <cleaning_station_common.scad>
@@ -45,10 +58,6 @@ H  = BIN_BASE_H + FLOOR + CAP_DROPPER;
 // applicator carries one into the next.
 PG    = 2.0;   // [1.2:0.1:5] gap between a bottle pocket and its first slot
 GG    = 3.0;   // [2:0.5:8] gap between groups
-
-W = NX*GF - 0.5; D = 1*GF - 0.5;
-IW = W - 2*WALL;  ID = D - 2*WALL;
-H  = BIN_BASE_H + FLOOR + CAP_DROPPER;
 
 // group = pocket + gap + slot + divider + slot
 SLOT_W = (IW - 2*GG - 3*(POCKET_L + PG + DIV)) / 6;
