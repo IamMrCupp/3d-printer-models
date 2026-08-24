@@ -40,9 +40,16 @@ D_FLOOD_BOTTLE = 75.50;
 D_DROPPER_L = 39.00;   // measured 2026-08-20, long axis of the footprint
 D_DROPPER_W = 20.00;   // measured, short axis
 DROPPER_CLR = 1.00;    // per dimension, matching the CLR convention
-CAP_DROPPER = 15;      // [8:1:25] capture depth. ⚠️ bottle HEIGHT is unmeasured —
+CAP_DROPPER = 26;      // [8:1:40] capture depth. ⚠️ bottle HEIGHT is unmeasured —
                        //   39 turned out to be a footprint, so the height nobody
-                       //   has taken. 15 is a judgement call.   // Labvida 500 ml LDPE wash bottle
+                       //   has taken.
+                       //   RAISED 15 → 26 on 2026-08-24: at 15 the brushes and
+                       //   swabs fell over in their slots. Depth is what resists
+                       //   an applicator tipping, and 15 mm of it on a ~100 mm
+                       //   brush is almost none. 26 makes the whole block half
+                       //   again as tall, which is what was asked for.
+                       //   Read the bin_deoxit_droppers header before assuming
+                       //   this alone fixes the tipping — it does not.
 
 // ---- melamine sponges (mm) — 3.94 × 2.35 × 0.79 in ----
 // Full block as sold. Bulk stock lives in the bag under the desk, ~100 of them;
