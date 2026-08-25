@@ -15,6 +15,7 @@ Gridfinity storage for the **small engraver rotary tool** — not the HARDELL.
 | File | What | Size |
 |---|---|---|
 | `bin_bits_engraver.scad` | 1 × 1 block, 7 × 5 grid, 35 bit holes | 42 × 42 × 24 mm |
+| `bin_tool_engraver.scad` | 1 × 1 cup, tool vertical (⌀19.66 bore), cord slot | 42 × 42 × 51 mm |
 
 ## The bore is measured, not derived
 
@@ -40,16 +41,23 @@ Counted, not estimated: **35** bits. 7 × 5 at a 6.0 × 8.4 mm pitch fits a 1×1
 material between bores. `BIT_COLS` / `BIT_ROWS` are parametric and an assert fires if the grid
 ever drops below `BIT_COUNT`.
 
-## Still blocked — the tool cup
+## The cup arrived by being mislabelled
 
-No cup yet. It needs three numbers, and **borrowing the HARDELL's is exactly the mistake this
-directory exists to prevent**:
+`bin_tool_engraver.scad` moved here from `rotary-tool-station/bin_tool.scad` on 2026-08-25. It had
+carried the HARDELL's name and a ⌀19.66 bore for months — but the HARDELL measures **28 at the
+base tapering to ≈30**, so 19.66 was never it. It matches this tool's ~20 mm across to within
+0.34 mm.
 
-| Need | Sets |
-|---|---|
-| Body ⌀ at its widest | the cup bore |
-| Overall length | `TOOL_CAPTURE`, about a third of it |
-| Corded? lead ⌀ | whether there's a cord slot at all, and how wide |
+The part was always correct; only the label was wrong, so it moved rather than being rebuilt. Had
+it been printed under the old name it would simply not have taken the HARDELL, and **no mesh
+check, assert, or CI job could have caught that** — it was watertight, manifold, and exactly the
+size it claimed to be. Only a caliper on the right tool finds this.
+
+`TOOL_L = 131.36` came with it and is re-attributed on the same reasoning: recorded beside the
+19.66 in one session. That's inference, not a reading.
+
+> 🔎 **One check settles it.** Put a tape on this tool end to end. **≈131 confirms** both numbers;
+> anything else and the pair needs splitting.
 
 ## Source
 
