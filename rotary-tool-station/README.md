@@ -6,9 +6,11 @@
 
 ## Design notes
 
-**The tool stands vertical in a 1 × 1 cup.** It's 131 mm long; the cup captures the bottom ~45 mm and the rest sticks up, like a pen in a pen cup. Laying it flat would need a 4 × 1 trough — four times the bench for the same tool.
+**The tool stands vertical in a 1 × 1 cup**, like a pen in a pen cup, capturing the bottom 45 mm. Laying a rotary tool flat needs a 4 × 1 trough — four times the bench for the same tool.
 
-**Cord slot.** The tool is corded (barrel jack), so the cup has a channel open to the rim for the lead. Without it the cord drapes over the edge and levers the tool sideways.
+(The "131 mm long" that used to appear here was the *engraver's* length, carried over with the mis-attributed diameter. The HARDELL's own length has never been measured, and doesn't need to be — see below.)
+
+**Cord slot.** The cup has a channel open to the rim for the lead — without one the cord drapes over the edge and levers the tool sideways. ⚠️ Its 6 mm width was measured on the *engraver's* barrel jack and is unverified for this tool.
 
 **Stored collet-down** so the burr is shrouded. A pointed bit at hand height on a reach-across bench is a snag you notice exactly once.
 
@@ -24,33 +26,47 @@ The old `BIT_CLR = 0.25` guess cut **2.631** — *under* the smallest hole that 
 
 
 
-## 🛑 Which tool is 19.66 mm?
+## The cup was cut for the wrong tool for months
 
-`TOOL_D = 19.66` / `TOOL_L = 131.36` are labelled HARDELL and were recorded before the small
-engraver was bought — which argues they really are the HARDELL's. But as of 2026-08-25 the
-engraver reads **~20 mm across** and the HARDELL is reported to be **bigger**. A 0.34 mm gap
-between them; those cannot all hold.
+`TOOL_D = 19.66` sat here labelled HARDELL, and `bin_tool` was bored to it. On 2026-08-25 the
+HARDELL measured **28 mm at the base, tapering to ≈30** — so 19.66 was never this tool. It's the
+small engraver's, matching its ~20 mm to within 0.34 mm.
 
-Either 19.66 is the engraver's diameter wearing the HARDELL's label, or the HARDELL isn't bigger.
-**`bin_tool` is bored to 19.66 and may be cut for the wrong tool.**
+The old cup was watertight, 2-manifold, and exactly the size it claimed. It simply would not have
+taken the tool named on it. **Nothing in the toolchain catches a right-shaped part cut for the
+wrong object** — not the mesh check, not the asserts, not CI. Only a caliper on the right tool
+does.
 
-Resolving it takes both tools on calipers in one pass, together, with a note saying which is
-which. The numbers stay put until then — changing them on a guess moves the error rather than
-fixing it — and no cup gets built for the other tool.
+So the file moved rather than being deleted — it's now
+[`../engraver-station/bin_tool_engraver.scad`](../engraver-station/), because the part was always
+correct and only the label was wrong. `bin_tool` here is new, bored to the real 30.
 
-**The bit bore is unaffected.** Bits are bits, and both tools take the same ones.
+**It's a taper, so the bore goes to the widest section (30), not the base (28)** — cut to the 28
+and the tool jams partway down.
+
+**Capture depth is a comfort choice, not a fit constraint.** The HARDELL's overall length has
+never been measured and doesn't need to be: the bin latches into the grid so nothing tips, and
+with 1 mm of clearance in a 45 mm bore the tool leans about 1.3°. Override with
+`-D TOOL_CAPTURE=` once you've held the printed one.
+
+> ⚠️ **`CORD_W = 6` is inherited and unverified for this tool.** That barrel-jack slot was
+> measured on the engraver, back when the two were conflated. A slot too narrow stops the tool
+> seating — check the HARDELL's lead before printing, or just widen it, since an oversized notch
+> costs nothing.
 
 ## Parts
 
 | File | What | Size |
 |---|---|---|
 | `coupons/bit_fit_gauge.scad` | **Print first** — five test holes, 2.5–2.9 mm, engraved | 95 × 24 × 9 mm |
-| `bin_tool.scad` | 1 × 1 cup, tool vertical, cord slot | 42 × 42 × 51 mm |
-| `bin_bits.scad` | 2 × 1 block, 14 × 5 grid of 3/32″ holes | 84 × 42 × 24 mm |
+| `bin_tool.scad` | 1 × 1 cup, HARDELL vertical (⌀30 bore), cord slot | 42 × 42 × 51 mm |
+| `bin_bits.scad` | 1 × 1 block, 5 × 3 grid, 15 bit holes | 42 × 42 × 24 mm |
 
-**70 is still an upper bound, not a count.** Confirmed 2026-08-25 that the kit is mixed: extra bits, grinding wheels, cut-off wheels and sanders. The wheels are mandrel-mounted and don't want a shank hole at all — the largest cut-off wheel is **25 mm** across and needs somewhere flat, not a bore.
+**15 holes, counted 2026-08-25.** The kit came with about 15 shank bits, a stack of cut-off wheels and ~20 sanding disks.
 
-So this grid is oversized by an unknown amount. Count the shank-mounted pieces and drop `BIT_COLS` / `BIT_ROWS`; the engraver's block went 70 → 35 on exactly that correction.
+It was 70 on a 2×1 — an upper bound from a 69-piece set, on the assumption every piece was shank-mounted. Most aren't, and the block was oversized by more than 4×. 5 × 3 on a 1×1 at an 8.4 × 14 pitch gives a cell back. The engraver's block took exactly this correction, 70 → 35.
+
+The wheels and sanding disks are mandrel-mounted and want a **pocket, not a bore** — largest wheel is 25 mm across. Their bin is blocked on one measurement: the collet wrench's L × W × thickness.
 
 Built on [`lib/vessel.scad`](../lib/vessel.scad) (the cup) and [`lib/syringe.scad`](../lib/syringe.scad) (the bore grid — the same module that racks syringes; a bit block is that with a smaller pitch).
 

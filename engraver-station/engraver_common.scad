@@ -36,3 +36,17 @@ BIT_CAPTURE = 18;   // [8:1:40] bits are light; 18 keeps the block low
 //
 // Do NOT borrow the HARDELL's 19.66 / 131.36 to fill these in. That is the
 // mistake this file exists to prevent.
+
+// ---- body, re-attributed from rotary-tool-station 2026-08-25 ----
+//
+// These two were recorded as the HARDELL's for months. The HARDELL measures
+// 28 mm at the base tapering to ≈30, so 19.66 cannot be it — and it matches the
+// ~20 mm this tool reads across to within 0.34 mm. `bin_tool.scad` moved here
+// with them, as `bin_tool_engraver.scad`.
+TOOL_D   = 19.66;   // body diameter — ✅ re-attributed, corroborated by "20 across"
+TOOL_L   = 131.36;  // ⚠️ overall length — re-attributed on the SAME reasoning
+                    //   (recorded beside the 19.66 in one session), which is
+                    //   inference rather than a reading. Put a tape on the
+                    //   engraver end to end: ≈131 settles it.
+TOOL_CAPTURE = 45;  // [20:1:80] ≈ a third of TOOL_L
+CORD_W       = 6;   // side channel for the barrel-jack lead
