@@ -25,16 +25,27 @@ is **wanted** for wire — a free-spinning spool overruns and birdnests — and 
 
 | File | What | Size |
 |---|---|---|
-| `rod_bracket.scad` | shelf clamp + rod bore | 30 × 65.6 × 82.5 mm |
+| `rod_bracket.scad` | shelf clamp + rod bore | 30 × 65.6 × 90.92 mm |
 
 The spine thickness is **derived from the bore**, never set by hand — at 7 mm against an 8.6 mm
 bore the hole cut straight out through both faces and left an open channel a rod would drop out
 of. Anything containing a hole is sized from that hole.
 
-## ⚠️ Check before printing two
+## The shelf is measured
 
-`SHELF_T` is **12.7 mm (1/2″) by estimate, not measurement**. The slot is 13.5 mm. If your shelf
-is 15 mm ply or 12 mm MDF it either won't go on or will be loose.
+`SHELF_T = 21.12 mm`, measured 2026-08-25, giving a **21.92 mm slot** with 0.8 mm of clearance so
+it slides on.
+
+It was **12.7 mm (½″) by estimate** until then, and that estimate was wrong by **8.42 mm** — a
+slot cut to it would not have gone onto the shelf at all. This part was deliberately held back
+from release for exactly that reason: a bracket that doesn't clamp isn't a bracket, and it's not
+a dimension a mesh check can catch.
+
+For a different shelf, re-render rather than filing the slot:
+
+```sh
+openscad -o rod_bracket.stl --export-format binstl -D SHELF_T=<yours> rod_bracket.scad
+```
 
 ## Source
 

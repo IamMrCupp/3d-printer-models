@@ -28,7 +28,9 @@
 // Copyright (c) 2026 Aaron Cupp
 
 /* [Shelf] */
-SHELF_T   = 12.7;   // [6:0.1:40] shelf thickness — 1/2" ⚠️ MEASURE, user est.
+SHELF_T   = 21.12;  // [6:0.1:40] ✅ MEASURED 2026-08-25. Was 12.7 (a 1/2" guess) —
+                    //   the real shelf is 8.42 mm thicker, so that slot would not
+                    //   have gone on at all.
 SHELF_CLR = 0.8;    // [0.2:0.1:2] slot clearance, so it slides on
 GRIP      = 45.0;   // [20:1:90] how far it reaches back onto the shelf
 
