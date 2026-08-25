@@ -12,13 +12,33 @@
 
 **Stored collet-down** so the burr is shrouded. A pointed bit at hand height on a reach-across bench is a snag you notice exactly once.
 
-## ⚠️ Print the fit gauge first
+## ✅ The fit gauge has been run
 
 `coupons/bit_fit_gauge.scad` is a calibration coupon, **not** a bench part. Small vertical holes come off an FDM printer undersize — inner-perimeter over-extrusion, typically 0.15–0.3 mm, and the exact amount is specific to your printer, nozzle, and filament.
 
-The gauge is a strip of five holes (2.5–2.9 mm), each engraved with its modelled diameter. Print it, try a 3/32″ shank in each, find the one that slides in cleanly, and set `BIT_CLR` in `rotary_station_common.scad` so `BIT_SHANK (2.381) + BIT_CLR` matches it. Then print `bin_bits.scad`.
+The gauge is a strip of five holes (2.5–2.9 mm), each engraved with its modelled diameter. It was printed on 2026-08-25 and **the shanks go into the 2.7**; the 2.6 does not take them. So `BIT_BORE = 2.70` and `BIT_CLR` is derived from it (0.319) rather than set by feel.
 
-Skip this and you get a block of 70 holes that are all the same amount wrong.
+The old `BIT_CLR = 0.25` guess cut **2.631** — *under* the smallest hole that actually takes a shank. Every one of these holes would have needed reaming. That is exactly what the coupon exists to prevent.
+
+**The HARDELL and the small engraver take the same bits**, confirmed 2026-08-25, so both share this bore. `../engraver-station/` uses the same 2.70.
+
+
+
+## 🛑 Which tool is 19.66 mm?
+
+`TOOL_D = 19.66` / `TOOL_L = 131.36` are labelled HARDELL and were recorded before the small
+engraver was bought — which argues they really are the HARDELL's. But as of 2026-08-25 the
+engraver reads **~20 mm across** and the HARDELL is reported to be **bigger**. A 0.34 mm gap
+between them; those cannot all hold.
+
+Either 19.66 is the engraver's diameter wearing the HARDELL's label, or the HARDELL isn't bigger.
+**`bin_tool` is bored to 19.66 and may be cut for the wrong tool.**
+
+Resolving it takes both tools on calipers in one pass, together, with a note saying which is
+which. The numbers stay put until then — changing them on a guess moves the error rather than
+fixing it — and no cup gets built for the other tool.
+
+**The bit bore is unaffected.** Bits are bits, and both tools take the same ones.
 
 ## Parts
 
@@ -28,7 +48,9 @@ Skip this and you get a block of 70 holes that are all the same amount wrong.
 | `bin_tool.scad` | 1 × 1 cup, tool vertical, cord slot | 42 × 42 × 51 mm |
 | `bin_bits.scad` | 2 × 1 block, 14 × 5 grid of 3/32″ holes | 84 × 42 × 24 mm |
 
-**The 70-hole count is an upper bound.** The set is 69 pieces, but not all are 3/32″ shank-mounted — cut-off discs and sanding drums come on mandrels, and the micro drill bits in the small case have their own shanks. Count what actually has a 3/32″ shank and drop `BIT_COLS` / `BIT_ROWS` to match.
+**70 is still an upper bound, not a count.** Confirmed 2026-08-25 that the kit is mixed: extra bits, grinding wheels, cut-off wheels and sanders. The wheels are mandrel-mounted and don't want a shank hole at all — the largest cut-off wheel is **25 mm** across and needs somewhere flat, not a bore.
+
+So this grid is oversized by an unknown amount. Count the shank-mounted pieces and drop `BIT_COLS` / `BIT_ROWS`; the engraver's block went 70 → 35 on exactly that correction.
 
 Built on [`lib/vessel.scad`](../lib/vessel.scad) (the cup) and [`lib/syringe.scad`](../lib/syringe.scad) (the bore grid — the same module that racks syringes; a bit block is that with a smaller pitch).
 
