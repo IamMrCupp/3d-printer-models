@@ -12,10 +12,17 @@
 // is ~49 N (5 kgf). Pulling a heat gun off a magnetic bracket beats 2.5 kgf
 // easily, and then the plate lifts with the gun. Four cells, not two.
 //
-// ⚠️ SCREW SIZE IS ASSUMED, NOT MEASURED. SCREW_D is set for M3 self-tapping into
-// plastic — the hole is deliberately undersized so the thread cuts its own way.
-// Get it wrong and it either strips or splits the boss. Change SCREW_D before
-// printing if these are M4 or a wood-type screw.
+// SCREW DIAMETER IS MEASURED. SCREW_OD = 2.84 is the thread outside diameter off
+// calipers; the pilot is derived from it at 78%, deliberately undersized so a
+// self-tapper cuts its own thread rather than stripping or splitting the boss.
+//
+// ⚠️ SCREW LENGTH IS NOT. SCREW_L = 10.0 is a guess — nobody has measured how far
+// these screws actually protrude behind the bracket. It only fails in one
+// direction, but it fails silently: if the screws are LONGER than 10 mm they
+// bottom out in the blind hole and the bracket never pulls tight against the
+// deck, which feels like a loose bracket rather than a too-short hole. Measure
+// the shank behind the bracket flange and set SCREW_L to that plus 2 mm; DECK
+// has 12 mm to give and asserts before anything breaks through.
 //
 // PRINT: as emitted, feet down. No supports — the blind holes are vertical.
 //
@@ -36,7 +43,7 @@ HOLE_Y  = 21.0;   // measured, centre to centre
 SCREW_OD  = 2.84;   // measured 2026-08-20 — thread outside diameter
 PILOT_PCT = 0.78;   // [0.70:0.01:0.85] of OD
 SCREW_D   = SCREW_OD * PILOT_PCT;
-SCREW_L = 10.0;   // [6:1:20] how deep the hole goes — set the plate thickness first
+SCREW_L = 10.0;   // [6:1:20] ⚠️ GUESS — screw LENGTH was never measured. See header.
 
 /* [Plate] */
 DECK    = 12.0;   // [8:0.5:25] solid material above the foot. Must exceed SCREW_L
