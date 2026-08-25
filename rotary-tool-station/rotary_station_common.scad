@@ -26,17 +26,31 @@ CORD_W       = 6;    // side channel for the barrel-jack lead
 // rattle. Absolute clearance does not scale down; small bores need their own
 // number.
 //
-// 0.25 mm is a starting point, not an answer. Small vertical holes come out of
-// an FDM printer UNDERSIZE (inner-perimeter over-extrusion), typically by
-// 0.15–0.3 mm, and how much is specific to your printer, nozzle, and filament.
-// Print `bit_fit_gauge.scad` first, find the hole your shanks actually slide
-// into, and set this to match. Guessing here means a block of 70 holes that are
-// all slightly wrong.
-BIT_CLR = 0.25;
+// ✅ CALIBRATED 2026-08-25 by `coupons/bit_fit_gauge.scad`. The gauge's five
+// holes ran 2.5 / 2.6 / 2.7 / 2.8 / 2.9 and the bits go into the **2.7**. So the
+// finished bore this printer needs is 2.70, and BIT_CLR is derived from it
+// rather than set by feel — the gauge reading is the measurement, the clearance
+// is arithmetic.
+//
+// 2.6 does NOT take them, so the true figure sits between 2.6 and 2.7 and 2.70
+// is the smallest that works. The old 0.25 guess would have cut 2.631 — under
+// the smallest hole that fits, i.e. 70 holes that all needed reaming.
+//
+// This is why the coupon exists. Small vertical holes come off an FDM printer
+// undersize (inner-perimeter over-extrusion) by an amount specific to the
+// printer, nozzle and filament, so the useful number is the FINISHED HOLE and
+// calipers on a bit only give you half of it.
+//
+// Re-run the gauge if the nozzle, filament or layer height changes.
+BIT_BORE = 2.70;                    // gauge result — the hole that takes a shank
+BIT_CLR  = BIT_BORE - BIT_SHANK;    // = 0.319
 
-// 70 holes covers the 69-piece accessory set as an upper bound. Not all 69 are
-// shank-mounted — cut-off discs and drums come on mandrels, and the micro drill
-// bits in the small case have their own shank sizes. Drop `BIT_COLS`/`BIT_ROWS`
-// once you've counted what actually has a 3/32" shank.
-BIT_COLS = 14; BIT_ROWS = 5;
+// ✅ COUNTED 2026-08-25: **35 bits** actually take this grinder's 3/32" shank.
+// The old 14 × 5 = 70 was an upper bound taken from the 69-piece accessory set,
+// on the assumption every piece was shank-mounted. It isn't — cut-off discs and
+// drums come on mandrels, and the micro drill bits have their own shanks.
+//
+// 7 × 5 = 35 at the SAME 6.0 × 8.4 pitch, so the block halves from a 2×1 to a
+// 1×1 and gives a cell back. Nothing about the holes changes.
+BIT_COLS = 7; BIT_ROWS = 5;
 BIT_CAPTURE = 18;   // bits are light; 18 mm keeps the block low under the hood
