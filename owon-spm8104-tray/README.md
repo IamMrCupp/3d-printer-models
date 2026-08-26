@@ -13,6 +13,27 @@ The SPM8104's top vents nowhere (rear fan only), so a tray over the lid is therm
 | **Frame** | `owon_tray_frame.scad` | 90 × 237.5 × 25.5 mm | ×1 — flat, walls up, no supports |
 | **Plate** | `owon_tray_plate.scad` | 84 × 210 × 4 mm | ×1 — flat, latches up, **PETG** |
 | **Fit gauge** | `coupons/owon_fit_gauge.scad` | 91 × 94 × 13 mm | optional — check clearance before committing to the frame |
+| **Tip bin** | `owon_bin_tips.scad` | 84 × 126 × 16 mm | ×1 — barrel-adapter tips, standing tip-up |
+| **Cord bin** | `owon_bin_cords.scad` | 84 × 84 × 55 mm | ×1 — mains lead, alligator leads, master plug |
+| **Cord label** | `owon_bin_cords_label.scad` | 67 × 0.8 × 12 mm | ×1 — reads across the top of the tip block |
+| **Tip fit gauge** | `owon_tip_fit_gauge.scad` | 152 × 30 × 12 mm | **print before the tip bin** |
+
+### The two bins fill the plate exactly
+
+The plate is 2 × 5 — ten cells, 84 × 210. A 2×3 tip block (126) plus a 2×2 cord well (84) is
+exactly 210, no waste.
+
+**Low bin at the front.** The tip block is ~16 mm; the cord well is 55. Reversed, you'd reach over
+a 55 mm wall to pick a 12 mm tip and the well would hide the block entirely. It also gives the
+warning label a home: the cord well's front wall stands ~39 mm proud of the tip block, so a label
+there reads across the top of it from a normal bench stance.
+
+These are **stock Gridfinity bins** — nothing about them is Clickfinity-specific, so they drop
+into either plate type.
+
+**`owon_tip_fit_gauge` is a print-first coupon**, same idea as the rotary tool's. The gauge read a
+mix of 12 and 13 on the real tips, which is exactly the kind of thing calipers on a tip won't tell
+you.
 
 Shared dimensions live in `owon_tray_common.scad`.
 
