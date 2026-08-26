@@ -17,25 +17,14 @@
 // reads the FINISHED HOLE, which folds the shank diameter and this printer's
 // hole shrinkage into a single number. That is the only number a drilled block
 // needs. Calipers on a bit would give half of it and still leave the shrinkage
-// unknown, which is exactly why the coupon exists. So the collet's nominal size
-// stays unmeasured and stays irrelevant *to this part* — it is still needed
-// before any tool cup gets built.
+// unknown, which is exactly why the coupon exists. The collet's nominal size
+// stays unmeasured and stays irrelevant — the cup is bored from the body, not
+// the collet.
 BIT_BORE  = 2.70;   // [2:0.05:5] ✅ gauge result 2026-08-25 — the finished hole
 BIT_COUNT = 35;     // ✅ counted 2026-08-25
 BIT_COLS  = 7;      // [3:1:14] 7 × 5 = 35 on a 1×1
 BIT_ROWS  = 5;      // [2:1:8]
 BIT_CAPTURE = 18;   // [8:1:40] bits are light; 18 keeps the block low
-
-// ---- NOT KNOWN — the tool cup is blocked on these ----
-//
-//   body ⌀ at its widest    — sets the cup bore
-//   overall length          — TOOL_CAPTURE is about a third of it
-//   corded? lead ⌀          — the HARDELL's CORD_W = 6 is a barrel jack; no cord
-//                             means no slot at all, and a different lead means a
-//                             different slot
-//
-// Do NOT borrow the HARDELL's 19.66 / 131.36 to fill these in. That is the
-// mistake this file exists to prevent.
 
 // ---- body, re-attributed from rotary-tool-station 2026-08-25 ----
 //
