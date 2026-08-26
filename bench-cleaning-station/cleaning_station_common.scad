@@ -17,14 +17,52 @@
 include <../lib/vessel.scad>
 
 // ---- measured diameters (mm) ----
-D_FREEZE_SPRAY = 56.00;   // MEICON freeze spray
-D_DEOXIT_D5    = 54.20;   // DeoxIT D5 contact cleaner
-D_DEOXIT_F5    = 51.75;   // DeoxIT F5 FaderLube
+// DeoxIT bore: taken from the PART, not from a can measurement.
+//
+// The 2026-08-20 print had three bores — 57.00 / 55.20 / 52.75. The 57.00 fits a
+// DeoxIT; 55.20 barely does; 52.75 holds nothing. So 57.00 is a validated bore,
+// which beats re-deriving it from a can diameter plus a clearance guess. D5, F5
+// and G5 are the same can, so one bore serves all three.
+BORE_DEOXIT = 57.00;   // ✅ proven by the printed part
+
+// Freeze spray is a DIFFERENT, LARGER can — 13 mm wider than a DeoxIT, which is
+// why it never fitted a shared block.
+D_FREEZE_SPRAY = 69.00;   // ✅ measured 2026-08-20 (was 56.00, badly wrong)
+FREEZE_CLR     = 2.0;     // [1:0.5:4] -> 71.00 bore
+FREEZE_MEASURED = true;
+
 D_DISPENSER    = 53.50;   // 200 ml push-down alcohol pump, square base across flats
-D_FLOOD_BOTTLE = 75.50;   // Labvida 500 ml LDPE wash bottle
+D_FLOOD_BOTTLE = 75.50;
+
+// DeoxIT D100 / F100 / G100 concentrate droppers — bare bottles, out of their
+// kit boxes. The boxes are a full 2×1 EACH; the three bare bottles share one.
+// NOT ROUND — 39 × 20 is a flattened cross-section, not a diameter and a height.
+D_DROPPER_L = 39.00;   // measured 2026-08-20, long axis of the footprint
+D_DROPPER_W = 20.00;   // measured, short axis
+DROPPER_CLR = 1.00;    // per dimension, matching the CLR convention
+CAP_DROPPER = 26;      // [8:1:40] capture depth. ⚠️ bottle HEIGHT is unmeasured —
+                       //   39 turned out to be a footprint, so the height nobody
+                       //   has taken.
+                       //   RAISED 15 → 26 on 2026-08-24: at 15 the brushes and
+                       //   swabs fell over in their slots. Depth is what resists
+                       //   an applicator tipping, and 15 mm of it on a ~100 mm
+                       //   brush is almost none. 26 makes the whole block half
+                       //   again as tall, which is what was asked for.
+                       //   Read the bin_deoxit_droppers header before assuming
+                       //   this alone fixes the tipping — it does not.
 
 // ---- melamine sponges (mm) — 3.94 × 2.35 × 0.79 in ----
+// Full block as sold. Bulk stock lives in the bag under the desk, ~100 of them;
+// none of it competes for grid.
 SPONGE_L = 100.1; SPONGE_W = 59.7; SPONGE_T = 20.1;
+
+// WORKING size: a full block is far more sponge than any bench task needs, and
+// melamine is consumed by abrasion — quartering one gets four uses out of what
+// was one, and the smaller piece reaches between connectors where a 100 mm block
+// cannot. Halve across, halve lengthwise.
+CUT_L = SPONGE_L / 2;   // 50.05
+CUT_W = SPONGE_W / 2;   // 29.85
+CUT_T = SPONGE_T;       // 20.1 — unchanged, cuts are through the face
 
 // ---- capture depth ----
 // Vessel HEIGHTS were not measured, so this is a judgement call rather than a
@@ -35,4 +73,7 @@ CAPTURE = 50;
 // Sponge bin: sponges stand ON EDGE (60 mm tall), ~4 across the 81 mm interior.
 // On edge beats flat-stacked — same count in a 68 mm bin instead of a 107 mm one,
 // and any sponge can be pinched out rather than peeling off the top of a pile.
+// Height is set by a FULL block standing on edge, not a cut one — so one uncut
+// block can still ride in the bin as reserve alongside the trimmed pieces.
+// Cut pieces are 50 long, which is what lets the footprint drop to 2×2.
 SPONGE_BIN_H = SPONGE_W + BIN_BASE_H + 1.4 + 2;   // ≈ 68

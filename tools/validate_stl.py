@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+#
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Aaron Cupp
 """Validate a binary STL mesh: watertight / 2-manifold + sane bounding box.
 
     python3 tools/validate_stl.py path/to/model.stl
@@ -10,15 +13,21 @@ so the script still runs locally without a venv. CI installs trimesh
 
 A mesh passes when:
   * it is watertight (closed) and consistently wound — i.e. 2-manifold
+  * no triangle edge is shorter than SLIVER_MM (no near-degenerate slivers)
   * the bounding box is non-degenerate (positive extent on all three axes)
 
 Exit code 0 on pass, 1 on failure (with diagnostics on stderr).
 """
 from __future__ import annotations
 
+import math
 import struct
 import sys
 from collections import Counter
+
+# Shortest edge a mesh may contain before it counts as near-degenerate. See the
+# sliver check in _validate_stdlib() for why this number.
+SLIVER_MM = 1e-3
 
 
 def load_binary_stl(path: str):
@@ -93,6 +102,32 @@ def _validate_stdlib(path: str) -> list[str]:
         problems.append(f"{open_edges} open edge(s) — mesh is not watertight")
     if nonmanifold:
         problems.append(f"{nonmanifold} non-manifold edge(s) — shared by >2 triangles")
+
+    # Sliver check: no triangle edge shorter than SLIVER_MM.
+    #
+    # This is the deterministic version of the non-manifold check above. A
+    # near-degenerate triangle is what a coincident-wall boolean leaves behind,
+    # and whether _key()'s 4-decimal rounding collapses one into a duplicate
+    # edge depends on where the mesh happens to sit in space — so the same bug
+    # reads as non-manifold at one ($fn, size) and passes at the next. Catching
+    # the sliver itself removes the luck. (The Gridfinity foot carried slivers
+    # of 5.7e-5 to 1.6e-4 mm for its whole life this way; see
+    # lib/selftest_fn.scad.)
+    #
+    # 1e-3 mm sits in clear air: the shortest legitimate edge across every model
+    # in this repo is 3.3e-3 mm, and those come from the e = 0.01 epsilon slabs
+    # OpenSCAD models are built from. Nothing printable has micron-scale edges.
+    short = min(
+        math.dist(p, q)
+        for a, b, c in tris
+        for p, q in ((a, b), (b, c), (c, a))
+    )
+    if short < SLIVER_MM:
+        problems.append(
+            f"sliver triangle — shortest edge {short:.2e} mm "
+            f"(under {SLIVER_MM:g} mm); near-degenerate geometry, usually a "
+            f"boolean between coincident walls"
+        )
 
     # Bounding-box sanity.
     xs = [p[0] for t in tris for p in t]

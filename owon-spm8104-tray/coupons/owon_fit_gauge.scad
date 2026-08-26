@@ -23,7 +23,7 @@
 // sits — measure across the case 20 mm BELOW the top, at its widest (include any
 // rim, seam or screw head) and give me that number instead.
 
-include <owon_tray_common.scad>
+include <../owon_tray_common.scad>
 $fn = 32;
 
 /* [Gauge] */

@@ -16,11 +16,60 @@ Every dimension here was taken off the actual item with calipers. Nothing is a n
 
 > ⚠️ **The aerosols are flammable and this bench has a 400 °C iron on it.** These cups are for *working* cans. Bulk stock belongs away from the hood and away from the iron.
 
+## Swabs and sponges — separate units
+
+They were briefly a two-tier tower (swab base with a baseplate top, sponge bin socketed on).
+Separate bins turned out to be wanted, and stacking cost the swab bin its **open top** — which is
+how you reload it. So: two independent bins.
+
+`bin_swabs` has **all four walls** and is open at the **top** — a fresh box tips straight in, and
+nothing rolls out onto the desk. It went through an open-front version and a lowered-lip
+dispenser version before that landed; both leaked buds. What survives from the dispenser idea is
+the inside: a shallow **dished floor** so buds settle forward rather than piling where they fell,
+and a **low dam** across the bin two thirds of the way back. The pile stays behind the dam, the
+front trough holds one loose row, and buds feed forward through a 9 mm gap underneath as you take
+them. You reach in over the dam — it stops 11 mm short of the rim for exactly that reason.
+
+It's **3 × 2, not 2 × 2**: buds run to 3.2″ (81.28 mm) and a 2×2 interior is 81.10 mm. Missing by
+0.18 mm means the bud sits diagonal, and a diagonal bud is the one that bridges the dam gap.
+
+Its height is **42 mm, lower than the rest of the family**. With a full front wall the trough is
+reached from above, so wall height is reach depth rather than free capacity — 42 mm puts the
+trough floor 35.9 mm down, which is normal bin reach. Capacity is not the constraint: buds are
+3 mm across and the hopper still swallows a box.
+
+**Cut the sponges.** A full 100.1 mm block doesn't fit a 2×2 — quarter them to 50 × 30 × 20.
+Melamine is consumed by abrasion, so a whole block is far more than any bench task needs, and the
+smaller piece reaches between connectors. Bulk stock stays in the bag under the desk. The bin's
+height still clears a **full block on edge**, so one uncut reserve can ride along.
+
+## The dropper caddy got taller, and that is only half a fix
+
+`bin_deoxit_droppers` went from 21 mm to **32 mm** overall (capture depth 15 → 26) because the
+brushes and swabs fell over in their slots.
+
+Depth is what resists an applicator tipping, so more of it genuinely helps — but be clear how
+much. A slot is 11.9 × 20 mm and **no brush or swab has ever been on calipers.** Assuming a 4 mm
+handle:
+
+| Capture depth | Lean across the slot | Lean along it |
+|---|---|---|
+| 15 mm | 27.8° | 46.8° |
+| **26 mm** | **16.9°** | **31.6°** |
+
+Better, not fixed. The slots are sized from *leftover space between the bottle pockets*, not
+from the thing that goes in them. **The number this part needs is the handle diameter of a brush
+and of a swab, and how many of each ship with a bottle.** With those the slot becomes handle plus
+clearance and the lean goes to nothing. Without them, depth is the only lever and it's a weak one.
+
 ## Parts
 
 | File | What | Size |
 |---|---|---|
-| `bin_aerosols.scad` | 5 × 2 three-can block — freeze spray + DeoxIT D5 + F5 | 210 × 84 × 56 mm |
+| `bin_aerosols.scad` | 5 × 2 three-can block — DeoxIT D5 + F5 + G5, one shared bore | 210 × 84 × 56 mm |
+| `bin_freeze_spray.scad` | 2 × 2 cup — freeze spray, ⌀69 mm can | 84 × 84 × 56 mm |
+| `bin_deoxit_droppers.scad` | 5 × 1 block — 3 × 39 × 20 mm dropper bottle + 2 applicators each | 210 × 42 × 32 mm |
+| `bin_swabs.scad` | 3 × 2 bin — cotton buds, dished floor + feed dam | 126 × 84 × 42 mm |
 | `bin_flood_bottle.scad` | 2 × 2 cup — Labvida 500 ml IPA wash bottle | 84 × 84 × 56 mm |
 | `bin_dispenser.scad` | 2 × 2 cup — 200 ml push-down IPA pump | 84 × 84 × 56 mm |
 | `bin_sponges.scad` | 3 × 2 bin — melamine sponges on edge (~4) | 126 × 84 × 68 mm |

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Aaron Cupp
+//
 // label.scad — two-colour flat-inset text labels, shared across the bench system.
 //
 // Generalizes the technique proven in donation-qr-stand/: the text is a recessed

@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
+#
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Aaron Cupp
 # Build release artifacts for one model: rendered STL(s) + a preview PNG each.
 #
 #     tools/build_release.sh <model-slug> [out-dir]
 #
-# Renders every .scad in <model-slug>/ to a binary STL (skipping library files
+# Renders every top-level .scad in <model-slug>/ to a binary STL (skipping
+# <model-slug>/coupons/ and library files
 # with no top-level geometry), then renders a Blender preview PNG for each STL.
 # Artifacts land in <out-dir> (default: dist/).
 #
@@ -18,6 +22,20 @@ cd "$repo_root"
 slug="${1:?usage: build_release.sh <model-slug> [out-dir]}"
 out_dir="${2:-dist}"
 model_dir="$slug"
+
+# The second argument is an OUT-DIR, not a version — this script doesn't tag
+# anything. Passing "v1.0.4" quietly creates ./v1.0.4/ in the repo root, whose
+# PNGs then get swept in by `git add -A` (happened 2026-07-31 and again
+# 2026-08-08). Catch it instead of silently obeying.
+case "$out_dir" in
+  v[0-9]*)
+    echo "refusing: out-dir '$out_dir' looks like a version." >&2
+    echo "  build_release.sh takes <model-slug> [out-dir] — it does not tag." >&2
+    echo "  Did you mean:  tools/build_release.sh $slug" >&2
+    echo "  (artifacts go to dist/; tag separately with git tag / gh release)" >&2
+    exit 2
+    ;;
+esac
 
 [ -d "$model_dir" ] || { echo "no such model directory: $model_dir" >&2; exit 1; }
 
@@ -59,7 +77,11 @@ while IFS= read -r -d '' scad; do
   echo "  preview → $png"
   "$BLENDER" -b -P tools/render_preview.py -- "$stl" "$png" $color >/dev/null
   count=$((count + 1))
-done < <(find "$model_dir" -name '*.scad' -print0)
+# -maxdepth 1: release the BENCH PARTS only. Print-first test coupons live in
+# <model>/coupons/ and are deliberately excluded — a release should be a set of
+# STLs you can print without reading anything first, not a pile where half the
+# files are gauges. They are still rendered and validated by tools/render.sh.
+done < <(find "$model_dir" -maxdepth 1 -name '*.scad' -print0)
 
 echo "—"
 echo "release artifacts for '$slug' in $out_dir/:"

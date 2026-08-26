@@ -9,6 +9,8 @@ on:
     paths:
       - "**.scad"
       - "**.stl"
+      - "**.png"
+      - "**README.md"
       - "tools/**"
       - "requirements-dev.txt"
       - ".github/workflows/validate.yml"
@@ -17,6 +19,10 @@ on:
 jobs:
   render-validate:
     runs-on: ubuntu-latest
+    # A stalled apt mirror once wedged this job for over an hour on the install
+    # step, and without a cap it would have run to the 6-hour default. A whole
+    # run is ~6 minutes, so 25 fails loudly while leaving plenty of headroom.
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v5
 
@@ -24,12 +30,31 @@ jobs:
         with:
           python-version: "3.x"
 
+      # Stock Ubuntu openscad (2021.01). An attempt to use ppa:openscad/releases
+      # for a newer build landed here by accident and broke every PR — that PPA
+      # has no noble (24.04) archive and apt 404s. Reproduce this exact renderer
+      # locally before blaming a model:
+      #   docker run --rm -v "$PWD":/w -w /w ubuntu:24.04 bash -c \
+      #     'apt-get update -qq && apt-get install -y -qq --no-install-recommends \
+      #      openscad xvfb python3 && xvfb-run -a tools/render.sh'
       - name: Install OpenSCAD + mesh validator
+        # Its own tighter cap: this step is ~1 minute healthy, so 10 separates
+        # "mirror is stalling" from "a model is slow to render" without reading
+        # logs. DEBIAN_FRONTEND stops apt blocking on a prompt nobody can answer.
+        timeout-minutes: 10
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends openscad xvfb
+          sudo apt-get update -o Acquire::Retries=3
+          sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 openscad xvfb
+          openscad --version
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
+
+      # Runs before the render so a missing README or catalog row is reported in
+      # seconds rather than after a full model render.
+      - name: Check the catalog matches the model dirs
+        run: python3 tools/check_catalog.py
 
       - name: Render + validate models
         run: xvfb-run -a tools/render.sh

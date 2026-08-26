@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Aaron Cupp
 # Render a Blender preview PNG from an OpenSCAD .scad file.
 #
 #     tools/preview.sh <input.scad> <output.png>

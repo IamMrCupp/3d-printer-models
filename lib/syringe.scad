@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Aaron Cupp
+//
 // syringe.scad — bore-grid racks: a Gridfinity block drilled with a 2D array of
 // vertical holes. Syringes, barrel tips, rotary burrs — same form, different
 // numbers.
