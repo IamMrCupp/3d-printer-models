@@ -1,30 +1,43 @@
 // plate_heat_gun — 2×2 Gridfinity plate that the heat gun's magnetic bracket
-// screws down onto.
+// bolts to FROM BELOW.
 //
 // HOW YOU USE IT:
-//   The plate latches into the desk grid. The magnetic bracket sits on top and
-//   four screws go down through it into the bosses below. The gun then parks on
-//   the bracket's magnet as usual, and the whole assembly comes off the grid as
-//   one piece if you ever move it.
+//   Sit the bracket on the plate, drop four screws up through the plate from
+//   underneath, into the bracket's own threads. The gun parks on the magnet as
+//   usual, and the whole assembly lifts off the grid as one piece.
+//
+// ⚠️ THIS REPLACES A PLATE THAT SCREWED FROM THE TOP, AND IT IS NOT A TWEAK.
+// v1.0.x had four BLIND 2.22 mm pilot holes 10 mm deep in a 12 mm deck: screws
+// went DOWN through the bracket and self-tapped into the plastic. The bracket
+// turns out to take screws only from its underside, which inverts every one of
+// those decisions:
+//
+//   blind pilot  ->  through hole at CLEARANCE (a pilot would bind the shank)
+//   head on top  ->  head RECESSED into the foot, or it fouls the grid socket
+//   thick deck   ->  THIN deck, because the screw must now span the whole plate
+//
+// THE DECK IS THE PART PEOPLE GET WRONG. At the old 12 mm, a screw entering from
+// below crosses 12.75 mm of plastic before it reaches the bracket at all — it
+// would need to be 17 mm long just to get 4 mm of engagement. At 5 mm the screw
+// crosses 5.75 and a 10 mm screw gives 4.25 mm of bite. The deck is now sized by
+// screw reach, not by breakthrough clearance.
+//
+// ⚠️ HEAD_D / HEAD_H ARE NOT MEASURED. Nobody has put calipers on the screw
+// heads. They are set GENEROUSLY on purpose: an oversized recess loses a little
+// material, an undersized one holds the plate off the grid and the latch never
+// seats. Wrong in the safe direction, like the accessory bin's open bay.
+//
+// ⚠️ SCREW LENGTH IS STILL NOT MEASURED, and now it matters more than it did.
+// Too short and it never reaches the bracket; too long and it bottoms out inside
+// the bracket before the plate pulls tight. Measure it and set DECK from the
+// table in the README.
 //
 // WHY 2×2 AND NOT 2×1. The hole pattern is only 36 × 21, which a 2×1 would take.
 // But Clickfinity holds about 12.2 N per cell: a 2×1 is ~24 N (2.5 kgf) and a 2×2
 // is ~49 N (5 kgf). Pulling a heat gun off a magnetic bracket beats 2.5 kgf
 // easily, and then the plate lifts with the gun. Four cells, not two.
 //
-// SCREW DIAMETER IS MEASURED. SCREW_OD = 2.84 is the thread outside diameter off
-// calipers; the pilot is derived from it at 78%, deliberately undersized so a
-// self-tapper cuts its own thread rather than stripping or splitting the boss.
-//
-// ⚠️ SCREW LENGTH IS NOT. SCREW_L = 10.0 is a guess — nobody has measured how far
-// these screws actually protrude behind the bracket. It only fails in one
-// direction, but it fails silently: if the screws are LONGER than 10 mm they
-// bottom out in the blind hole and the bracket never pulls tight against the
-// deck, which feels like a loose bracket rather than a too-short hole. Measure
-// the shank behind the bracket flange and set SCREW_L to that plus 2 mm; DECK
-// has 12 mm to give and asserts before anything breaks through.
-//
-// PRINT: as emitted, feet down. No supports — the blind holes are vertical.
+// PRINT: as emitted, feet down. No supports — every hole is vertical.
 //
 // SPDX-License-Identifier: CC-BY-NC-4.0
 // Copyright (c) 2026 Aaron Cupp
@@ -34,32 +47,35 @@ include <../lib/gridfinity.scad>
 HOLE_X  = 36.0;   // measured 2026-08-20, centre to centre — a true rectangle
 HOLE_Y  = 21.0;   // measured, centre to centre
 
-/* [Screws] */
-// Store the MEASURED screw, derive the hole. A self-tapper cuts its own thread,
-// so the pilot is deliberately smaller than the screw — around 75-80% of the
-// thread OD in PETG. Too big and it strips, too small and it splits the boss.
-// An earlier version had the pilot at 2.5 against a 2.84 screw: 88% of OD, which
-// would have stripped.
+/* [Screws — entering from BELOW] */
 SCREW_OD  = 2.84;   // measured 2026-08-20 — thread outside diameter
-PILOT_PCT = 0.78;   // [0.70:0.01:0.85] of OD
-SCREW_D   = SCREW_OD * PILOT_PCT;
-SCREW_L = 10.0;   // [6:1:20] ⚠️ GUESS — screw LENGTH was never measured. See header.
+SHANK_CLR = 0.40;   // [0.2:0.05:1] the screw must pass FREELY; this is not a pilot
+SCREW_D   = SCREW_OD + SHANK_CLR;
+
+HEAD_D = 8.0;   // [5:0.5:12] ⚠️ NOT MEASURED — deliberately generous
+HEAD_H = 4.0;   // [2:0.5:4.7] ⚠️ NOT MEASURED — must stay inside the foot
 
 /* [Plate] */
-DECK    = 12.0;   // [8:0.5:25] solid material above the foot. Must exceed SCREW_L
-                  //   so the screw never breaks through into the baseplate socket.
+DECK = 5.0;     // [3:0.5:14] sized by SCREW REACH, not breakthrough. See header.
 
 H = BIN_BASE_H + DECK;
+REACH = (BIN_BASE_H - HEAD_H) + DECK;   // plastic the screw crosses
 
-assert(DECK > SCREW_L + 1.5, "Screw would break through the underside of the deck.");
-assert(HOLE_X + 3*SCREW_D < 2*GF - 0.5, "Hole pattern too wide for a 2x2.");
-echo(str("plate ", 2*GF - 0.5, " square x ", H, " tall; ", SCREW_OD,
-         " screw -> ", SCREW_D, " pilot, ", SCREW_L, " deep; holes at +/-",
-         HOLE_X/2, ", +/-", HOLE_Y/2));
+assert(HEAD_H < BIN_BASE_H - 0.5,
+       "Head recess would cut through the foot into the deck.");
+assert(HOLE_X + HEAD_D + 3 < 2*GF - 0.5, "Head recesses too wide for a 2x2.");
+echo(str("plate ", 2*GF - 0.5, " square x ", H, " tall; ", SCREW_D,
+         " through, head recess ", HEAD_D, " x ", HEAD_H,
+         "; screw crosses ", REACH, " mm -> needs a ", REACH + 4, " mm screw"));
 
 difference() {
     bin_blank(2, 2, H);
-    for (sx = [-1, 1], sy = [-1, 1])
-        translate([sx*HOLE_X/2, sy*HOLE_Y/2, H - SCREW_L])
-            cylinder(d = SCREW_D, h = SCREW_L + 0.1, $fn = 32);
+    for (sx = [-1, 1], sy = [-1, 1]) {
+        // clearance hole, all the way through
+        translate([sx*HOLE_X/2, sy*HOLE_Y/2, -0.1])
+            cylinder(d = SCREW_D, h = H + 0.2, $fn = 32);
+        // head recess, cut UP from the underside — stays inside the foot
+        translate([sx*HOLE_X/2, sy*HOLE_Y/2, -0.1])
+            cylinder(d = HEAD_D, h = HEAD_H + 0.1, $fn = 48);
+    }
 }
