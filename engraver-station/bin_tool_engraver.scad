@@ -1,5 +1,6 @@
-// bin_tool_engraver — 1×1 cup, the small engraver standing vertical, cord slot
-// to the side.
+// bin_tool_engraver — 1×1 cup, the small engraver standing vertical.
+//
+// No cord slot: it charges from the base.
 //
 // ⚠️ THIS FILE MOVED, AND THAT MOVE IS THE WHOLE STORY. It lived in
 // `rotary-tool-station/` as `bin_tool.scad`, labelled the HARDELL's cup, bored
