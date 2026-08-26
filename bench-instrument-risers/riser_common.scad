@@ -73,7 +73,10 @@ GY = 2;   // [1:1:4] cells deep
 // RISER_H minus 40 — so 4" takes a 60 mm bin and 8" takes a 160 mm one, both
 // past the 55 mm cord well that is currently the tallest bin in the repo.
 SCOPE_RISE  = 101.6;  // 4" — sightline over the front trays
-HOTAIR_RISE = 203.2;  // 8" — working height for the station
+HOTAIR_RISE = 152.4;  // 6" — was 8". Dropped 2026-08-20 to get all four
+                      //   pedestals inside an overnight print. If 6" turns out
+                      //   short, riser_spacer_2in.scad clicks underneath and
+                      //   restores the original 8" without reprinting these.
 
 // Either height can be overridden without editing this file:
 //   openscad -o r.stl --export-format binstl -D RISER_H=90 riser_pedestal_scope.scad
@@ -97,8 +100,13 @@ LIP_H = 2.00;   // [0:0.5:6] rim height above the pad. 0 = flat top, no lip.
 // of load path, ~3,000 kg crushing, ~21,000 kg Euler buckling at 8", against
 // ~1.5 kg per pedestal.
 HOLLOW  = true;   // false gives a solid prism — do not, at these heights
-SHELL_T = 1.60;   // [1.2:0.2:4] perimeter wall thickness
-RIB_T   = 1.60;   // [1.2:0.2:4] internal rib thickness. Ribs sit on the cell
+SHELL_T = 1.26;   // [1.2:0.2:4] perimeter wall thickness — THREE 0.42 mm lines.
+                  //   Was 1.60 (four lines). Walls are 72% of this print's time,
+                  //   so a line off the wall is real money. Structurally it is
+                  //   nothing: the section still carries thousands of kg against
+                  //   a ~1.5 kg instrument. The 4" scope pedestals already
+                  //   printed at 1.60 and are fine as they are.
+RIB_T   = 1.26;   // [1.2:0.2:4] internal rib thickness — matches SHELL_T. Ribs sit on the cell
                   //   boundaries, so they also restore the internal foot walls
                   //   the cavity would otherwise thin out.
 CAP_T   = 6.00;   // [4:0.5:12] solid material under the pad. This is what the
