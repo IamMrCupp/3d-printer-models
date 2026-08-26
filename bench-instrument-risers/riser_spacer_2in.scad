@@ -39,9 +39,18 @@ difference() {
         bin_blank(2, 2, BODY);
         translate([0, 0, BODY]) clickfinity_baseplate(2, 2);
     }
-    // hollow it out — walls only, capped by the plate above
+    // Hollow it out — walls only, capped by the plate above.
+    //
+    // The extrude stops EXACTLY at BODY, where the Clickfinity plate begins. It
+    // used to run to BODY + 0.01, and that epsilon is what failed CI with
+    // "8 non-manifold edges": the cut shaved a 0.01 sliver off the underside of
+    // the plate, leaving near-coincident faces that OpenSCAD 2021.01 (what CI
+    // runs) resolves into edges shared by more than two triangles. Locally, on
+    // 2026.06, it rendered clean — which is why it sat unmerged.
+    //
+    // In Z, butt solids at the exact plane. Do not overlap by epsilon.
     translate([0, 0, BIN_BASE_H + FLOOR])
-        linear_extrude(BODY - BIN_BASE_H - FLOOR + 0.01)
+        linear_extrude(BODY - BIN_BASE_H - FLOOR)
             offset(BIN_R - WALL) offset(-(BIN_R - WALL))
                 square([2*GF - 0.5 - 2*WALL, 2*GF - 0.5 - 2*WALL], center = true);
     // vents
