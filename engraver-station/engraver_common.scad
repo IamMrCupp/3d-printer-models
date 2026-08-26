@@ -49,4 +49,4 @@ TOOL_L   = 131.36;  // ⚠️ overall length — re-attributed on the SAME reaso
                     //   inference rather than a reading. Put a tape on the
                     //   engraver end to end: ≈131 settles it.
 TOOL_CAPTURE = 45;  // [20:1:80] ≈ a third of TOOL_L
-CORD_W       = 6;   // side channel for the barrel-jack lead
+CORD_W       = 0;   // no slot — it charges from the base, not a lead

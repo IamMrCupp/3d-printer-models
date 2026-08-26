@@ -5,7 +5,7 @@
 Gridfinity storage for the **small engraver rotary tool** — not the HARDELL.
 
 > ⚠️ **This is a different tool from `rotary-tool-station/`, and none of its numbers transfer.**
-> That directory is HARDELL-only: `TOOL_D = 19.66`, `TOOL_L = 131.36`, a barrel-jack cord slot,
+> That directory is HARDELL-only: its own body numbers, cord slot,
 > and a bit count taken from a 69-piece set. Different body, different length, different
 > accessories. The two were briefly conflated and this tool's gauge reading nearly got written
 > into the HARDELL's bit block — which would have recalibrated a part nobody had measured for.
@@ -15,7 +15,7 @@ Gridfinity storage for the **small engraver rotary tool** — not the HARDELL.
 | File | What | Size |
 |---|---|---|
 | `bin_bits_engraver.scad` | 1 × 1 block, 7 × 5 grid, 35 bit holes | 42 × 42 × 24 mm |
-| `bin_tool_engraver.scad` | 1 × 1 cup, tool vertical (⌀19.66 bore), cord slot | 42 × 42 × 51 mm |
+| `bin_tool_engraver.scad` | 1 × 1 cup, tool vertical (⌀19.66 bore) | 42 × 42 × 51 mm |
 | `bin_accessories_engraver.scad` | 2 × 1 bin — bit box, wheels, spare bay | 84 × 42 × 21 mm |
 
 ## The bore is measured, not derived
