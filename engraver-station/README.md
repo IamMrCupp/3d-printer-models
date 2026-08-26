@@ -16,6 +16,7 @@ Gridfinity storage for the **small engraver rotary tool** — not the HARDELL.
 |---|---|---|
 | `bin_bits_engraver.scad` | 1 × 1 block, 7 × 5 grid, 35 bit holes | 42 × 42 × 24 mm |
 | `bin_tool_engraver.scad` | 1 × 1 cup, tool vertical (⌀19.66 bore), cord slot | 42 × 42 × 51 mm |
+| `bin_accessories_engraver.scad` | 2 × 1 bin — bit box, wheels, spare bay | 84 × 42 × 21 mm |
 
 ## The bore is measured, not derived
 
@@ -64,6 +65,19 @@ size it claimed to be. Only a caliper on the right tool finds this.
 ```sh
 openscad -o bin_bits_engraver.stl --export-format binstl bin_bits_engraver.scad
 ```
+
+## The accessories bin
+
+`bin_bits_engraver` is a drilled block and only takes shank-mounted pieces. The box and the wheels
+aren't that.
+
+| Zone | Width | Holds |
+|---|---|---|
+| Box | 14 mm | the 13 × 13 bit box (1 off) |
+| Wheels | 26 mm | ⌀25 wheels, stacked flat |
+| Bay | 37.1 × 39.1 | spare |
+
+15 mm deep, full depth in Y.
 
 ## Recommended print settings
 
