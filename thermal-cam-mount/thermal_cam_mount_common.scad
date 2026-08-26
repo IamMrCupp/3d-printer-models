@@ -144,7 +144,14 @@ module mount_top() {
             translate([0,0,half]) _plate();
             for (sx = [-boss_x, boss_x]) translate([sx, boss_y, half - EPS]) {
                 cylinder(d = SCREW_D, h = PLATE_T + 2*EPS);
-                translate([0,0,PLATE_T - 1.6]) cylinder(d = SCREW_CB, h = 1.6 + EPS);
+                // h is 1.6 + 2*EPS, not 1.6 + EPS. At 1.6 + EPS the counterbore's
+                // top face lands EXACTLY on the plate's top face, and OpenSCAD
+                // 2021.01 — what CI runs — turns that coincidence into one
+                // non-manifold edge per facet: 2 holes x $fn 48 = 96, plus a
+                // 1.9e-06 mm sliver. Local 2026.06 renders it clean, which is how
+                // this branch sat red since August. A cut must pass THROUGH the
+                // face it exits, never stop on it.
+                translate([0,0,PLATE_T - 1.6]) cylinder(d = SCREW_CB, h = 1.6 + 2*EPS);
             }
         }
         _arm();
