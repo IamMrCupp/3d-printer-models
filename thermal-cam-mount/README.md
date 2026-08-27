@@ -83,4 +83,23 @@ slices, and still passes a mesh check.
 | Layer height | 0.2 mm |
 | Walls | 4 perimeters |
 | Infill | 40 % — this is a clamp |
-| Supports | none |
+| Supports | **`mount_top`: YES. `mount_bottom`: none.** See below |
+
+### Supports — mount_top only
+
+Measured off the exported mesh, not eyeballed:
+
+| Part | Surface that is unsupported overhang steeper than 45° |
+|---|---|
+| `mount_top` | **14.3%** |
+| `mount_bottom` | **0.0%** |
+
+`mount_top` carries two ~470 mm² faces that are **flat-down** — 0.1° off horizontal, hanging in
+air — plus the cradle's 30° faces, because the cradle is tilted 60° from vertical by design. That
+is not a marginal overhang; it is a ceiling.
+
+This README said "Supports: none" for both parts until 2026-08-27, and a print was started on
+that basis and killed. `mount_bottom` genuinely needs none — it is a plate with a pocket.
+
+**Set supports per-object.** If both parts share a plate, a global support setting grows them
+under `mount_bottom` for nothing.
