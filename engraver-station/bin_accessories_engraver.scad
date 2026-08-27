@@ -53,13 +53,38 @@ assert(DISC_W < ID, "Disc pocket is deeper than the bin interior.");
 echo(str("box ", BOX_W, " | discs ", DISC_W, " | bay ", BAY_W, " x ", ID,
          " (diagonal ", sqrt(BAY_W*BAY_W + ID*ID), ")"));
 
+
+// THE CUTS MUST BE CLIPPED TO THE ROUNDED INTERIOR.
+//
+// bin_blank's interior is a ROUNDED rectangle (radius BIN_R - WALL). A plain
+// cube spanning the full IW x ID runs straight through those corner radii and
+// opens all four corners — the bin comes off the printer with no connected
+// corners at all.
+//
+// It renders. It is watertight, 2-manifold, the right bounding box, and every
+// zone measures exactly right. tools/validate_stl.py PASSES it. The only thing
+// wrong is that the box is not a box, and nothing in the toolchain can see that.
+// This shipped and was printed before anyone noticed.
+//
+// Clip first, then cut. Same fix as bin_swabs.
+module _interior() {
+    translate([0, 0, Z0]) linear_extrude(DEPTH + 0.2)
+        offset(BIN_R - WALL) offset(-(BIN_R - WALL))
+            square([IW, ID], center = true);
+}
+
 difference() {
     bin_blank(NX, NY, H);
-    // zone 1 — the bit box
-    translate([-IW/2, -ID/2, Z0]) cube([BOX_W, ID, DEPTH + 0.1]);
-    // zone 2 — wheels, stacked flat
-    translate([-IW/2 + BOX_W + DIV, -ID/2, Z0]) cube([DISC_W, ID, DEPTH + 0.1]);
-    // zone 3 — open bay, spare
-    translate([-IW/2 + BOX_W + DISC_W + 2*DIV, -ID/2, Z0])
-        cube([BAY_W, ID, DEPTH + 0.1]);
+    intersection() {
+        union() {
+            // zone 1 — the bit box
+            translate([-IW/2, -ID/2, Z0]) cube([BOX_W, ID, DEPTH + 0.1]);
+            // zone 2 — wheels, stacked flat
+            translate([-IW/2 + BOX_W + DIV, -ID/2, Z0]) cube([DISC_W, ID, DEPTH + 0.1]);
+            // zone 3 — open bay, spare
+            translate([-IW/2 + BOX_W + DISC_W + 2*DIV, -ID/2, Z0])
+                cube([BAY_W, ID, DEPTH + 0.1]);
+        }
+        _interior();
+    }
 }
