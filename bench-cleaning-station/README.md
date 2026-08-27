@@ -62,6 +62,24 @@ from the thing that goes in them. **The number this part needs is the handle dia
 and of a swab, and how many of each ship with a bottle.** With those the slot becomes handle plus
 clearance and the lean goes to nothing. Without them, depth is the only lever and it's a weak one.
 
+## The Kimwipes tray runs 1.0 mm walls, and that is the design
+
+The box is **119.60 × 122.86**. A 3×3 is 125.5 across, so at the usual 1.2 mm wall the interior is
+123.10 and the long side clears by **0.24 mm** — not a fit, a coincidence. At 1.0 mm the interior
+is 123.50 and the slack is **0.64 mm**, which a cardboard box actually goes into.
+
+If it binds, go to a 3×4 — `-D NY=4` gives 165.10 of interior and 42 mm of slack. Do not thin the
+walls further.
+
+**Capture is 25 mm and the box's height is irrelevant.** It dispenses from the top, so the tray
+only stops it sliding and tipping; anything taller just stands further proud. That's the one
+dimension this part is deliberately independent of, which is why it could be built without ever
+measuring the box's height.
+
+> The same box also sits on `scope-baseplate/scope_wipe_plate.scad`, which was built as a platform
+> for it. That's a **baseplate** — no walls — which is why it fits comfortably there and only just
+> fits here. Don't copy that part's clearances across.
+
 ## Parts
 
 | File | What | Size |
@@ -70,6 +88,7 @@ clearance and the lean goes to nothing. Without them, depth is the only lever an
 | `bin_freeze_spray.scad` | 2 × 2 cup — freeze spray, ⌀69 mm can | 84 × 84 × 56 mm |
 | `bin_deoxit_droppers.scad` | 5 × 1 block — 3 × 39 × 20 mm dropper bottle + 2 applicators each | 210 × 42 × 32 mm |
 | `bin_swabs.scad` | 3 × 2 bin — cotton buds, dished floor + feed dam | 126 × 84 × 42 mm |
+| `bin_kimwipes.scad` | 3 × 3 tray — Kimtech Kimwipes pop-up cube | 126 × 126 × 31 mm |
 | `bin_flood_bottle.scad` | 2 × 2 cup — Labvida 500 ml IPA wash bottle | 84 × 84 × 56 mm |
 | `bin_dispenser.scad` | 2 × 2 cup — 200 ml push-down IPA pump | 84 × 84 × 56 mm |
 | `bin_sponges.scad` | 3 × 2 bin — melamine sponges on edge (~4) | 126 × 84 × 68 mm |
