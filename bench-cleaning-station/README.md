@@ -22,21 +22,33 @@ They were briefly a two-tier tower (swab base with a baseplate top, sponge bin s
 Separate bins turned out to be wanted, and stacking cost the swab bin its **open top** — which is
 how you reload it. So: two independent bins.
 
-`bin_swabs` has **all four walls** and is open at the **top** — a fresh box tips straight in, and
-nothing rolls out onto the desk. It went through an open-front version and a lowered-lip
-dispenser version before that landed; both leaked buds. What survives from the dispenser idea is
-the inside: a shallow **dished floor** so buds settle forward rather than piling where they fell,
-and a **low dam** across the bin two thirds of the way back. The pile stays behind the dam, the
-front trough holds one loose row, and buds feed forward through a 9 mm gap underneath as you take
-them. You reach in over the dam — it stops 11 mm short of the rim for exactly that reason.
+`bin_swabs` is modelled on [thing:7165275](https://www.thingiverse.com/thing:7165275) (Haaneroth,
+CC BY-NC-SA) — a **tall closed hopper whose front wall doubles as a dam, with a low scooped trough
+in front of it.** Tip a box of buds in the top, they roll down a continuous curved floor, pass
+under the dam, and present in the trough where you pinch one out.
+
+**The silhouette is the design:**
+
+| | height |
+|---|---|
+| Back wall | 58 mm — hopper, holds the pile |
+| Dam (the hopper's front wall) | 58 mm, standing 9 mm clear of the floor |
+| Front wall | **26 mm** — reach over it |
+
+A previous version was a box of **uniform** height with a dish inside. Every wall stood at 42 mm,
+so the trough sat at the bottom of a 36 mm well — you reached down a shaft to find a bud instead
+of picking one off a shelf. It held buds; it didn't dispense them.
+
+**Front and back are both real walls.** An attempt before that cut the front to a 12 mm lip and
+buds rolled onto the desk. 26 mm over a trough floor at 7.97 gives **18 mm of containment** — a
+dished shelf you reach into, not an opening things escape from.
+
+**The floor is one continuous radius**, not a ramp meeting a trough, so there's no corner anywhere
+along the path a bud rolls and it runs downhill the whole way instead of climbing out from under
+the dam.
 
 It's **3 × 2, not 2 × 2**: buds run to 3.2″ (81.28 mm) and a 2×2 interior is 81.10 mm. Missing by
 0.18 mm means the bud sits diagonal, and a diagonal bud is the one that bridges the dam gap.
-
-Its height is **42 mm, lower than the rest of the family**. With a full front wall the trough is
-reached from above, so wall height is reach depth rather than free capacity — 42 mm puts the
-trough floor 35.9 mm down, which is normal bin reach. Capacity is not the constraint: buds are
-3 mm across and the hopper still swallows a box.
 
 **Cut the sponges.** A full 100.1 mm block doesn't fit a 2×2 — quarter them to 50 × 30 × 20.
 Melamine is consumed by abrasion, so a whole block is far more than any bench task needs, and the
@@ -69,7 +81,7 @@ clearance and the lean goes to nothing. Without them, depth is the only lever an
 | `bin_aerosols.scad` | 5 × 2 three-can block — DeoxIT D5 + F5 + G5, one shared bore | 210 × 84 × 56 mm |
 | `bin_freeze_spray.scad` | 2 × 2 cup — freeze spray, ⌀69 mm can | 84 × 84 × 56 mm |
 | `bin_deoxit_droppers.scad` | 5 × 1 block — 3 × 39 × 20 mm dropper bottle + 2 applicators each | 210 × 42 × 32 mm |
-| `bin_swabs.scad` | 3 × 2 bin — cotton buds, dished floor + feed dam | 126 × 84 × 42 mm |
+| `bin_swabs.scad` | 3 × 2 dispenser — hopper + dam + scooped trough | 126 × 84 × 58 mm |
 | `bin_flood_bottle.scad` | 2 × 2 cup — Labvida 500 ml IPA wash bottle | 84 × 84 × 56 mm |
 | `bin_dispenser.scad` | 2 × 2 cup — 200 ml push-down IPA pump | 84 × 84 × 56 mm |
 | `bin_sponges.scad` | 3 × 2 bin — melamine sponges on edge (~4) | 126 × 84 × 68 mm |
