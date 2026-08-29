@@ -21,8 +21,8 @@ weak point.
 | File | What | Size |
 |---|---|---|
 | `mount_bottom.scad` | bottom plate + screw bosses | 70.05 × 28.0 × 31.7 mm |
-| `mount_top.scad` | top plate + arm + joint pad | 71.33 × 55.7 × 37.4 mm |
-| `mount_cradle.scad` | the cradle + its joint pad | 34.0 × 32.0 × 54.6 mm |
+| `mount_top.scad` | top plate + arm + joint pad | 71.33 × 51.7 × 33.4 mm |
+| `mount_cradle.scad` | the cradle + its joint pad | 54.6 × 24.0 × 33.0 mm |
 
 Two M3 screws into heat-set inserts draw the plates together, and two more join the cradle to the
 arm — four M3s and four inserts in total. Shared dimensions live in `thermal_cam_mount_common.scad`.
@@ -154,28 +154,28 @@ objective's spot stays well in frame across the whole range.
 | Layer height | 0.2 mm |
 | Walls | 4 perimeters |
 | Infill | 40 % — this is a clamp |
-| Supports | **`mount_cradle` only.** See below |
+| Supports | **None, on any part.** See below |
 
-### Supports — mount_cradle only
+### Supports — none
 
 Measured off the exported meshes in each part's own print orientation:
 
 | Part | Unsupported overhang steeper than 45° | |
 |---|---|---|
 | `mount_bottom` | **0.0%** | none |
-| `mount_top` | **2.8%** | none |
-| `mount_cradle` | **7.5%** | light supports |
+| `mount_top` | **1.8%** | none |
+| `mount_cradle` | **2.7%** | none |
 
-**Splitting the cradle out is what killed the support problem.** In v1.0.1 the cradle was fused to
-the top plate at 60°, which put two ~470 mm² flat-down faces in mid-air — `mount_top` measured
-14.3%. As its own part it prints in its own orientation and `mount_top` drops to 2.8%.
+**Splitting the cradle out is what killed the support problem.** In v1.0.1 it was fused to the top
+plate at 60°, putting two ~470 mm² flat-down faces in mid-air — `mount_top` measured 14.3%. As its
+own part each piece prints in its own orientation.
 
-`mount_cradle` prints **on its side, pad down**. That's both the cheapest orientation (7.5% against
-16.2% standing up) and the right one — the pad is the joint's mating face, so printing it against
-the bed makes it flat.
+`mount_cradle` prints **upright, as exported**. That only became the right answer once `PAD_R` came
+down from 16 to 12 — at 16 the joint disc was itself the overhang, and lying it on its side was
+better (7.5% against 16.2%). At 12 upright wins outright: 2.7% against 7.4% on its side.
 
-This README said "Supports: none" for both parts until 2026-08-27, and a print was started on that
-basis and killed.
+This README said "Supports: none" for both parts until 2026-08-27 when it wasn't true, and a print
+was started on that basis and killed. It is true now, and the numbers above are measured.
 
 **Set supports per-object.** If both parts share a plate, a global support setting grows them
 under `mount_bottom` for nothing.

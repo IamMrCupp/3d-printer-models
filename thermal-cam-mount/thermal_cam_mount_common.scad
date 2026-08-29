@@ -129,8 +129,23 @@ ARM_UP  = 0;                // cradle base above the top plate's top face
 // 175 x 127 mm patch, so the objective's spot stays well in frame.
 CAM_ANGLE_MIN = 30; CAM_ANGLE_MAX = 55; CAM_ANGLE_STEP = 5;   // reporting granularity for verify_aim's sweep only
 PAD_T   = 6;      // thickness of each half of the joint (>= an M3 insert's length)
-PAD_R   = 16;     // joint pad radius
-IDX_R   = 11;     // index-hole circle radius, about the pivot
+// PAD_R IS 12, NOT 16, AND THE CONSTRAINT IS SCREW ACCESS. At 16 the pad's rear
+// edge sat at y 11.92 while the right clamp screw's counterbore reaches y 13.46,
+// so 23.19 mm of pad sat on top of a screw that holds the whole mount on — the
+// part could not be assembled. A render showed one counterbore where there
+// should be two; a driver-access probe confirmed it.
+//
+// Moving the arm FORWARD instead was tried and is the wrong lever: it fixed the
+// screw and broke the aim. A lens further out has further to travel back to the
+// plate's corner plane, so it has dropped further by the time it gets there —
+// clearance at 30 deg went from +1.30 to -20.80. Shrinking the pad fixes the
+// screw and leaves the aim untouched.
+//
+// 12 puts the pad's rear at y 15.92, clear of the counterbore by 2.5 mm.
+PAD_R   = 12;     // joint pad radius
+IDX_R   = 8;      // slot radius about the pivot — must leave PAD_R a rim:
+                  // IDX_R + SLOT_W/2 = 10 against a 12 pad. Friction torque
+                  // scales with it and is ~1.2 N.m here against 0.006 needed.
 M3_CLR  = 3.4;
 M3_SHANK = 3.0;   // the actual screw, for working out how far it can over-travel
 SLOT_W  = M3_CLR + 0.6;
@@ -171,6 +186,11 @@ REF_TILT = 60;
 PIV_WY = cr_y + (CR_OY/2)*cos(REF_TILT) - PIV_Z*sin(REF_TILT);
 PIV_WZ = cr_z + (CR_OY/2)*sin(REF_TILT) + PIV_Z*cos(REF_TILT);
 PAD_X  = CR_OW/2;          // cradle pad inboard face; arm pad sits outboard of it
+// The top plate grows a short tongue past the tab's front face, under the arm's
+// footprint only, so the arm has somewhere to stand that is forward of the
+// screw boss. Without it the arm's hull has to start behind the boss and the
+// convex hull closes back over it.
+ARM_TONGUE = 8;
 
 module _plate() {                            // flat footprint in X-Y, unit thickness at z=0
     translate([-PW/2, y_back, 0]) cube([PW, GRIP_LEN, PLATE_T]);
@@ -218,7 +238,7 @@ module _cradle_pad() {
 module _arm() {
     difference() {
         hull() {
-            translate([PAD_X + PAD_T, y_front - 12, top_z1 - EPS]) cube([PAD_T, 12, EPS]);
+            translate([PAD_X + PAD_T, y_front, top_z1 - EPS]) cube([PAD_T, ARM_TONGUE, EPS]);
             translate([PAD_X + PAD_T, PIV_WY, PIV_WZ]) rotate([0,90,0]) cylinder(r = PAD_R, h = PAD_T);
         }
         // pivot
@@ -270,7 +290,11 @@ module mount_bottom() {
 module mount_top() {
     union() {
         difference() {
-            translate([0,0,half]) _plate();
+            union() {
+                translate([0,0,half]) _plate();
+                // tongue for the arm to stand on, forward of the screw boss
+                translate([PAD_X + PAD_T, y_front, half]) cube([PAD_T, ARM_TONGUE, PLATE_T]);
+            }
             for (sx = [-boss_x, boss_x]) translate([sx, boss_y, half - EPS]) {
                 cylinder(d = SCREW_D, h = PLATE_T + 2*EPS);
                 // h is 1.6 + 2*EPS, not 1.6 + EPS. At 1.6 + EPS the counterbore's
