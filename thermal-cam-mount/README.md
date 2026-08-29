@@ -14,8 +14,8 @@ the calibration.
 
 | File | What | Size |
 |---|---|---|
-| `mount_bottom.scad` | bottom plate + cam cradle | 70.05 × 28.0 × 31.7 mm |
-| `mount_top.scad` | top plate, counterbored | 70.05 × 57.9 × 32.3 mm |
+| `mount_bottom.scad` | bottom plate + bosses | 70.05 × 28.0 × 31.7 mm |
+| `mount_top.scad` | top plate + arm + cam cradle | 70.05 × 57.9 × 37.8 mm |
 
 Two M3 screws into heat-set inserts draw the plates together. Shared dimensions live in
 `thermal_cam_mount_common.scad`.
@@ -68,12 +68,53 @@ PASS
 **Run it before any print.** A mount that aims the lens at the objective still renders, still
 slices, and still passes a mesh check.
 
+## Why v1.0.1 didn't hold the camera
+
+The cradle gripped the camera **entirely below its centre of mass.**
+
+The camera sits on the lip, so it spans z 4.50 → 39.50 and its centre of mass is at z 22.00. At `SIDE_H = 16` every retaining feature — side walls, back wall, and the front corner tabs that ride on top of the walls — topped out at z 19.00. Measured off the mesh:
+
+| | v1.0.1 | now |
+|---|---|---|
+| Material in front of the camera (what retains it) | z 0 → **19.00** | z 0 → **33.00** |
+| Material beside it | z 0 → 19.00 | z 0 → 33.00 |
+| Camera | z 4.50 → 39.50, **CoM at 22.00** | unchanged |
+
+The cradle is tilted 60°, which puts a gravity component of 0.87 along the local −Y — straight out the open front. With every grip below the centre of mass, the camera pivots over the top of the walls and levers itself out. It was never going to hold.
+
+**The camera's dimensions were never the problem.** The pocket is 42.6 × 14.6 and a 42 × 14 body drops straight in. The fix is `SIDE_H` 16 → 30, which puts the front corner tabs at z 30 → 33 and takes the side-wall grip from 14.5 mm of the 35 mm body to 25.5 mm.
+
+`BACK_H` was split out and left at 19 on purpose. The back wall is the only solid face against the 1.69" screen, and raising it with the sides would bury the screen this open cradle exists to keep visible — and it isn't the face doing the work, because gravity pushes the camera forward, not back.
+
+**Nothing could have caught this.** The mesh was valid, the bounding box was right, and `verify_aim.py` checks the lens *angle*, which was correct the whole time. There was no check that retention reached above the centre of mass. There is now — see below.
+
 ## Still to confirm on the first print
 
 - **`FIT = 0.3`** — the gap between each plate and the tab face. Too loose and the calibration
   drifts, which is the one thing this mount exists to prevent.
 - **Front-corner screw clearance** — that the screws really do pass outboard of the wheel.
 - **That the tab's top face is rigid ABS** before trusting the grip.
+- **That the sandwich clamp itself grips the tab.** The v1.0.1 failure was the cradle; whether the clamp half holds is a separate question and hasn't been reported either way.
+
+## Checking retention
+
+Aim is not the only thing a valid mesh can get wrong. Retention has to reach above the camera's centre of mass, or the body levers out however good the aim is:
+
+```sh
+python3 check_retention.py
+```
+
+```
+camera        z   4.50 ..  39.50    centre of mass z  22.00
+retention     z   0.00 ..  33.00
+
+retention reaches +11.00 mm relative to the centre of mass
+PASS  28.5 mm of the camera's 35.0 mm height is gripped (81%)
+```
+
+It probes the real `_cradle()` with OpenSCAD booleans rather than re-deriving the geometry, so it can't drift from the model. Put `SIDE_H` back to 16 and it fails with `-3.00 mm` — it catches the exact bug that shipped.
+
+**Run this and `verify_aim.py` before any print.** Between them they cover the two things a valid mesh can still get wrong: where the lens points, and whether the camera stays in.
 
 ## Recommended print settings
 
@@ -91,7 +132,7 @@ Measured off the exported mesh, not eyeballed:
 
 | Part | Surface that is unsupported overhang steeper than 45° |
 |---|---|
-| `mount_top` | **14.3%** |
+| `mount_top` | **13.4%** |
 | `mount_bottom` | **0.0%** |
 
 `mount_top` carries two ~470 mm² faces that are **flat-down** — 0.1° off horizontal, hanging in

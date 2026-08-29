@@ -49,7 +49,34 @@ CAM_CLR   = 0.6;
 CAM_ANGLE = 30;   // tilt from vertical → lens looks down at the board
 
 // ---- cradle ----
-LIP=4.5; SIDE_H=16; CORNER=6; CABLE_W=12; WALL=3;
+// SIDE_H IS THE WHOLE BALLGAME. It was 16, and that is why the printed part did
+// not hold the camera.
+//
+// The camera sits on the LIP, so it spans z 4.50 .. 39.50 and its centre of mass
+// is at z 22.00. At SIDE_H 16 every retaining feature — side walls, back wall,
+// and the front corner tabs that sit on top of the walls — topped out at z 19.00.
+// Measured off the mesh, not eyeballed:
+//
+//     material in front of the camera   z  0.00 .. 19.00
+//     material beside it                z  0.00 .. 19.00
+//     material behind it                z  0.00 .. 19.00
+//     camera                            z  4.50 .. 39.50   CoM z 22.00
+//
+// Every grip below the centre of mass, on a cradle tilted 60 deg so that gravity
+// pulls the body out the open front (the local -Y component of gravity after the
+// tilt is 0.87). The camera pivots over the top of the walls and levers itself
+// out. Nothing could catch this: the mesh is valid, and verify_aim.py checks the
+// lens ANGLE, which was right the whole time.
+//
+// 30 puts the corner tabs at z 30 .. 33 — above the centre of mass — and takes
+// the side-wall grip from 14.5 mm of the 35 mm body to 25.5 mm.
+SIDE_H = 30;
+// The back wall stays where it was. It is the only solid face against the 1.69"
+// screen, and raising it with the sides would bury the screen the open cradle
+// exists to keep visible. It also is not the face doing the work: gravity pushes
+// the camera FORWARD out of this cradle, so the front tabs are what retain it.
+BACK_H = 19;
+LIP=4.5; CORNER=6; CABLE_W=12; WALL=3;
 CABLE_DIR = "down";   // "down" (female/bottom port) | "side" (right-angle adapter)
 
 // ---- cradle placement — ABOVE the plate, looking DOWN and INWARD -----------
@@ -93,7 +120,7 @@ module _cradle() {
             translate([-ow/2, 0, 0]) cube([ow, oy, LIP]);
             translate([-ow/2, 0, 0]) cube([WALL, oy, SIDE_H]);
             translate([ iw/2, 0, 0]) cube([WALL, oy, SIDE_H]);
-            translate([-ow/2, oy - WALL, 0]) cube([ow, WALL, SIDE_H + WALL]);
+            translate([-ow/2, oy - WALL, 0]) cube([ow, WALL, BACK_H]);
             for (sx = [-ow/2, iw/2 - CORNER])
                 translate([sx, 0, SIDE_H - EPS]) cube([WALL + CORNER, WALL + 2, WALL + EPS]);
         }
