@@ -139,11 +139,25 @@ module scope_wipe_plate() {
             // Skirt. Bored the FULL height so it stays a ring all the way up —
             // stopping the bore at z=0 leaves a slab over the plate that swallows
             // every socket into a manifold, CI-passing brick.
+            // THE SKIRT STOPS AT z=0. It used to run up to BP_H so it would
+            // volumetrically merge with the plate rather than only touch it —
+            // and that put skirt INSIDE the grid.
+            //
+            // The ring is 206.23 long against a 210 grid, so its two end
+            // sections sit at |x| 100.62..103.12, which is inside the last row
+            // of cells. Extruded to BP_H they ran straight through those
+            // sockets: 448 mm3 of solid bar in every row-5 cell, 220 mm3 in
+            // row 1. Nothing seated. The near-end cut below only removed
+            // material under z=0, so opening that end did not save it either.
+            //
+            // Butting at exactly z=0 is the right join anyway — an overlap here
+            // is the riser_spacer_2in bug, and a face-to-face union at an exact
+            // plane is what 2021.01 wants.
             difference() {
-                translate([0,0,-SKIRT_DEPTH]) linear_extrude(SKIRT_DEPTH + BP_H)
+                translate([0,0,-SKIRT_DEPTH]) linear_extrude(SKIRT_DEPTH)
                     _rrect(SKIRT_OUT_L, SKIRT_OUT_W, CORNER);
                 translate([0,0,-SKIRT_DEPTH - EPS])
-                    linear_extrude(SKIRT_DEPTH + BP_H + 2*EPS)
+                    linear_extrude(SKIRT_DEPTH + 2*EPS)
                         _rrect(SKIRT_IN_L, SKIRT_IN_W, CORNER);
             }
         }
