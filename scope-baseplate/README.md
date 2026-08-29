@@ -95,6 +95,24 @@ Not fit — manifoldness. The cell pitch is 42 and the boss is 39.78, so any "na
 
 44 clears the whole middle column and passes 1 mm into the neighbouring sockets' outer taper — comfortably off every boundary. It costs a 1 mm nick in one wall of the two cells either side, which is cosmetic: Gridfinity retention is perimeter-wide.
 
+## What v2.0.0 got wrong
+
+**The skirt ran through the sockets of the end rows, and nothing seated.**
+
+The skirt ring is 206.23 long against a 210 mm grid, so its two end sections sit at |x| 100.62–103.12 — inside the last row of cells. It was extruded from −12 all the way up to `BP_H` so it would merge with the plate volumetrically instead of only touching it, and that put a solid 2.5 mm bar straight through those sockets: **448 mm³ in every row-5 cell, 220 mm³ in row 1.** Opening the near end didn't save it, because that cut only removed material below z=0.
+
+The skirt now stops at **z=0**, butting the plate's underside at an exact plane. It still merges — the side rails overlap it in Y above z=0, and the end sections sit directly under the grid.
+
+**Every check in the repo passed the broken part:** watertight, 2-manifold, correct bounding box, one connected body, corner walls present, seats on the plateau, slides on through all 14 positions, clean on OpenSCAD 2021.01. The per-cell check that would have caught it was run *before* the skirt was added and never re-run after.
+
+`tools/check_sockets.py` exists now so that can't recur:
+
+```sh
+python3 ../tools/check_sockets.py scope_plate_common.scad "scope_wipe_plate()" 5 3
+```
+
+Put the old skirt back and it reports `FAIL 5 socket(s) have material in them`. A socket is defined by what *isn't* there, so every check that looks for material being present is blind to this class of bug.
+
 ## Verified
 
 Measured on the rendered mesh, not asserted:
@@ -104,6 +122,7 @@ Measured on the rendered mesh, not asserted:
 - **Boss passes clean through** — zero intersection with a 39.78 cylinder at the boss position
 - **Slides on** — a plateau solid swept the full insertion path, 14 positions, no contact until seated
 - **Seats and stops** — clear at 0 mm, bears on the far wall at +1 mm
+- **Every socket clear** — `tools/check_sockets.py`, the check that was missing from v2.0.0
 - Clean on **OpenSCAD 2021.01** (what CI runs) as well as current builds
 
 ## Source
