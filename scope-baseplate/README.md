@@ -12,6 +12,7 @@ A **5×3 Gridfinity baseplate** that wraps the raised plateau on a microscope bo
 |---|---|---|---|
 | **Baseplate** | `scope_wipe_plate.scad` | 210 × 136.38 × 17.85 mm | ×1 — **grid down**, no supports |
 | **Wrap coupon** | `coupons/scope_wrap_coupon.scad` | 21 × 136.38 × 17.85 mm | **print first** — ~9 g |
+| **Seat coupon** | `coupons/scope_seat_coupon.scad` | 42 × 44 × 17.85 mm | **print first** — ~4 g |
 | **Corner gauge** | `coupons/scope_corner_gauge.scad` | 192 × 94 × 3 mm | only if your stand differs |
 
 Dimensions live in `scope_plate_common.scad`.
@@ -63,6 +64,20 @@ It's an `intersection()` against the actual model, not a re-derivation, so it ca
 One wall tells you nothing about the width — 0.6 mm a side over 130 mm is exactly what PETG shrink eats, and you need both walls at true spacing to see it. Print it in the same material as the plate for that reason.
 
 It doesn't test the pole slot or the boss position. Those live at the other end.
+
+## And a seat coupon
+
+`coupons/scope_seat_coupon.scad` is one **end cell** plus the skirt's end wall — the exact region v2.0.0 got wrong — at **~4 g**.
+
+`tools/check_sockets.py` catches an obstructed socket in software. This catches what software can't: whether a real bin actually drops in and holds. A socket can be geometrically clear and still print tight, and no mesh check will ever say so.
+
+| What it does | What it means |
+|---|---|
+| Bin seats fully, sits flat, doesn't rock | Print the plate |
+| Bin bottoms out proud | Something is in the socket — run `check_sockets.py` before reprinting |
+| Bin seats but rocks | The end wall is standing proud of the grid |
+
+Print it on the same plate as the wrap coupon. 13 g of the two together against the plate's 50.
 
 ## Fit
 
