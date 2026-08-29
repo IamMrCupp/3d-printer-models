@@ -1,101 +1,163 @@
-// scope_plate_common — click-on Gridfinity plate for the microscope boom's
-// weighted-base raised platform. Sits on the platform, skirt hugs front + both
-// sides (open at the back toward the pole), 3×3 grid on top — mainly a home for
-// the Kimwipe box that already lives there.
+// scope_plate_common — Gridfinity plate for the microscope boom stand's weighted
+// base. Sits flat on the base, wraps the boom pole, 5x3 grid on top.
 //
-// MEASURED 2026-07-27:
-//   platform  131.84 (W) × 130.54 (D)   raised-platform outline, front→pole
-//   step      17.76 mm                  platform height above the rim → skirt grab
-//   corner    ~15 mm radius             gauged (see CORNER below)
-//   kimwipe   119.60 × 122.86           box footprint (fits the 3×3)
+// THIS IS A REBUILD. The previous version was a 3x3 with a three-sided skirt,
+// open at the BACK for the pole. Both premises were wrong:
+//   - the pole does NOT rise at the back edge, it rises from a boss ~a fifth of
+//     the way in from one END. A plate that opens toward the back misses it.
+//   - 131.84 x 130.54 was not the base. 130.54 was the true short axis, but the
+//     long axis is 200.03 — the old reading covered only PART of the base.
+// The old part is unusable; nothing here is carried over except the Gridfinity
+// pitch itself.
+//
+// MEASURED 2026-08-28 (tape + calipers, user):
+//   base       200.03 (7 7/8") x 130.18 (5 1/8")
+//   boss       39.78 mm diameter, pole rises from it
+//   boss pos   158.75 (6 1/4") from the RIGHT end  ->  41.28 from the left end
+//
+// ASSUMED, NOT MEASURED:
+//   boss is CENTRED across the 130.18 width. The tape read 92.08 (3 5/8") from
+//   one long edge, which is 27 mm off-centre and does NOT reconcile with the
+//   eyeball "it looks centred". User's call, 2026-08-28: go with centred.
+//   If it turns out to be off-centre the pole slot moves and TWO more cells die
+//   (13 -> 11). Set BOSS_Y to the real offset and everything else follows.
 include <../lib/gridfinity.scad>
 
-PLAT_W = 131.84;   // platform width  (X)
-PLAT_D = 130.54;   // platform depth  (Y, front edge → pole)
-STEP_H = 17.76;    // measured — platform height above rim → skirt grab
+// 200.03 x 130.18 IS THE PLATEAU — the raised top surface the plate sits on,
+// not the outline of whatever the base steps down to below it. The old
+// 131.84 x 130.54 was the same plateau with a short length reading; 130.54 and
+// 130.18 are the same edge measured twice.
+BASE_L = 200.03;   // 7 7/8"  long axis
+BASE_W = 130.18;   // 5 1/8"  short axis
+BOSS_D = 39.78;    // boss the pole rises from
+BOSS_FROM_RIGHT = 158.75;   // 6 1/4"
 
-// Gauged with scope_corner_gauge.stl (8 female corners, 6–20 mm in 2 mm steps):
-// gauges 5 (14) and 6 (16) both seated, so the real radius is ~15.
-// Use 14, NOT 15 — the error is ASYMMETRIC. A larger CORNER rounds the skirt
-// opening more, making it smaller at the corners, so it binds. Boolean
-// interference test (platform vs skirt opening):
-//     CORNER=14 -> clears real R = 14, 15, 16
-//     CORNER=15 -> BINDS if R = 14
-//     CORNER=16 -> BINDS if R = 14 or 15
-// Taking the smaller gauge that seated clears the whole measured range, so no
-// finer gauge is needed. Worst case the corners sit ~0.8 mm proud — irrelevant
-// on a skirt registering against 130 mm of flat.
-CORNER = 14;
-
-GRID_NX = 3; GRID_NY = 3;
-SKIRT_DEPTH = 12;  // < STEP_H (17.76), deep grip with margin
+STEP_H = 17.76;    // plateau height above the layer below -> how deep a skirt can grab
+CORNER = 14;       // plateau corner radius. GAUGED, not calipered, with
+                   // coupons/scope_corner_gauge.scad: gauges 5 (14) and 6 (16)
+                   // both seated, so the real radius is ~15. Use 14 — the error
+                   // is asymmetric. A larger CORNER rounds the skirt opening
+                   // MORE, making it smaller at the corners, so it binds:
+                   //     14 -> clears a real R of 14, 15 or 16
+                   //     15 -> binds at 14
+                   //     16 -> binds at 14 or 15
+SKIRT_DEPTH = 12;  // < STEP_H with margin
 SKIRT_WALL  = 2.5;
-
-// Slip clearance, skirt-to-platform. NOT 0.4 — that is the same number over the
-// same ~131 mm span that just failed on the OWON tray frame: PETG shrinks
-// ~0.5 mm across 131 mm, so an internal dimension prints undersize and binds.
-// 1.2 leaves ~0.35 mm/side of real clearance after shrink.
+// Slip clearance, skirt to plateau. NOT 0.4 — that is the number that failed on
+// the OWON tray frame over a similar span. PETG shrinks ~0.5 mm across 130 mm,
+// so an internal dimension prints undersize and binds.
 FIT = 1.2;
+
+// ---- grid ----
+// 5 along the length, 3 across the width.
+//
+// FIVE, NOT FOUR, AND IT OVERHANGS ON PURPOSE. 5*42 = 210 against a 200.03 base,
+// so the plate hangs ~5 mm past each end. That is worth doing:
+//     4 rows, slid so a row centre lands on the boss  -> 12 cells - 1 = 11
+//     5 rows, overhanging                             -> 15 cells - 2 = 13
+// Four rows can be positioned so the boss falls inside a single cell (the 32 mm
+// of slack is enough to move a row centre onto 41.28). Five rows cannot — every
+// offset in the valid -9.97..0 range straddles a boundary, so the boss costs two
+// cells instead of one. You still come out two cells ahead, and the 32 mm of
+// dead border stops existing.
+//
+// The overhang is plate, not bin: every socket stays a full 42 mm, so bins seat
+// normally. What cantilevers is ~5 mm of 5.85 mm baseplate per end.
+GRID_NX = 5;   // along BASE_L
+GRID_NY = 3;   // across BASE_W
+
+OVERHANG = (GRID_NX*GF - BASE_L) / 2;   // 4.99 per end
+assert(OVERHANG > 0 && OVERHANG < GF/2, "grid/base mismatch — re-check BASE_L");
+assert(GRID_NY*GF < BASE_W, "grid wider than the base — the sides would hang");
+
+// ---- pole opening ----
+// Boss centre in model coordinates (the grid is centred on the origin).
+BOSS_X = -BASE_L/2 + (BASE_L - BOSS_FROM_RIGHT);   // -58.74
+BOSS_Y = 0;                                        // ASSUMED centred — see header
+
+// SLOT_W is 44, not BOSS_D + a fit clearance, and the reason is manifoldness on
+// OpenSCAD 2021.01, not fit.
+//
+// Every "natural" width here lands within a millimetre of a socket boundary: the
+// cell pitch is 42 and the boss is 39.78, so a 41-ish hole sits ~0.5 mm inside
+// the socket opening, and at the plate's TOP FACE adjacent socket openings meet
+// exactly at +-21. A cut plane tangent to that line is the same class of bug that
+// put 96 non-manifold edges in the thermal mount's counterbore. 44 clears the
+// whole of the middle column and passes 1 mm INTO the neighbouring sockets'
+// outer taper — comfortably off every boundary, at the cost of a 1 mm nick in
+// one wall of the two cells either side. Gridfinity retention is perimeter-wide;
+// a 1 mm nick in one edge is cosmetic.
+SLOT_W = 44;
+
+// The slot runs off the near end so the plate SLIDES IN sideways. A closed hole
+// would mean lifting the plate down over the pole — i.e. pulling the microscope
+// head off first. The boss is 41.28 from the left end and 158.75 from the right,
+// so the near end is the left.
+//
+// This costs nothing. The slot runs through the middle column of rows 1 and 2,
+// which are the two cells the boss already destroyed.
+SLOT_END = -GRID_NX*GF/2 + 2*GF + 2;   // -19: 2 mm past the row-2 / row-3 line at -21
 EPS = 0.1;
+
+assert(BOSS_X - BOSS_D/2 > -GRID_NX*GF/2, "boss falls off the near end");
+assert(BOSS_X + BOSS_D/2 < SLOT_END,      "slot too short — boss is not fully freed");
+assert(abs(BOSS_Y) + BOSS_D/2 < SLOT_W/2, "boss wider than the slot");
+
+SKIRT_IN_L  = BASE_L + FIT;   SKIRT_IN_W  = BASE_W + FIT;
+SKIRT_OUT_L = SKIRT_IN_L + 2*SKIRT_WALL;
+SKIRT_OUT_W = SKIRT_IN_W + 2*SKIRT_WALL;
+
+// The wrap is a U, open at the NEAR end — the same end the pole slot runs off.
+// It has to be: the plate slides on lengthwise, so anything hanging down across
+// that end would hit the plateau's edge and stop it 12 mm short.
+//
+// OPEN_X is where the skirt starts. It sits 1.6 mm PAST the point where the
+// end wall's corner arc becomes the straight side wall (-86.6), not on it — a
+// cut plane tangent to an arc is the XY twin of the counterbore bug.
+OPEN_X = -(SKIRT_IN_L/2 - CORNER) + 1.6;
+assert(SKIRT_DEPTH < STEP_H, "skirt deeper than the step — it will bottom out");
+assert(SKIRT_OUT_W > GRID_NY*GF, "skirt inboard of the grid — no border to hang it from");
+assert(SKIRT_OUT_L < GRID_NX*GF, "skirt outboard of the grid ends — it would float");
+assert(OPEN_X < BOSS_X - BOSS_D/2, "skirt starts before the boss — plate cannot slide on");
 
 module _rrect(w, d, r) { offset(r) offset(-r) square([w, d], center = true); }
 
-// Derived: the skirt wraps the platform with FIT of slop, so its faces sit
-// OUTBOARD of the platform outline.
-SKIRT_IN_W  = PLAT_W + FIT;                    // inner face — hugs the platform
-SKIRT_IN_D  = PLAT_D + FIT;
-SKIRT_OUT_W = SKIRT_IN_W + 2*SKIRT_WALL;       // outer face
-SKIRT_OUT_D = SKIRT_IN_D + 2*SKIRT_WALL;
-
-// The plate must reach the skirt's OUTER face, not the platform outline.
-//
-// Sizing the border to PLAT_W left its edge at PLAT_W/2 = 65.92 while the skirt's
-// inner face sits at (PLAT_W+FIT)/2 = 66.52 — they never touched, and the model
-// rendered as TWO disconnected bodies (manifold, CI-green, and useless: a loose
-// ring plus a loose plate). The gap is FIT/2, so it was present at the original
-// FIT = 0.4 too, just 0.2 mm wide instead of 0.6.
 module scope_wipe_plate() {
-    // ONE cut at the platform's back edge opens the skirt for the boom pole and
-    // stops the plate growing into it. Done in 3D on the finished union, not as a
-    // 2D intersection on the outline: trimming the rounded outline in 2D
-    // retriangulates the border's underside and throws sub-micron sliver
-    // triangles at the inner corners, which the mesh validator rejects.
     difference() {
         union() {
-            // 3×3 grid, centred
             baseplate(GRID_NX, GRID_NY);
-            // Border frame: a ring from the grid's outer edge out to the skirt's
-            // outer face.
-            //
-            // Its inner boundary is the EXACT expression baseplate() uses for its
-            // own outline — _rrect(nx*GF, ny*GF, GF_FILLET) — so the two curves are
-            // bit-identical and CGAL merges them. The earlier version cut at
-            // nx*GF - 2 to "overlap the grid by ~1 mm", which put two rounded rects
-            // 1 mm apart with the SAME corner radius: near-parallel arcs whose facet
-            // vertices land close enough to stitch sub-micron sliver triangles.
-            // Identical beats nearly-identical. Cranking $fn hid it on one renderer
-            // and not on CI's.
+            // Side rails: the grid is 126 wide, the skirt hangs at 136.38, so the
+            // plate needs material out to the skirt to hang it from. The inner
+            // boundary is the EXACT expression baseplate() uses for its own
+            // outline, so the two curves are bit-identical and CGAL merges them
+            // instead of stitching slivers between near-parallel arcs.
             difference() {
-                linear_extrude(BP_H) _rrect(SKIRT_OUT_W, SKIRT_OUT_D, CORNER);
+                linear_extrude(BP_H) _rrect(SKIRT_OUT_L, SKIRT_OUT_W, CORNER);
                 translate([0,0,-EPS]) linear_extrude(BP_H + 2*EPS)
                     _rrect(GRID_NX*GF, GRID_NY*GF, GF_FILLET);
             }
-            // click skirt, full plate height so it is volumetrically embedded in
-            // the border above z=0 rather than merely touching it on one face.
+            // Skirt. Bored the FULL height so it stays a ring all the way up —
+            // stopping the bore at z=0 leaves a slab over the plate that swallows
+            // every socket into a manifold, CI-passing brick.
             difference() {
                 translate([0,0,-SKIRT_DEPTH]) linear_extrude(SKIRT_DEPTH + BP_H)
-                    _rrect(SKIRT_OUT_W, SKIRT_OUT_D, CORNER);
-                // Bore runs the FULL height — the skirt stays a ring all the way
-                // up. Stopping this at z=0 leaves a solid slab over the plate that
-                // swallows every socket (416 facets instead of ~2600: a manifold,
-                // CI-passing brick).
+                    _rrect(SKIRT_OUT_L, SKIRT_OUT_W, CORNER);
                 translate([0,0,-SKIRT_DEPTH - EPS])
                     linear_extrude(SKIRT_DEPTH + BP_H + 2*EPS)
-                        _rrect(SKIRT_IN_W, SKIRT_IN_D, CORNER);
+                        _rrect(SKIRT_IN_L, SKIRT_IN_W, CORNER);
             }
         }
-        // the pole cut
-        translate([-SKIRT_OUT_W, PLAT_D/2, -SKIRT_DEPTH - 1])
-            cube([2*SKIRT_OUT_W, SKIRT_OUT_D, SKIRT_DEPTH + BP_H + 2]);
+        // Open the near end. Below z=0 only — the plate above it stays whole.
+        // The cut's top face BUTTS z=0 exactly rather than overlapping by an
+        // epsilon: an epsilon here shaves a sliver off the plate's underside,
+        // which is what broke riser_spacer_2in on 2021.01.
+        translate([-GRID_NX*GF, -SKIRT_OUT_W, -SKIRT_DEPTH - 1])
+            cube([GRID_NX*GF + OPEN_X, 2*SKIRT_OUT_W, SKIRT_DEPTH + 1]);
+        // Pole slot: rounded rect, open at the near end. Started well outside the
+        // plate (-GRID_NX*GF) so the cut PASSES THROUGH the end face rather than
+        // stopping on it.
+        translate([0, 0, -EPS]) linear_extrude(BP_H + 2*EPS)
+            translate([(SLOT_END - GRID_NX*GF)/2, BOSS_Y])
+                _rrect(SLOT_END + GRID_NX*GF, SLOT_W, 3);
     }
 }
