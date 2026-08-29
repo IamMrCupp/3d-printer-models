@@ -1,50 +1,122 @@
 #!/usr/bin/env python3
-"""Assert the thermal cam's lens points DOWN and INWARD, and that its sight
-line clears the top plate's front-top corner. Run before any print."""
-import math, sys
+"""Assert the thermal cam's lens points DOWN and INWARD, that its sight line
+clears the top plate's front-top corner, and that nothing dips into the working
+volume between the objective and the board — at EVERY settable tilt.
 
-CAM_ANGLE=30; CAM_D=14; CAM_H=35; CAM_CLR=0.6; WALL=3
-TAB_FB=32.51; TAB_T=26.42; FIT=0.3; PLATE_T=5
-ARM_FWD=19.5; ARM_UP=0
-TILT=90-CAM_ANGLE
+Two things changed here after v1.0.1:
 
-half=TAB_T/2+FIT/2; y_front=TAB_FB/2
-top_z1=half+PLATE_T; cr_y=y_front+ARM_FWD; cr_z=top_z1+ARM_UP
-th=math.radians(TILT); c,s=math.cos(th),math.sin(th)
-rot=lambda y,z:(y*c-z*s, y*s+z*c)
+1. It reads the constants out of thermal_cam_mount_common.scad instead of
+   keeping its own hand-copied set. The old copy still said the cradle topped
+   out at 19 after the walls went to 30. A checker with its own copy of the
+   numbers is a checker that eventually checks the wrong model.
 
-# cam sits in the cavity: local y WALL..WALL+CAM_D+CAM_CLR, z LIP..LIP+CAM_H
-# lens = the OPEN low-y face; screen = against the back wall at high y
-lens_y=WALL; screen_y=WALL+CAM_D+CAM_CLR; mid_z=4.5+CAM_H/2
-(ly,lz)=rot(lens_y,mid_z); (sy,sz)=rot(screen_y,mid_z)
-ly+=cr_y; lz+=cr_z; sy+=cr_y; sz+=cr_z
-n=(ly-sy, lz-sz); m=math.hypot(*n); n=(n[0]/m, n[1]/m)
-ang=math.degrees(math.atan2(-n[0], -n[1]))   # from straight-down, +ve = inward
+2. It sweeps the whole index range, not just the current CAM_ANGLE. The tilt is
+   now chosen at assembly, so "it aims correctly" has to be true for every hole
+   the user can put the screw through, not only the one that happens to be set.
 
-ok=True
-print(f"lens centre        y={ly:7.2f}  z={lz:7.2f}")
-print(f"lens vector        dY={n[0]:+.3f} dZ={n[1]:+.3f}  -> {abs(ang):.1f} deg from vertical, "
-      f"{'INWARD' if n[0]<0 else 'OUTWARD'}, {'DOWN' if n[1]<0 else 'UP'}")
+SPDX-License-Identifier: MIT
+Copyright (c) 2026 Aaron Cupp
+"""
+import math
+import os
+import re
+import sys
 
-if n[1] >= 0: print("  FAIL lens points UP"); ok=False
-if n[0] >= 0: print("  FAIL lens points away from the optical axis"); ok=False
+HERE = os.path.dirname(os.path.abspath(__file__))
+SRC = open(os.path.join(HERE, "thermal_cam_mount_common.scad")).read()
 
-# every ray from A..A+halfFOV must pass forward/above the plate's front-top corner
-corner=(y_front, top_z1)
-print(f"\nplate front-top corner  y={corner[0]:.2f}  z={corner[1]:.2f}")
-for a in (abs(ang)-21, abs(ang), abs(ang)+21):     # 42 deg vertical FOV
-    if a<=0: continue
-    dz = (ly-corner[0])/math.tan(math.radians(a))
-    z_at = lz - dz
-    clr = z_at - corner[1]
-    flag = "ok " if clr>0 else "FAIL"
-    if clr<=0: ok=False
-    print(f"  ray {a:5.1f} deg -> crosses corner plane at z={z_at:7.2f}  clearance {clr:+7.2f}  {flag}")
 
-# nothing may sit below the top plate's underside except the clamp itself
-lo = min(rot(y,z)[1] for y in (0, CAM_D+CAM_CLR+2*WALL) for z in (0,19)) + cr_z
-print(f"\nlowest cradle point  z={lo:.2f}   (top plate underside z={half:.2f})")
-if lo < half: print("  FAIL cradle dips below the tab's top face"); ok=False
-else: print("  ok  cradle stays above the tab plane -> out of the working volume")
+def c(name):
+    m = re.search(r"(?m)^\s*%s\s*=\s*(-?[0-9.]+)\s*;" % name, SRC) \
+        or re.search(r"\b%s\s*=\s*(-?[0-9.]+)\s*;" % name, SRC)
+    if not m:
+        sys.exit("cannot read %s from thermal_cam_mount_common.scad" % name)
+    return float(m.group(1))
 
-print("\n"+("PASS" if ok else "FAIL")); sys.exit(0 if ok else 1)
+
+CAM_D, CAM_H, CAM_CLR, WALL = c("CAM_D"), c("CAM_H"), c("CAM_CLR"), c("WALL")
+TAB_FB, TAB_T, FIT, PLATE_T = c("TAB_FB"), c("TAB_T"), c("FIT"), c("PLATE_T")
+ARM_FWD, ARM_UP, LIP = c("ARM_FWD"), c("ARM_UP"), c("LIP")
+SIDE_H, BACK_H, PIV_Z, PAD_R = c("SIDE_H"), c("BACK_H"), c("PIV_Z"), c("PAD_R")
+A_MIN, A_MAX, A_STEP = c("CAM_ANGLE_MIN"), c("CAM_ANGLE_MAX"), c("CAM_ANGLE_STEP")
+CAM_ANGLE, REF_TILT = c("CAM_ANGLE"), c("REF_TILT")
+
+half = TAB_T / 2 + FIT / 2
+y_front = TAB_FB / 2
+top_z1 = half + PLATE_T
+cr_y, cr_z = y_front + ARM_FWD, top_z1 + ARM_UP
+CR_OY = CAM_D + CAM_CLR + 2 * WALL
+
+
+def rot(t, y, z):
+    th = math.radians(t)
+    return (y * math.cos(th) - z * math.sin(th), y * math.sin(th) + z * math.cos(th))
+
+
+# pivot in world, derived at REF_TILT so CAM_ANGLE 30 reproduces the old pose
+_py, _pz = rot(REF_TILT, CR_OY / 2, PIV_Z)
+PIV_WY, PIV_WZ = cr_y + _py, cr_z + _pz
+
+
+def place(t, y, z):
+    """cradle-frame point -> world, for tilt t"""
+    dy, dz = rot(t, y - CR_OY / 2, z - PIV_Z)
+    return (PIV_WY + dy, PIV_WZ + dz)
+
+
+def check(angle, verbose):
+    t = 90 - angle
+    ok = True
+    mid_z = LIP + CAM_H / 2
+    ly, lz = place(t, WALL, mid_z)                       # lens: the open low-y face
+    sy, sz = place(t, WALL + CAM_D + CAM_CLR, mid_z)     # screen: against the back wall
+    ny, nz = ly - sy, lz - sz
+    m = math.hypot(ny, nz)
+    ny, nz = ny / m, nz / m
+    ang = abs(math.degrees(math.atan2(-ny, -nz)))
+
+    if verbose:
+        print("  lens  y=%7.2f z=%7.2f   dY=%+.3f dZ=%+.3f  -> %.1f deg from vertical, %s, %s"
+              % (ly, lz, ny, nz, ang, "INWARD" if ny < 0 else "OUTWARD", "DOWN" if nz < 0 else "UP"))
+    if nz >= 0 or ny >= 0:
+        ok = False
+
+    # every ray across the 42 deg vertical FOV must clear the plate's front-top corner
+    worst = None
+    for a in (ang - 21, ang, ang + 21):
+        if a <= 0:
+            ok = False
+            continue
+        clr = (lz - (ly - y_front) / math.tan(math.radians(a))) - top_z1
+        worst = clr if worst is None else min(worst, clr)
+        if clr <= 0:
+            ok = False
+
+    # nothing below the tab's top face except the clamp
+    pts = [place(t, y, z) for y in (0, CR_OY) for z in (0, max(SIDE_H, BACK_H))]
+    lo = min(p[1] for p in pts)
+    lo = min(lo, PIV_WZ - PAD_R)          # the joint pad counts too
+    if lo < half:
+        ok = False
+    return ok, ang, worst, lo
+
+
+print("current CAM_ANGLE = %g" % CAM_ANGLE)
+ok_now, ang, worst, lo = check(CAM_ANGLE, True)
+print("  FOV clearance over the plate corner: %+.2f mm" % worst)
+print("  lowest point z=%.2f   (tab top face z=%.2f)" % (lo, half))
+
+print("\nsweeping every index position — the tilt is set at assembly, so all of")
+print("these have to aim correctly, not just the one currently in the file:\n")
+print("  %-6s %-10s %-14s %-12s" % ("angle", "aim", "FOV clear", "lowest z"))
+allok = True
+a = A_MIN
+while a <= A_MAX + 1e-9:
+    o, g, w, l = check(a, False)
+    allok &= o
+    print("  %-6g %-10s %-14s %-12s %s"
+          % (a, "%.1f deg" % g, "%+.2f" % w, "%.2f" % l, "ok" if o else "FAIL"))
+    a += A_STEP
+
+print("\n" + ("PASS" if (allok and ok_now) else "FAIL"))
+sys.exit(0 if (allok and ok_now) else 1)

@@ -2,23 +2,30 @@
 
 ![Thermal cam mount](preview.png)
 
-A two-part sandwich clamp that holds a **Sipeed T256s thermal camera** on the LED-56S ring
-light's control-box tab, aimed down at the board.
+A **three-part** mount that holds a **Sipeed T256s thermal camera** on the LED-56S ring light's
+control-box tab, aimed down at the board. A sandwich clamp grips the tab, and the cradle hangs
+off it on a **lockable joint** — set the down-angle anywhere from 30° to 55°, then tighten.
 
 The T256s is registered onto the scope's visible feed so a hot component's bloom labels that
-component. That registration transform is computed once and has to **hold between sessions** — so
-the mount is rigid, non-drifting, and fixed-angle. Anything that can rotate or creep invalidates
-the calibration.
+component. That registration transform is computed once and has to **hold between sessions**, so
+nothing may drift.
+
+**Rigid and adjustable aren't opposites.** v1.0.1 was fixed-angle on the reasoning that anything
+adjustable could creep — which made every aim error a reprint. Adjust-then-clamp gives both: an
+M3 hand-tight in PETG holds on the order of 1.6 N·m of friction at this radius, against the
+camera's ~0.006 N·m of gravity torque about the pivot. That's ~250× margin. The joint is not the
+weak point.
 
 ## Parts
 
 | File | What | Size |
 |---|---|---|
-| `mount_bottom.scad` | bottom plate + bosses | 70.05 × 28.0 × 31.7 mm |
-| `mount_top.scad` | top plate + arm + cam cradle | 70.05 × 57.9 × 37.8 mm |
+| `mount_bottom.scad` | bottom plate + screw bosses | 70.05 × 28.0 × 31.7 mm |
+| `mount_top.scad` | top plate + arm + joint pad | 71.33 × 55.7 × 37.4 mm |
+| `mount_cradle.scad` | the cradle + its joint pad | 34.0 × 32.0 × 54.6 mm |
 
-Two M3 screws into heat-set inserts draw the plates together. Shared dimensions live in
-`thermal_cam_mount_common.scad`.
+Two M3 screws into heat-set inserts draw the plates together, and two more join the cradle to the
+arm — four M3s and four inserts in total. Shared dimensions live in `thermal_cam_mount_common.scad`.
 
 ## Why a sandwich and not a bracket
 
@@ -116,6 +123,29 @@ It probes the real `_cradle()` with OpenSCAD booleans rather than re-deriving th
 
 **Run this and `verify_aim.py` before any print.** Between them they cover the two things a valid mesh can still get wrong: where the lens points, and whether the camera stays in.
 
+## Setting the angle
+
+The cradle pivots on one M3 and locks with a second through an arc slot in the arm's pad. Loosen
+both, swing the cradle, tighten both.
+
+**The range is 30°–55° from vertical, and the floor is geometry, not taste.** Below 30° the top
+plate's own front-top corner clips the bottom of the camera's 42° vertical FOV:
+
+| Angle | FOV clearance over the plate corner |
+|---|---|
+| 28° | **−3.45 mm** — blocked |
+| 29° | **−0.79 mm** — blocked |
+| 30° | +1.30 mm |
+| 35° | +7.48 mm |
+| 55° | +15.50 mm |
+
+That falls off fast, so the slot's end bores are **inset** to make the reachable range exactly
+30°–55°. Hulling bores centred on the endpoints instead would let the screw sit 2.6° past each
+end and set 28°. Probed at 29.0 / 29.4 / 29.6 — all correctly blocked.
+
+You don't need shallower. At 165 mm the thermal sees a 175 × 127 mm patch of board, so the
+objective's spot stays well in frame across the whole range.
+
 ## Recommended print settings
 
 | | |
@@ -124,23 +154,28 @@ It probes the real `_cradle()` with OpenSCAD booleans rather than re-deriving th
 | Layer height | 0.2 mm |
 | Walls | 4 perimeters |
 | Infill | 40 % — this is a clamp |
-| Supports | **`mount_top`: YES. `mount_bottom`: none.** See below |
+| Supports | **`mount_cradle` only.** See below |
 
-### Supports — mount_top only
+### Supports — mount_cradle only
 
-Measured off the exported mesh, not eyeballed:
+Measured off the exported meshes in each part's own print orientation:
 
-| Part | Surface that is unsupported overhang steeper than 45° |
-|---|---|
-| `mount_top` | **13.4%** |
-| `mount_bottom` | **0.0%** |
+| Part | Unsupported overhang steeper than 45° | |
+|---|---|---|
+| `mount_bottom` | **0.0%** | none |
+| `mount_top` | **2.8%** | none |
+| `mount_cradle` | **7.5%** | light supports |
 
-`mount_top` carries two ~470 mm² faces that are **flat-down** — 0.1° off horizontal, hanging in
-air — plus the cradle's 30° faces, because the cradle is tilted 60° from vertical by design. That
-is not a marginal overhang; it is a ceiling.
+**Splitting the cradle out is what killed the support problem.** In v1.0.1 the cradle was fused to
+the top plate at 60°, which put two ~470 mm² flat-down faces in mid-air — `mount_top` measured
+14.3%. As its own part it prints in its own orientation and `mount_top` drops to 2.8%.
 
-This README said "Supports: none" for both parts until 2026-08-27, and a print was started on
-that basis and killed. `mount_bottom` genuinely needs none — it is a plate with a pocket.
+`mount_cradle` prints **on its side, pad down**. That's both the cheapest orientation (7.5% against
+16.2% standing up) and the right one — the pad is the joint's mating face, so printing it against
+the bed makes it flat.
+
+This README said "Supports: none" for both parts until 2026-08-27, and a print was started on that
+basis and killed.
 
 **Set supports per-object.** If both parts share a plate, a global support setting grows them
 under `mount_bottom` for nothing.
