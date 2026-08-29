@@ -12,7 +12,7 @@ A **5×3 Gridfinity baseplate** that wraps the raised plateau on a microscope bo
 |---|---|---|---|
 | **Baseplate** | `scope_wipe_plate.scad` | 210 × 136.38 × 17.85 mm | ×1 — **grid down**, no supports |
 | **Wrap coupon** | `coupons/scope_wrap_coupon.scad` | 21 × 136.38 × 17.85 mm | **print first** — ~9 g |
-| **Seat coupon** | `coupons/scope_seat_coupon.scad` | 42 × 44 × 17.85 mm | **print first** — ~4 g |
+| **Seat coupon** | `coupons/scope_seat_coupon.scad` | 44 × 50 × 17.85 mm | **print first** — ~5 g |
 | **Corner gauge** | `coupons/scope_corner_gauge.scad` | 192 × 94 × 3 mm | only if your stand differs |
 
 Dimensions live in `scope_plate_common.scad`.
@@ -77,7 +77,9 @@ It doesn't test the pole slot or the boss position. Those live at the other end.
 | Bin bottoms out proud | Something is in the socket — run `check_sockets.py` before reprinting |
 | Bin seats but rocks | The end wall is standing proud of the grid |
 
-Print it on the same plate as the wrap coupon. 13 g of the two together against the plate's 50.
+Print it on the same plate as the wrap coupon. 14 g of the two together against the plate's 50.
+
+Its cut planes are held off both the socket boundary at 21 and the pole slot's wall at 22 — the first version cut at exactly 22 and produced a sliver triangle on OpenSCAD 2021.01 that rendered clean locally. Swept on the CI toolchain: 22 fails, 19/23/25 pass.
 
 ## Fit
 

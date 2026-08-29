@@ -28,12 +28,20 @@
 include <../scope_plate_common.scad>
 $fn = 96;
 
-// The far end cell of the middle column, x 63..105, plus the skirt end wall.
-// 22 in Y, not 21, so the cut misses the exact cell boundary where two socket
-// openings meet at the top face — a cut plane tangent to that line is the same
-// hazard the pole slot has to dodge.
+// The far end cell of the middle column plus the skirt end wall.
+//
+// THE Y HALF-WIDTH IS 25, AND THE NUMBER MATTERS. The first version used 22,
+// which is exactly SLOT_W/2 — the pole slot's own wall plane, at the far end of
+// the plate. Cutting on that plane produced a 9.03e-04 mm sliver triangle on
+// OpenSCAD 2021.01. It rendered clean on 2026.06, which is how it reached CI.
+//
+// Swept on the CI toolchain: 22 fails at every X offset tried; 19, 23 and 25 all
+// pass. 25 sits clear of both hazards — the socket boundary at 21 and the slot
+// wall at 22.
+//
+// X is held 2 mm into row 4 for the same reason, off the row 4 / row 5 boundary.
 intersection() {
     scope_wipe_plate();
-    translate([GRID_NX*GF/2 - GF, -22, -SKIRT_DEPTH - 1])
-        cube([GF + 1, 44, SKIRT_DEPTH + BP_H + 2]);
+    translate([GRID_NX*GF/2 - GF - 2, -25, -SKIRT_DEPTH - 1])
+        cube([GF + 3, 50, SKIRT_DEPTH + BP_H + 2]);
 }
