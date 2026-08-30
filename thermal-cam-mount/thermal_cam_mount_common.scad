@@ -77,6 +77,8 @@ SIDE_H = 30;
 // the camera FORWARD out of this cradle, so the front tabs are what retain it.
 BACK_H = 19;
 LIP=4.5; CORNER=6; CABLE_W=12; WALL=3;
+TAB_PROJ = CORNER;      // how far a retaining tab reaches over the pocket
+TAB_RISE = TAB_PROJ + 1;// 7 over 6 -> 40.6 deg from vertical, self-supporting
 // PORT: the camera runs off its MALE plug, which is on the TOP edge (user,
 // 2026-08-28). The plug protrudes ~7 mm, so with the body at z 4.50..39.50 the
 // plug and its right-angle adapter live at z 39.50..46.50 — above the cradle
@@ -207,8 +209,31 @@ module _cradle() {
             translate([-ow/2, 0, 0]) cube([WALL, oy, SIDE_H]);
             translate([ iw/2, 0, 0]) cube([WALL, oy, SIDE_H]);
             translate([-ow/2, oy - WALL, 0]) cube([ow, WALL, BACK_H]);
-            for (sx = [-ow/2, iw/2 - CORNER])
-                translate([sx, 0, SIDE_H - EPS]) cube([WALL + CORNER, WALL + 2, WALL + EPS]);
+            // Retaining tabs, CORBELLED so they carry themselves.
+            //
+            // They used to be plain slabs sitting on the wall tops, projecting
+            // 6 mm straight over the pocket at z 30. That is a 36 mm2 flat
+            // CEILING 30 mm in the air, and it is on the one feature that stops
+            // the camera falling out — exactly the wrong place to accept droop.
+            // It was 2.7% of the part's surface, which is why it got waved
+            // through as "no supports"; area is the wrong way to judge a
+            // ceiling.
+            //
+            // Now each tab starts flush with the wall at z=SIDE_H and reaches
+            // its full projection at z=SIDE_H+TAB_RISE, so its underside is a
+            // ramp at 40.6 deg from vertical — inside the 45 deg a printer
+            // carries unaided. Retention improves rather than suffers: the
+            // bearing edge moves UP to 37, further above the camera's centre of
+            // mass at 22. Insertion gets easier too, because the gap between the
+            // tabs now opens from 30.6 mm at the top to the full 42.6 at z=30
+            // instead of being a hard step.
+            for (s = [-1, 1])
+                hull() {
+                    translate([s < 0 ? -ow/2 : iw/2, 0, SIDE_H - EPS])
+                        cube([WALL, WALL + 2, TAB_RISE + EPS]);
+                    translate([s < 0 ? -ow/2 : iw/2 - TAB_PROJ, 0, SIDE_H + TAB_RISE - EPS])
+                        cube([WALL + TAB_PROJ, WALL + 2, EPS]);
+                }
         }
         translate([-iw/2, WALL, LIP]) cube([iw, id, CAM_H + CAM_CLR + 10]);
         if (CABLE_DIR == "down")
@@ -222,13 +247,39 @@ module _cradle() {
 // Joint pad on the CRADLE, in the cradle's own frame. Sits just outboard of the
 // right side wall — right, because the notes put the thermal lens offset to the
 // LEFT and the pad must not shadow it.
-module _cradle_pad() {
-    difference() {
-        translate([PAD_X, CR_OY/2, PIV_Z]) rotate([0,90,0]) cylinder(r = PAD_R, h = PAD_T);
-        for (p = [[0,0], [0,-IDX_R]])
-            translate([PAD_X - EPS, CR_OY/2 + p[0], PIV_Z + p[1]])
-                rotate([0,90,0]) cylinder(d = INSERT_D, h = PAD_T + 2*EPS);
+module _cradle_pad_solid() {
+    translate([PAD_X, CR_OY/2, PIV_Z]) rotate([0,90,0]) cylinder(r = PAD_R, h = PAD_T);
+}
+
+// Foot under the joint pad.
+//
+// The pad is a disc standing on edge, cantilevered off the side wall, and its
+// lowest point is 3 mm above the bed with NOTHING under it. The bottom of a
+// circle is a horizontal surface, so that was 18.8 mm2 of near-flat ceiling
+// (86 deg) printing into air — a curl-and-knock failure, not cosmetic droop.
+// The overhang-percentage metric missed it because 2.2% of surface area sounds
+// like nothing; area is the wrong way to judge a ceiling.
+//
+// The foot carries the disc down to the bed, tapering outward at ~33 deg from
+// vertical so it needs no help itself. It also earns its place structurally:
+// the pad carries the whole camera load, and it was previously joined to the
+// cradle only across its overlap with the wall.
+PAD_FOOT_H = 6.5;   // above this the disc's own surface is shallower than 45 deg
+module _pad_foot() {
+    top_hw = sqrt(PAD_R*PAD_R - (PIV_Z - PAD_FOOT_H)*(PIV_Z - PAD_FOOT_H));
+    hull() {
+        translate([PAD_X, CR_OY/2 - 4.3, 0]) cube([PAD_T, 8.6, EPS]);
+        translate([PAD_X, CR_OY/2 - top_hw, PAD_FOOT_H - EPS]) cube([PAD_T, 2*top_hw, EPS]);
     }
+}
+
+// Bores are cut from the FINISHED union, not from the disc alone — the foot
+// reaches z 6.5 and the index insert's bore spans 4.7..9.3, so cutting the disc
+// first would leave the foot filling the bottom of that bore.
+module _cradle_pad_bores() {
+    for (p = [[0,0], [0,-IDX_R]])
+        translate([PAD_X - EPS, CR_OY/2 + p[0], PIV_Z + p[1]])
+            rotate([0,90,0]) cylinder(d = INSERT_D, h = PAD_T + 2*EPS);
 }
 
 // Arm: carries the joint pad up off the TOP plate, forward of the tab's front
@@ -316,7 +367,10 @@ module mount_top() {
 // 60 deg fused overhang. The tilt is set at assembly by which index hole the
 // second screw goes through.
 module mount_cradle() {
-    union() { _cradle(); _cradle_pad(); }
+    difference() {
+        union() { _cradle(); _cradle_pad_solid(); _pad_foot(); }
+        _cradle_pad_bores();
+    }
 }
 
 // Assembly view only — never exported as a part.

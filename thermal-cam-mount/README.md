@@ -22,7 +22,7 @@ weak point.
 |---|---|---|
 | `mount_bottom.scad` | bottom plate + screw bosses | 70.05 × 28.0 × 31.7 mm |
 | `mount_top.scad` | top plate + arm + joint pad | 71.33 × 51.7 × 33.4 mm |
-| `mount_cradle.scad` | the cradle + its joint pad | 54.6 × 24.0 × 33.0 mm |
+| `mount_cradle.scad` | the cradle + its joint pad | 54.6 × 24.0 × 37.0 mm |
 
 Two M3 screws into heat-set inserts draw the plates together, and two more join the cradle to the
 arm — four M3s and four inserts in total. Shared dimensions live in `thermal_cam_mount_common.scad`.
@@ -83,7 +83,7 @@ The camera sits on the lip, so it spans z 4.50 → 39.50 and its centre of mass 
 
 | | v1.0.1 | now |
 |---|---|---|
-| Material in front of the camera (what retains it) | z 0 → **19.00** | z 0 → **33.00** |
+| Material in front of the camera (what retains it) | z 0 → **19.00** | z 0 → **37.00** |
 | Material beside it | z 0 → 19.00 | z 0 → 33.00 |
 | Camera | z 4.50 → 39.50, **CoM at 22.00** | unchanged |
 
@@ -115,8 +115,8 @@ python3 check_retention.py
 camera        z   4.50 ..  39.50    centre of mass z  22.00
 retention     z   0.00 ..  33.00
 
-retention reaches +11.00 mm relative to the centre of mass
-PASS  28.5 mm of the camera's 35.0 mm height is gripped (81%)
+retention reaches +15.00 mm relative to the centre of mass
+PASS  32.5 mm of the camera's 35.0 mm height is gripped (93%)
 ```
 
 It probes the real `_cradle()` with OpenSCAD booleans rather than re-deriving the geometry, so it can't drift from the model. Put `SIDE_H` back to 16 and it fails with `-3.00 mm` — it catches the exact bug that shipped.
@@ -164,15 +164,31 @@ Measured off the exported meshes in each part's own print orientation:
 |---|---|---|
 | `mount_bottom` | **0.0%** | none |
 | `mount_top` | **1.8%** | none |
-| `mount_cradle` | **2.7%** | none |
+| `mount_cradle` | **0.6%** | none |
 
 **Splitting the cradle out is what killed the support problem.** In v1.0.1 it was fused to the top
 plate at 60°, putting two ~470 mm² flat-down faces in mid-air — `mount_top` measured 14.3%. As its
 own part each piece prints in its own orientation.
 
-`mount_cradle` prints **upright, as exported**. That only became the right answer once `PAD_R` came
-down from 16 to 12 — at 16 the joint disc was itself the overhang, and lying it on its side was
-better (7.5% against 16.2%). At 12 upright wins outright: 2.7% against 7.4% on its side.
+`mount_cradle` prints **upright, as exported** — 0.6% against 7.6% on its side and 17.0% on its back.
+
+**Two features had to change to earn that, and a percentage hid both of them.**
+
+*The retaining tabs* used to be plain slabs on the wall tops, projecting 6 mm straight over the
+pocket at z 30 — 36 mm² of flat **ceiling** 30 mm in the air, on the one feature that stops the
+camera falling out. They're corbelled now: each starts flush with the wall at z 30 and reaches full
+projection at z 37, so the underside is a 41° ramp. Retention *improved* — the bearing edge moved
+up to 37, and grip went from 81% of the camera's height to **93%**.
+
+*The joint pad* is a disc on edge, cantilevered off the side wall, and its lowest point sat 3 mm
+above the bed with nothing underneath. The bottom of a circle is horizontal, so that was another
+18.8 mm² of near-flat ceiling printing into air. It has a tapered foot to the bed now (33° sides),
+which also ties the pad to the cradle body — worth having, since the pad carries the whole camera
+load and was previously joined only across its overlap with the wall.
+
+**Both were reported as "2.7%, no supports" before.** Surface-area percentage is the wrong way to
+judge a ceiling: the area is trivial and the consequence is a curled first layer knocked by the
+nozzle. Look at the steepest *angle* and what's under it.
 
 This README said "Supports: none" for both parts until 2026-08-27 when it wasn't true, and a print
 was started on that basis and killed. It is true now, and the numbers above are measured.
