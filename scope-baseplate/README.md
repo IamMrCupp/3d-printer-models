@@ -112,6 +112,29 @@ Not fit — manifoldness. The cell pitch is 42 and the boss is 39.78, so any "na
 
 44 clears the whole middle column and passes 1 mm into the neighbouring sockets' outer taper — comfortably off every boundary. It costs a 1 mm nick in one wall of the two cells either side, which is cosmetic: Gridfinity retention is perimeter-wide.
 
+## What v2.0.1 got wrong
+
+**It slid off the plateau with a push.** The wrap was open at the near end, so nothing stopped the plate sliding straight back off — and the pole didn't help, because the slot is open the same way.
+
+That end was opened so the plate could slide on past the pole without pulling the microscope head off. The mistake was treating that as forcing the end open. It only has to let the **pole** through, not the whole plateau.
+
+So the near-end wall is back, with a 44 mm channel through it aligned with the pole slot, and the plate goes on differently:
+
+1. Hold it **above** the plateau and slide it sideways until the pole is in the slot — the pole passes through the channel on the way
+2. **Lower it straight down.** All four walls drop over the plateau's edges
+
+Sliding off is now blocked by the two wall segments either side of the channel — ~43.7 mm each against a 130.18 mm plateau, which cannot pass a 44 mm gap. The pole can. This needs no measurement we don't already have; in particular it does **not** need the pole diameter or the boss height, which a keyhole throat would have.
+
+Verified on the model, not asserted:
+
+| | |
+|---|---|
+| seated on the plateau | clear |
+| pole channel through the near wall | clear |
+| **pushed toward the near end, +2 / +5 / +10 / +20 / +40 mm** | **BLOCKED at every offset** |
+| lifted 13 / 18 / 25 mm and slid 60 mm across | clear — it still goes on |
+| boss-diameter column travelling from the near end to its seat | clear at all 11 positions |
+
 ## What v2.0.0 got wrong
 
 **The skirt ran through the sockets of the end rows, and nothing seated.**

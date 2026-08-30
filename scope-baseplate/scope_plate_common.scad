@@ -107,18 +107,30 @@ SKIRT_IN_L  = BASE_L + FIT;   SKIRT_IN_W  = BASE_W + FIT;
 SKIRT_OUT_L = SKIRT_IN_L + 2*SKIRT_WALL;
 SKIRT_OUT_W = SKIRT_IN_W + 2*SKIRT_WALL;
 
-// The wrap is a U, open at the NEAR end — the same end the pole slot runs off.
-// It has to be: the plate slides on lengthwise, so anything hanging down across
-// that end would hit the plateau's edge and stop it 12 mm short.
+// THE WRAP IS CLOSED ON ALL FOUR SIDES. The near-end wall carries a channel
+// exactly as wide as the pole slot above it, and nothing more.
 //
-// OPEN_X is where the skirt starts. It sits 1.6 mm PAST the point where the
-// end wall's corner arc becomes the straight side wall (-86.6), not on it — a
-// cut plane tangent to an arc is the XY twin of the counterbore bug.
-OPEN_X = -(SKIRT_IN_L/2 - CORNER) + 1.6;
+// v2.0.1 left that whole end open, on the reasoning that the plate slides on
+// lengthwise so anything hanging down across that end would hit the plateau.
+// True — but it also means nothing stops the plate sliding straight back OFF,
+// and the pole does not help, because the slot is open the same way. The
+// printed plate slid off with a push.
+//
+// The fix is to change how it goes on. Instead of sliding on at plateau level:
+//     1. hold the plate ABOVE the plateau and slide it sideways until the pole
+//        is in the slot — the pole passes through this channel on the way
+//     2. lower it straight down; all four walls drop over the plateau's edges
+//
+// Now sliding off is blocked by the two wall segments either side of the
+// channel: they are ~43.7 mm each, and the plateau is 130.18 wide, so it cannot
+// pass a 44 mm gap. The pole can. That is the whole trick, and it needs no
+// measurement we do not already have — in particular it does NOT need the pole
+// diameter or the boss height, which a keyhole throat would have.
+SKIRT_GAP = SLOT_W;   // channel in the near-end wall — pole passes, plateau cannot
+
 assert(SKIRT_DEPTH < STEP_H, "skirt deeper than the step — it will bottom out");
 assert(SKIRT_OUT_W > GRID_NY*GF, "skirt inboard of the grid — no border to hang it from");
 assert(SKIRT_OUT_L < GRID_NX*GF, "skirt outboard of the grid ends — it would float");
-assert(OPEN_X < BOSS_X - BOSS_D/2, "skirt starts before the boss — plate cannot slide on");
 
 module _rrect(w, d, r) { offset(r) offset(-r) square([w, d], center = true); }
 
@@ -161,12 +173,22 @@ module scope_wipe_plate() {
                         _rrect(SKIRT_IN_L, SKIRT_IN_W, CORNER);
             }
         }
-        // Open the near end. Below z=0 only — the plate above it stays whole.
-        // The cut's top face BUTTS z=0 exactly rather than overlapping by an
-        // epsilon: an epsilon here shaves a sliver off the plate's underside,
-        // which is what broke riser_spacer_2in on 2021.01.
-        translate([-GRID_NX*GF, -SKIRT_OUT_W, -SKIRT_DEPTH - 1])
-            cube([GRID_NX*GF + OPEN_X, 2*SKIRT_OUT_W, SKIRT_DEPTH + 1]);
+        // Channel through the near-end wall for the pole. Below z=0 only — the
+        // plate above it stays whole, and the cut's top face BUTTS z=0 exactly
+        // rather than overlapping by an epsilon, which is what broke
+        // riser_spacer_2in on 2021.01.
+        //
+        // Aligned with the pole slot above it (same width, same BOSS_Y), so the
+        // pole drops through both as one continuous channel.
+        // Same rounded profile as the slot above it, not a sharp-cornered cube.
+        // A cube here leaves the channel's square corners meeting the slot's
+        // r=3 corners at z=0 — the profile changes shape abruptly across that
+        // plane, and isolating the near end produced a 9.03e-04 mm sliver on
+        // 2021.01. One continuous profile through both is cleaner and cheaper
+        // than special-casing it.
+        translate([0, 0, -SKIRT_DEPTH - 1]) linear_extrude(SKIRT_DEPTH + 1)
+            translate([(-SKIRT_IN_L/2 + 1 - GRID_NX*GF)/2, BOSS_Y])
+                _rrect(GRID_NX*GF - SKIRT_IN_L/2 + 1, SKIRT_GAP, 3);
         // Pole slot: rounded rect, open at the near end. Started well outside the
         // plate (-GRID_NX*GF) so the cut PASSES THROUGH the end face rather than
         // stopping on it.
