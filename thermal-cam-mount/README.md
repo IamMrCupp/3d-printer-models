@@ -15,8 +15,8 @@ the calibration.
 
 | File | What | Size |
 |---|---|---|
-| `mount_bottom.scad` | bottom plate + bosses | 70.05 × 28.0 × 31.7 mm |
-| `mount_top.scad` | top plate + web + camera tray | 70.05 × 78.3 × 25.9 mm |
+| `mount_bottom.scad` | bottom plate + web + camera tray | 70.05 × 78.3 × 62.8 mm |
+| `mount_top.scad` | top plate, counterbored | 70.05 × 28.0 × 5.0 mm |
 
 Two M3 screws into heat-set inserts draw the plates together. Shared dimensions live in
 `thermal_cam_mount_common.scad`.
@@ -67,6 +67,21 @@ lead drop clear.
 LEFT" and that offset has never been measured. A window cut to a guessed centre would blind the
 camera, and no mesh check catches a part that's the right shape over the wrong spot. 34 × 26 in a
 42 × 35 body leaves a 4 mm border all round and clears the optic wherever it sits.
+
+## The tray hangs BELOW the clamp
+
+The control housing sits **behind** the lights and the space under it is clear. An earlier version
+of this file claimed *"everything below the tab is the working volume"* and pushed the camera up on
+top of the clamp. **That claim was wrong** and it is what put the camera in the worse place.
+
+Below is better: it drops the camera about **34 mm**, much closer to the objective's plane, which
+cuts the parallax the HUD registration has to correct — the whole reason the mount exists.
+
+The pre-2026-08-08 version that hung below failed because of an **inverted tilt sign** that aimed
+the lens up into the objective. That was a real bug, and the position got blamed for it. A flat
+tray looking down through a window cannot repeat it.
+
+`mount_bottom` now carries the web and tray; `mount_top` is a plain counterbored plate.
 
 ## Why the tray reaches 26 mm out
 

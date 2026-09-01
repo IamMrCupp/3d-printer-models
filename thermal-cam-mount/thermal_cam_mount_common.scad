@@ -89,7 +89,23 @@ WIN_W = 34; WIN_D = 26;
 // aims the lens nearer straight down and gives up inward coverage. Reaching
 // further out costs 6.5 mm of offset against a 175 mm field — nothing.
 ARM_FWD = 26;       // tray centre forward of the tab's front face
-ARM_UP  = 3;        // tray above the top plate — see the working-volume assert
+// THE TRAY HANGS BELOW THE BOTTOM PLATE. The control housing sits BEHIND the
+// lights and the space under it is clear (user, 2026-08-31, after sending photos
+// repeatedly). The old header claim that "everything below the tab is the
+// working volume" was simply wrong, and it is what pushed the camera up top.
+//
+// Below is the better place: it drops the camera ~34 mm, much closer to the
+// objective's plane, which cuts the parallax the HUD registration has to correct.
+// The pre-2026-08-08 version that hung below failed on an INVERTED TILT SIGN
+// that aimed the lens up into the objective — a real bug that got blamed on the
+// position. A flat tray looking down through a window cannot repeat it.
+TRAY_BELOW = true;
+ARM_UP  = 3;        // used only when TRAY_BELOW is false
+
+TRAY_W = CAM_W + CAM_CLR + 2*BORDER;    // 52.6
+TRAY_D = CAM_H + CAM_CLR + 2*BORDER;    // 45.6
+POCK_W = CAM_W + CAM_CLR;
+POCK_D = CAM_H + CAM_CLR;
 
 // ============================================================================
 // derived
@@ -101,17 +117,15 @@ boss_x  = TAB_W/2 + BOSS_GAP + BOSS_R;
 boss_y  = y_front - BOSS_INSET_Y;
 bot_z0  = -half - PLATE_T;                  // underside of the bottom plate
 top_z1  = half + PLATE_T;                   // top face of the top plate
-cr_y    = y_front + ARM_FWD;                // cradle origin, pre-rotation
-cr_z    = top_z1 + ARM_UP;
+cr_y    = y_front + ARM_FWD;                // tray origin, pre-rotation
+// Hanging below, the camera sits BETWEEN the tray and the bottom plate, so the
+// drop has to clear the tray's own inboard rise plus the camera's full depth.
+TRAY_DROP = (TRAY_D/2)*sin(TRAY_TILT) + (TRAY_T + CAM_D + CAM_CLR)*cos(TRAY_TILT) + 3;
+cr_z    = TRAY_BELOW ? bot_z0 - TRAY_DROP : top_z1 + ARM_UP;
 
 module _plate() {                            // flat footprint in X-Y, unit thickness at z=0
     translate([-PW/2, y_back, 0]) cube([PW, GRIP_LEN, PLATE_T]);
 }
-
-TRAY_W = CAM_W + CAM_CLR + 2*BORDER;    // 52.6
-TRAY_D = CAM_H + CAM_CLR + 2*BORDER;    // 45.6
-POCK_W = CAM_W + CAM_CLR;
-POCK_D = CAM_H + CAM_CLR;
 
 module _rr(w, d, r) { offset(r) offset(-r) square([w, d], center = true); }
 
@@ -167,16 +181,22 @@ ARM_STRIP_W = POCK_W - 6;
 // deg — an honest intersection with nothing coincident, coplanar or tangent.
 // It buries 4 mm into the top plate at the bottom and stops inside the tray's
 // thickness at the top.
-ARM_Y0 = 14;        // web spans this in Y...
-ARM_Y1 = 24;        //   ...to this, bracketing the tray's inboard edge at 20.1
-ARM_TOP = 28.5;     // stops inside the tray (its underside is at 26.9 there)
+// The web spans Y 14..24. That overlaps the plate (which ends at y_front 16.26)
+// at its inboard end, and at its outboard end maps to tray-frame y -18.8 —
+// still INBOARD of the camera pocket's edge at -17.8, so it never intrudes on
+// the camera.
+ARM_Y0 = 14;
+ARM_Y1 = 24;
 module _arm() {
-    translate([-ARM_STRIP_W/2, ARM_Y0, top_z1 - 4])
-        cube([ARM_STRIP_W, ARM_Y1 - ARM_Y0, ARM_TOP - (top_z1 - 4)]);
+    z0 = TRAY_BELOW ? cr_z + (TRAY_D/2)*sin(TRAY_TILT) + TRAY_T/2 : top_z1 - 4;
+    z1 = TRAY_BELOW ? bot_z0 + 4 : 28.5;
+    translate([-ARM_STRIP_W/2, ARM_Y0, z0])
+        cube([ARM_STRIP_W, ARM_Y1 - ARM_Y0, z1 - z0]);
 }
 
 // ---- part 1: bottom plate + bosses ----
 module mount_bottom() {
+    if (TRAY_BELOW) { _arm(); translate([0, cr_y, cr_z]) rotate([-TRAY_TILT,0,0]) _tray(); }
     union() {
         difference() {
             union() {
@@ -211,7 +231,6 @@ module mount_top() {
                 translate([0,0,PLATE_T - 1.6]) cylinder(d = SCREW_CB, h = 1.6 + 2*EPS);
             }
         }
-        _arm();
-        translate([0, cr_y, cr_z]) rotate([-TRAY_TILT, 0, 0]) _tray();
+        if (!TRAY_BELOW) { _arm(); translate([0, cr_y, cr_z]) rotate([-TRAY_TILT,0,0]) _tray(); }
     }
 }
