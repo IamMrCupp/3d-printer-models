@@ -66,9 +66,18 @@ CAM_ANGLE = 30;   // tilt from vertical → lens looks down at the board
 // (49.65 x 32.51 x 26.42) is unchanged — that half was never the problem.
 TRAY_T    = 3.0;    // tray thickness — the reference's
 TRAY_TILT = 14;     // deg off horizontal — the reference's 14.1, rounded
-BORDER    = 5;      // material around the camera pocket
+BORDER    = 8;      // material around the camera pocket. 8, not 5, so the
+                    //   lips stay over solid tray instead of hanging past its edge
 POST_W    = 4;      // corner post footprint
-POST_H    = 10;     // camera is 14 deep; 10 fences it without burying it
+// POSTS REACH THE CAMERA'S TOP AND THEN HOOK OVER IT. The first cut made them
+// plain 10 mm pins: they fenced the camera at four corners and did nothing else,
+// so on a 14 deg tray it slid to the low pair and lifted straight out. 10 mm did
+// not even reach the 14 mm top face.
+POST_H    = CAM_D + CAM_CLR;   // 14.6 — level with the camera's top face
+LIP_PROJ  = 3.0;    // how far each lip reaches IN over the camera
+LIP_RISE  = 4.0;    // 3 over 4 -> 37 deg from vertical, so the lip's underside
+                    //   carries itself and needs no support
+
 PLUG_W    = 14;     // relief notch for the male plug + lead, OUTBOARD side
 
 // ⚠️ THE WINDOW IS DELIBERATELY OVERSIZE. The notes record the thermal lens as
@@ -137,8 +146,22 @@ module _tray() {
         union() {
             linear_extrude(TRAY_T) _rr(TRAY_W, TRAY_D, 3);
             for (sx = [-1, 1], sy = [-1, 1])
-                translate([sx*(POCK_W/2 + POST_W/2), sy*(POCK_D/2 + POST_W/2), TRAY_T - EPS])
+                translate([sx*(POCK_W/2 + POST_W/2), sy*(POCK_D/2 + POST_W/2), TRAY_T - EPS]) {
                     linear_extrude(POST_H + EPS) _rr(POST_W, POST_W, 1);
+                    // Corbelled lip: a TAPERED EXTRUDE, not a hull. Hulling two
+                    // EPS-thin slabs is what produced a 6.7e-04 mm sliver here,
+                    // and it is the same thing that cost five attempts on the
+                    // arm. linear_extrude's scale gives the taper directly, with
+                    // nothing coincident anywhere.
+                    //
+                    // It grows LIP_PROJ on every side over LIP_RISE — 3 over 4,
+                    // 37 deg from vertical, so the underside carries itself. The
+                    // inward growth is what hooks over the camera; the outward
+                    // growth is why BORDER is 8.
+                    translate([0, 0, POST_H])
+                        linear_extrude(LIP_RISE, scale = (POST_W + 2*LIP_PROJ)/POST_W)
+                            _rr(POST_W, POST_W, 1);
+                }
         }
         // lens window
         translate([0, 0, -EPS]) linear_extrude(TRAY_T + 2*EPS) _rr(WIN_W, WIN_D, 4);
