@@ -28,9 +28,14 @@ Parked flat, the gun's auto-off only fired about **45% of the time**. Tilting it
 settle the gun into the cradle instead of leaving it balanced on the magnet. 20°, nozzle end
 down — the user's call on both.
 
-**Only the axis matters, not which way it points.** A Gridfinity plate spins 180° on the grid, so
-the ramp is cut rising along +X and you park the plate with the nozzle at the low end. The rise
-runs along the 36 mm hole spacing.
+**The rise runs across the 21 mm spacing, not the 36.** The two screws that are 36 mm apart sit at
+the *same* height — that side stays level — and the ramp climbs from one 21 mm row to the other.
+
+⚠️ **`v2.1.0` shipped this the wrong way round** and tilted the bracket about the wrong axis. If you
+printed that one, it does not sit right; reprint.
+
+Only the *sign* is free: a Gridfinity plate spins 180° on the grid, so the ramp is cut rising along
++Y and you park the plate with the nozzle at the low end.
 
 Three things follow from tilting a bolt-from-below plate, and all three are easy to miss:
 

@@ -43,9 +43,13 @@
 // Tilting it lets gravity settle the gun into the cradle instead of leaving it
 // balanced. User's call on the angle and the direction: nozzle end DOWN.
 //
-// ONLY THE AXIS MATTERS, NOT THE SIGN. A Gridfinity plate spins 180° on the
-// grid, so the ramp is cut rising along +X and you park the plate with the
-// nozzle at the low end. The rise runs along the 36 mm hole spacing.
+// THE RISE RUNS ACROSS THE 21 mm SPACING, NOT THE 36. The two screws that are
+// 36 mm apart sit at the SAME height — that side stays level — and the ramp
+// climbs from one 21 mm row to the other. v2.1.0 shipped with this the other way
+// round and tilted the bracket about the wrong axis.
+//
+// Only the SIGN is free: a Gridfinity plate spins 180° on the grid, so the ramp
+// is cut rising along +Y and you park the plate with the nozzle at the low end.
 //
 // ⚠️ HOLE_X IS MEASURED ON THE BRACKET, WHICH IS NOW TILTED. 36 mm centre to
 // centre is a distance along the bracket's own face; in PLAN that foreshortens
@@ -76,8 +80,11 @@
 include <../lib/gridfinity.scad>
 
 /* [Bracket] */
-HOLE_X  = 36.0;   // measured 2026-08-20, centre to centre ON THE BRACKET FACE
-HOLE_Y  = 21.0;   // measured, centre to centre (across the tilt axis — unchanged)
+HOLE_X  = 36.0;   // measured 2026-08-20, centre to centre. ALONG the tilt axis,
+                  //   so both of these sit at the same height and it is NOT
+                  //   foreshortened
+HOLE_Y  = 21.0;   // measured, centre to centre ON THE BRACKET FACE — this is the
+                  //   pair the ramp climbs between, so this one foreshortens
 
 /* [Ramp] */
 TILT = 20;        // [0:1:35] degrees. 0 gives the old flat plate back.
@@ -101,17 +108,19 @@ DECK = 5.0;     // [3:0.5:14] sized by SCREW REACH, not breakthrough. See header
 W     = 2*GF - 0.5;
 Z_LOW = BIN_BASE_H + RAMP_LOW;          // deck top at the ramp's LOW edge
 H     = Z_LOW + W*tan(TILT);            // ...and at the high edge
-HOLE_X_PLAN = HOLE_X*cos(TILT);         // foreshortened — see header
+HOLE_Y_PLAN = HOLE_Y*cos(TILT);         // foreshortened — see header
 REACH = DECK;                           // plastic the screw crosses, BOTH holes
 
-function face_z(x) = Z_LOW + (x + W/2)*tan(TILT);
+function face_z(y) = Z_LOW + (y + W/2)*tan(TILT);
 
-assert(HOLE_X_PLAN + HEAD_D + 3 < W, "Head bores too wide for a 2x2.");
-assert(DECK < face_z(-HOLE_X_PLAN/2)/cos(TILT),
+assert(HOLE_X + HEAD_D + 3 < W, "Head bores too wide for a 2x2.");
+assert(HOLE_Y_PLAN + HEAD_D + 3 < W, "Head bores too deep for a 2x2.");
+assert(DECK < face_z(-HOLE_Y_PLAN/2)/cos(TILT),
        "DECK exceeds the material above the LOW hole — no room for a counterbore.");
 echo(str("plate ", W, " square, ", Z_LOW, " tall at the low edge and ", H,
-         " at the high; ramp ", TILT, " deg; holes ", HOLE_X_PLAN,
-         " apart in plan (", HOLE_X, " on the bracket); screw crosses ", REACH,
+         " at the high; ramp ", TILT, " deg; the 21 pair is ", HOLE_Y_PLAN,
+         " apart in plan (", HOLE_Y, " on the bracket), the 36 pair is level",
+         "; screw crosses ", REACH,
          " mm -> needs a ", REACH + 4, " mm screw"));
 
 difference() {
@@ -125,13 +134,13 @@ difference() {
     bin_blank(2, 2, H + 1);
 
     // the ramp itself — everything above a plane through the low edge at TILT
-    translate([-W/2, 0, Z_LOW]) rotate([0, -TILT, 0])
-        translate([-0.01, -W, 0]) cube([3*W, 2*W, 3*H]);
+    translate([0, -W/2, Z_LOW]) rotate([TILT, 0, 0])
+        translate([-W, -0.01, 0]) cube([2*W, 3*W, 3*H]);
 
     for (sx = [-1, 1], sy = [-1, 1]) {
-        x = sx*HOLE_X_PLAN/2;
-        // bores run along the ramp's NORMAL: down and toward +X
-        translate([x, sy*HOLE_Y/2, face_z(x)]) rotate([0, 180 - TILT, 0]) {
+        y = sy*HOLE_Y_PLAN/2;
+        // bores run along the ramp's NORMAL: down and toward +Y
+        translate([sx*HOLE_X/2, y, face_z(y)]) rotate([180 + TILT, 0, 0]) {
             // START 1 mm OUTSIDE THE RAMP FACE. Beginning the bore exactly at
             // face_z lands its end cap on the surface it exits, and OpenSCAD
             // 2021.01 turns that coincidence into non-manifold edges — 3 of them
