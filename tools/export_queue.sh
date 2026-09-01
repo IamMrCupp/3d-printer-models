@@ -50,7 +50,6 @@ declare -a NOT_QUEUED=(
 # main would overwrite a newer STL with an older one — the exact regression this
 # tool exists to prevent. Empty this as the PRs land.
 declare -a ON_A_BRANCH=(
-  thermal-cam-mount heat-gun-holder reel-brackets
 )
 
 queue_for() {
