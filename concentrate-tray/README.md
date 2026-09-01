@@ -11,8 +11,31 @@ A **drop-in tray for 16 concentrate jars**, two sizes in one pocket, sized to a 
 | Part | File | Size | Print |
 |---|---|---|---|
 | **Jar tray** | `tray_jars.scad` | 197.4 × 197.4 × 23 mm | ×1 — floor down, no supports |
+| **Fit coupon** | `coupons/jar_fit_coupon.scad` | 50.1 × 50.1 × 23 mm | **print first** — ~11 g |
 
 454 cm³, roughly 173 g at 15% infill.
+
+## Print the coupon first
+
+`coupons/jar_fit_coupon.scad` is one **corner** pocket cut straight out of the real tray — the nested
+⌀45.6/⌀35.6 pocket plus two genuine outer walls and the corner radius. **~11 g against the tray's
+~173 g.**
+
+It's an `intersection()` against the actual `tray_jars()`, not a re-derivation, so it can't drift
+from the part it stands in for.
+
+| What it does | What it means |
+|---|---|
+| Both jars drop in, sit flat, lift out | `JAR_CLR` is right — print the tray |
+| Wide jar tight or won't seat | raise `JAR_CLR` |
+| Slim jar rattles in the lower bore | lower `JAR_CLR` |
+| Corner fouls the case | raise `CORNER` |
+
+`JAR_CLR = 0.6` on a ⌀45 bore is 1.3%, and PETG shrink over 45 mm is real — it's the one number here
+that can be wrong in a way you feel.
+
+**It does not tell you whether the whole tray fits.** That's 2.1 mm of total slack across a 197 mm
+flat print, and one corner says nothing about warp over that span.
 
 ## Two sizes, one pocket
 
