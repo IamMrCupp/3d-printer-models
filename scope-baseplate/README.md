@@ -12,6 +12,7 @@ A **5×3 Gridfinity baseplate** that wraps the raised plateau on a microscope bo
 |---|---|---|---|
 | **Baseplate** | `scope_wipe_plate.scad` | 210 × 136.38 × 17.85 mm | ×1 — **grid down**, no supports |
 | **Wrap coupon** | `coupons/scope_wrap_coupon.scad` | 21 × 136.38 × 17.85 mm | **print first** — ~9 g |
+| **Seat coupon** | `coupons/scope_seat_coupon.scad` | 44 × 50 × 17.85 mm | **print first** — ~5 g |
 | **Corner gauge** | `coupons/scope_corner_gauge.scad` | 192 × 94 × 3 mm | only if your stand differs |
 
 Dimensions live in `scope_plate_common.scad`.
@@ -64,6 +65,22 @@ One wall tells you nothing about the width — 0.6 mm a side over 130 mm is exac
 
 It doesn't test the pole slot or the boss position. Those live at the other end.
 
+## And a seat coupon
+
+`coupons/scope_seat_coupon.scad` is one **end cell** plus the skirt's end wall — the exact region v2.0.0 got wrong — at **~4 g**.
+
+`tools/check_sockets.py` catches an obstructed socket in software. This catches what software can't: whether a real bin actually drops in and holds. A socket can be geometrically clear and still print tight, and no mesh check will ever say so.
+
+| What it does | What it means |
+|---|---|
+| Bin seats fully, sits flat, doesn't rock | Print the plate |
+| Bin bottoms out proud | Something is in the socket — run `check_sockets.py` before reprinting |
+| Bin seats but rocks | The end wall is standing proud of the grid |
+
+Print it on the same plate as the wrap coupon. 14 g of the two together against the plate's 50.
+
+Its cut planes are held off both the socket boundary at 21 and the pole slot's wall at 22 — the first version cut at exactly 22 and produced a sliver triangle on OpenSCAD 2021.01 that rendered clean locally. Swept on the CI toolchain: 22 fails, 19/23/25 pass.
+
 ## Fit
 
 | Dimension | Value | How |
@@ -95,6 +112,47 @@ Not fit — manifoldness. The cell pitch is 42 and the boss is 39.78, so any "na
 
 44 clears the whole middle column and passes 1 mm into the neighbouring sockets' outer taper — comfortably off every boundary. It costs a 1 mm nick in one wall of the two cells either side, which is cosmetic: Gridfinity retention is perimeter-wide.
 
+## What v2.0.1 got wrong
+
+**It slid off the plateau with a push.** The wrap was open at the near end, so nothing stopped the plate sliding straight back off — and the pole didn't help, because the slot is open the same way.
+
+That end was opened so the plate could slide on past the pole without pulling the microscope head off. The mistake was treating that as forcing the end open. It only has to let the **pole** through, not the whole plateau.
+
+So the near-end wall is back, with a 44 mm channel through it aligned with the pole slot, and the plate goes on differently:
+
+1. Hold it **above** the plateau and slide it sideways until the pole is in the slot — the pole passes through the channel on the way
+2. **Lower it straight down.** All four walls drop over the plateau's edges
+
+Sliding off is now blocked by the two wall segments either side of the channel — ~43.7 mm each against a 130.18 mm plateau, which cannot pass a 44 mm gap. The pole can. This needs no measurement we don't already have; in particular it does **not** need the pole diameter or the boss height, which a keyhole throat would have.
+
+Verified on the model, not asserted:
+
+| | |
+|---|---|
+| seated on the plateau | clear |
+| pole channel through the near wall | clear |
+| **pushed toward the near end, +2 / +5 / +10 / +20 / +40 mm** | **BLOCKED at every offset** |
+| lifted 13 / 18 / 25 mm and slid 60 mm across | clear — it still goes on |
+| boss-diameter column travelling from the near end to its seat | clear at all 11 positions |
+
+## What v2.0.0 got wrong
+
+**The skirt ran through the sockets of the end rows, and nothing seated.**
+
+The skirt ring is 206.23 long against a 210 mm grid, so its two end sections sit at |x| 100.62–103.12 — inside the last row of cells. It was extruded from −12 all the way up to `BP_H` so it would merge with the plate volumetrically instead of only touching it, and that put a solid 2.5 mm bar straight through those sockets: **448 mm³ in every row-5 cell, 220 mm³ in row 1.** Opening the near end didn't save it, because that cut only removed material below z=0.
+
+The skirt now stops at **z=0**, butting the plate's underside at an exact plane. It still merges — the side rails overlap it in Y above z=0, and the end sections sit directly under the grid.
+
+**Every check in the repo passed the broken part:** watertight, 2-manifold, correct bounding box, one connected body, corner walls present, seats on the plateau, slides on through all 14 positions, clean on OpenSCAD 2021.01. The per-cell check that would have caught it was run *before* the skirt was added and never re-run after.
+
+`tools/check_sockets.py` exists now so that can't recur:
+
+```sh
+python3 ../tools/check_sockets.py scope_plate_common.scad "scope_wipe_plate()" 5 3
+```
+
+Put the old skirt back and it reports `FAIL 5 socket(s) have material in them`. A socket is defined by what *isn't* there, so every check that looks for material being present is blind to this class of bug.
+
 ## Verified
 
 Measured on the rendered mesh, not asserted:
@@ -104,6 +162,7 @@ Measured on the rendered mesh, not asserted:
 - **Boss passes clean through** — zero intersection with a 39.78 cylinder at the boss position
 - **Slides on** — a plateau solid swept the full insertion path, 14 positions, no contact until seated
 - **Seats and stops** — clear at 0 mm, bears on the far wall at +1 mm
+- **Every socket clear** — `tools/check_sockets.py`, the check that was missing from v2.0.0
 - Clean on **OpenSCAD 2021.01** (what CI runs) as well as current builds
 
 ## Source
