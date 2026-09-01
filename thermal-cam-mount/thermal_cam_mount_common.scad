@@ -48,23 +48,48 @@ CAM_W = 42; CAM_H = 35; CAM_D = 14;
 CAM_CLR   = 0.6;
 CAM_ANGLE = 30;   // tilt from vertical → lens looks down at the board
 
-// ---- cradle ----
-LIP=4.5; SIDE_H=16; CORNER=6; CABLE_W=12; WALL=3;
-CABLE_DIR = "down";   // "down" (female/bottom port) | "side" (right-angle adapter)
-
-// ---- cradle placement — ABOVE the plate, looking DOWN and INWARD -----------
-// The tab is COPLANAR with the ring light's disc. So everything below the tab
-// is the working volume between the objective and the board — the cam must
-// never go there. It rides ABOVE the top plate, just outboard of the tab's
-// front face, and sights down past the plate's front-top corner at the board.
+// ---- TRAY (2026-08-31) — replaces the upright cradle -----------------------
 //
-// FIXED 2026-08-08: the cradle used to hang BELOW the bottom plate, rotated
-// -(90-CAM_ANGLE). That put the cam in the working volume AND aimed the lens
-// 60 deg UP into the objective. Both are corrected here; verify_aim.py checks
-// the lens vector and the corner clearance so this can't regress silently.
-TILT    = 90 - CAM_ANGLE;   // +60 -> lens points DOWN and inward (sign was inverted)
-ARM_FWD = 19.5;             // cradle origin forward of the tab's front face
-ARM_UP  = 0;                // cradle base above the top plate's top face
+// The camera LIES FLAT in an open tray and looks straight down through a window,
+// instead of standing upright in a cradle tilted 60 deg. Modelled on the
+// reference the user supplied (Thermal Camera Mount type 3 v3.2): open tray,
+// round lens window, corner posts, shallow tilt.
+//
+// THIS IS WHAT FIXES THE CABLE. The old cradle stood the camera up and tilted it
+// 60 deg, which aimed its top edge — where the male plug and the live cable are
+// — at (0, -0.87, +0.50): up and INWARD, straight at the scope's objective. Lying
+// flat, the plug edge points sideways, and WHICH sideways is a free choice. It is
+// set OUTBOARD, away from the optical axis, and the tray's outboard border is
+// notched so the plug and lead drop clear.
+//
+// Only the CRADLE is replaced. The sandwich clamp on the control-box tab
+// (49.65 x 32.51 x 26.42) is unchanged — that half was never the problem.
+TRAY_T    = 3.0;    // tray thickness — the reference's
+TRAY_TILT = 14;     // deg off horizontal — the reference's 14.1, rounded
+BORDER    = 5;      // material around the camera pocket
+POST_W    = 4;      // corner post footprint
+POST_H    = 10;     // camera is 14 deep; 10 fences it without burying it
+PLUG_W    = 14;     // relief notch for the male plug + lead, OUTBOARD side
+
+// ⚠️ THE WINDOW IS DELIBERATELY OVERSIZE. The notes record the thermal lens as
+// "offset toward LEFT" and the offset itself has never been measured. A window
+// cut to a guessed centre would blind the camera, and no mesh check catches a
+// part that is the right shape over the wrong spot. 34 x 26 in a 42 x 35 body
+// leaves a 4 mm border all round and clears the optic wherever it actually sits.
+// Wrong in the safe direction, like the heat-gun plate's head recesses.
+WIN_W = 34; WIN_D = 26;
+
+// 26, NOT the cradle's old 19.5. At 19.5 the BOTTOM clamp plate clipped the
+// innermost 3.8 mm of the lens window about 35 mm down — the camera could not
+// see the part of the board nearest the objective, which is the only part worth
+// seeing. Swept against the real sight line: blocked at 19.5 and 22, clear from
+// 24. 26 leaves 2 mm of margin.
+//
+// The alternative was flattening TRAY_TILT to 8 (also clear at 19.5), but that
+// aims the lens nearer straight down and gives up inward coverage. Reaching
+// further out costs 6.5 mm of offset against a 175 mm field — nothing.
+ARM_FWD = 26;       // tray centre forward of the tab's front face
+ARM_UP  = 3;        // tray above the top plate — see the working-volume assert
 
 // ============================================================================
 // derived
@@ -83,39 +108,71 @@ module _plate() {                            // flat footprint in X-Y, unit thic
     translate([-PW/2, y_back, 0]) cube([PW, GRIP_LEN, PLATE_T]);
 }
 
-// Open cradle (upright frame, pre-tilt) — grips the cam bottom edge, both sides,
-// top-front corners; lens (front) and most of the screen (back) stay open.
-module _cradle() {
-    iw = CAM_W + CAM_CLR; id = CAM_D + CAM_CLR;
-    ow = iw + 2*WALL; oy = id + 2*WALL;
+TRAY_W = CAM_W + CAM_CLR + 2*BORDER;    // 52.6
+TRAY_D = CAM_H + CAM_CLR + 2*BORDER;    // 45.6
+POCK_W = CAM_W + CAM_CLR;
+POCK_D = CAM_H + CAM_CLR;
+
+module _rr(w, d, r) { offset(r) offset(-r) square([w, d], center = true); }
+
+// Open tray, flat, pre-tilt. Camera lies in it; posts fence it; it looks down
+// through the window. +Y is OUTBOARD (away from the optical axis) — that is the
+// side the plug notch is cut into.
+module _tray() {
     difference() {
         union() {
-            translate([-ow/2, 0, 0]) cube([ow, oy, LIP]);
-            translate([-ow/2, 0, 0]) cube([WALL, oy, SIDE_H]);
-            translate([ iw/2, 0, 0]) cube([WALL, oy, SIDE_H]);
-            translate([-ow/2, oy - WALL, 0]) cube([ow, WALL, SIDE_H + WALL]);
-            for (sx = [-ow/2, iw/2 - CORNER])
-                translate([sx, 0, SIDE_H - EPS]) cube([WALL + CORNER, WALL + 2, WALL + EPS]);
+            linear_extrude(TRAY_T) _rr(TRAY_W, TRAY_D, 3);
+            for (sx = [-1, 1], sy = [-1, 1])
+                translate([sx*(POCK_W/2 + POST_W/2), sy*(POCK_D/2 + POST_W/2), TRAY_T - EPS])
+                    linear_extrude(POST_H + EPS) _rr(POST_W, POST_W, 1);
         }
-        translate([-iw/2, WALL, LIP]) cube([iw, id, CAM_H + CAM_CLR + 10]);
-        if (CABLE_DIR == "down")
-            translate([-CABLE_W/2, -EPS, -EPS]) cube([CABLE_W, oy + 2*EPS, LIP + 2*EPS]);
-        else
-            translate([-ow/2 - EPS, oy/2 - CABLE_W/2, -EPS]) cube([ow + 2*EPS, CABLE_W, LIP + 2*EPS]);
+        // lens window
+        translate([0, 0, -EPS]) linear_extrude(TRAY_T + 2*EPS) _rr(WIN_W, WIN_D, 4);
+        // plug + lead relief, OUTBOARD border only, clear of the corner posts
+        translate([0, TRAY_D/4, -EPS])
+            linear_extrude(TRAY_T + 2*EPS) square([PLUG_W, TRAY_D/2 + 2*EPS], center = true);
     }
 }
 
-// Arm: carries the cradle up off the TOP plate, forward of the tab's front
-// face. Hulled from a patch of the plate's top face to the cradle's underside
-// so the cradle is fully backed, not hanging off a single edge.
+// Arm: carries the tray up off the TOP plate and forward of the tab's front
+// face.
+//
+// IT MEETS THE TRAY AT ITS INBOARD EDGE, NOT UNDERNEATH IT. Two reasons, and the
+// first one is fatal:
+//   1. A hull reaching the tray's full footprint sits directly under the lens
+//      window and blinds the camera.
+//   2. Matching the tray's outline exactly made the hull's side walls arrive
+//      TANGENT to the tray's side walls along their whole length — 10
+//      non-manifold edges on the seam at x = +-26.3. A square patch of the same
+//      size was no better: its corners stood proud of the tray's rounded ones,
+//      for 4 edges. Landing on the edge strip avoids both.
+//
+// The strip is 8 mm narrower than the tray so it stays inside the flat part of
+// the outline and never interacts with the corner radii.
+ARM_STRIP = 6;      // depth of the landing strip along the tray's inboard edge
+// ...and it must stay clear of the INBOARD POSTS, whose inner faces sit at
+// |x| = POCK_W/2 = 21.3. A strip wide enough to reach them makes the hull's
+// surface graze the post walls, which stitched 2 non-manifold edges at
+// x = -22.3. 36.6 leaves 3 mm either side.
+ARM_STRIP_W = POCK_W - 6;
+// Arm: a plain upright web from the top plate into the tray's inboard edge.
+//
+// NO hull(). Five attempts at hulling to the tilted tray produced five different
+// degeneracies — corners proud of the rounded outline (4 edges), a tangent
+// arrival on the side walls (10), three faces on one line (2), a zero-length
+// edge, and again with solid blocks. Bisection put it on the arm-to-tray join
+// every time; the tray alone and the arm alone always passed.
+//
+// A box has flat faces. Where it meets the tilted tray, two planes cross at 14
+// deg — an honest intersection with nothing coincident, coplanar or tangent.
+// It buries 4 mm into the top plate at the bottom and stops inside the tray's
+// thickness at the top.
+ARM_Y0 = 14;        // web spans this in Y...
+ARM_Y1 = 24;        //   ...to this, bracketing the tray's inboard edge at 20.1
+ARM_TOP = 28.5;     // stops inside the tray (its underside is at 26.9 there)
 module _arm() {
-    aw = CAM_W + 2*WALL;
-    oy = CAM_D + CAM_CLR + 2*WALL;
-    hull() {
-        translate([-aw/2, y_front - 10, top_z1 - EPS]) cube([aw, 10, EPS]);
-        translate([0, cr_y, cr_z]) rotate([TILT, 0, 0])
-            translate([-aw/2, 0, -EPS]) cube([aw, oy, EPS]);
-    }
+    translate([-ARM_STRIP_W/2, ARM_Y0, top_z1 - 4])
+        cube([ARM_STRIP_W, ARM_Y1 - ARM_Y0, ARM_TOP - (top_z1 - 4)]);
 }
 
 // ---- part 1: bottom plate + bosses ----
@@ -155,6 +212,6 @@ module mount_top() {
             }
         }
         _arm();
-        translate([0, cr_y, cr_z]) rotate([TILT, 0, 0]) _cradle();
+        translate([0, cr_y, cr_z]) rotate([-TRAY_TILT, 0, 0]) _tray();
     }
 }

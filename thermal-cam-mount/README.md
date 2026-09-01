@@ -2,8 +2,9 @@
 
 ![Thermal cam mount](preview.png)
 
-A two-part sandwich clamp that holds a **Sipeed T256s thermal camera** on the LED-56S ring
-light's control-box tab, aimed down at the board.
+A two-part sandwich clamp on the LED-56S ring light's **control-box tab** (49.65 × 32.51 × 26.42),
+carrying an **open tray** that a **Sipeed T256s** lies flat in, looking straight down at the board
+through a window.
 
 The T256s is registered onto the scope's visible feed so a hot component's bloom labels that
 component. That registration transform is computed once and has to **hold between sessions** — so
@@ -14,8 +15,8 @@ the calibration.
 
 | File | What | Size |
 |---|---|---|
-| `mount_bottom.scad` | bottom plate + cam cradle | 70.05 × 28.0 × 31.7 mm |
-| `mount_top.scad` | top plate, counterbored | 70.05 × 57.9 × 32.3 mm |
+| `mount_bottom.scad` | bottom plate + bosses | 70.05 × 28.0 × 31.7 mm |
+| `mount_top.scad` | top plate + web + camera tray | 70.05 × 78.3 × 25.9 mm |
 
 Two M3 screws into heat-set inserts draw the plates together. Shared dimensions live in
 `thermal_cam_mount_common.scad`.
@@ -40,6 +41,60 @@ The long top-and-bottom grip is the moment arm that resists the camera's weight 
 thing nose-down. The bottom plate carries a pocket for the tab's centre screw.
 
 Tab measured 2026-07-23: **49.65 W × 32.51 front-to-back × 26.42 thick**.
+
+## The camera lies flat in a tray
+
+Modelled on the reference design the user supplied (*Thermal Camera Mount type 3 v3.2*): open tray,
+round lens window, corner posts, shallow tilt. That reference **glues** to the ring; this clamps the
+control-box tab instead, which is the half that already worked.
+
+**This is what fixes the cable.** The old cradle stood the camera upright and tilted it 60°, which
+aimed its top edge — where the male plug and the live cable are — at (0, −0.87, +0.50): up and
+*inward*, straight at the objective. The cord crossed in front of the scope and made it unusable.
+
+Lying flat, the plug edge points sideways, and **which** sideways is a free choice. It's set
+**outboard**, away from the optical axis, and the tray's outboard border is notched so the plug and
+lead drop clear.
+
+| | |
+|---|---|
+| Tray tilt | **14°** — the reference's 14.1°, rounded |
+| Lens window | 34 × 26 rounded rect |
+| Posts | 4 × 4 mm, 10 mm tall, at the pocket corners |
+| Plug notch | 14 mm, outboard border |
+
+⚠️ **The window is deliberately oversize.** The notes record the thermal lens as "offset toward
+LEFT" and that offset has never been measured. A window cut to a guessed centre would blind the
+camera, and no mesh check catches a part that's the right shape over the wrong spot. 34 × 26 in a
+42 × 35 body leaves a 4 mm border all round and clears the optic wherever it sits.
+
+## Why the tray reaches 26 mm out
+
+`ARM_FWD` is 26, not the old cradle's 19.5. At 19.5 the **bottom clamp plate** clipped the innermost
+3.8 mm of the lens window about 35 mm down — the camera couldn't see the part of the board nearest
+the objective, which is the only part worth seeing.
+
+Swept against the real sight line: blocked at 19.5 and 22, clear from 24. 26 leaves 2 mm of margin.
+Flattening the tilt to 8° also clears it, but that aims the lens nearer straight down and gives up
+inward coverage. Reaching further out costs 6.5 mm of offset against a 175 mm field — nothing.
+
+## The arm is a plain web, and that took five tries
+
+Every attempt to `hull()` onto the tilted tray produced a different degeneracy on OpenSCAD 2021.01:
+
+| Attempt | Result |
+|---|---|
+| Square patch, tray-sized | corners proud of the rounded outline — 4 non-manifold edges |
+| Patch matching the outline exactly | hull arrives **tangent** to the tray's side walls — 10 edges |
+| Patch butted on the tray's underside | three faces on one line — 2 edges |
+| Patch pushed inside the tray | zero-length edge |
+| Hull of two solid blocks | 4 edges |
+
+Bisection put it on the arm-to-tray join every time — tray alone passed, arm alone passed, together
+they failed, with or without the posts and the window.
+
+A plain box has flat faces. Where it meets the tilted tray, two planes cross at 14° — an honest
+intersection with nothing coincident, coplanar or tangent. It passes.
 
 ## The cradle rides above the plate, not below
 
