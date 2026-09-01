@@ -10,7 +10,7 @@
 
 (The "131 mm long" that used to appear here was the *engraver's* length, carried over with the mis-attributed diameter. The HARDELL's own length has never been measured, and doesn't need to be — see below.)
 
-**Cord slot.** The cup has a channel open to the rim for the lead — without one the cord drapes over the edge and levers the tool sideways. ⚠️ Its 6 mm width was measured on the *engraver's* barrel jack and is unverified for this tool.
+**No cord slot.** The cup used to carry a channel open to the rim. The user doesn't want one (2026-08-31), so it's gone rather than widened — its 6 mm width was the *engraver's* barrel jack, inherited when the two tools were conflated, and had been flagged unverified for this tool since 2026-08-25.
 
 **Stored collet-down** so the burr is shrouded. A pointed bit at hand height on a reach-across bench is a snag you notice exactly once.
 
@@ -39,27 +39,22 @@ does.
 
 So the file moved rather than being deleted — it's now
 [`../engraver-station/bin_tool_engraver.scad`](../engraver-station/), because the part was always
-correct and only the label was wrong. `bin_tool` here is new, bored to the real 30.
+correct and only the label was wrong. `bin_tool` here is new, and now bored to a stated 34.
 
-**It's a taper, so the bore goes to the widest section (30), not the base (28)** — cut to the 28
-and the tool jams partway down.
+**The bore is stated, not derived — and that distinction is the fix.**
 
-**Capture depth is a comfort choice, not a fit constraint.** The HARDELL's overall length has
-never been measured and doesn't need to be: the bin latches into the grid so nothing tips, and
-with 1 mm of clearance in a 45 mm bore the tool leans about 1.3°. Override with
-`-D TOOL_CAPTURE=` once you've held the printed one.
+`collar_cup` cuts `vessel_d + CLR`, and the library's `CLR` is 1.0. Feeding it `TOOL_D = 30` therefore cut a **31.0** hole while every comment in the model claimed 30, and the number actually responsible was written down nowhere. The printed cup was too tight in the hand.
 
-> ⚠️ **`CORD_W = 6` is inherited and unverified for this tool.** That barrel-jack slot was
-> measured on the engraver, back when the two were conflated. A slot too narrow stops the tool
-> seating — check the HARDELL's lead before printing, or just widen it, since an oversized notch
-> costs nothing.
+`TOOL_BORE = 34` is now the **finished hole**, the same way `BIT_BORE` is, and `bin_tool` passes `clr = 0` so nothing is added on top. Measured off the rendered mesh: a ⌀33.8 probe passes clean, ⌀34.6 hits material — the hole is 34.0 (33.98 across the flats at `$fn = 96`), leaving a 3.75 mm wall to the outer face.
+
+> ⚠️ **34 is stated, not calipered** — *"i think the bore should be about 34"* (2026-08-31). The recorded taper is 28 at the base to ≈30 at its widest. If that still holds, a 34 bore leaves ~4 mm of slop and the tool leans ~5° in a 45 mm capture. That's a comfort call, not a fit failure: the bin latches into the grid, so nothing tips either way. Override with `-D TOOL_BORE=`.
 
 ## Parts
 
 | File | What | Size |
 |---|---|---|
 | `coupons/bit_fit_gauge.scad` | **Print first** — five test holes, 2.5–2.9 mm, engraved | 95 × 24 × 9 mm |
-| `bin_tool.scad` | 1 × 1 cup, HARDELL vertical (⌀30 bore), cord slot | 42 × 42 × 51 mm |
+| `bin_tool.scad` | 1 × 1 cup, HARDELL vertical (⌀34 bore), no cord slot | 42 × 42 × 51 mm |
 | `bin_bits.scad` | 1 × 1 block, 5 × 3 grid, 15 bit holes | 42 × 42 × 24 mm |
 
 **15 holes, counted 2026-08-25.** The kit came with about 15 shank bits, a stack of cut-off wheels and ~20 sanding disks.
@@ -84,4 +79,4 @@ openscad -o bin_tool.stl --export-format binstl bin_tool.scad
 | Layer height | 0.2 mm (**0.12 for the bit block** — finer layers hold small-hole diameter better) |
 | Walls | 3 perimeters |
 | Infill | 15 % |
-| Supports | **None** — the cord slot and all bores print without them |
+| Supports | **None** — every bore prints without them |

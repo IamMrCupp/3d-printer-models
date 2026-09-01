@@ -1,8 +1,9 @@
-// bin_tool — 1×1 cup, the HARDELL standing vertical, cord slot to the side.
+// bin_tool — 1×1 cup, the HARDELL standing vertical. No cord channel.
 //
-// BORED TO THE TAPER'S WIDEST POINT. The body runs 28 at the base to ≈30 at its
-// widest, and a bore cut to the 28 would jam the tool partway down. TOOL_D is
-// the 30 for exactly that reason.
+// THE BORE IS STATED, NOT DERIVED. TOOL_BORE is the FINISHED hole, so this
+// passes clr = 0 — collar_cup would otherwise add the library's CLR = 1.0 on
+// top. That is exactly what went wrong before: TOOL_D 30 + CLR 1.0 cut a 31.0
+// bore while every comment claimed 30, and the printed cup was too tight.
 //
 // ⚠️ This REPLACES a cup bored to ⌀19.66 that carried this filename and this
 // tool's name until 2026-08-25. That bore was the small engraver's — the file
@@ -21,7 +22,7 @@
 include <rotary_station_common.scad>
 use <../lib/vessel.scad>
 
-assert(TOOL_D >= TOOL_D_BASE,
-       "TOOL_D must be the WIDEST section — a bore cut to the narrow end jams.");
+assert(TOOL_BORE >= TOOL_D && TOOL_D >= TOOL_D_BASE,
+       "bore must clear the taper's WIDEST section — one cut to the narrow end jams.");
 
-collar_cup(1, 1, TOOL_D, TOOL_CAPTURE, cord_w = CORD_W);
+collar_cup(1, 1, TOOL_BORE, TOOL_CAPTURE, clr = 0, cord_w = CORD_W);

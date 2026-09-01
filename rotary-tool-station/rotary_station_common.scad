@@ -4,8 +4,10 @@
 // captures the bottom ~45 mm and lets the remaining ~86 mm stick up, the way a
 // pen sits in a pen cup — 4× less bench for the same tool.
 //
-// It's corded (barrel jack), so the cup carries a side channel open to the rim.
-// Without one the lead drapes over the edge and levers the tool sideways.
+// NO CORD CHANNEL. The cup used to carry one; the user does not want it
+// (2026-08-31). The 6 mm slot was inherited from the ENGRAVER's barrel jack back
+// when the two tools were conflated, and had been flagged unverified for this
+// tool since 2026-08-25. It is gone rather than widened.
 // Store it COLLET-DOWN: a pointed burr at hand height on a bench you reach
 // across is a snag you only notice once.
 
@@ -28,7 +30,23 @@ include <../lib/syringe.scad>
 BIT_SHANK   = 2.381;  // 3/32" collet — 0.09375 × 25.4. Nominal only; the bore
                       //   comes from the gauge, not from this. See BIT_BORE.
 TOOL_D_BASE = 28.0;   // narrow end of the base
-TOOL_D      = 30.0;   // ⚠️ widest — this is what the bore is sized from
+TOOL_D      = 30.0;   // widest section of the taper, measured 2026-08-25
+
+// ---- the bore is stated, not derived ----
+//
+// TOOL_BORE IS THE FINISHED HOLE, the same way BIT_BORE is. It is NOT the tool's
+// diameter and it does NOT get CLR added on top — bin_tool passes clr = 0.
+//
+// The old arrangement was the trap: collar_cup cuts `vessel_d + CLR`, so feeding
+// it TOOL_D = 30 with the library's CLR = 1.0 produced a 31.0 bore while every
+// comment in this file talked about 30. The printed cup was too tight in the
+// hand and the number responsible was never written down anywhere.
+//
+// ⚠️ 34 IS STATED, NOT CALIPERED — "i think the bore should be about 34"
+// (user, 2026-08-31). If the taper really does top out at ≈30, this leaves ~4 mm
+// of slop and the tool leans ~5° in a 45 mm capture. That is a comfort call the
+// user has made; the bin latches into the grid, so nothing tips either way.
+TOOL_BORE   = 34.0;
 TOOL_L      = undef;  // ❌ NOT MEASURED. Only ever fed TOOL_CAPTURE, and capture
                       //   is a comfort choice, not a fit constraint — the bin
                       //   latches into the grid so nothing tips. Not a blocker.
@@ -36,11 +54,10 @@ TOOL_L      = undef;  // ❌ NOT MEASURED. Only ever fed TOOL_CAPTURE, and captu
 TOOL_CAPTURE = 45;   // [20:1:80] judgement, NOT derived — TOOL_L is unknown.
                      //   45 holds plenty and leaves the tool easy to pinch out.
                      //   Override with -D TOOL_CAPTURE= once you've held one.
-// ⚠️ CORD_W IS INHERITED AND UNVERIFIED FOR THIS TOOL. The 6 mm barrel-jack
-// slot was measured on the engraver, back when the two tools were conflated.
-// A slot too narrow stops the tool seating, so check the HARDELL's lead before
-// printing — or widen it, since an oversized notch costs nothing.
-CORD_W       = 6;
+// ⚠️ 0 ON PURPOSE — the user does not want a cord channel (2026-08-31). The 6 mm
+// value here was the ENGRAVER's barrel-jack slot, inherited when the two tools
+// were conflated and never verified against the HARDELL's lead.
+CORD_W       = 0;
 
 // ---- bit-hole clearance ----
 // lib/vessel.scad's CLR = 1.0 mm is tuned for 50–80 mm vessels, where it's ~2%
@@ -77,6 +94,8 @@ assert(is_num(BIT_BORE) && BIT_BORE > BIT_SHANK,
        "BIT_BORE must be a number larger than BIT_SHANK — it is the FINISHED hole.");
 assert(is_num(TOOL_D) && TOOL_D >= TOOL_D_BASE,
        "TOOL_D must be a number, and the WIDEST section of the taper.");
+assert(is_num(TOOL_BORE) && TOOL_BORE >= TOOL_D,
+       "TOOL_BORE is the FINISHED hole and must be at least the tool's widest section.");
 // ✅ COUNTED 2026-08-25: the HARDELL came with about **15 shank bits**, a stack
 // of cut-off wheels and ~20 sanding disks.
 //
