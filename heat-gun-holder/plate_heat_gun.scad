@@ -1,5 +1,5 @@
 // plate_heat_gun — 2×2 Gridfinity plate that the heat gun's magnetic bracket
-// bolts to FROM BELOW.
+// bolts to FROM BELOW, on a 20° ramp.
 //
 // HOW YOU USE IT:
 //   Sit the bracket on the plate, drop four screws up through the plate from
@@ -37,15 +37,55 @@
 // is ~49 N (5 kgf). Pulling a heat gun off a magnetic bracket beats 2.5 kgf
 // easily, and then the plate lifts with the gun. Four cells, not two.
 //
-// PRINT: as emitted, feet down. No supports — every hole is vertical.
+// ---- THE 20° RAMP (added 2026-08-31) --------------------------------------
+//
+// WHY: parked flat, the gun's auto-off only triggered about 45% of the time.
+// Tilting it lets gravity settle the gun into the cradle instead of leaving it
+// balanced. User's call on the angle and the direction: nozzle end DOWN.
+//
+// ONLY THE AXIS MATTERS, NOT THE SIGN. A Gridfinity plate spins 180° on the
+// grid, so the ramp is cut rising along +X and you park the plate with the
+// nozzle at the low end. The rise runs along the 36 mm hole spacing.
+//
+// ⚠️ HOLE_X IS MEASURED ON THE BRACKET, WHICH IS NOW TILTED. 36 mm centre to
+// centre is a distance along the bracket's own face; in PLAN that foreshortens
+// to 36·cos20 = 33.83. Drilling at 36 apart in plan would space the holes
+// 38.3 mm apart along the ramp and the bracket would not sit on them.
+//
+// ⚠️ THE SCREWS MUST BE NORMAL TO THE RAMP, not vertical, or they meet the
+// bracket's threads at 20° and cross-thread. Both the through-bore and the head
+// counterbore run along that tilted axis.
+//
+// THE COUNTERBORE IS WHAT KEEPS THE SCREW SHORT. Left solid, a screw entering
+// the underside would cross 20.0 mm of plastic at the low hole and 33.1 mm at
+// the high one — two different screw lengths, both long, and the whole reason
+// DECK was thinned in the first place. The counterbore is cut along the same
+// tilted axis from the bottom face up to DECK below the ramp, so the screw
+// crosses DECK and nothing more, at BOTH holes. Same 10 mm screw as the flat
+// version.
+//
+// The counterbore's seat is a disc tilted 20° at the top of an 8 mm bore, walled
+// all round — that is a bridge, not a cantilevered ceiling, and it closes
+// progressively from one side. It prints.
+//
+// PRINT: as emitted, feet down. No supports — the ramp faces UP and every bore
+// closes as a bridge.
 //
 // SPDX-License-Identifier: CC-BY-NC-4.0
 // Copyright (c) 2026 Aaron Cupp
 include <../lib/gridfinity.scad>
 
 /* [Bracket] */
-HOLE_X  = 36.0;   // measured 2026-08-20, centre to centre — a true rectangle
-HOLE_Y  = 21.0;   // measured, centre to centre
+HOLE_X  = 36.0;   // measured 2026-08-20, centre to centre ON THE BRACKET FACE
+HOLE_Y  = 21.0;   // measured, centre to centre (across the tilt axis — unchanged)
+
+/* [Ramp] */
+TILT = 20;        // [0:1:35] degrees. 0 gives the old flat plate back.
+// Thickness of the deck at the ramp's LOW edge. This is NOT the same number as
+// DECK: DECK is what a screw crosses at a hole and is set by screw reach, while
+// this is just how much plastic sits under the ramp's thin end. Keeping them
+// separate is worth ~21 cm3 — at 5 the part is 163 cm3, at 2 it is 142.
+RAMP_LOW = 2.0;   // [1:0.5:8]
 
 /* [Screws — entering from BELOW] */
 SCREW_OD  = 2.84;   // measured 2026-08-20 — thread outside diameter
@@ -58,24 +98,50 @@ HEAD_H = 4.0;   // [2:0.5:4.7] ⚠️ NOT MEASURED — must stay inside the foot
 /* [Plate] */
 DECK = 5.0;     // [3:0.5:14] sized by SCREW REACH, not breakthrough. See header.
 
-H = BIN_BASE_H + DECK;
-REACH = (BIN_BASE_H - HEAD_H) + DECK;   // plastic the screw crosses
+W     = 2*GF - 0.5;
+Z_LOW = BIN_BASE_H + RAMP_LOW;          // deck top at the ramp's LOW edge
+H     = Z_LOW + W*tan(TILT);            // ...and at the high edge
+HOLE_X_PLAN = HOLE_X*cos(TILT);         // foreshortened — see header
+REACH = DECK;                           // plastic the screw crosses, BOTH holes
 
-assert(HEAD_H < BIN_BASE_H - 0.5,
-       "Head recess would cut through the foot into the deck.");
-assert(HOLE_X + HEAD_D + 3 < 2*GF - 0.5, "Head recesses too wide for a 2x2.");
-echo(str("plate ", 2*GF - 0.5, " square x ", H, " tall; ", SCREW_D,
-         " through, head recess ", HEAD_D, " x ", HEAD_H,
-         "; screw crosses ", REACH, " mm -> needs a ", REACH + 4, " mm screw"));
+function face_z(x) = Z_LOW + (x + W/2)*tan(TILT);
+
+assert(HOLE_X_PLAN + HEAD_D + 3 < W, "Head bores too wide for a 2x2.");
+assert(DECK < face_z(-HOLE_X_PLAN/2)/cos(TILT),
+       "DECK exceeds the material above the LOW hole — no room for a counterbore.");
+echo(str("plate ", W, " square, ", Z_LOW, " tall at the low edge and ", H,
+         " at the high; ramp ", TILT, " deg; holes ", HOLE_X_PLAN,
+         " apart in plan (", HOLE_X, " on the bracket); screw crosses ", REACH,
+         " mm -> needs a ", REACH + 4, " mm screw"));
 
 difference() {
-    bin_blank(2, 2, H);
+    // BLANK IS CUT 1 mm PROUD OF H, and the ramp trims it back. Built exactly H
+    // tall, the blank's top face and the ramp plane meet along the same line at
+    // the high edge (x 41.75, z 37.14) — the cut lands ON the face it exits
+    // instead of passing through it, and OpenSCAD 2021.01 returns 3 non-manifold
+    // edges there. 2026.06 renders it clean. Isolated by bisection: the ramp cut
+    // alone fails, the bores alone pass. The finished height is still exactly H,
+    // because the ramp is what caps it.
+    bin_blank(2, 2, H + 1);
+
+    // the ramp itself — everything above a plane through the low edge at TILT
+    translate([-W/2, 0, Z_LOW]) rotate([0, -TILT, 0])
+        translate([-0.01, -W, 0]) cube([3*W, 2*W, 3*H]);
+
     for (sx = [-1, 1], sy = [-1, 1]) {
-        // clearance hole, all the way through
-        translate([sx*HOLE_X/2, sy*HOLE_Y/2, -0.1])
-            cylinder(d = SCREW_D, h = H + 0.2, $fn = 32);
-        // head recess, cut UP from the underside — stays inside the foot
-        translate([sx*HOLE_X/2, sy*HOLE_Y/2, -0.1])
-            cylinder(d = HEAD_D, h = HEAD_H + 0.1, $fn = 48);
+        x = sx*HOLE_X_PLAN/2;
+        // bores run along the ramp's NORMAL: down and toward +X
+        translate([x, sy*HOLE_Y/2, face_z(x)]) rotate([0, 180 - TILT, 0]) {
+            // START 1 mm OUTSIDE THE RAMP FACE. Beginning the bore exactly at
+            // face_z lands its end cap on the surface it exits, and OpenSCAD
+            // 2021.01 turns that coincidence into non-manifold edges — 3 of them
+            // here, plus a 3.8e-06 mm sliver. 2026.06 renders it clean, which is
+            // how it would have reached CI. Same bug as the thermal mount's
+            // counterbore: a cut must pass THROUGH the face it exits.
+            translate([0, 0, -1])
+                cylinder(d = SCREW_D, h = 2*H, $fn = 32);        // shank, through
+            translate([0, 0, DECK])                              // head + driver
+                cylinder(d = HEAD_D, h = 2*H, $fn = 48);
+        }
     }
 }
