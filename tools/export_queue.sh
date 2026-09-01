@@ -35,7 +35,7 @@ declare -a OVERRIDE=(
   "stand-cable-clamp:5-status-unknown-ASK-FIRST/stand-cable-clamp"
   "apache-5800-cord-organizer:5-status-unknown-ASK-FIRST/apache-5800-cord-organizer"
   "donation-qr-stand:5-status-unknown-ASK-FIRST/donation-qr-stand"
-  "gridfinity-fillers:5-status-unknown-ASK-FIRST/gridfinity-fillers"
+  "gridfinity-fillers:18-gridfinity-fillers"
 )
 
 # Models deliberately NOT in the queue: printed and confirmed in service, so an
@@ -50,7 +50,6 @@ declare -a NOT_QUEUED=(
 # main would overwrite a newer STL with an older one — the exact regression this
 # tool exists to prevent. Empty this as the PRs land.
 declare -a ON_A_BRANCH=(
-  thermal-cam-mount heat-gun-holder reel-brackets
 )
 
 queue_for() {
