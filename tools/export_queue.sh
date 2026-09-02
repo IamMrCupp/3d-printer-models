@@ -36,6 +36,7 @@ declare -a OVERRIDE=(
   "apache-5800-cord-organizer:5-status-unknown-ASK-FIRST/apache-5800-cord-organizer"
   "donation-qr-stand:5-status-unknown-ASK-FIRST/donation-qr-stand"
   "gridfinity-fillers:18-gridfinity-fillers"
+  "wolfbox-nozzles:19-wolfbox-nozzles"
 )
 
 # Models deliberately NOT in the queue: printed and confirmed in service, so an
