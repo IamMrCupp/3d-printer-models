@@ -54,7 +54,7 @@ CENTER_POCKET_H = 3.5;
 // leaving only 0.24 mm on the long one — slop one way and a near interference the
 // other, from the same wrong pair.
 CAM_W = 42.36; CAM_H = 34.35; CAM_D = 13.43;
-CAM_CLR   = 0.6;
+CAM_CLR   = 0.2;
 CAM_ANGLE = 30;   // tilt from vertical → lens looks down at the board
 
 // ---- TRAY (2026-08-31) — replaces the upright cradle -----------------------
@@ -147,34 +147,61 @@ module _plate() {                            // flat footprint in X-Y, unit thic
 
 module _rr(w, d, r) { offset(r) offset(-r) square([w, d], center = true); }
 
+// ---------------------------------------------------------------------------
+// RETENTION PADS.  [x, y, w, d, radial_is_Y]
+//
+// These sit at the MIDDLE OF EACH EDGE, not at the corners.  The first printed
+// tray fenced the pocket with four corner posts, and the camera slid freely
+// inside it: the body's corners are radiused, so a 4 mm post standing in a
+// corner touches nothing but air.  Contact has to land on the flat middle of a
+// side, which is the one part of the outline whose position does not depend on
+// a corner radius nobody has measured.
+//
+// The outboard edge is not free at its centre — the plug notch owns x -7..+7 —
+// so that side gets a pair flanking the notch instead of one pad.
+PAD_T = POST_W;                     // radial thickness of a pad
+px    = POCK_W/2 + PAD_T/2;
+py    = POCK_D/2 + PAD_T/2;
+PADS = [
+    [-px,   0, PAD_T, 10, false],   // left edge
+    [ px,   0, PAD_T, 10, false],   // right edge
+    [   0, -py,   12, PAD_T, true], // inboard edge
+    [ -10,  py,    6, PAD_T, true], // outboard, left of the plug notch
+    [  10,  py,    6, PAD_T, true] // outboard, right of the plug notch
+];
+
+
 // Open tray, flat, pre-tilt. Camera lies in it; posts fence it; it looks down
-// through the window. +Y is OUTBOARD (away from the optical axis) — that is the
+// through the window. Pads fence it on the flats. +Y is OUTBOARD (away from the optical axis) — that is the
 // side the plug notch is cut into.
 module _tray() {
     difference() {
         union() {
             linear_extrude(TRAY_T) _rr(TRAY_W, TRAY_D, 3);
-            for (sx = [-1, 1], sy = [-1, 1])
-                translate([sx*(POCK_W/2 + POST_W/2), sy*(POCK_D/2 + POST_W/2), TRAY_T - EPS]) {
-                    linear_extrude(POST_H + EPS) _rr(POST_W, POST_W, 1);
+            for (pad = PADS)
+                translate([pad[0], pad[1], TRAY_T - EPS]) {
+                    linear_extrude(POST_H + EPS) _rr(pad[2], pad[3], 1);
                     // Corbelled lip: a TAPERED EXTRUDE, not a hull. Hulling two
                     // EPS-thin slabs is what produced a 6.7e-04 mm sliver here,
                     // and it is the same thing that cost five attempts on the
                     // arm. linear_extrude's scale gives the taper directly, with
                     // nothing coincident anywhere.
                     //
-                    // It grows LIP_PROJ on every side over LIP_RISE — 3 over 4,
-                    // 37 deg from vertical, so the underside carries itself. The
-                    // inward growth is what hooks over the camera; the outward
-                    // growth is why BORDER is 8.
+                    // The scale is a VECTOR, and it grows on the RADIAL axis
+                    // only — LIP_PROJ per side over LIP_RISE, 37 deg from
+                    // vertical, so the underside carries itself. Growing along
+                    // the edge too would just eat BORDER for nothing, and on the
+                    // outboard pair it would close over the plug notch.
                     translate([0, 0, POST_H])
-                        linear_extrude(LIP_RISE, scale = (POST_W + 2*LIP_PROJ)/POST_W)
-                            _rr(POST_W, POST_W, 1);
+                        linear_extrude(LIP_RISE,
+                                       scale = [pad[4] ? 1 : (pad[2] + 2*LIP_PROJ)/pad[2],
+                                                pad[4] ? (pad[3] + 2*LIP_PROJ)/pad[3] : 1])
+                            _rr(pad[2], pad[3], 1);
                 }
         }
         // lens window
         translate([0, 0, -EPS]) linear_extrude(TRAY_T + 2*EPS) _rr(WIN_W, WIN_D, 4);
-        // plug + lead relief, OUTBOARD border only, clear of the corner posts
+        // plug + lead relief, OUTBOARD border only, between the outboard pads
         translate([0, TRAY_D/4, -EPS])
             linear_extrude(TRAY_T + 2*EPS) square([PLUG_W, TRAY_D/2 + 2*EPS], center = true);
     }
