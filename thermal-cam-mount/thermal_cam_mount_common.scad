@@ -43,8 +43,17 @@ SCREW_CB  = 6.4;  // counterbore for the screw head
 CENTER_POCKET_D = 13;   // clearance pocket over the tab's bottom center screw
 CENTER_POCKET_H = 3.5;
 
-// ---- Sipeed T256s (LOCKED) ----
-CAM_W = 42; CAM_H = 35; CAM_D = 14;
+// ---- Sipeed T256s — CALIPERED 2026-09-01 ----
+//
+// 42 x 35 x 14 was a DATASHEET figure. The user's own 2026-07-22 notes label that
+// line "(spec)", and survey/MEASUREMENTS.md carried it as ✅ regardless. Every
+// version of this mount cut its pocket from it.
+//
+// Real body on calipers: W +0.36, H -0.65, D -0.57 against spec. Small numbers,
+// but the pocket cut from spec ran 1.25 mm loose across the short axis while
+// leaving only 0.24 mm on the long one — slop one way and a near interference the
+// other, from the same wrong pair.
+CAM_W = 42.36; CAM_H = 34.35; CAM_D = 13.43;
 CAM_CLR   = 0.6;
 CAM_ANGLE = 30;   // tilt from vertical → lens looks down at the board
 
@@ -66,9 +75,18 @@ CAM_ANGLE = 30;   // tilt from vertical → lens looks down at the board
 // (49.65 x 32.51 x 26.42) is unchanged — that half was never the problem.
 TRAY_T    = 3.0;    // tray thickness — the reference's
 TRAY_TILT = 14;     // deg off horizontal — the reference's 14.1, rounded
-BORDER    = 5;      // material around the camera pocket
+BORDER    = 8;      // material around the camera pocket. 8, not 5, so the
+                    //   lips stay over solid tray instead of hanging past its edge
 POST_W    = 4;      // corner post footprint
-POST_H    = 10;     // camera is 14 deep; 10 fences it without burying it
+// POSTS REACH THE CAMERA'S TOP AND THEN HOOK OVER IT. The first cut made them
+// plain 10 mm pins: they fenced the camera at four corners and did nothing else,
+// so on a 14 deg tray it slid to the low pair and lifted straight out. 10 mm did
+// not even reach the 14 mm top face.
+POST_H    = CAM_D + CAM_CLR;   // 14.03 — level with the camera's top face
+LIP_PROJ  = 3.0;    // how far each lip reaches IN over the camera
+LIP_RISE  = 4.0;    // 3 over 4 -> 37 deg from vertical, so the lip's underside
+                    //   carries itself and needs no support
+
 PLUG_W    = 14;     // relief notch for the male plug + lead, OUTBOARD side
 
 // ⚠️ THE WINDOW IS DELIBERATELY OVERSIZE. The notes record the thermal lens as
@@ -137,8 +155,22 @@ module _tray() {
         union() {
             linear_extrude(TRAY_T) _rr(TRAY_W, TRAY_D, 3);
             for (sx = [-1, 1], sy = [-1, 1])
-                translate([sx*(POCK_W/2 + POST_W/2), sy*(POCK_D/2 + POST_W/2), TRAY_T - EPS])
+                translate([sx*(POCK_W/2 + POST_W/2), sy*(POCK_D/2 + POST_W/2), TRAY_T - EPS]) {
                     linear_extrude(POST_H + EPS) _rr(POST_W, POST_W, 1);
+                    // Corbelled lip: a TAPERED EXTRUDE, not a hull. Hulling two
+                    // EPS-thin slabs is what produced a 6.7e-04 mm sliver here,
+                    // and it is the same thing that cost five attempts on the
+                    // arm. linear_extrude's scale gives the taper directly, with
+                    // nothing coincident anywhere.
+                    //
+                    // It grows LIP_PROJ on every side over LIP_RISE — 3 over 4,
+                    // 37 deg from vertical, so the underside carries itself. The
+                    // inward growth is what hooks over the camera; the outward
+                    // growth is why BORDER is 8.
+                    translate([0, 0, POST_H])
+                        linear_extrude(LIP_RISE, scale = (POST_W + 2*LIP_PROJ)/POST_W)
+                            _rr(POST_W, POST_W, 1);
+                }
         }
         // lens window
         translate([0, 0, -EPS]) linear_extrude(TRAY_T + 2*EPS) _rr(WIN_W, WIN_D, 4);
