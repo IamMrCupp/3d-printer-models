@@ -71,6 +71,18 @@ against 14 g and four hours for the real mount. Drop the camera in: it should ta
 pressure to seat and stay put when the coupon is turned upside down. Two full mounts have already
 been thrown away for a fit that a coupon would have caught in twenty minutes.
 
+⚠️ **The arm is ONE web. Do not split it.** It was briefly two legs straddling the plug notch,
+on the belief that the notch would otherwise cut it in half. The notch is subtracted inside
+`_tray()`, before the arm is unioned — it never touched the arm. The split cost 44% of the section
+(365.6 → 205.6 mm²) and left two 10.3 mm posts with 16 mm of support packed between them for the
+arm's whole height; prying it out snapped them off the bottom plate. 2 h 45 min and 45 g.
+`check_arm_clearance.py` now proves the arm stays out of the camera pocket, so there is no reason
+to reach for a split again.
+
+⚠️ **The coupon does not cover the arm.** `coupons/cam_fit_coupon.scad` is the tray alone. It
+validates the pocket and is structurally blind to everything that carries load. A passing coupon is
+not evidence the mount will survive support removal.
+
 ⚠️ **The plug exits on the INBOARD edge, and that is deliberate.** The tray tilts 14° down toward
 +Y, so the inboard edge is the *high* one and a plug leaving it points up-slope. That is what keeps
 the device's screen visible and its touchscreen reachable while the camera is being placed. The

@@ -251,20 +251,25 @@ ARM_STRIP_W = POCK_W - 6;
 // the camera.
 ARM_Y0 = 14;
 ARM_Y1 = 24;
-// TWO legs, not one web. The plug notch is now on the inboard edge, which is
-// exactly where the arm lands, and a full-depth notch through a single centred
-// web would cut it in half at its most loaded section. Splitting it into a pair
-// straddling the notch keeps the full relief depth and loses only the material
-// the notch would have taken anyway. Each leg still crosses the tilted tray as
-// a flat face at 14 deg — the honest intersection that finally rendered clean.
-ARM_GAP  = PLUG_W + 2;                        // clear span the notch needs
-ARM_LEG  = (ARM_STRIP_W - ARM_GAP) / 2;       // 10.28 each
+// ONE web. It was briefly split into two legs straddling the plug notch, on the
+// belief that the notch would otherwise cut it in half. That was wrong twice
+// over, and it broke a printed part:
+//
+//   1. The notch is subtracted INSIDE _tray(). The arm is unioned afterwards, so
+//      the notch never cut the arm at all — the arm fills it where they overlap.
+//      There was no collision to solve.
+//   2. The split cost 44% of the section (365.6 -> 205.6 mm2) and left two
+//      10.3 mm posts with 16 mm of support packed between them for the arm's
+//      whole height. Prying that out snapped them off the plate.
+//
+// The arm's top stops INSIDE the tray's thickness, below the floor's top face,
+// so it never intrudes on the camera pocket and the plug — which sits above the
+// floor — clears it regardless. check_arm_clearance.py holds that line.
 module _arm() {
     z0 = TRAY_BELOW ? cr_z + (TRAY_D/2)*sin(TRAY_TILT) + TRAY_T/2 : top_z1 - 4;
     z1 = TRAY_BELOW ? bot_z0 + 4 : 28.5;
-    for (sx = [-1, 1])
-        translate([sx > 0 ? ARM_GAP/2 : -ARM_GAP/2 - ARM_LEG, ARM_Y0, z0])
-            cube([ARM_LEG, ARM_Y1 - ARM_Y0, z1 - z0]);
+    translate([-ARM_STRIP_W/2, ARM_Y0, z0])
+        cube([ARM_STRIP_W, ARM_Y1 - ARM_Y0, z1 - z0]);
 }
 
 // ---- part 1: bottom plate + bosses ----
