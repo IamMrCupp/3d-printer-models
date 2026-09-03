@@ -60,9 +60,9 @@ lead drop clear.
 |---|---|
 | Tray tilt | **14°** — the reference's 14.1°, rounded |
 | Lens window | 34 × 26 rounded rect |
-| Retention pads | 5, at the **middle of each edge** — 2 × 10 mm long sides, 12 mm inboard, 2 × 6 mm outboard |
+| Retention pads | 5, at the **middle of each edge** — 2 × 10 mm long sides, 12 mm outboard, 2 × 6 mm inboard |
 | Pocket clearance | 0.2 mm total, ~0.1 per side |
-| Plug notch | 14 mm, outboard border |
+| Plug notch | 14 mm, **inboard** border — the high side of the tilt |
 
 ## Print the coupon first
 
@@ -70,6 +70,13 @@ lead drop clear.
 against 14 g and four hours for the real mount. Drop the camera in: it should take light thumb
 pressure to seat and stay put when the coupon is turned upside down. Two full mounts have already
 been thrown away for a fit that a coupon would have caught in twenty minutes.
+
+⚠️ **The plug exits on the INBOARD edge, and that is deliberate.** The tray tilts 14° down toward
++Y, so the inboard edge is the *high* one and a plug leaving it points up-slope. That is what keeps
+the device's screen visible and its touchscreen reachable while the camera is being placed. The
+first build had the notch outboard, on the low side, which buried the plug under the mount. The arm
+is split into two legs straddling the notch for the same reason — a single centred web sat exactly
+where the relief has to go.
 
 ⚠️ **The pads are not at the corners, and that is the whole point.** The first printed tray
 fenced the pocket with four 4 mm posts standing at its corners. The camera slid around freely

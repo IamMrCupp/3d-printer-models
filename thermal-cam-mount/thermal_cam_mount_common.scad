@@ -165,9 +165,9 @@ py    = POCK_D/2 + PAD_T/2;
 PADS = [
     [-px,   0, PAD_T, 10, false],   // left edge
     [ px,   0, PAD_T, 10, false],   // right edge
-    [   0, -py,   12, PAD_T, true], // inboard edge
-    [ -10,  py,    6, PAD_T, true], // outboard, left of the plug notch
-    [  10,  py,    6, PAD_T, true] // outboard, right of the plug notch
+    [   0,  py,   12, PAD_T, true], // outboard edge — the LOW side, now unobstructed
+    [ -10, -py,    6, PAD_T, true], // inboard, left of the plug notch
+    [  10, -py,    6, PAD_T, true] // inboard, right of the plug notch
 ];
 
 
@@ -201,8 +201,13 @@ module _tray() {
         }
         // lens window
         translate([0, 0, -EPS]) linear_extrude(TRAY_T + 2*EPS) _rr(WIN_W, WIN_D, 4);
-        // plug + lead relief, OUTBOARD border only, between the outboard pads
-        translate([0, TRAY_D/4, -EPS])
+        // plug + lead relief, INBOARD border only, between the inboard pads.
+        // The tray tilts 14 deg down toward +Y, so the INBOARD edge is the high
+        // one: the plug leaves it pointing UP-slope, which is what puts the
+        // device's screen where it can be seen and touched during placement.
+        // Outboard would bury it under the mount, which is how the first one
+        // was built.
+        translate([0, -TRAY_D/4, -EPS])
             linear_extrude(TRAY_T + 2*EPS) square([PLUG_W, TRAY_D/2 + 2*EPS], center = true);
     }
 }
@@ -246,11 +251,20 @@ ARM_STRIP_W = POCK_W - 6;
 // the camera.
 ARM_Y0 = 14;
 ARM_Y1 = 24;
+// TWO legs, not one web. The plug notch is now on the inboard edge, which is
+// exactly where the arm lands, and a full-depth notch through a single centred
+// web would cut it in half at its most loaded section. Splitting it into a pair
+// straddling the notch keeps the full relief depth and loses only the material
+// the notch would have taken anyway. Each leg still crosses the tilted tray as
+// a flat face at 14 deg — the honest intersection that finally rendered clean.
+ARM_GAP  = PLUG_W + 2;                        // clear span the notch needs
+ARM_LEG  = (ARM_STRIP_W - ARM_GAP) / 2;       // 10.28 each
 module _arm() {
     z0 = TRAY_BELOW ? cr_z + (TRAY_D/2)*sin(TRAY_TILT) + TRAY_T/2 : top_z1 - 4;
     z1 = TRAY_BELOW ? bot_z0 + 4 : 28.5;
-    translate([-ARM_STRIP_W/2, ARM_Y0, z0])
-        cube([ARM_STRIP_W, ARM_Y1 - ARM_Y0, z1 - z0]);
+    for (sx = [-1, 1])
+        translate([sx > 0 ? ARM_GAP/2 : -ARM_GAP/2 - ARM_LEG, ARM_Y0, z0])
+            cube([ARM_LEG, ARM_Y1 - ARM_Y0, z1 - z0]);
 }
 
 // ---- part 1: bottom plate + bosses ----
