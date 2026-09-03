@@ -60,8 +60,30 @@ lead drop clear.
 |---|---|
 | Tray tilt | **14°** — the reference's 14.1°, rounded |
 | Lens window | 34 × 26 rounded rect |
-| Posts | 4 × 4 mm, 10 mm tall, at the pocket corners |
-| Plug notch | 14 mm, outboard border |
+| Retention pads | 5, at the **middle of each edge** — 2 × 10 mm long sides, 12 mm outboard, 2 × 6 mm inboard |
+| Pocket clearance | 0.2 mm total, ~0.1 per side |
+| Plug notch | 14 mm, **inboard** border — the high side of the tilt |
+
+## Print the coupon first
+
+`coupons/cam_fit_coupon.scad` is the tray alone — flat on the bed, no arm, no clamp plates. ~8 g
+against 14 g and four hours for the real mount. Drop the camera in: it should take light thumb
+pressure to seat and stay put when the coupon is turned upside down. Two full mounts have already
+been thrown away for a fit that a coupon would have caught in twenty minutes.
+
+⚠️ **The plug exits on the INBOARD edge, and that is deliberate.** The tray tilts 14° down toward
++Y, so the inboard edge is the *high* one and a plug leaving it points up-slope. That is what keeps
+the device's screen visible and its touchscreen reachable while the camera is being placed. The
+first build had the notch outboard, on the low side, which buried the plug under the mount. The arm
+is split into two legs straddling the notch for the same reason — a single centred web sat exactly
+where the relief has to go.
+
+⚠️ **The pads are not at the corners, and that is the whole point.** The first printed tray
+fenced the pocket with four 4 mm posts standing at its corners. The camera slid around freely
+inside it, because the body's corners are radiused — a post in a corner touches nothing but air.
+Contact has to land on the flat middle of a side, the one part of the outline whose position does
+not depend on a corner radius nobody has measured. Anything that moves a pad back toward a corner
+reintroduces the failure.
 
 ⚠️ **The window is deliberately oversize.** The notes record the thermal lens as "offset toward
 LEFT" and that offset has never been measured. A window cut to a guessed centre would blind the
@@ -106,7 +128,7 @@ Every attempt to `hull()` onto the tilted tray produced a different degeneracy o
 | Hull of two solid blocks | 4 edges |
 
 Bisection put it on the arm-to-tray join every time — tray alone passed, arm alone passed, together
-they failed, with or without the posts and the window.
+they failed, with or without the pads and the window.
 
 A plain box has flat faces. Where it meets the tilted tray, two planes cross at 14° — an honest
 intersection with nothing coincident, coplanar or tangent. It passes.
