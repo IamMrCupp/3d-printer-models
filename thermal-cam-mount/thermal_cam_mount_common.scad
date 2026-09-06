@@ -83,7 +83,26 @@ POST_W    = 4;      // corner post footprint
 // so on a 14 deg tray it slid to the low pair and lifted straight out. 10 mm did
 // not even reach the 14 mm top face.
 POST_H    = CAM_D + CAM_CLR;   // 14.03 — level with the camera's top face
-LIP_PROJ  = 3.0;    // how far each lip reaches IN over the camera
+LIP_PROJ  = 1.0;    // how far each lip reaches IN over the camera.
+                    //
+                    // WAS 3.0, AND THAT DESTROYED A PRINTED MOUNT. A 3 mm lip
+                    // leaves a 36.56 mm opening over a 42.36 mm camera, so
+                    // seating it demanded 2.90 mm of spread PER SIDE. Rigid
+                    // PETG does not give 2.9 mm. The mount split into six
+                    // pieces along its layer lines on the first attempt to
+                    // flex the camera in.
+                    //
+                    // The tray-only coupon flexed fine and proved nothing: it
+                    // prints FLAT, so its layers run across the bend, and it is
+                    // unbraced. In the mount the tray prints on edge, layers
+                    // aligned with the split, with the arm and gussets holding
+                    // the very edges that have to move. Opposite mechanics from
+                    // the same geometry.
+                    //
+                    // At 1.0 the opening is 40.56 and seating needs 0.90 mm per
+                    // side - taken by the pads themselves, not by bending the
+                    // frame. cam_fit_coupon now prints in the MOUNT's
+                    // orientation so this is testable for 12 g.
 LIP_RISE  = 4.0;    // 3 over 4 -> 37 deg from vertical, so the lip's underside
                     //   carries itself and needs no support
 
@@ -251,20 +270,64 @@ ARM_STRIP_W = POCK_W - 6;
 // the camera.
 ARM_Y0 = 14;
 ARM_Y1 = 24;
-// TWO legs, not one web. The plug notch is now on the inboard edge, which is
-// exactly where the arm lands, and a full-depth notch through a single centred
-// web would cut it in half at its most loaded section. Splitting it into a pair
-// straddling the notch keeps the full relief depth and loses only the material
-// the notch would have taken anyway. Each leg still crosses the tilted tray as
-// a flat face at 14 deg — the honest intersection that finally rendered clean.
-ARM_GAP  = PLUG_W + 2;                        // clear span the notch needs
-ARM_LEG  = (ARM_STRIP_W - ARM_GAP) / 2;       // 10.28 each
+// ONE web. It was briefly split into two legs straddling the plug notch, on the
+// belief that the notch would otherwise cut it in half. That was wrong twice
+// over, and it broke a printed part:
+//
+//   1. The notch is subtracted INSIDE _tray(). The arm is unioned afterwards, so
+//      the notch never cut the arm at all — the arm fills it where they overlap.
+//      There was no collision to solve.
+//   2. The split cost 44% of the section (365.6 -> 205.6 mm2) and left two
+//      10.3 mm posts with 16 mm of support packed between them for the arm's
+//      whole height. Prying that out snapped them off the plate.
+//
+// The arm's top stops INSIDE the tray's thickness, below the floor's top face,
+// so it never intrudes on the camera pocket and the plug — which sits above the
+// floor — clears it regardless. check_arm_clearance.py holds that line.
+// TWO LEGS, DEEP ONES, WITH A GUSSET AT THE ROOT.
+//
+// The channel between the legs is NOT optional — the plug and cord leave the
+// tray's inboard edge and pass up through it. A single web closes it and the
+// camera cannot be fitted at all. That mistake was made once, by "restoring"
+// the web to fix a broken arm, with no check to catch it. check_cord_path.py
+// exists so it cannot happen again.
+//
+// What actually broke the printed part was not the split, it was the leg
+// SECTION: 10.28 x 10 mm each. Depth is the free direction here — it does not
+// touch the channel — so the legs run ARM_D deep instead of 10, and two of them
+// now carry more section than the single web ever did:
+//
+//   single web        36.56 x 10 = 365.6 mm2   (no cord channel)
+//   two legs, old      2 x 10.28 x 10 = 205.6 mm2
+//   two legs, now      2 x 10.28 x 18 = 370.1 mm2
+//
+// Bending stiffness goes with depth squared, so each leg is 3.24x stiffer than
+// the pair that snapped.
+//
+// The gusset flares that depth further over the last GUSSET_H below the plate,
+// killing the sharp 90 deg corner that was both the stress riser and the thing
+// the support tool levered against. It grows DOWNWARD from the plate's
+// underside, never above it, so it stays out of the tab's clamped volume.
+ARM_GAP    = PLUG_W + 2;                      // clear span for plug + cord
+ARM_LEG    = (ARM_STRIP_W - ARM_GAP) / 2;     // 10.28 each
+ARM_D      = 18;                              // leg depth in Y (was 10)
+GUSSET_H   = 8;
+GUSSET_OUT = 4;
+// Depth is added INBOARD only. Growing it outboard pushes the legs under the
+// camera pocket and they rise into it — check_arm_clearance.py caught exactly
+// that at 86 mm3. The outboard face stays at ARM_Y1 where it always was.
+ARM_YC     = ARM_Y1 - ARM_D/2;                // legs span Y 6..24
 module _arm() {
     z0 = TRAY_BELOW ? cr_z + (TRAY_D/2)*sin(TRAY_TILT) + TRAY_T/2 : top_z1 - 4;
     z1 = TRAY_BELOW ? bot_z0 + 4 : 28.5;
-    for (sx = [-1, 1])
-        translate([sx > 0 ? ARM_GAP/2 : -ARM_GAP/2 - ARM_LEG, ARM_Y0, z0])
-            cube([ARM_LEG, ARM_Y1 - ARM_Y0, z1 - z0]);
+    for (sx = [-1, 1]) {
+        xl = sx > 0 ? ARM_GAP/2 : -ARM_GAP/2 - ARM_LEG;
+        translate([xl, ARM_YC - ARM_D/2, z0]) cube([ARM_LEG, ARM_D, z1 - z0]);
+        if (TRAY_BELOW)
+            translate([xl + ARM_LEG/2, ARM_YC, bot_z0 - GUSSET_H])
+                linear_extrude(GUSSET_H, scale = [1, (ARM_D + 2*GUSSET_OUT)/ARM_D])
+                    square([ARM_LEG, ARM_D], center = true);
+    }
 }
 
 // ---- part 1: bottom plate + bosses ----
