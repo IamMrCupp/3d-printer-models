@@ -80,11 +80,20 @@ for dir in "$REPO"/*/; do
     case "$(basename "$f")" in *_common.scad|_*) continue;; esac
 
     n="$(basename "$f" .scad)"
-    held=0
-    for x in "${ON_A_BRANCH[@]}"; do
-      [ "$x" = "$m/$n" ] && { echo "  held     $m/$n — newer source is on an unmerged branch"; held=1; }
-    done
-    [ "$held" = 1 ] && continue
+    # AUTOMATIC STALENESS GUARD. Find the newest commit touching this file on ANY
+    # ref; if HEAD does not contain it, HEAD's copy is old and exporting it would
+    # write a stale STL over a newer one.
+    #
+    # This replaces a hand-written hold list. That list was correct three
+    # separate times on 2026-09-07 and still let bin_swabs' 2x2 be overwritten by
+    # its old 3x2 three separate times, because keeping it accurate across every
+    # in-flight branch is a thing a person has to remember to do. This is not.
+    newest="$(git log -1 --format=%H --all -- "$f" 2>/dev/null)"
+    if [ -n "$newest" ] && ! git merge-base --is-ancestor "$newest" HEAD 2>/dev/null; then
+      br="$(git branch -a --contains "$newest" --format='%(refname:short)' 2>/dev/null | grep -v HEAD | head -1)"
+      echo "  held     $m/$n — newer source on ${br:-another branch}"
+      continue
+    fi
     if [[ "$f" == *"/coupons/"* ]]; then
       out="$QUEUE/1-print-first-gauges"
     else
