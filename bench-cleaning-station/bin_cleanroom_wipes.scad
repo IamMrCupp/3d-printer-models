@@ -1,14 +1,13 @@
-// bin_cleanroom_wipes — 2×1 open bin for a bag of cleanroom wipes.
+// bin_cleanroom_wipes — 3×1 open bin for cleanroom wipes, standing on end.
 //
 // AN OPEN BIN WITH NO WIPE DIMENSION IN IT. The wipes are 90 × 90 per the spec
 // sheet, and that number is a red herring for this part: it describes a wipe
 // opened out flat, not the shape it lives in. They are cloth-like and come in a
 // plastic bag, so the bag conforms to whatever pocket it is given.
 //
-// Laid flat, a 90 mm wipe needs a 3×3 — it does not fit a 2×1, a 2×2 or even a
-// 3×2. That arithmetic is correct and completely beside the point. Designing a
-// rigid pocket around it would have produced a bin three times the size of what
-// is actually needed.
+// Laid flat, a 90 mm wipe needs a 3×3. Stood on end in a 3×1 it does not have to
+// lie flat at all: the interior is 123.1 × 39.1, so the 90 mm dimension runs
+// along the length with room to spare and the stack fills the depth.
 //
 // So the only number here is depth, and that is a capacity choice. Change H if
 // the bag wants more or less room; nothing else depends on it.
@@ -17,7 +16,7 @@
 include <cleaning_station_common.scad>
 include <../lib/gridfinity.scad>
 
-NX = 2; NY = 1;
+NX = 3; NY = 1;   // 3×1 so they can stand on end — 123.1 mm of length
 H  = 45;    // [20:1:70] ~39 mm of usable depth — a bag stands in it and you
             //   pull wipes off the top
 

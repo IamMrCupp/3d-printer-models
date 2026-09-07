@@ -80,6 +80,11 @@ for dir in "$REPO"/*/; do
     case "$(basename "$f")" in *_common.scad|_*) continue;; esac
 
     n="$(basename "$f" .scad)"
+    held=0
+    for x in "${ON_A_BRANCH[@]}"; do
+      [ "$x" = "$m/$n" ] && { echo "  held     $m/$n — newer source is on an unmerged branch"; held=1; }
+    done
+    [ "$held" = 1 ] && continue
     if [[ "$f" == *"/coupons/"* ]]; then
       out="$QUEUE/1-print-first-gauges"
     else
