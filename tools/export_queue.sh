@@ -51,6 +51,8 @@ declare -a NOT_QUEUED=(
 # main would overwrite a newer STL with an older one — the exact regression this
 # tool exists to prevent. Empty this as the PRs land.
 declare -a ON_A_BRANCH=(
+  # wick-solder-spool lives on feat/wick-solder-spool and does not exist here.
+  wick-solder-spool
 )
 
 queue_for() {
