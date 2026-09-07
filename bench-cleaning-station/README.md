@@ -104,6 +104,7 @@ measuring the box's height.
 | `bin_flood_bottle.scad` | 2 × 2 cup — Labvida 500 ml IPA wash bottle | 84 × 84 × 56 mm |
 | `bin_dispenser.scad` | 2 × 2 cup — 200 ml push-down IPA pump | 84 × 84 × 56 mm |
 | `bin_sponges.scad` | 3 × 2 bin — melamine sponges on edge (~4) | 126 × 84 × 68 mm |
+| `bin_micro_sponges.scad` | 2×1 open bin for mechanic's micro cleaning sponges | 83.5 × 41.5 × 30 mm |
 
 ### Why the aerosol block is 5 × 2 and not 4 × 2
 
