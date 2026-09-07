@@ -17,7 +17,10 @@ include <cleaning_station_common.scad>
 include <../lib/gridfinity.scad>
 
 NX = 2; NY = 1;
-H  = 30;    // [16:1:60] ~24 mm of usable depth above the floor
+H  = 58;    // [16:1:90] matches bin_swabs' HIGH side — its hopper wall and dam
+            //   both stand at 58, so the two sit level on the plate rather than
+            //   stepping. bin_swabs' front wall is 26 and is deliberately lower;
+            //   this follows the tall side, not that one.
 
 WALL = 1.2; FLOOR = 1.4;
 
