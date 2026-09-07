@@ -63,3 +63,22 @@ openscad -o plate_iron_stand.stl --export-format binstl plate_iron_stand.scad
 | Walls | 3 perimeters |
 | Infill | 15 % |
 | Supports | **None** |
+
+## `bin_iron_tips` — 1×1, sixteen bores
+
+Soldering iron tips standing on end. Calipered 2026-09-07: ⌀6.22, 41.6 mm long, 14–15 of them.
+Sixteen bores covers either count.
+
+| | |
+|---|---|
+| grid | 1×1 — 41.5 × 41.5 × 32 mm, ~49 g |
+| bores | 4×4 = 16 at a 9.62 mm pitch, ⌀6.62 |
+| depth | 25.25 mm, leaving **16.35 mm proud** to pinch |
+
+A 1×1 is the right size rather than a compromise: at this pitch one cell takes 16, and a 2×1 would
+take 32 — twice the grid for tips that do not exist.
+
+Bore depth is the only real decision. Too shallow and a 41.6 mm tip topples; too deep and there is
+nothing left to grip. Asserts hold both ends of that.
+
+Prints feet down, no supports — the bores are open holes, not overhangs.
