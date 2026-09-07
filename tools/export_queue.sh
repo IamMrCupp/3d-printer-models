@@ -37,6 +37,7 @@ declare -a OVERRIDE=(
   "donation-qr-stand:5-status-unknown-ASK-FIRST/donation-qr-stand"
   "gridfinity-fillers:18-gridfinity-fillers"
   "wolfbox-nozzles:19-wolfbox-nozzles"
+  "wick-solder-spool:21-wick-solder-spool"
 )
 
 # Models deliberately NOT in the queue: printed and confirmed in service, so an
@@ -51,8 +52,8 @@ declare -a NOT_QUEUED=(
 # main would overwrite a newer STL with an older one — the exact regression this
 # tool exists to prevent. Empty this as the PRs land.
 declare -a ON_A_BRANCH=(
-  # wick-solder-spool lives on feat/wick-solder-spool and does not exist here.
-  wick-solder-spool
+  # Empty: wick-solder-spool landed in #132, and bin_swabs' 2x2 is on this
+  # branch. Refill it the moment a model's newer source moves to a branch.
 )
 
 queue_for() {
