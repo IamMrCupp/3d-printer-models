@@ -16,6 +16,17 @@ Every dimension here was taken off the actual item with calipers. Nothing is a n
 
 > ⚠️ **The aerosols are flammable and this bench has a 400 °C iron on it.** These cups are for *working* cans. Bulk stock belongs away from the hood and away from the iron.
 
+## ⚠️ The swab dam needs support
+
+`bin_swabs` has a dam whose underside is a horizontal ceiling 9 mm above the floor, spanning the
+full interior on a 2 mm ribbon — 123.10 mm at 3×2 (61.5 : 1), 81.10 mm at 2×2 (40.5 : 1). Nothing
+bridges that. It sags into the feed opening and closes it, which presents as swabs not fitting
+through a gap that is nominally 9 mm.
+
+It cannot be arched or pillared out: swabs lie across the width and roll forward, so the opening has
+to stay clear for its whole span. **Use a support enforcer in the feed slot**, and measure the gap on
+the printed part before changing `GAP`.
+
 ## Swabs and sponges — separate units
 
 They were briefly a two-tier tower (swab base with a baseplate top, sponge bin socketed on).

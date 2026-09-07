@@ -27,8 +27,25 @@
 // SCOOP_R means there is no corner anywhere along the path a bud rolls, and it
 // runs downhill the whole way rather than having to climb out from under the dam.
 //
-// PRINT: as emitted, feet down. The dam's underside is a GAP-tall bridge over
-// the floor; at this span it prints unsupported.
+// PRINT: as emitted, feet down — WITH SUPPORT UNDER THE DAM.
+//
+// This used to claim the dam "prints unsupported at this span". That is false,
+// and it cost a print. The dam's underside is a horizontal ceiling GAP mm above
+// the floor, anchored only at its two ends, on a ribbon DAM_T deep:
+//
+//     3×2   bridges 123.10 mm on 2.0 mm   —  61.5 : 1
+//     2×2   bridges  81.10 mm on 2.0 mm   —  40.5 : 1
+//
+// Nothing bridges 123 mm at 61:1. It sagged into the feed opening and closed it,
+// which read as "the swabs are too fat" — they were not.
+//
+// IT CANNOT BE MADE SELF-SUPPORTING BY ARCHING IT. Swabs lie ACROSS the width
+// and roll forward, so the opening has to stay clear for its whole span: no
+// pillars, no centre post. An arch steep enough to print (45°) would need its
+// apex 40 mm above the ends on the 2×2 — taller than the dam itself.
+//
+// So: a support enforcer in the feed slot, and check the gap is actually GAP mm
+// on the printed part before blaming the swabs.
 include <cleaning_station_common.scad>
 include <../lib/gridfinity.scad>
 
