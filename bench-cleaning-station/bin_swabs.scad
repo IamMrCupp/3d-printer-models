@@ -1,4 +1,4 @@
-// bin_swabs — 3×2 cotton-bud dispenser: tall hopper behind, low trough in front.
+// bin_swabs — 2×2 cotton-bud dispenser: tall hopper behind, low trough in front.
 //
 // MODELLED ON thing:7165275 (Haaneroth, CC BY-NC-SA), which is the shape that
 // actually works. That design is a TALL CLOSED BOX whose front wall doubles as a
@@ -27,12 +27,29 @@
 // SCOOP_R means there is no corner anywhere along the path a bud rolls, and it
 // runs downhill the whole way rather than having to climb out from under the dam.
 //
-// PRINT: as emitted, feet down. The dam's underside is a GAP-tall bridge over
-// the floor; at this span it prints unsupported.
+// PRINT: as emitted, feet down — WITH SUPPORT UNDER THE DAM.
+//
+// This used to claim the dam "prints unsupported at this span". That is false,
+// and it cost a print. The dam's underside is a horizontal ceiling GAP mm above
+// the floor, anchored only at its two ends, on a ribbon DAM_T deep:
+//
+//     3×2   bridges 123.10 mm on 2.0 mm   —  61.5 : 1
+//     2×2   bridges  81.10 mm on 2.0 mm   —  40.5 : 1
+//
+// Nothing bridges 123 mm at 61:1. It sagged into the feed opening and closed it,
+// which read as "the swabs are too fat" — they were not.
+//
+// IT CANNOT BE MADE SELF-SUPPORTING BY ARCHING IT. Swabs lie ACROSS the width
+// and roll forward, so the opening has to stay clear for its whole span: no
+// pillars, no centre post. An arch steep enough to print (45°) would need its
+// apex 40 mm above the ends on the 2×2 — taller than the dam itself.
+//
+// So: a support enforcer in the feed slot, and check the gap is actually GAP mm
+// on the printed part before blaming the swabs.
 include <cleaning_station_common.scad>
 include <../lib/gridfinity.scad>
 
-NX = 3; NY = 2;
+NX = 2; NY = 2;
 H         = 58;    // [40:1:90] hopper height — the back wall and the dam
 FRONT_H   = 26;    // [16:1:40] front wall. Low enough to reach over, high enough
                    //   to contain: see the 18 mm figure in the header.
@@ -45,7 +62,14 @@ DAM_T     = 2.0;   // [1.2:0.2:4] dam thickness
 GAP       = 9;     // [5:0.5:16] feed opening under the dam — about one bud
 WALL      = 1.2;
 FLOOR     = 1.4;
-BUD_L     = 81.28; // 3.2" — the footprint is chosen against this
+// NO BUD LENGTH IS HARDCODED HERE ANY MORE. This said 81.28 — an assumed 3.2" —
+// and MEASUREMENTS.md listed "swab shaft ⌀ + length" as missing the whole time.
+// It was a guess driving the assert that decided whether 2×2 was even possible.
+//
+// What IS known, 2026-09-07: the swabs were dropped into a 2-cell span and fit.
+// So they clear an 81.1 mm interior. That is the bound the geometry needs; the
+// exact length is still not on calipers and does not need to be.
+IW_MIN    = 79.1;  // the 2×2 interior less 2 mm — verified in hand
 
 W = NX*GF - 0.5; D = NY*GF - 0.5;
 IW = W - 2*WALL; ID = D - 2*WALL;
@@ -58,7 +82,7 @@ Y_LOW   = Y_FRONT + LOW_IN;
 
 function floor_z(y) = SCOOP_R - sqrt(SCOOP_R*SCOOP_R - pow(y - Y_LOW, 2));
 
-assert(IW > BUD_L + 2, str("A ", BUD_L, " mm bud will not lie square in ", IW, " mm."));
+assert(IW >= IW_MIN, str("Interior is ", IW, " mm — swabs were only confirmed to fit ", IW_MIN, "."));
 assert(FRONT_H > Z0 + floor_z(Y_FRONT) + 12,
        "Front wall is too low over the trough floor — buds will roll out.");
 assert(Z0 + floor_z(Y_BACK) < H - 15, "Floor climbs too far at the back — raise SCOOP_R.");

@@ -52,9 +52,8 @@ declare -a NOT_QUEUED=(
 # main would overwrite a newer STL with an older one — the exact regression this
 # tool exists to prevent. Empty this as the PRs land.
 declare -a ON_A_BRANCH=(
-  # bin_swabs is 2x2 on fix/swab-bin-2x2. Exporting it from here writes the old
-  # 3x2 over it — which happened once, 2026-09-07, in exactly this situation.
-  bench-cleaning-station
+  # Empty: wick-solder-spool landed in #132, and bin_swabs' 2x2 is on this
+  # branch. Refill it the moment a model's newer source moves to a branch.
 )
 
 queue_for() {
