@@ -52,6 +52,28 @@ The ridge is two stacked cones rather than a torus. A torus meets the bore on a 
 
 `HUB_D` is also the tightest bend the braid sees; raise it if the braid resists the wind.
 
+## Respooler — there is no crank
+
+The printed spool already spins in the holder's own brackets; that is what its 0.30 mm spigot and
+0.40 mm journal clearances are for. Winding 15 m of 3 mm braid is only **~126–149 turns** on a ⌀56
+flange you can grip. So you turn it by hand and the stand just feeds it.
+
+An earlier sketch had a crank, a driven upright, and two flats milled on the journal to drive it —
+a spool revision for a problem that does not exist.
+
+**The existing holder cannot host the source spools.** Both fail, for different reasons, which is the
+only reason a stand is needed:
+
+| source spool | | |
+|---|---|---|
+| solder braid | ⌀48.50 × 44.75 wide, bore 10.25 | 44.75 wide vs a 34.25 mm span — **too wide** |
+| micro wire #1/#2 | ⌀69.13 × 13.50 wide, bore 11.30 | ⌀69.13 vs a ⌀60 envelope — **too big** |
+
+The ⌀9.9 post clears both bores. The drag washer is what makes the wind tight: without it the source
+overruns whenever you pause. Its own weight supplies the drag — deliberately not a spring, because a
+printed spring at this size relaxes and this has to behave the same on a 44.75 mm spool and a 13.50
+mm one.
+
 ## Parts
 
 | file | what |
@@ -59,3 +81,6 @@ The ridge is two stacked cones rather than a torus. A torus meets the bore on a 
 | `spool_common.scad` | measured mounting dimensions, envelope, joint |
 | `spool_lower.scad` | spigot, lower flange, full hub, joint boss |
 | `spool_upper.scad` | upper flange, journal, joint socket |
+| `respool_common.scad` | source-spool dimensions and stand geometry |
+| `respool_stand.scad` | 2×2 base + ⌀9.9 post — 83.5 × 83.5 × 64 mm, ~67 g |
+| `respool_drag_washer.scad` | ⌀40 × 6 disc — ~9 g |
