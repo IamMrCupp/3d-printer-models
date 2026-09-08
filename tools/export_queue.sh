@@ -39,13 +39,16 @@ declare -a OVERRIDE=(
   "wolfbox-nozzles:19-wolfbox-nozzles"
   "wick-solder-spool:21-wick-solder-spool"
   "hot-air-nozzles:22-hot-air-nozzles"
+  "uv-mask-station:23-uv-mask-station"
 )
 
 # Models deliberately NOT in the queue: printed and confirmed in service, so an
 # STL sitting in the print list is noise. See the queue README's "Not here, and
 # why". Listed rather than silently skipped, so removing one is a decision.
+# uv-mask-station came OFF this list 2026-09-08: plate_oiler is new and unprinted,
+# so the directory has to be queued again. Its other parts are already in service.
 declare -a NOT_QUEUED=(
-  syringe-holders uv-mask-station instrument-holders engindot-shortkiller-topper
+  syringe-holders instrument-holders engindot-shortkiller-topper
   owon-spm8104-tray drybox-splitter-stand bench-cleaning-station-legacy
 )
 
