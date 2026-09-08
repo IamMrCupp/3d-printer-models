@@ -52,7 +52,25 @@ The ridge is two stacked cones rather than a torus. A torus meets the bore on a 
 
 `HUB_D` is also the tightest bend the braid sees; raise it if the braid resists the wind.
 
-## Respooler — there is no crank
+## Respooler — with a crank
+
+Winding 15 m of braid is **126–149 turns**. Pinching a ⌀56 flange means re-gripping every half turn —
+a doorknob, 140 times. The crank makes it steady winding.
+
+**It drives from outside the holder.** Installed, the spool's journal top is flush with the bracket
+(41.40 vs 41.50) and there is nothing to grip. Out of the holder the whole 5.5 mm journal is exposed,
+so the spool stands in `respool_winder` while you wind, and goes back to the holder to live.
+
+**The journal carries two flats**, 12.00 across a ⌀14.60 body. The flats take the torque so the crank
+does not rely on friction, which printed-on-printed never survives. They do not affect the holder —
+its bore is ⌀15.00 and round, and the two remaining arcs still locate the journal exactly as before.
+
+A hex socket down the journal's top face was considered first and does not fit: the joint socket
+already eats 33.50–39.50, leaving 2 mm of solid. Flipping the joint to free it would put the upper
+half's boss below its own bed surface when printed flange-down, costing that part its support-free
+print.
+
+## Source stand
 
 The printed spool already spins in the holder's own brackets; that is what its 0.30 mm spigot and
 0.40 mm journal clearances are for. Winding 15 m of 3 mm braid is only **~126–149 turns** on a ⌀56
@@ -84,3 +102,5 @@ mm one.
 | `respool_common.scad` | source-spool dimensions and stand geometry |
 | `respool_stand.scad` | 2×2 base + ⌀9.9 post — 83.5 × 83.5 × 64 mm, ~67 g |
 | `respool_drag_washer.scad` | ⌀40 × 6 disc — ~9 g |
+| `respool_winder.scad` | 2×2 plate with a ⌀10.00 socket — the spool stands in it to be wound, ~62 g |
+| `respool_crank.scad` | D-socket crank for the journal's flats — ~17 g |

@@ -46,6 +46,28 @@ CHAMFER_H  = 0.55;
 JOURNAL_D  = 14.60;   // top bracket bore is 15.00 — 0.40 clearance to spin
 JOURNAL_BOT = 36.00;  // covers the bracket's grip at 37.90..41.40
 
+// ---- crank drive -----------------------------------------------------------
+// TWO FLATS ON THE JOURNAL, so a crank can turn the spool while winding.
+//
+// Winding 15 m of braid is 126-149 turns. Doing that by pinching a ⌀56 flange
+// means re-gripping every half turn — a doorknob, 140 times. A crank makes it
+// two minutes of steady winding, and the spool is the only part that can carry
+// the drive feature.
+//
+// IT DRIVES FROM OUTSIDE THE HOLDER, not in it. Installed, the journal's top is
+// flush with the bracket (41.40 vs 41.50) and there is nothing to grip. Out of
+// the holder the whole 5.5 mm journal is exposed, so the crank slips over it and
+// the flats carry the torque. The respooler's stand has a socket to stand the
+// spool in while you wind.
+//
+// The flats do NOT affect the holder. Its bore is ⌀15.00 and round; the two
+// remaining arcs still locate the journal exactly as before.
+//
+// A hex socket down the journal's top face was tried on paper first and does not
+// fit: the joint socket already eats 33.50..39.50, leaving 2 mm of solid — too
+// shallow to drive anything.
+FLAT_AF = 12.0;   // across the flats, on a ⌀14.60 journal -> 1.3 mm cut per side
+
 // ---- spool: free choices inside the measured envelope ----
 FLANGE_D   = 56;      // [40:2:60] 60.0 is where it fouls the bracket
 FLANGE_T   = 2.5;
@@ -93,6 +115,18 @@ module _lower_profile() {
         ]);
 }
 
+// The journal's two flats, as a solid to subtract. Cut through the journal only,
+// never into the flange.
+module _journal_flats(z0) {
+    // Each cube starts AT the flat and runs outward. Writing this as
+    // sx*(FLAT_AF/2 + JOURNAL_D) put the + side entirely clear of the journal and
+    // cut nothing — one flat instead of two, and the mesh still passed every
+    // check because a D-shaped journal is perfectly manifold.
+    for (sx = [-1, 1])
+        translate([sx > 0 ? FLAT_AF/2 : -FLAT_AF/2 - JOURNAL_D, -JOURNAL_D, z0])
+            cube([JOURNAL_D, 2*JOURNAL_D, SHAFT_L - JOURNAL_BOT + 1]);
+}
+
 // Emitted with its own base at z = 0, which is also how it prints: flange-down.
 module _upper_profile() {
     ft = FLANGE_T;
@@ -110,12 +144,7 @@ module _upper_profile() {
 }
 
 // ---- the joint ----
-SPLIT_Z    = UP_FL_BOT;   // the upper flange's underside
-JOINT_D    = 10.0;        // leaves 2.2 mm of wall inside the ⌀14.60 journal
-JOINT_L    = 6.0;
-JOINT_CLR  = 0.20;
 
-EPS = 0.01;
 
 assert(FLANGE_D <= 60, "Flange fouls the bracket above ⌀60.");
 assert(JOURNAL_BOT < 37.90, "Journal must already be full ⌀ where the bracket grips.");

@@ -1,5 +1,10 @@
 // plate_oiler — 3×3 plate with a round recess for the oiler.
 //
+// IT LIVES WITH THE UV MASK STATION, NOT THE CLEANING BENCH. The oiler is a
+// DISPENSING tool: it lays UV mask and solder paste down under the scope, which
+// wastes far less than picking it up on tweezers. It belongs next to the masks
+// and their colour trays, not with the swabs and sponges.
+//
 // Calipered 2026-09-07: the oiler is ⌀95.95 and the recess wants to be 5 mm deep.
 //
 // A RECESS, NOT A BIN. The oiler is only located, not contained — 5 mm of depth
@@ -11,7 +16,6 @@
 // 81.1 mm interior — not close. In a 3×3 it leaves 14.6 mm of rim all round.
 //
 // PRINT: as emitted, feet down. No supports — the recess is an open pocket.
-include <cleaning_station_common.scad>
 include <../lib/gridfinity.scad>
 
 NX = 3; NY = 3;

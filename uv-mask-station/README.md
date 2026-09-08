@@ -66,3 +66,22 @@ openscad -o bin_uv_mask.stl --export-format binstl bin_uv_mask.scad
 | Walls | 3 perimeters (don't drop below 2 on the rack — thin walls leak light) |
 | Infill | 15 % |
 | Supports | **None** — bores are vertical; the cap prints top-down as emitted, so nothing bridges |
+
+## `plate_oiler` — 3×3, a recess for the oiler
+
+The oiler is a **dispensing tool**, which is why it lives here rather than with the cleaning bench: it
+lays UV mask and solder paste down under the scope, wasting far less than picking it up on tweezers.
+It belongs next to the masks and their colour trays.
+
+| | |
+|---|---|
+| plate | 125.5 × 125.5 × 11.75 mm, ~168 g |
+| recess | ⌀96.35 (0.40 clearance on a calipered ⌀95.95), 5 mm deep |
+| rim | 14.575 mm all round |
+
+**A recess, not a bin.** The oiler is located, not contained — 5 mm stops it sliding and nothing more.
+A deep well would bury a round object you pick up one-handed, and at ⌀95.95 it would be most of a
+3×3's volume in wall.
+
+3×3 is the smallest grid that takes it; ⌀95.95 does not fit a 2×2's 81.1 mm interior, and not
+narrowly. Prints feet down, no supports.
