@@ -116,7 +116,7 @@ measuring the box's height.
 | `bin_dispenser.scad` | 2 × 2 cup — 200 ml push-down IPA pump | 84 × 84 × 56 mm |
 | `bin_sponges.scad` | 2 × 2 bin — melamine sponges on edge (~4) | 83.5 × 83.5 × 68 mm |
 | `bin_micro_sponges.scad` | 2×1 open bin for mechanic's micro cleaning sponges | 83.5 × 41.5 × 58 mm |
-| `bin_cleanroom_wipes.scad` | 3×1 open bin — cleanroom wipes standing on end | 125.5 × 41.5 × 56.25 mm |
+| `bin_cleanroom_wipes.scad` | 3×1 open bin — cleanroom wipes standing on end | 125.5 × 41.5 × 58 mm |
 | `plate_oiler.scad` | 3×3 plate — ⌀96.35 recess, 5 mm deep, for the oiler | 125.5 × 125.5 × 11.75 mm |
 
 ### Why the aerosol block is 5 × 2 and not 4 × 2

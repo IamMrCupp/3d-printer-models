@@ -17,8 +17,13 @@ include <cleaning_station_common.scad>
 include <../lib/gridfinity.scad>
 
 NX = 3; NY = 1;   // 3×1 so they can stand on end — 123.1 mm of length
-H  = 56.25;    // [20:1:70] ~39 mm of usable depth — a bag stands in it and you
-            //   pull wipes off the top. 45 -> 56.25 (25% taller) 2026-09-08.
+H  = 58;    // [20:1:70] ~39 mm of usable depth — a bag stands in it and you
+            //   pull wipes off the top.
+            //
+            //   45 -> 58 on 2026-09-08. The ask was "25% taller", which is
+            //   56.25 — but that lands 1.75 mm under bin_swabs and
+            //   bin_micro_sponges, both of which stand at 58, and a step that
+            //   size shows in a row of three. 58 is 29% taller and level.
 
 WALL = 1.2; FLOOR = 1.4;
 
