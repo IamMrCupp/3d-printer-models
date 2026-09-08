@@ -8,6 +8,8 @@ include <spool_common.scad>
 $fn = 96;
 difference() {
     _upper_profile();
+    // The crank's flats. Cut from the journal's base upward, past the top face.
+    translate([0, 0, JOURNAL_BOT - SPLIT_Z]) _journal_flats(0);
     // The socket must pass THROUGH the bottom face, never stop on it.
     translate([0, 0, -EPS]) _joint_socket();
 }
