@@ -38,6 +38,7 @@ declare -a OVERRIDE=(
   "gridfinity-fillers:18-gridfinity-fillers"
   "wolfbox-nozzles:19-wolfbox-nozzles"
   "wick-solder-spool:21-wick-solder-spool"
+  "hot-air-nozzles:22-hot-air-nozzles"
 )
 
 # Models deliberately NOT in the queue: printed and confirmed in service, so an
