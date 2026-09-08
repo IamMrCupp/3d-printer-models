@@ -17,8 +17,8 @@ include <cleaning_station_common.scad>
 include <../lib/gridfinity.scad>
 
 NX = 3; NY = 1;   // 3×1 so they can stand on end — 123.1 mm of length
-H  = 45;    // [20:1:70] ~39 mm of usable depth — a bag stands in it and you
-            //   pull wipes off the top
+H  = 56.25;    // [20:1:70] ~39 mm of usable depth — a bag stands in it and you
+            //   pull wipes off the top. 45 -> 56.25 (25% taller) 2026-09-08.
 
 WALL = 1.2; FLOOR = 1.4;
 
