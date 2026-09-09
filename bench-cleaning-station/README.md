@@ -16,6 +16,15 @@ Every dimension here was taken off the actual item with calipers. Nothing is a n
 
 > ⚠️ **The aerosols are flammable and this bench has a 400 °C iron on it.** These cups are for *working* cans. Bulk stock belongs away from the hood and away from the iron.
 
+## The DeoxIT wipe bin is deliberately shorter
+
+`bin_deoxit_wipes` stands at 45 while `bin_swabs`, `bin_micro_sponges` and `bin_cleanroom_wipes` all
+stand at 58 and line up on purpose. These are small sachets: in a 58 mm bin they sink to the bottom
+of a 52 mm well and you fish for them. Reaching in beats looking tidy.
+
+Like its neighbours it carries no dimension of its contents — the wipes have never been on calipers
+and do not need to be.
+
 ## ⚠️ The swab dam needs support
 
 `bin_swabs` has a dam whose underside is a horizontal ceiling 9 mm above the floor, spanning the
@@ -117,6 +126,7 @@ measuring the box's height.
 | `bin_sponges.scad` | 2 × 2 bin — melamine sponges on edge (~4) | 83.5 × 83.5 × 68 mm |
 | `bin_micro_sponges.scad` | 2×1 open bin for mechanic's micro cleaning sponges | 83.5 × 41.5 × 58 mm |
 | `bin_cleanroom_wipes.scad` | 3×1 open bin — cleanroom wipes standing on end | 125.5 × 41.5 × 58 mm |
+| `bin_deoxit_wipes.scad` | 2×1 open bin — the small wipes from the DeoxIT bottles | 83.5 × 41.5 × 45 mm |
 
 ### Why the aerosol block is 5 × 2 and not 4 × 2
 
