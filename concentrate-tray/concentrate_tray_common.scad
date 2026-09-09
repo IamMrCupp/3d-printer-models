@@ -44,9 +44,24 @@ CASE_CLR = 2.0;   // [0.5:0.5:6] total slack so the tray drops in and lifts out
 COLS = 4;  ROWS = 4;   // 16. ROWS=3 gives 12 and frees a strip of the case
 WALL  = 3.0;      // [1.5:0.1:6] between pockets and at the edges
 FLOOR = 3.0;      // [2:0.5:6]
-CORNER = 8;       // [0:1:20] outer corner radius, to clear the case's corners
+CORNER = 16;      // [0:1:24] outer corner radius. IT MUST CLEAR THE CASE'S
+                  //   INTERIOR CORNER, which is MEASURED at radius 17.0 centred
+                  //   at (82.99, 82.99) — fitted from the box mesh, not guessed.
+                  //
+                  //   At the original 8 the tray's corner landed 3.96 mm OUTSIDE
+                  //   the cavity and the tray did not fit the box at all. It was
+                  //   signed off on a span measured through the MIDDLE of the
+                  //   box, which says nothing about corners.
+                  //
+                  //     CORNER  8 -> -0.65 mm   does not fit
+                  //     CORNER 12 -> -0.25 mm   does not fit
+                  //     CORNER 14 -> +0.57 mm   marginal
+                  //     CORNER 16 -> +1.40 mm   corners stop being the limiter
+                  //
+                  //   Past 16 there is no gain: the flats cap clearance at
+                  //   1.30 mm (tray half 98.70 against a 100.00 cavity).
+                  //   check_box_fit.py proves the whole thing against both meshes.
 
-/* [Pocket depths] */
 RECESS = 12.0;    // [6:0.5:20] wide jar sits on this shoulder
 BORE   = 8.0;     // [4:0.5:20] slim jar drops this much further
 
