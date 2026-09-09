@@ -207,3 +207,17 @@ that basis and killed. `mount_bottom` genuinely needs none — it is a plate wit
 
 **Set supports per-object.** If both parts share a plate, a global support setting grows them
 under `mount_bottom` for nothing.
+
+## `verify_aim.py` reads the model, on purpose
+
+It used to carry its own copies of the constants, and they drifted badly: it modelled a **60° upright
+cradle** with `ARM_FWD` 19.5 and the pre-caliper camera long after the design became a **14° flat
+tray** at `ARM_FWD` 26. It reported PASS throughout, including in two release notes.
+
+It now parses `thermal_cam_mount_common.scad` and exits with an error if a constant it needs has
+gone. **Do not reintroduce literals into it** — a checker with its own copy of the numbers is one
+that will eventually validate a part that does not exist.
+
+It checks that the lens points down and inward, that the reported aim equals `TRAY_TILT`, and that
+the view cone clears the window without the floor vignetting it. Negative-tested: flipping the tilt
+sign and shrinking the window both make it fail.
