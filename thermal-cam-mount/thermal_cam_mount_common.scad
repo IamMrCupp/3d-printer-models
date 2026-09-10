@@ -74,7 +74,7 @@ CAM_ANGLE = 30;   // tilt from vertical → lens looks down at the board
 // Only the CRADLE is replaced. The sandwich clamp on the control-box tab
 // (49.65 x 32.51 x 26.42) is unchanged — that half was never the problem.
 TRAY_T    = 3.0;    // tray thickness — the reference's
-TRAY_TILT = 14;     // deg off horizontal — the reference's 14.1, rounded
+TRAY_TILT = 25;   // the ANGLE YOU SET ON THE BENCH — see the index below     // deg off horizontal — the reference's 14.1, rounded
 BORDER    = 8;      // material around the camera pocket. 8, not 5, so the
                     //   lips stay over solid tray instead of hanging past its edge
 POST_W    = 4;      // corner post footprint
@@ -317,8 +317,10 @@ GUSSET_OUT = 4;
 // camera pocket and they rise into it — check_arm_clearance.py caught exactly
 // that at 86 mm3. The outboard face stays at ARM_Y1 where it always was.
 ARM_YC     = ARM_Y1 - ARM_D/2;                // legs span Y 6..24
+// The legs are TILT-INDEPENDENT now: they end just below the pivot and the tray
+// swings off it, so changing the angle never changes this part.
 module _arm() {
-    z0 = TRAY_BELOW ? cr_z + (TRAY_D/2)*sin(TRAY_TILT) + TRAY_T/2 : top_z1 - 4;
+    z0 = TRAY_BELOW ? PIV_Z - YOKE_R - 3 : top_z1 - 4;
     z1 = TRAY_BELOW ? bot_z0 + 4 : 28.5;
     for (sx = [-1, 1]) {
         xl = sx > 0 ? ARM_GAP/2 : -ARM_GAP/2 - ARM_LEG;
@@ -330,9 +332,158 @@ module _arm() {
     }
 }
 
+// ============================================================================
+// ADJUSTABLE TILT — pivot + indexed lock
+//
+// The tilt was a FIXED 14 deg, inherited as "the reference's 14.1, rounded" from
+// a downloaded model and never checked against this scope. At 14 the thermal
+// view lands 2-3 cm off the scope's field, because the lens sits ~43 mm outboard
+// of the optical axis and at that angle the two axes do not converge until
+// 172 mm below the lens. Twenty-odd reprints went into guessing a fixed number.
+//
+// So it is not fixed any more. The tray pivots and locks at 5 deg steps, set by
+// eye against the app.
+//
+// INDEXED, NOT FRICTION. A friction joint in printed PETG holding a camera at
+// 30 deg creeps. Two M3 screws: one is the pivot, the second drops through one
+// of the index holes and positively locks the angle.
+//
+// THE PIVOT GOES OUTSIDE THE LEGS. The 16 mm gap between them carries the plug
+// and cord — see check_cord_path.py — so the yoke straddles the legs instead,
+// in the 11.00 mm of tray that overhangs each one.
+PIV_Y      = 20;                 // pivot axis, assembly Y — inside the legs' 6..24 span
+PIV_Z      = bot_z0 - 34;        // and Z — 34 below the plate's underside
+PIVOT_IN   = 8;                  // pivot's inset from the tray's inboard edge
+PIVOT_D    = 3.4;                // M3 clearance
+YOKE_T     = 4;                  // yoke arm thickness
+YOKE_CLR   = 0.0;                // the yoke's inner face MEETS the leg's outer
+                                 //   face; clearance lives in the groove, not a gap
+YOKE_R     = 17;                 // yoke disc radius — must clear SERR_R1
+
+// SERRATED, NOT DRILLED. Index holes cannot work here at any radius that fits:
+// 3.4 mm holes 5 deg apart need a 50 mm radius to stop merging, and even there
+// they touch. The first attempt would have produced one arc slot that indexed
+// nothing. Radial ribs instead, meshing into matching grooves.
+//
+// THE PITCH IS SET BY WHAT PRINTS, not by what would be nice. At 10 deg and
+// r = 9 the ribs are 1.57 mm apart — 0.5 mm of rib and ~1.1 mm of gap, which a
+// 0.4 mm nozzle resolves. At 5 deg they would be 0.79 mm apart, leaving 0.3 mm
+// of gap: the ribs would bridge into a smear and index nothing, which is the
+// same failure as the holes.
+SERR_R0    = 6;      // ribs run from this radius
+SERR_R1    = 15;     //   out to this
+SERR_W     = 0.5;    // rib width
+SERR_H     = 0.6;    // how proud it stands / how deep the groove cuts
+SERR_CLR   = 0.15;   // groove is this much wider and deeper than the rib
+TILT_MIN   = 15;
+TILT_MAX   = 45;
+TILT_STEP  = 10;
+IDX_N      = floor((TILT_MAX - TILT_MIN)/TILT_STEP) + 1;
+
+assert(TRAY_TILT >= TILT_MIN && TRAY_TILT <= TILT_MAX,
+       str("TRAY_TILT ", TRAY_TILT, " is outside the indexed range ",
+           TILT_MIN, "..", TILT_MAX));
+assert((TRAY_TILT - TILT_MIN) % TILT_STEP == 0,
+       str("TRAY_TILT ", TRAY_TILT, " is not on a ", TILT_STEP, " deg index step"));
+echo(str("tilt ", TRAY_TILT, " deg — index hole ",
+         (TRAY_TILT - TILT_MIN)/TILT_STEP + 1, " of ", IDX_N));
+
+// In the TRAY's own frame the pivot is a fixed point, which is what makes this
+// tractable: the yoke and its index hole never move relative to the tray.
+PIV_LY = -TRAY_D/2 + PIVOT_IN;   // pivot, tray-local Y
+PIV_LZ = TRAY_T/2;               // pivot, tray-local Z
+
+// One ring of radial ribs, in the Y-Z plane, centred on the pivot. Both mating
+// faces carry the SAME ring, so they mesh at any multiple of TILT_STEP.
+module _serration(grow = 0) {
+    for (i = [0 : 360/TILT_STEP - 1])
+        rotate([0, 0, i*TILT_STEP])
+            translate([SERR_R0, -(SERR_W + 2*grow)/2])
+                square([SERR_R1 - SERR_R0, SERR_W + 2*grow]);
+}
+
+// The tray part: the tray itself plus the two yoke arms, in tray-local coords.
+module _tray_yoked() {
+    x0 = ARM_GAP/2 + ARM_LEG + YOKE_CLR;
+    union() {
+        _tray();
+        for (sx = [-1, 1])
+            difference() {
+                translate([sx > 0 ? x0 : -x0 - YOKE_T, 0, 0])
+                    rotate([0, 90, 0])
+                        linear_extrude(YOKE_T)
+                            difference() {
+                                translate([-PIV_LZ, PIV_LY]) circle(r = YOKE_R, $fn = 96);
+                                translate([-PIV_LZ, PIV_LY]) circle(d = PIVOT_D, $fn = 32);
+                            }
+                // Grooves in the INNER face, receiving the leg's ribs. Cut a
+                // touch wider and deeper than the rib so it seats rather than
+                // bottoming out on tolerance.
+                translate([sx > 0 ? x0 - EPS : -x0 - (SERR_H + SERR_CLR) + EPS, PIV_Y, PIV_Z])
+                    rotate([0, 90, 0])
+                        linear_extrude(SERR_H + SERR_CLR)
+                            intersection() {
+                                _serration(SERR_CLR);
+                                circle(r = SERR_R1 + SERR_CLR, $fn = 96);
+                            }
+            }
+    }
+}
+
+// The tray, hung off the pivot at whatever tilt is set.
+module _tray_at(t) {
+    translate([0, PIV_Y, PIV_Z])
+        rotate([-t, 0, 0])
+            translate([0, -PIV_LY, -PIV_LZ])
+                _tray_yoked();
+}
+
+// The legs get the pivot bore and the whole arc of index holes, so any step can
+// be chosen after printing without touching the file.
+// The ribs SINK into the leg rather than standing on its face. Butted at the
+// exact plane they came out as 18 floating bodies — a partial-area join has to
+// overlap volumetrically. Same rule as the nozzle posts and the PSU nubs.
+// The serration ring is WIDER THAN THE LEG — r 15 about a pivot at Y 20 spans
+// Y 5..35, and the leg is only 6..24. Standing the ribs straight on the leg left
+// 18 of them floating in mid-air. They sit on a BOSS instead: a disc that
+// overlaps the leg where it can and cantilevers where it must, so everything
+// stays one body.
+SERR_SINK = 0.4;
+BOSS_PAD  = 1.5;
+module _leg_pad() {
+    xo = ARM_GAP/2 + ARM_LEG;
+    for (sx = [-1, 1])
+        translate([sx > 0 ? xo - SERR_SINK : -xo - SERR_H, PIV_Y, PIV_Z])
+            rotate([0, 90, 0])
+                linear_extrude(SERR_H + SERR_SINK)
+                    circle(r = SERR_R1 + BOSS_PAD, $fn = 96);
+}
+module _leg_ribs() {
+    xo = ARM_GAP/2 + ARM_LEG;
+    for (sx = [-1, 1])
+        translate([sx > 0 ? xo + SERR_H - SERR_SINK : -xo - SERR_H - SERR_H, PIV_Y, PIV_Z])
+            rotate([0, 90, 0])
+                linear_extrude(SERR_H + SERR_SINK)
+                    intersection() { _serration(); circle(r = SERR_R1, $fn = 96); }
+}
+
+module _leg_holes() {
+    for (sx = [-1, 1])
+        translate([sx*(ARM_GAP/2 + ARM_LEG + YOKE_CLR + YOKE_T + 2), PIV_Y, PIV_Z])
+            rotate([0, 90, 0]) {
+                translate([0, 0, -2*(ARM_GAP + 2*ARM_LEG)])
+                    cylinder(d = PIVOT_D, h = 4*(ARM_GAP + 2*ARM_LEG), $fn = 32);
+            }
+}
+
 // ---- part 1: bottom plate + bosses ----
 module mount_bottom() {
-    if (TRAY_BELOW) { _arm(); translate([0, cr_y, cr_z]) rotate([-TRAY_TILT,0,0]) _tray(); }
+    // The tray is its OWN part now — see mount_tray.scad. This piece never
+    // changes when the angle does.
+    if (TRAY_BELOW) difference() {
+        union() { _arm(); _leg_pad(); _leg_ribs(); }
+        _leg_holes();
+    }
     union() {
         difference() {
             union() {
@@ -367,6 +518,6 @@ module mount_top() {
                 translate([0,0,PLATE_T - 1.6]) cylinder(d = SCREW_CB, h = 1.6 + 2*EPS);
             }
         }
-        if (!TRAY_BELOW) { _arm(); translate([0, cr_y, cr_z]) rotate([-TRAY_TILT,0,0]) _tray(); }
+        if (!TRAY_BELOW) { difference() { _arm(); _leg_holes(); } }
     }
 }

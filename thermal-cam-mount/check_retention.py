@@ -50,7 +50,11 @@ module _cam_frame() {
     translate([0, cr_y, cr_z]) rotate([-TRAY_TILT, 0, 0]) children();
 }
 intersection() {
-    mount_bottom();
+    // THE TRAY IS ITS OWN PART NOW. Rendering mount_bottom() alone leaves no
+// tray at all, so this measured nothing and reported success. Assemble it.
+difference() { _arm(); _leg_holes(); }
+_leg_pad(); _leg_ribs();
+_tray_at(TRAY_TILT);
     _cam_frame() translate([-CAM_W/2, -CAM_H/2, TRAY_T + CAM_D + 0.2])
         cube([CAM_W, CAM_H, %0.2f]);
 }

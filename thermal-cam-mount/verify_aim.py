@@ -1,50 +1,82 @@
 #!/usr/bin/env python3
-"""Assert the thermal cam's lens points DOWN and INWARD, and that its sight
-line clears the top plate's front-top corner. Run before any print."""
-import math, sys
+"""Report what each index step of the adjustable tilt actually aims at.
 
-CAM_ANGLE=30; CAM_D=14; CAM_H=35; CAM_CLR=0.6; WALL=3
-TAB_FB=32.51; TAB_T=26.42; FIT=0.3; PLATE_T=5
-ARM_FWD=19.5; ARM_UP=0
-TILT=90-CAM_ANGLE
+IT READS ITS CONSTANTS OUT OF thermal_cam_mount_common.scad. It used to carry its
+own copies and they drifted: it modelled a 60 deg upright cradle long after the
+design became a hung tray, and reported PASS throughout — including in two
+release notes. Do not reintroduce literals here.
+"""
+import math, os, re, sys
 
-half=TAB_T/2+FIT/2; y_front=TAB_FB/2
-top_z1=half+PLATE_T; cr_y=y_front+ARM_FWD; cr_z=top_z1+ARM_UP
-th=math.radians(TILT); c,s=math.cos(th),math.sin(th)
-rot=lambda y,z:(y*c-z*s, y*s+z*c)
+HERE = os.path.dirname(os.path.abspath(__file__))
+SRC = re.sub(r"//[^\n]*", "", open(os.path.join(HERE, "thermal_cam_mount_common.scad")).read())
 
-# cam sits in the cavity: local y WALL..WALL+CAM_D+CAM_CLR, z LIP..LIP+CAM_H
-# lens = the OPEN low-y face; screen = against the back wall at high y
-lens_y=WALL; screen_y=WALL+CAM_D+CAM_CLR; mid_z=4.5+CAM_H/2
-(ly,lz)=rot(lens_y,mid_z); (sy,sz)=rot(screen_y,mid_z)
-ly+=cr_y; lz+=cr_z; sy+=cr_y; sz+=cr_z
-n=(ly-sy, lz-sz); m=math.hypot(*n); n=(n[0]/m, n[1]/m)
-ang=math.degrees(math.atan2(-n[0], -n[1]))   # from straight-down, +ve = inward
 
-ok=True
-print(f"lens centre        y={ly:7.2f}  z={lz:7.2f}")
-print(f"lens vector        dY={n[0]:+.3f} dZ={n[1]:+.3f}  -> {abs(ang):.1f} deg from vertical, "
-      f"{'INWARD' if n[0]<0 else 'OUTWARD'}, {'DOWN' if n[1]<0 else 'UP'}")
+def const(name):
+    m = re.search(rf"\b{name}\s*=\s*([-0-9.]+)\s*;", SRC)
+    if not m:
+        sys.exit(f"verify_aim: {name} not found in the .scad — the model changed shape")
+    return float(m.group(1))
 
-if n[1] >= 0: print("  FAIL lens points UP"); ok=False
-if n[0] >= 0: print("  FAIL lens points away from the optical axis"); ok=False
 
-# every ray from A..A+halfFOV must pass forward/above the plate's front-top corner
-corner=(y_front, top_z1)
-print(f"\nplate front-top corner  y={corner[0]:.2f}  z={corner[1]:.2f}")
-for a in (abs(ang)-21, abs(ang), abs(ang)+21):     # 42 deg vertical FOV
-    if a<=0: continue
-    dz = (ly-corner[0])/math.tan(math.radians(a))
-    z_at = lz - dz
-    clr = z_at - corner[1]
-    flag = "ok " if clr>0 else "FAIL"
-    if clr<=0: ok=False
-    print(f"  ray {a:5.1f} deg -> crosses corner plane at z={z_at:7.2f}  clearance {clr:+7.2f}  {flag}")
+TAB_T, FIT, PLATE_T = const("TAB_T"), const("FIT"), const("PLATE_T")
+TRAY_T, TILT = const("TRAY_T"), const("TRAY_TILT")
+CAM_H, CAM_CLR, BORDER = const("CAM_H"), const("CAM_CLR"), const("BORDER")
+WIN_W, WIN_D = const("WIN_W"), const("WIN_D")
+PIV_Y, PIVOT_IN = const("PIV_Y"), const("PIVOT_IN")
+TILT_MIN, TILT_MAX, TILT_STEP = const("TILT_MIN"), const("TILT_MAX"), const("TILT_STEP")
+FOV_V = 42.0        # vertical field of view — the only figure not in the .scad
 
-# nothing may sit below the top plate's underside except the clamp itself
-lo = min(rot(y,z)[1] for y in (0, CAM_D+CAM_CLR+2*WALL) for z in (0,19)) + cr_z
-print(f"\nlowest cradle point  z={lo:.2f}   (top plate underside z={half:.2f})")
-if lo < half: print("  FAIL cradle dips below the tab's top face"); ok=False
-else: print("  ok  cradle stays above the tab plane -> out of the working volume")
+TRAY_D = CAM_H + CAM_CLR + 2 * BORDER
+half = TAB_T / 2 + FIT / 2
+bot_z0 = -half - PLATE_T
+PIV_Z = bot_z0 - 34.0            # matches PIV_Z = bot_z0 - 34 in the .scad
+PIV_LY, PIV_LZ = -TRAY_D / 2 + PIVOT_IN, TRAY_T / 2
 
-print("\n"+("PASS" if ok else "FAIL")); sys.exit(0 if ok else 1)
+
+def lens_at(t):
+    a = math.radians(t)
+    oy, oz = -PIV_LY, TRAY_T - PIV_LZ
+    return (PIV_Y + oy * math.cos(a) + oz * math.sin(a),
+            PIV_Z - oy * math.sin(a) + oz * math.cos(a),
+            -math.sin(a), -math.cos(a))
+
+
+ok = True
+print(f"tray pivots at y={PIV_Y:.1f} z={PIV_Z:.2f}, indexed "
+      f"{TILT_MIN:.0f}-{TILT_MAX:.0f} deg in {TILT_STEP:.0f} deg steps")
+print("the scope's optical axis is y=0; +ve means the thermal lands outboard of it\n")
+
+dists = [50, 70, 90, 110, 130]
+print("   hole  tilt   lens y  crosses  " + "".join(f"{d:>9d}" for d in dists))
+print("  " + "-" * (31 + 9 * len(dists)))
+n = int((TILT_MAX - TILT_MIN) / TILT_STEP) + 1
+for i in range(n):
+    t = TILT_MIN + i * TILT_STEP
+    ly, lz, dy, dz = lens_at(t)
+    cross = ly / math.tan(math.radians(t))
+    row = "".join(f"{ly - d * math.tan(math.radians(t)):+9.1f}" for d in dists)
+    print(f"  {i+1:5d} {t:5.0f}° {ly:8.2f} {cross:8.1f}  {row}")
+    if dz >= 0 or dy >= 0:
+        print(f"     FAIL step {t:.0f} does not point down and inward")
+        ok = False
+
+ly, lz, dy, dz = lens_at(TILT)
+print(f"\nset tilt {TILT:.0f}° -> lens y={ly:.2f} z={lz:.2f}, "
+      f"axes cross {ly / math.tan(math.radians(TILT)):.1f} mm below the lens")
+if abs(math.degrees(math.atan2(abs(dy), abs(dz))) - TILT) > 0.05:
+    print("  FAIL aim does not equal TRAY_TILT")
+    ok = False
+else:
+    print("  ok  aim equals TRAY_TILT")
+
+spread = TRAY_T * math.tan(math.radians(FOV_V / 2))
+clear = WIN_D / 2 - spread
+if clear <= 0:
+    print("  FAIL the floor vignettes the view cone")
+    ok = False
+else:
+    print(f"  ok  view cone clears the window by {clear:+.2f} mm")
+
+print("\n" + ("PASS" if ok else "FAIL"))
+sys.exit(0 if ok else 1)

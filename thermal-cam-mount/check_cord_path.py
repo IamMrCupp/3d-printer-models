@@ -14,7 +14,11 @@ import math, os, struct, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = """include <%s/thermal_cam_mount_common.scad>
 $fn = 64;
-mount_bottom();
+// THE TRAY IS ITS OWN PART NOW. Rendering mount_bottom() alone leaves no
+// tray at all, so this measured nothing and reported success. Assemble it.
+difference() { _arm(); _leg_holes(); }
+_leg_pad(); _leg_ribs();
+_tray_at(TRAY_TILT);
 """ % HERE
 
 TILT, CR_Y = 14.0, 42.26
