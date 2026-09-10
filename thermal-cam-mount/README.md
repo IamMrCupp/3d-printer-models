@@ -207,3 +207,33 @@ that basis and killed. `mount_bottom` genuinely needs none — it is a plate wit
 
 **Set supports per-object.** If both parts share a plate, a global support setting grows them
 under `mount_bottom` for nothing.
+
+## The tilt is adjustable now — set it on the bench
+
+`TRAY_TILT` was a fixed 14° for months, inherited as *"the reference's 14.1, rounded"* from a
+downloaded model and never checked against this scope. The lens sits ~43 mm outboard of the optical
+axis; at 14° the two axes do not converge until 172 mm below the lens, so the thermal view landed
+2–3 cm off the scope's field at real working distances. Twenty-odd reprints went into guessing a
+fixed number.
+
+So it is not fixed any more. **`mount_tray` pivots on the arm's legs and locks at 10° steps,
+15–45°.** Two M3 screws: one is the pivot, the second clamps the serrations.
+
+**Serrated, not friction, not drilled.** A friction joint in printed PETG creeps under a camera at
+30°. Index holes cannot work either — 3.4 mm holes 5° apart need a 50 mm radius just to stop
+merging. Radial ribs on the leg mesh into grooves on the yoke; the 10° pitch is what a 0.4 mm
+nozzle resolves (1.57 mm rib-to-rib at r 9 — 5° would leave 0.3 mm of gap and smear).
+
+**The pivot goes outside the legs.** The 16 mm gap between them carries the plug and cord, so the
+yoke straddles them in the 11 mm of tray that overhangs each one.
+
+`verify_aim.py` prints what each step aims at across working distances — pick the hole from that
+rather than guessing. All four checkers now render the **assembled** geometry; three of them
+carried their own copy of the old tray placement after the split and passed on empty space until
+that was fixed.
+
+| part | | print |
+|---|---|---|
+| `mount_bottom` | plate + bosses + legs + serrated pivot pads, ~43 g | front-down as emitted, grid supports |
+| `mount_tray` | tray + yoke, ~19 g | tray floor down, no supports |
+| `mount_top` | unchanged | — |

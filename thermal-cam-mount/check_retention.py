@@ -46,15 +46,22 @@ include <thermal_cam_mount_common.scad>
 $fn = 64;
 // A slab spanning the camera's footprint, sitting just ABOVE its top face.
 // Anything of the mount inside this slab is material hooking over the camera.
+// The tray hangs off the PIVOT now, so the camera frame must follow the same
+// transform _tray_at() uses. This carried its own copy of the old placement
+// (cr_y/cr_z) after the redesign and probed empty space — reporting 0 mm3 of
+// retention that the tray actually has.
 module _cam_frame() {
-    translate([0, cr_y, cr_z]) rotate([-TRAY_TILT, 0, 0]) children();
+    translate([0, PIV_Y, PIV_Z]) rotate([-TRAY_TILT, 0, 0])
+        translate([0, -PIV_LY, -PIV_LZ]) children();
 }
 intersection() {
-    // THE TRAY IS ITS OWN PART NOW. Rendering mount_bottom() alone leaves no
-// tray at all, so this measured nothing and reported success. Assemble it.
-difference() { _arm(); _leg_holes(); }
-_leg_pad(); _leg_ribs();
-_tray_at(TRAY_TILT);
+    // THE TRAY IS ITS OWN PART. mount_bottom() alone has no tray, so the whole
+    // assembly is unioned here; as bare siblings they intersected each other.
+    union() {
+        difference() { _arm(); _leg_holes(); }
+        _leg_pad(); _leg_ribs();
+        _tray_at(TRAY_TILT);
+    }
     _cam_frame() translate([-CAM_W/2, -CAM_H/2, TRAY_T + CAM_D + 0.2])
         cube([CAM_W, CAM_H, %0.2f]);
 }
