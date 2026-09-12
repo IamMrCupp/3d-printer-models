@@ -40,8 +40,13 @@ BASE_H    = 6;
 
 BAND_ID   = 22.69;
 BAND_OD   = 23.95;
-POST_CLR  = 0.40;
-POST_D    = BAND_ID - POST_CLR;     // 22.29
+// 1.30, NOT 0.40. The rack shipped at 0.40 and no nozzle would go on. A four-post
+// ladder (0.40 / 0.70 / 1.00 / 1.30) settled it in the hand on 2026-09-12: 0.40
+// and 0.70 do not fit, 1.00 fits, 1.30 fits every nozzle safely. Printed posts
+// come out over nominal, and the 22.69 band ID was likely read with the clamp
+// screw snug. This is a MEASURED clearance — do not tighten it on paper.
+POST_CLR  = 1.30;
+POST_D    = BAND_ID - POST_CLR;     // 21.39
 POST_H    = 18;                     // into a ~23 mm band, leaving 5 mm
 POST_CHAM = 1.2;                    // lead-in, so a nozzle drops on
 POST_SINK = 1.0;                    // partial-area join -> overlap, never butt.
