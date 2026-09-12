@@ -207,3 +207,61 @@ that basis and killed. `mount_bottom` genuinely needs none — it is a plate wit
 
 **Set supports per-object.** If both parts share a plate, a global support setting grows them
 under `mount_bottom` for nothing.
+
+## The tilt is adjustable — set it on the bench, lock it with a pin
+
+`TRAY_TILT` was a fixed 14° for months, inherited as *"the reference's 14.1, rounded"* from a
+downloaded model and never checked against this scope. The lens sits ~43 mm outboard of the optical
+axis; at 14° the axes don't meet until 172 mm down, so the thermal view landed 2–3 cm off the field
+at real working distances. Twenty-odd reprints went into guessing a fixed number.
+
+**`mount_tray` pivots on the arm's legs and locks at 10° steps, 15–45°.** Two M3s (one per side,
+into nut traps on the legs' inner faces) are the pivot. A **1.75 mm filament stub** through the
+yoke's index hole and one of the four on each leg is the lock. It cannot creep. Set by eye against
+the app, pin it, done.
+
+| hole | tilt | axes cross | typical use |
+|---|---|---|---|
+| 1 | 15° | 142 mm below the lens | far working distance |
+| **2** | **25°** | **76 mm** | **start here** |
+| 3 | 35° | 46 mm | close work |
+| 4 | 45° | 28 mm | very close |
+
+`verify_aim.py` prints the full off-axis table per hole across 50–130 mm. A 10° step is ±10 mm at
+the work plane — the app's overlay absorbs that; it cannot absorb the 20–30 mm the fixed tilt gave.
+
+### What the first adjustable version got wrong — all of it printed
+
+| defect | how big | how it got through |
+|---|---|---|
+| the two parts **overlapped** | 2,330 mm³ | no part-vs-part check existed |
+| the yoke sat **inside the camera pocket** | 1,021 mm³ | pivot placed at the pocket's edge |
+| 15.5 mm of yoke **hung below the tray floor** | — | never checked the part's own z-min |
+| the legs entered the camera | 320 mm³ | pivot on the camera's face |
+| three of four index holes were **in thin air** | — | pin check passed through empty space |
+
+`check_assembly.py` now exists and catches every one of those. It intersects the two parts at every
+index step (must be empty), the tray and legs against the camera's seated volume (empty), the index
+pin against both parts (empty — unblocked) **and a probe around the pin against both parts (must be
+~450 mm³ — material, not air)**. It was negative-tested against the shipped geometry and fails on it.
+Every checker in this directory now renders the **assembled** geometry and reads its constants out of
+the `.scad`; three of them had their own copies and passed on empty space after the split.
+
+### Why a filament pin
+
+Serrations need a full 360° ring, which never fit on a 10 mm bar. M3 index holes 5° apart need a
+50 mm radius just to stop merging into a slot. A 1.75 mm stub through 2.0 mm holes on a 30° arc at
+r 15 fits on the plain bar, prints trivially, and can't creep.
+
+### Print
+
+| part | | orientation | support |
+|---|---|---|---|
+| `mount_bottom` | plate + bosses + legs, ~40 g | front-down as emitted | grid, not tree |
+| `mount_tray` | tray + yoke paddles, ~15 g | floor down as emitted — 2070 mm² on the bed | **none** (24 mm² of lip underside, self-supporting at 37°) |
+| `mount_top` | unchanged | — | — |
+| `coupons/joint_coupon` | one leg end + one yoke, ~9 g | flat as emitted | none |
+
+**Print the joint coupon first.** It is the only untested mechanism: does the M3 seat in the nut
+trap, and does the pin drop through yoke and leg at each of the four holes? Nine grams answers that
+before 55. All four index holes are verified present in its cross-section.
