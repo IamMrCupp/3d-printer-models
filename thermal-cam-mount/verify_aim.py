@@ -23,15 +23,18 @@ TAB_T, FIT, PLATE_T = const("TAB_T"), const("FIT"), const("PLATE_T")
 TRAY_T, TILT = const("TRAY_T"), const("TRAY_TILT")
 CAM_H, CAM_CLR, BORDER = const("CAM_H"), const("CAM_CLR"), const("BORDER")
 WIN_W, WIN_D = const("WIN_W"), const("WIN_D")
-PIV_Y, PIVOT_IN = const("PIV_Y"), const("PIVOT_IN")
+PIV_Y, PIVOT_IN, PIV_DROP, PIV_LZ = const("PIV_Y"), const("PIVOT_IN"), const("PIV_DROP"), const("PIV_LZ")
 TILT_MIN, TILT_MAX, TILT_STEP = const("TILT_MIN"), const("TILT_MAX"), const("TILT_STEP")
 FOV_V = 42.0        # vertical field of view — the only figure not in the .scad
 
 TRAY_D = CAM_H + CAM_CLR + 2 * BORDER
 half = TAB_T / 2 + FIT / 2
 bot_z0 = -half - PLATE_T
-PIV_Z = bot_z0 - 34.0            # matches PIV_Z = bot_z0 - 34 in the .scad
-PIV_LY, PIV_LZ = -TRAY_D / 2 + PIVOT_IN, TRAY_T / 2
+# EVERY placement number comes from the .scad. This carried PIV_LZ = TRAY_T/2
+# as a literal after the model moved it to 11 — a 9.5 mm error in the lens
+# position, in the checker whose whole purpose is the lens position.
+PIV_Z = bot_z0 - PIV_DROP
+PIV_LY = -TRAY_D / 2 + PIVOT_IN
 
 
 def lens_at(t):
