@@ -84,3 +84,31 @@ That extra 9.5 mm over the nominal 190 is what buys **3 mm walls** between pocke
 | Supports | **None** |
 
 It's a big flat part; a brim helps if your first layer is marginal.
+
+## ⚠️ The corner radius is set by the case, not by taste
+
+`CORNER = 16` because the case's interior corner is **radius 17.0, centred at (82.99, 82.99)** —
+fitted from the box mesh by `check_box_fit.py`, not estimated.
+
+At the original **8** the tray's corner landed **3.96 mm outside the cavity and the tray did not fit
+the box at all.** It had been signed off on an interior span measured through the *middle* of the
+box, which says nothing about corners.
+
+| CORNER | diagonal clearance | |
+|---|---|---|
+| 8 | −0.65 mm | does not fit |
+| 12 | −0.25 mm | does not fit |
+| 14 | +0.57 mm | marginal — inside print growth |
+| **16** | **+1.40 mm** | corners stop being the limiter |
+
+Past 16 there is no gain: the flats cap it at 1.30 mm (tray half 98.70 against a 100.00 cavity).
+
+## `check_box_fit.py`
+
+Slices both meshes and tests real containment — every point of the tray's outline, at every height,
+against the box's interior contour at the same height. It reports where the tray seats, the tightest
+free clearance above the floor chamfer, and the headroom left under the lid.
+
+Two things it gets right that a naive version does not: a point in the cavity is *outside* the box's
+material, so it tests against the extracted **interior contour**; and it measures against the mesh's
+**own segments**, because re-ordering the loop chords the arcs and reads distances low.
