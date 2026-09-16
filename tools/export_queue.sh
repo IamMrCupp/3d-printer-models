@@ -48,6 +48,10 @@ declare -a OVERRIDE=(
 # uv-mask-station came OFF this list 2026-09-08: plate_oiler is new and unprinted,
 # so the directory has to be queued again. Its other parts are already in service.
 declare -a NOT_QUEUED=(
+  # baseplates and psu-locators landed 2026-09-09 from worktree-bench-holders.
+  # They were printed from that worktree and are in service, so an STL in the
+  # print list would be noise.
+  baseplates psu-locators
   syringe-holders instrument-holders engindot-shortkiller-topper
   owon-spm8104-tray drybox-splitter-stand bench-cleaning-station-legacy
 )
