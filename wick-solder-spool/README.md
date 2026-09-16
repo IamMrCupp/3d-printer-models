@@ -28,12 +28,14 @@ Taken off the supplied STLs. The existing brackets are being kept, so none of it
 
 Printed upright in one piece, both flange undersides are flat ceilings. Making them self-supporting costs 45° cones that eat 20–37 mm of a 34 mm span — ⌀48 and up will not fit at all, and the self-supporting version collapses to **6.9 cm³**.
 
-Splitting at the **upper flange's underside** gives 58.8 cm³ with no towers:
+Splitting at the **upper flange's underside** gives 53.7 cm³ with no towers:
 
 | part | print | support |
 |---|---|---|
 | `spool_lower.scad` | spigot-down, as emitted | a short ring under the lower flange, 3.80 mm above the bed |
 | `spool_upper.scad` | flange-down, as emitted — 2463 mm² on the bed | **none** |
+
+**Getting `spool_lower` off the plate.** The only model touching the bed is the ⌀9.70 spigot. The ⌀56 flange is sitting on that support ring, and in PETG the ring is what holds the part down. Let the plate cool all the way and flex it; do not lever the flange up with a scraper. The first print was pried, and the hub sheared off the flange — see below.
 
 ⚠️ **Do not split it mid-hub.** That was the first idea and it is wrong: the upper half becomes hub-then-flange, which overhangs whichever way up you print it.
 
@@ -46,9 +48,24 @@ The two halves are trapped between the brackets once installed, so the joint onl
 
 The ridge is two stacked cones rather than a torus. A torus meets the bore on a tangent line, and tangency in a boolean is what this repo keeps paying for.
 
+## The hub sheared off the lower flange — and the fix
+
+The first `spool_lower` came off the plate in two pieces: the flange stayed on the support ring and the hub came away with the spool. The profile met the flange with a sharp 90° corner, on a layer line, and the flange was 2.5 mm. Prying a ⌀56 disc off the plate puts the whole lever into that corner, and a ⌀24 hub on a 2.5 mm flange is not much of a corner to hold it.
+
+Two changes, both in `spool_common.scad`:
+
+- **`HUB_FILLET` 3.0** — the corner is a quarter-round now, so the load spreads across several layers instead of one.
+- **`LOW_FL_T` 3.0** — the lower flange is 0.5 mm thicker. The upper flange stays 2.5; it prints face-down and is never pried.
+
+Cost: 0.5 mm of winding width. The upper part is unchanged apart from its anchor slot, so any already-printed `spool_upper` still fits.
+
+## Anchor slot
+
+Each flange has one **4.5 × 1.6 mm slot** through it, hard against the hub, in line with the joint's flat. Poke the start of the wire or braid down through the slot and bend it over on the far face; the first turn traps it. No tape. The braid goes through flat-wise. One slot per flange so a start can be anchored at either end.
+
 ## Capacity
 
-⌀56 flanges over a ⌀24 hub, 27.2 mm of winding width — **54.7 cm³**.
+⌀56 flanges over a ⌀24 hub, 26.7 mm of winding width — **53.7 cm³**.
 
 `HUB_D` is also the tightest bend the braid sees; raise it if the braid resists the wind.
 

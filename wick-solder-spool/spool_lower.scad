@@ -6,10 +6,13 @@
 // steps inward and needs nothing.
 include <spool_common.scad>
 $fn = 96;
-union() {
-    _lower_profile();
+difference() {
+    union() {
+        _lower_profile();
     // The boss lands on the hub's top face over ⌀10 of a ⌀24 annulus — a
     // PARTIAL-area join, so it overlaps volumetrically. Exact-plane butting is
     // for FULL-face joins only.
-    translate([0, 0, SPLIT_Z - JOINT_SINK]) _joint_boss(JOINT_L + JOINT_SINK);
+        translate([0, 0, SPLIT_Z - JOINT_SINK]) _joint_boss(JOINT_L + JOINT_SINK);
+    }
+    _anchor_slot(SPIGOT_TOP, LOW_FL_T);
 }
