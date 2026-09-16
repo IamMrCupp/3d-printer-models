@@ -25,7 +25,7 @@
 //   upper  flange-down on 2463 mm2. The journal is narrower than the flange, so
 //          it steps inward going up: NO overhang at all.
 //
-// Capacity 58.8 cm3 against 6.9 for a self-supporting one-piece.
+// Capacity 53.7 cm3 against 6.9 for a self-supporting one-piece.
 //
 // The split is NOT in the middle of the hub. That was the first idea and it is
 // wrong: it leaves the upper half as hub-then-flange, so the flange overhangs
@@ -70,10 +70,44 @@ FLAT_AF = 12.0;   // across the flats, on a ⌀14.60 journal -> 1.3 mm cut per s
 
 // ---- spool: free choices inside the measured envelope ----
 FLANGE_D   = 56;      // [40:2:60] 60.0 is where it fouls the bracket
-FLANGE_T   = 2.5;
+FLANGE_T   = 2.5;     // the UPPER flange — it prints face-down and never gets pried
 HUB_D      = 24;      // [16:1:36] also the tightest bend the braid sees
-LOW_FL_TOP = 6.30;
-UP_FL_BOT  = 33.50;   // hub runs 6.30..33.50 -> 27.2 mm of winding width
+
+// THE LOWER FLANGE IS THE ONE THAT GETS PRIED OFF THE PLATE, and the first
+// print's hub sheared clean off it. spool_lower prints spigot-down: the only
+// model on the bed is the ⌀9.70 spigot, and the ⌀56 flange sits 3.80 mm up on
+// a ring of support. Levering that disc off the support put every bit of the
+// pry into the hub/flange corner — a sharp 90° in the profile, sitting on a
+// layer line — and a ⌀24 hub on a 2.5 mm flange let go there. So: the flange
+// is thicker, and the corner is a fillet instead of a notch. Costs 0.5 mm of
+// winding width.
+LOW_FL_T   = 3.0;     // was 2.5
+LOW_FL_TOP = SPIGOT_TOP + LOW_FL_T;   // 6.80
+HUB_FILLET = 3.0;     // concave, hub into lower flange
+UP_FL_BOT  = 33.50;   // hub runs LOW_FL_TOP..33.50 -> 26.7 mm of winding width
+
+// ANCHOR SLOT — somewhere to start the wind without tape. One tangential slot
+// through each flange, hard against the hub, in line with the joint flat (+X).
+// Poke the start of the wire or braid down through it and bend it over on the
+// far side; the first turn traps it. 4.5 × 1.6 takes the 3 mm braid flat-wise
+// and any wire the hub will bend.
+ANCHOR_L   = 4.5;     // tangential
+ANCHOR_W   = 1.6;     // radial
+ANCHOR_R   = HUB_D/2 + HUB_FILLET + 0.6 + ANCHOR_W/2;   // 16.4 — clear of the fillet
+
+// The fillet as polygon points, flange side first, for a profile walked
+// flange -> hub. A quarter arc about (HUB_D/2 + r, LOW_FL_TOP + r).
+function _hub_fillet(n = 10) = [for (i = [0:n]) let(t = -90 - 90*i/n)
+    [HUB_D/2 + HUB_FILLET + HUB_FILLET*cos(t),
+     LOW_FL_TOP + HUB_FILLET + HUB_FILLET*sin(t)]];
+
+// Through-cut for one flange: z0 is its underside, h its thickness. The cube
+// clears both faces by 1 mm and sits in air outside the flange on every side —
+// a plain full-depth cut, nothing tangent, nothing coplanar.
+module _anchor_slot(z0, h) {
+    translate([ANCHOR_R - ANCHOR_W/2, -ANCHOR_L/2, z0 - 1])
+        cube([ANCHOR_W, ANCHOR_L, h + 2]);
+}
 
 // ---- the joint ----
 SPLIT_Z    = UP_FL_BOT;   // the upper flange's underside
@@ -102,17 +136,17 @@ echo(str("winding width ", UP_FL_BOT - LOW_FL_TOP, " mm, capacity ",
 
 module _lower_profile() {
     rotate_extrude($fn = 128)
-        polygon([
+        polygon(concat([
             [0,           0],
             [CHAMFER_D/2, 0],
             [SPIGOT_D/2,  CHAMFER_H],
             [SPIGOT_D/2,  SPIGOT_TOP],
             [FLANGE_D/2,  SPIGOT_TOP],
             [FLANGE_D/2,  LOW_FL_TOP],
-            [HUB_D/2,     LOW_FL_TOP],
+        ], _hub_fillet(), [
             [HUB_D/2,     SPLIT_Z],
             [0,           SPLIT_Z],
-        ]);
+        ]));
 }
 
 // The journal's two flats, as a solid to subtract. Cut through the journal only,

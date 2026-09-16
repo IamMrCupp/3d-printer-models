@@ -12,4 +12,5 @@ difference() {
     translate([0, 0, JOURNAL_BOT - SPLIT_Z]) _journal_flats(0);
     // The socket must pass THROUGH the bottom face, never stop on it.
     translate([0, 0, -EPS]) _joint_socket();
+    _anchor_slot(0, FLANGE_T);
 }
