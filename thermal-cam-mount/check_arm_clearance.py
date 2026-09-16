@@ -25,6 +25,7 @@ $fn = 64;
 INSET = 0.2;
 intersection() {
     _arm();
+    _tray_at(TRAY_TILT);
     translate([0, cr_y, cr_z]) rotate([-TRAY_TILT, 0, 0])
         translate([0, 0, TRAY_T + INSET])
             linear_extrude(CAM_D - 2*INSET)

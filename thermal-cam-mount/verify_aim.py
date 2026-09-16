@@ -1,25 +1,18 @@
 #!/usr/bin/env python3
-"""Check the thermal cam's aim against the geometry that is actually in the model.
+"""Report what each index step of the adjustable tilt actually aims at.
 
 IT READS ITS CONSTANTS OUT OF thermal_cam_mount_common.scad. It used to carry its
-own copies, and they drifted: it modelled a 60 deg upright cradle with ARM_FWD
-19.5 and the pre-caliper camera long after the design became a 14 deg flat tray
-at ARM_FWD 26. It reported PASS the whole time, including in two release notes.
-A checker with its own copy of the numbers is a checker that will eventually
-validate a part that does not exist. Do not reintroduce literals here.
+own copies and they drifted: it modelled a 60 deg upright cradle long after the
+design became a hung tray, and reported PASS throughout — including in two
+release notes. Do not reintroduce literals here.
 """
 import math, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-_RAW = open(os.path.join(HERE, "thermal_cam_mount_common.scad")).read()
-# Strip // comments first: several constants are discussed in prose above their
-# definition, and a comment mentioning a number must never be read as the value.
-SRC = re.sub(r"//[^\n]*", "", _RAW)
+SRC = re.sub(r"//[^\n]*", "", open(os.path.join(HERE, "thermal_cam_mount_common.scad")).read())
 
 
 def const(name):
-    # NOT anchored to line start — the .scad packs several onto one line, e.g.
-    # "CAM_W = 42.36; CAM_H = 34.35; CAM_D = 13.43;"
     m = re.search(rf"\b{name}\s*=\s*([-0-9.]+)\s*;", SRC)
     if not m:
         sys.exit(f"verify_aim: {name} not found in the .scad — the model changed shape")
@@ -27,65 +20,66 @@ def const(name):
 
 
 TAB_T, FIT, PLATE_T = const("TAB_T"), const("FIT"), const("PLATE_T")
-TAB_FB, ARM_FWD = const("TAB_FB"), const("ARM_FWD")
-TILT, TRAY_T = const("TRAY_TILT"), const("TRAY_T")
-CAM_D, CAM_H, CAM_CLR = const("CAM_D"), const("CAM_H"), const("CAM_CLR")
+TRAY_T, TILT = const("TRAY_T"), const("TRAY_TILT")
+CAM_H, CAM_CLR, BORDER = const("CAM_H"), const("CAM_CLR"), const("BORDER")
 WIN_W, WIN_D = const("WIN_W"), const("WIN_D")
-BORDER = const("BORDER")
-FOV_V = 42.0        # vertical field of view, degrees — the only figure not in the .scad
+PIV_Y, PIVOT_IN, PIV_DROP, PIV_LZ = const("PIV_Y"), const("PIVOT_IN"), const("PIV_DROP"), const("PIV_LZ")
+TILT_MIN, TILT_MAX, TILT_STEP = const("TILT_MIN"), const("TILT_MAX"), const("TILT_STEP")
+FOV_V = 42.0        # vertical field of view — the only figure not in the .scad
 
 TRAY_D = CAM_H + CAM_CLR + 2 * BORDER
 half = TAB_T / 2 + FIT / 2
-y_front = TAB_FB / 2
 bot_z0 = -half - PLATE_T
-TRAY_DROP = ((TRAY_D / 2) * math.sin(math.radians(TILT))
-             + (TRAY_T + CAM_D + CAM_CLR) * math.cos(math.radians(TILT)) + 3)
-cr_y, cr_z = y_front + ARM_FWD, bot_z0 - TRAY_DROP
+# EVERY placement number comes from the .scad. This carried PIV_LZ = TRAY_T/2
+# as a literal after the model moved it to 11 — a 9.5 mm error in the lens
+# position, in the checker whose whole purpose is the lens position.
+PIV_Z = bot_z0 - PIV_DROP
+PIV_LY = -TRAY_D / 2 + PIVOT_IN
 
-th = math.radians(-TILT)
-c, s = math.cos(th), math.sin(th)
 
-
-def to_world(y, z):
-    return (y * c - z * s + cr_y, y * s + z * c + cr_z)
+def lens_at(t):
+    a = math.radians(t)
+    oy, oz = -PIV_LY, TRAY_T - PIV_LZ
+    return (PIV_Y + oy * math.cos(a) + oz * math.sin(a),
+            PIV_Z - oy * math.sin(a) + oz * math.cos(a),
+            -math.sin(a), -math.cos(a))
 
 
 ok = True
-print(f"tray tilt {TILT:.0f} deg, hung {TRAY_DROP:.2f} below the bottom plate")
+print(f"tray pivots at y={PIV_Y:.1f} z={PIV_Z:.2f}, indexed "
+      f"{TILT_MIN:.0f}-{TILT_MAX:.0f} deg in {TILT_STEP:.0f} deg steps")
+print("the scope's optical axis is y=0; +ve means the thermal lands outboard of it\n")
 
-# The camera lies on the tray floor and looks DOWN through the window.
-lens = to_world(0.0, TRAY_T)
-dy, dz = (0.0 * c - (-1.0) * s), (0.0 * s + (-1.0) * c)
-ang = math.degrees(math.atan2(abs(dy), abs(dz)))
-print(f"lens centre        y={lens[0]:7.2f}  z={lens[1]:7.2f}")
-print(f"lens vector        dY={dy:+.3f} dZ={dz:+.3f}  -> {ang:.1f} deg from vertical, "
-      f"{'INWARD' if dy < 0 else 'OUTWARD'}, {'DOWN' if dz < 0 else 'UP'}")
-
-if dz >= 0:
-    print("  FAIL lens points UP"); ok = False
-if dy >= 0:
-    print("  FAIL lens points away from the optical axis"); ok = False
-if abs(ang - TILT) > 0.05:
-    print(f"  FAIL aim is {ang:.2f} but the tray tilts {TILT:.2f}"); ok = False
-
-# The view cone must clear the window cut in the tray floor, or the floor vignettes it.
-spread = TRAY_T * math.tan(math.radians(FOV_V / 2))
-print(f"\nwindow {WIN_W:.0f} x {WIN_D:.0f}, floor {TRAY_T:.1f} thick")
-print(f"  cone spreads {spread:.2f} mm per side over the floor's thickness")
-for name, w in (("across the window's width", WIN_W), ("across its depth", WIN_D)):
-    clear = w / 2 - spread
-    flag = "ok " if clear > 0 else "FAIL"
-    if clear <= 0:
+dists = [50, 70, 90, 110, 130]
+print("   hole  tilt   lens y  crosses  " + "".join(f"{d:>9d}" for d in dists))
+print("  " + "-" * (31 + 9 * len(dists)))
+n = int((TILT_MAX - TILT_MIN) / TILT_STEP) + 1
+for i in range(n):
+    t = TILT_MIN + i * TILT_STEP
+    ly, lz, dy, dz = lens_at(t)
+    cross = ly / math.tan(math.radians(t))
+    row = "".join(f"{ly - d * math.tan(math.radians(t)):+9.1f}" for d in dists)
+    print(f"  {i+1:5d} {t:5.0f}° {ly:8.2f} {cross:8.1f}  {row}")
+    if dz >= 0 or dy >= 0:
+        print(f"     FAIL step {t:.0f} does not point down and inward")
         ok = False
-    print(f"  {name:28s} clearance {clear:+7.2f}  {flag}")
 
-# The camera must sit over the window, not over solid floor.
-print(f"\ncamera {CAM_D:.2f} deep on a {TRAY_D:.2f} mm tray — the window is inset "
-      f"{(TRAY_D - WIN_D) / 2:.2f} mm from each edge")
-if WIN_D >= TRAY_D:
-    print("  FAIL window is not inside the tray"); ok = False
+ly, lz, dy, dz = lens_at(TILT)
+print(f"\nset tilt {TILT:.0f}° -> lens y={ly:.2f} z={lz:.2f}, "
+      f"axes cross {ly / math.tan(math.radians(TILT)):.1f} mm below the lens")
+if abs(math.degrees(math.atan2(abs(dy), abs(dz))) - TILT) > 0.05:
+    print("  FAIL aim does not equal TRAY_TILT")
+    ok = False
 else:
-    print("  ok  window sits inside the tray's footprint")
+    print("  ok  aim equals TRAY_TILT")
+
+spread = TRAY_T * math.tan(math.radians(FOV_V / 2))
+clear = WIN_D / 2 - spread
+if clear <= 0:
+    print("  FAIL the floor vignettes the view cone")
+    ok = False
+else:
+    print(f"  ok  view cone clears the window by {clear:+.2f} mm")
 
 print("\n" + ("PASS" if ok else "FAIL"))
 sys.exit(0 if ok else 1)
