@@ -16,7 +16,7 @@ Calipered 2026-09-07.
 
 | | |
 |---|---|
-| band ID | **22.69 mm** — the post is sized to this |
+| band ID | **22.69 mm** — the post is sized to this, less **1.30** of clearance found on a fit ladder |
 | band OD | 23.95 mm |
 | across the nut | 27.11 mm — the ears stand 3.16 mm proud on one side |
 | band section | ~23 mm — the common part; the post engages here |

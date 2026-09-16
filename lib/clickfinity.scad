@@ -3,12 +3,6 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Aaron Cupp
 //
-// >>> VENDORED SNAPSHOT — do not edit here. <<<
-// Upstream: IamMrCupp/clickfinity-openscad (lib/clickfinity.scad), MIT.
-// Pinned copy so models in this repo can build without an external checkout —
-// same pattern as lib/gridfinity.scad. This file stays MIT even though the repo
-// is CC BY-NC. Re-copy from upstream to update; fix bugs upstream, not here.
-//
 // Clean-room reimplementation of the Clickfinity concept (jerrymk → NoWarrenty
 // → John Hall's CLICKbase) from the published Gridfinity spec and physical
 // measurement of the CLICKbase-derivative (Printables 719455). No geometry is
@@ -16,7 +10,8 @@
 //
 //   clickfinity_baseplate(nx, ny)  — tiled SHALLOW baseplate with latch tongues
 //   click_arm()                    — one full-height cantilever tongue
-//   connector_clip()               — plate-to-plate joiner (Phase 4 — TODO)
+//   connector_key()                — the bowtie key that joins two plates
+//                                    (set JOIN = true to cut the pockets)
 //
 // PRINT IN PETG / ABS / ASA / NYLON — **NOT PLA.** The tongues sit under
 // constant spring tension; PLA creeps and loses grip within weeks.
@@ -60,16 +55,33 @@ LEADIN  = 1.20;   // [0.60:0.10:2.00] mm top opening chamfer — guides the foot
                   //   AND clears the start of the foot's flare at the rim.
 
 // ---------------------------------------------------------------------------
-// Edge joining (Phase 4) — built-in dovetails, no loose parts.
+// Edge joining (Phase 4) — underside bowtie keys.
 // ---------------------------------------------------------------------------
-// +X and +Y edges get a MALE dovetail per cell; -X and -Y edges get the matching
-// FEMALE slot. Butt two plates edge-to-edge and slide along the shared edge to
-// lock them (the widening dovetail can't pull apart in-plane). Opt-in.
-JOIN        = false;  // enable edge dovetails
-JOIN_DEPTH  = 3.00;   // [2.00:0.50:5.00] mm how far the tab protrudes / slot cuts
-JOIN_WB     = 5.00;   // [3.00:0.50:8.00] mm dovetail width at the plate edge (neck)
-JOIN_WT     = 8.00;   // [5.00:0.50:11.00] mm width at the tip (wider = locks harder)
-JOIN_CLEAR  = 0.20;   // [0.05:0.05:0.40] mm slop in the female slot — tune to print
+// A separate bowtie key bridges the seam UNDER two butted plates: narrow at the
+// seam, wide at both ends, so neither plate can pull off it in-plane. Every edge
+// gets the same half-pocket, so the joint is symmetric — no male/female, no
+// mating orientation to get wrong, any edge meets any edge.
+//
+// Why underside and not a dovetail cut into the plate edge: the perimeter wall
+// is only GF/2 - SOCK_HW = 2.15 mm thick, and just 0.95 mm at the top rim once
+// LEADIN opens up — an edge dovetail deep enough to hold breaks into the socket.
+// Worse, the latch arm's flex slot already occupies the middle of every wall out
+// to _SLOT_O (0.25 mm PAST the plate edge), so an edge tab centred on a cell
+// would be sliced clean off its root. The pockets below live in the solid wall
+// band near the cell corners, clear of the arms and clear of the socket.
+//
+// Pockets open downward: lay the plates face-down, drop the keys in, flip. The
+// bench then traps them — nothing to glue.
+JOIN       = false;  // enable underside key pockets
+KEY_NECK   = 4.00;   // [3.00:0.50:6.00] mm key width at the seam
+KEY_END    = 6.50;   // [4.00:0.50:9.00] mm width at each end — the undercut that locks
+KEY_REACH  = 1.80;   // [1.00:0.10:2.00] mm how far the pocket cuts into EACH plate.
+                     //   Hard ceiling 2.15 (the wall band) — beyond that it
+                     //   breaks through into the bin socket.
+KEY_H      = 1.60;   // [1.00:0.20:2.40] mm pocket depth up from the underside
+KEY_OFF    = 13.00;  // [9.00:0.50:16.00] mm from cell centre along the edge. Must
+                     //   clear the arm relief (~6.4 mm) and the corner fillet.
+KEY_CLEAR  = 0.15;   // [0.05:0.05:0.30] mm slop in the pocket — tune to print
 
 // ---------------------------------------------------------------------------
 // Latch tunables — tune against a printed tile. Watch the root-stress echo.
@@ -188,37 +200,57 @@ module _per_wall(nx, ny) {
         translate([(ix-(nx-1)/2)*GF, (iy-(ny-1)/2)*GF, 0])
             for (a=[0:ARMS_PER_CELL-1]) rotate([0,0,a*360/ARMS_PER_CELL]) children();
 }
-// A dovetail in the XY plane: neck (WB) at the edge, widening to WT at the tip.
-// `over` extends the base back into the plate so a male tab fuses / a female
-// slot cuts cleanly through the edge. Extruded full plate height.
-module _dovetail(wb, wt, depth, over) {
-    linear_extrude(PLATE_H + (over > 0 ? 0 : 2))
-        polygon([[-over,-wb/2], [0,-wb/2], [depth,-wt/2],
-                 [depth,wt/2], [0,wb/2], [-over,wb/2]]);
+// Half of the bowtie, in plan: the seam sits at local x=0 and the plate interior
+// runs -x. Narrow (neck) at the seam, widening to KEY_END at KEY_REACH inboard —
+// that flare is the undercut the plate cannot pull off. The little rectangle
+// carries the mouth 0.5 mm PAST the seam so the cut face never lands coplanar
+// with the plate's outer face.
+module _key_pocket_2d() {
+    n = KEY_NECK + KEY_CLEAR;
+    e = KEY_END  + KEY_CLEAR;
+    r = KEY_REACH;
+    union() {
+        polygon([[0,-n/2], [0,n/2], [-r,e/2], [-r,-e/2]]);
+        translate([0,-n/2]) square([0.5, n]);
+    }
 }
-// Male tabs on +X/+Y, female slots on -X/-Y. Females are the same dovetail
-// grown by JOIN_CLEAR and cut full-depth (z -1 .. PLATE_H+1).
-module _join_males(nx, ny) {
+// Open at the bottom (z -1 .. KEY_H) so the key drops in from underneath.
+module _key_pocket() {
+    translate([0,0,-1]) linear_extrude(KEY_H + 1) _key_pocket_2d();
+}
+// Same half-pocket on all four edges, KEY_OFF either side of each cell centre.
+// Symmetric by construction: butt any two plates and their half-pockets line up
+// into one full bowtie cavity.
+module _key_pockets(nx, ny) {
     ex = nx*GF/2; ey = ny*GF/2;
-    for (iy=[0:ny-1]) translate([ex, (iy-(ny-1)/2)*GF, 0]) _dovetail(JOIN_WB, JOIN_WT, JOIN_DEPTH, 1);
-    for (ix=[0:nx-1]) translate([(ix-(nx-1)/2)*GF, ey, 0]) rotate([0,0,90]) _dovetail(JOIN_WB, JOIN_WT, JOIN_DEPTH, 1);
+    for (iy=[0:ny-1], s=[-1,1]) {
+        cy = (iy-(ny-1)/2)*GF + s*KEY_OFF;
+        translate([ ex, cy, 0])                  _key_pocket();
+        translate([-ex, cy, 0]) rotate([0,0,180]) _key_pocket();
+    }
+    for (ix=[0:nx-1], s=[-1,1]) {
+        cx = (ix-(nx-1)/2)*GF + s*KEY_OFF;
+        translate([cx,  ey, 0]) rotate([0,0, 90]) _key_pocket();
+        translate([cx, -ey, 0]) rotate([0,0,270]) _key_pocket();
+    }
 }
-module _join_females(nx, ny) {
-    ex = nx*GF/2; ey = ny*GF/2; c = JOIN_CLEAR;
-    for (iy=[0:ny-1]) translate([-ex, (iy-(ny-1)/2)*GF, -1]) _dovetail(JOIN_WB+c, JOIN_WT+c, JOIN_DEPTH+0.3, 1);
-    for (ix=[0:nx-1]) translate([(ix-(nx-1)/2)*GF, -ey, -1]) rotate([0,0,90]) _dovetail(JOIN_WB+c, JOIN_WT+c, JOIN_DEPTH+0.3, 1);
+// The loose part. Nominal size — the pockets carry KEY_CLEAR. Sits 0.2 mm under
+// the pocket roof so it can never prop the plates up off the bench.
+module connector_key() {
+    n = KEY_NECK; e = KEY_END; r = KEY_REACH;
+    linear_extrude(KEY_H - 0.20)
+        polygon([[-r,-e/2], [-r,e/2], [0,n/2], [r,e/2], [r,-e/2], [0,-n/2]]);
 }
 module clickfinity_baseplate(nx, ny, arms = true) {
     difference() {
         union() {
             _shallow_base(nx, ny);
             if (arms) _per_wall(nx, ny) click_arm();
-            if (JOIN) _join_males(nx, ny);
         }
         if (arms) _per_wall(nx, ny) _arm_relief();
-        if (JOIN) _join_females(nx, ny);
+        if (JOIN) _key_pockets(nx, ny);
     }
 }
 
-// The old separate-clip joiner is superseded by built-in dovetails (JOIN).
-module connector_clip() { }
+// Superseded by connector_key() — kept so old callers don't break.
+module connector_clip() { connector_key(); }

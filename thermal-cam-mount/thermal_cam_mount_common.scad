@@ -37,7 +37,18 @@ GRIP_LEN  = 28;   // how far back from the front the plates cover (of 32.51 → 
 BOSS_GAP  = 1.2;  // clearance from the tab side to the screw boss
 BOSS_R    = 4.5;  // front-corner boss radius (M3 heat-set insert)
 BOSS_INSET_Y = 6; // boss centre back from the front edge
-INSERT_D  = 4.6;  // M3 heat-set insert bore (bottom-plate bosses)
+// ⚠️ INSERT_D IS WRONG AND UNVERIFIED. It has been 4.6 since the original WIP
+// commit and no insert has ever been on calipers. Proven in the hand 2026-09-08:
+// an M4 insert is far too big for it, and an M3 SLIPS IN WITH NO RESISTANCE —
+// zero interference, so a heat-set M3 has nothing to grip and spins under the
+// screw. That mount was assembled by gluing the inserts in.
+//
+// A heat-set bore must be SMALLER than the insert's knurl OD so melting displaces
+// plastic that grips it. The fix is INSERT_D = <M3 knurl OD> - 0.2..0.4, but the
+// knurl OD is still unmeasured, so no invented number has been put here.
+//
+// Do not "fix" this by guessing. Measure the insert first.
+INSERT_D  = 4.6;  // M3 heat-set insert bore (bottom-plate bosses) — SEE ABOVE
 SCREW_D   = 3.4;  // M3 clearance (top plate)
 SCREW_CB  = 6.4;  // counterbore for the screw head
 CENTER_POCKET_D = 13;   // clearance pocket over the tab's bottom center screw

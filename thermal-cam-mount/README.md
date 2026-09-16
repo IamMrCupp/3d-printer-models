@@ -265,3 +265,16 @@ r 15 fits on the plain bar, prints trivially, and can't creep.
 **Print the joint coupon first.** It is the only untested mechanism: does the M3 seat in the nut
 trap, and does the pin drop through yoke and leg at each of the four holes? Nine grams answers that
 before 55. All four index holes are verified present in its cross-section.
+## `verify_aim.py` reads the model, on purpose
+
+It used to carry its own copies of the constants, and they drifted badly: it modelled a **60° upright
+cradle** with `ARM_FWD` 19.5 and the pre-caliper camera long after the design became a **14° flat
+tray** at `ARM_FWD` 26. It reported PASS throughout, including in two release notes.
+
+It now parses `thermal_cam_mount_common.scad` and exits with an error if a constant it needs has
+gone. **Do not reintroduce literals into it** — a checker with its own copy of the numbers is one
+that will eventually validate a part that does not exist.
+
+It checks that the lens points down and inward at every index hole, reports the off-axis error per
+hole across 50–130 mm, and that the view cone clears the window without the floor vignetting it. Negative-tested: flipping the tilt
+sign and shrinking the window both make it fail.
