@@ -16,6 +16,7 @@ Bins are standard Gridfinity and drop into the click arms unmodified.
 |---|---|---|
 | `baseplate_2x2_test.scad` | 2×2 | test tile — **print two of these first** |
 | `baseplate_consumables_4x4.scad` | 4×4 | 168 × 168 mm — syringes / UV / rotary |
+| `baseplate_respool_4x2.scad` | 4×2 | 168 × 84 mm — the wick respooler's stand and winder side by side, portable. No JOIN pockets; it never butts against another plate |
 | `baseplate_cleaning_5x6.scad` | 5×6 | 210 × 252 mm — the cleaning zone |
 | `baseplate_6x6.scad` | 6×6 | 252 × 252 mm — largest single piece the U1 bed takes |
 
