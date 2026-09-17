@@ -76,7 +76,7 @@ a doorknob, 140 times. The crank makes it steady winding.
 
 **It drives from outside the holder.** Installed, the spool's journal top is flush with the bracket
 (41.40 vs 41.50) and there is nothing to grip. Out of the holder the whole 5.5 mm journal is exposed,
-so the spool stands in `respool_winder` while you wind, and goes back to the holder to live.
+so the spool sits captured in `respool_winder` while you wind, and goes back to the holder to live.
 
 **The journal carries two flats**, 12.00 across a ⌀14.60 body. The flats take the torque so the crank
 does not rely on friction, which printed-on-printed never survives. They do not affect the holder —
@@ -86,6 +86,33 @@ A hex socket down the journal's top face was considered first and does not fit: 
 already eats 33.50–39.50, leaving 2 mm of solid. Flipping the joint to free it would put the upper
 half's boss below its own bed surface when printed flange-down, costing that part its support-free
 print.
+
+### The first crank would not stay on
+
+Nothing holds the crank down but your hand, and a push on the grip tips it about the edge of whatever it is sitting on. The first one sat on the **journal's top**: its socket was 5.2 deep on a 5.5 journal, so the hub hung 0.3 mm above the flange, with a ⌀22.6 hub as its only footing and a 26 mm grip to lever against. Staying on took a downward push of about 1.9× the winding force. It walked up the socket and off.
+
+| | was | is |
+|---|---|---|
+| footing | ⌀22.6 hub, on the journal top | **⌀54 disc, flat on the ⌀56 upper flange** |
+| socket | 5.2 deep — journal bottoms first | 6.2 deep — the disc lands first |
+| grip | 26 tall | 18 tall |
+
+The push needed drops to about 0.6× the winding force, which is the weight of a hand on the grip. **Crank-only reprint — the spool is unchanged.** Two windows through the disc sit over the upper flange's anchor slot, either way round, so a bent-over wire tail does not hold the disc off the flange.
+
+Checked assembled, not just as a part: crank against `spool_upper` seated on the flange intersects nothing, and the same check fails with 38 mm³ of overlap when the socket is put back to 5.2.
+
+### The first winder let the spool jump out
+
+The spool stood on a ⌀9.70 spigot, 3.8 mm long, in a 4 mm socket, with nothing holding it down. The wire pulls sideways about 20 mm up the hub, and all that resisted the tip was a 30 g spool's own weight — about 40 gf of tension turns it over, and the drag washer asks for more than that. Each time it tipped, the spigot cleared the socket and the wind sprang loose.
+
+**`respool_winder` now holds the lower flange down.** A U-shaped fence wraps the flange, with a lip leaning in over its rim; the socket became a slot out to the open edge. Slide the spool in along the slot, flange under the lip, until the spigot seats in the slot's round end. It spins freely and cannot tip out.
+
+- **Closed end toward the source spool**, so wire tension pulls the spigot into its seat.
+- **Gate:** two ⌀2 holes at the open side. If cranking walks the spool back out, stand a stub of 1.75 filament in one.
+- The lip's underside is a 45° slope — no supports.
+- The lip takes the last 1.3 mm of radial fill at the bottom 3 mm of the winding space. Wind to ⌀53 there and nothing rubs.
+
+Checked against the real `spool_lower`, assembled: seated and spinning it touches nothing; it slides in along the whole slot touching nothing; lifted 2 mm it is on the lip. Tipped about its own rim, the lip stops it at **1.2°** toward the open side or sideways and **1.8°** toward the closed end — the direction the wire pulls, where only the lip at the rails' roots is in play. The spigot does not clear its socket until **7.8°**.
 
 ## Source stand
 
@@ -119,5 +146,5 @@ mm one.
 | `respool_common.scad` | source-spool dimensions and stand geometry |
 | `respool_stand.scad` | 2×2 base + ⌀9.9 post — 83.5 × 83.5 × 64 mm, ~67 g |
 | `respool_drag_washer.scad` | ⌀40 × 6 disc — ~9 g |
-| `respool_winder.scad` | 2×2 plate with a ⌀10.00 socket — the spool stands in it to be wound, ~62 g |
-| `respool_crank.scad` | D-socket crank for the journal's flats — ~17 g |
+| `respool_winder.scad` | 2×2 plate with a spigot slot and a lipped U fence that holds the spool's lower flange down — ~65 g |
+| `respool_crank.scad` | D-socket crank on a ⌀54 disc that bears on the upper flange — ~32 g solid, less at normal infill |
