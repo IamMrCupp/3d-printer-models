@@ -437,15 +437,16 @@ def publish_one(slug: str, args) -> None:
         meta["release"] = tag
         meta_path.write_text(json.dumps(meta, indent=2) + "\n")
 
-        if args.publish:
+        # Publishing twice is an HTTP 400 ("Thing is already published"), so ask first.
+        _, cur = tv.json("GET", f"/things/{thing_id}")
+        public = isinstance(cur, dict) and bool(cur.get("is_published"))
+        if public:
+            print("already public — updated in place.")
+        elif args.publish:
             status, resp = tv.json("POST", f"/things/{thing_id}/publish", {})
             print(f"publish   -> {status} {json.dumps(resp)[:300] if resp else ''}")
         else:
-            _, cur = tv.json("GET", f"/things/{thing_id}")
-            if isinstance(cur, dict) and cur.get("is_published"):
-                print("already public — updated in place.")
-            else:
-                print("left as draft — re-run with --publish, or publish from the site.")
+            print("left as draft — re-run with --publish, or publish from the site.")
         print(f"\ndone: {slug} {version} -> https://www.thingiverse.com/thing:{thing_id}")
 
 
