@@ -8,10 +8,19 @@
     tools/thingiverse_publish.py <model-slug> --apply     # create/update the thing, upload files
     tools/thingiverse_publish.py <model-slug> --apply --publish   # ...and take it out of draft
 
-Auth is an App Token from https://www.thingiverse.com/developers (My Apps ->
-Create an App -> App Token), read from the THINGIVERSE_TOKEN environment
-variable. It is never printed, never written to disk, and never passed on the
-command line.
+Auth. The App Token on the developer page is READ-ONLY (the form says so), so
+uploads need an OAuth token for the account. One-time:
+
+    export THINGIVERSE_CLIENT_ID=...      # from the app's page on thingiverse.com/developers
+    export THINGIVERSE_CLIENT_SECRET=...  # same page; keep it out of the repo
+    tools/thingiverse_publish.py --login
+
+--login prints the authorize URL; open it, click Allow, and Thingiverse sends
+you to the app's Callback URL with `?code=...` in the address bar. Paste that
+code at the prompt. The tool swaps it for an access token and stores it in
+~/.config/thingiverse/token (mode 600, outside the repo). Every later run reads
+it from there, or from THINGIVERSE_TOKEN if that is set. Nothing secret is ever
+printed, committed, or passed on the command line.
 
 Per model, `<slug>/thingiverse.json` holds what the repo can't derive:
 
@@ -58,6 +67,9 @@ from pathlib import Path
 from urllib import error, request
 
 API = "https://api.thingiverse.com"
+AUTHORIZE = "https://www.thingiverse.com/login/oauth/authorize"
+TOKEN_URL = "https://www.thingiverse.com/login/oauth/access_token"
+TOKEN_FILE = Path.home() / ".config" / "thingiverse" / "token"
 REPO = "IamMrCupp/3d-printer-models"
 RAW = f"https://raw.githubusercontent.com/{REPO}/main"
 ROOT = Path(__file__).resolve().parent.parent
@@ -197,14 +209,70 @@ def normalize_md5(value: str | None) -> str | None:
         return None
 
 
+# ---- login ----------------------------------------------------------------------
+
+def login() -> None:
+    cid = os.environ.get("THINGIVERSE_CLIENT_ID")
+    secret = os.environ.get("THINGIVERSE_CLIENT_SECRET")
+    if not (cid and secret):
+        die("set THINGIVERSE_CLIENT_ID and THINGIVERSE_CLIENT_SECRET from the app's developer page first")
+    print("1. Open this in a browser where you are signed in to Thingiverse, and click Allow:\n")
+    print(f"   {AUTHORIZE}?client_id={cid}&response_type=code\n")
+    print("2. You land on the app's Callback URL with ?code=... in the address bar.")
+    code = input("   Paste the code here: ").strip()
+    if not code:
+        die("no code given")
+    from urllib.parse import urlencode, parse_qs
+    body = urlencode({"client_id": cid, "client_secret": secret, "code": code}).encode()
+    req = request.Request(TOKEN_URL, data=body, method="POST")
+    req.add_header("User-Agent", f"{REPO} thingiverse_publish.py")
+    try:
+        with request.urlopen(req, timeout=60) as r:
+            raw = r.read().decode()
+    except error.HTTPError as e:
+        die(f"token exchange -> HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:400]}")
+    # Thingiverse answers this endpoint as a query string, not JSON
+    token = parse_qs(raw).get("access_token", [None])[0]
+    if not token:
+        try:
+            token = json.loads(raw).get("access_token")
+        except Exception:
+            token = None
+    if not token:
+        die(f"no access_token in the reply (first 200 chars, secrets redacted): {raw[:200]!r}")
+    TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
+    TOKEN_FILE.write_text(token + "\n")
+    TOKEN_FILE.chmod(0o600)
+    # prove it is a user token, not the read-only app token
+    tv = Thingiverse(token)
+    status, me = tv.json("GET", "/users/me")
+    print(f"\nsigned in as {me.get('name') if isinstance(me, dict) else '?'}; token saved to {TOKEN_FILE}")
+
+
+def load_token() -> str:
+    token = os.environ.get("THINGIVERSE_TOKEN")
+    if not token and TOKEN_FILE.exists():
+        token = TOKEN_FILE.read_text().strip()
+    if not token:
+        die("no token: run `tools/thingiverse_publish.py --login` once (or set THINGIVERSE_TOKEN)")
+    return token
+
+
 # ---- main -----------------------------------------------------------------------
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("slug")
+    ap.add_argument("slug", nargs="?")
+    ap.add_argument("--login", action="store_true", help="one-time OAuth: store an access token for this account")
     ap.add_argument("--apply", action="store_true", help="talk to Thingiverse (default: dry run)")
     ap.add_argument("--publish", action="store_true", help="after --apply, take the thing out of draft")
     args = ap.parse_args()
+
+    if args.login:
+        login()
+        return
+    if not args.slug:
+        ap.error("model slug required (or --login)")
 
     slug = args.slug.rstrip("/")
     if not (ROOT / slug / "README.md").exists():
@@ -240,11 +308,7 @@ def main() -> None:
             print("\ndry run — nothing sent. Add --apply to create/update, --publish to un-draft.")
             return
 
-        token = os.environ.get("THINGIVERSE_TOKEN")
-        if not token:
-            die("THINGIVERSE_TOKEN is not set. Create an App at https://www.thingiverse.com/developers "
-                "and export its App Token; this tool never takes it on the command line.")
-        tv = Thingiverse(token)
+        tv = Thingiverse(load_token())
 
         if meta.get("thing_id"):
             thing_id = int(meta["thing_id"])
