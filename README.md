@@ -76,6 +76,20 @@ git tag sticker-holder-inserts/v1.0.0
 git push origin sticker-holder-inserts/v1.0.0
 ```
 
+### Publishing to Thingiverse
+
+[`tools/thingiverse_publish.py`](tools/thingiverse_publish.py) pushes one model's **latest GitHub release** to Thingiverse — the same CI-validated STLs and previews, never a local render. It is a dry run unless told otherwise:
+
+```sh
+tools/thingiverse_publish.py wick-solder-spool                    # show what would be sent
+tools/thingiverse_publish.py wick-solder-spool --apply            # create or update the thing, upload changed files, leave it as a draft
+tools/thingiverse_publish.py wick-solder-spool --apply --publish  # ...and publish it
+```
+
+It needs an App Token from [thingiverse.com/developers](https://www.thingiverse.com/developers) in `THINGIVERSE_TOKEN` (environment only — never on the command line, never in the repo). The first `--apply` writes the new thing's id to `<model>/thingiverse.json`; commit that file, and every later run updates the same thing instead of making a duplicate. Category and tags live in that file too. Name comes from the Models table above, description from the model's README, license from the `.scad` SPDX header (CC BY-NC 4.0 when there is none). Files already on the thing with a matching MD5 are skipped.
+
+Publishing is deliberately **not** wired to the release workflow: a release is an artifact, a Thingiverse post is a public act, and the two should not happen from one `git push`.
+
 ### Adding a model
 
 1. Create `<model-slug>/` with the parametric `.scad` source (one shared `_common.scad` + part variants for multi-part models, like the existing ones). Put print-first **test coupons** — fit gauges, grip tests, calibration strips — in `<model-slug>/coupons/`. They still get rendered and validated by CI, but `build_release.sh` skips them, so a release stays a set of bench parts you can print without reading anything first.
