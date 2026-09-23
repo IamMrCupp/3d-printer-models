@@ -7,6 +7,7 @@
     tools/thingiverse_publish.py <model-slug>             # dry run: show what would happen
     tools/thingiverse_publish.py <model-slug> --apply     # create/update the thing, upload files
     tools/thingiverse_publish.py <model-slug> --apply --publish   # ...and take it out of draft
+    tools/thingiverse_publish.py --all --skip a,b --apply --publish  # every released model, paced
 
 Auth. The App Token on the developer page is READ-ONLY (the form says so), so
 uploads need an OAuth token for the account. One-time:
@@ -66,6 +67,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 import uuid
 from pathlib import Path
 from urllib import error, request
@@ -88,6 +90,7 @@ LICENSES = {
     "MIT": "bsd",   # Thingiverse has no MIT entry; BSD is the closest permissive one
 }
 DEFAULT_CATEGORY = "Tool Holders & Boxes"
+PACE_S = 60   # seconds between models in --all
 
 
 def die(msg: str, code: int = 1) -> None:
@@ -311,6 +314,8 @@ def main() -> None:
     ap.add_argument("--login", action="store_true", help="one-time OAuth: store an access token for this account")
     ap.add_argument("--apply", action="store_true", help="talk to Thingiverse (default: dry run)")
     ap.add_argument("--publish", action="store_true", help="after --apply, take the thing out of draft")
+    ap.add_argument("--all", action="store_true", help="every released model, one at a time, paced for the rate limit")
+    ap.add_argument("--skip", help="with --all: comma-separated model slugs to leave out")
     ap.add_argument("--dedupe", action="store_true",
                     help="remove identical duplicate files/previews, keeping the oldest (dry run unless --apply)")
     args = ap.parse_args()
@@ -318,10 +323,30 @@ def main() -> None:
     if args.login:
         login()
         return
+    if args.all:
+        if args.dedupe:
+            ap.error("--dedupe works on one model at a time")
+        skip = {x.strip().rstrip("/") for x in (args.skip or "").split(",") if x.strip()}
+        slugs = [d.name for d in sorted(ROOT.iterdir())
+                 if (d / "README.md").exists() and d.name not in skip
+                 and subprocess.run(["git", "tag", "-l", f"{d.name}/v*"], cwd=ROOT,
+                                    capture_output=True, text=True).stdout.strip()]
+        print(f"{len(slugs)} released model(s); skipping {sorted(skip) or 'none'}\n")
+        for i, slug in enumerate(slugs):
+            print(f"==== [{i+1}/{len(slugs)}] {slug}")
+            publish_one(slug, args)
+            # 300 requests / 5 min. The biggest model is ~30 requests; a minute
+            # between models keeps any 5-minute window far under the limit.
+            if args.apply and i + 1 < len(slugs):
+                time.sleep(PACE_S)
+            print()
+        return
     if not args.slug:
-        ap.error("model slug required (or --login)")
+        ap.error("model slug required (or --all, or --login)")
+    publish_one(args.slug.rstrip("/"), args)
 
-    slug = args.slug.rstrip("/")
+
+def publish_one(slug: str, args) -> None:
     if not (ROOT / slug / "README.md").exists():
         die(f"no such model: {slug}")
 
