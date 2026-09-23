@@ -7,6 +7,7 @@
     tools/thingiverse_publish.py <model-slug>             # dry run: show what would happen
     tools/thingiverse_publish.py <model-slug> --apply     # create/update the thing, upload files
     tools/thingiverse_publish.py <model-slug> --apply --publish   # ...and take it out of draft
+    tools/thingiverse_publish.py --all --skip a,b --apply --publish  # every released model, paced
 
 Auth. The App Token on the developer page is READ-ONLY (the form says so), so
 uploads need an OAuth token for the account. One-time:
@@ -43,12 +44,16 @@ directory is NC regardless.
 Endpoints (v1, https://api.thingiverse.com, `Authorization: Bearer <token>`):
     POST   /things/                       create   {name, license, category, description, tags}
     PATCH  /things/{id}                   update   same fields
-    GET    /things/{id}/files             existing files, with md5
+    GET    /things/{id}/files             existing STLs; `hash` is the base64 MD5
+    GET    /things/{id}/images            previews — PNGs are sorted here, and carry no hash
+    DELETE /things/{id}/files/{fid}       /  DELETE /things/{id}/images/{iid}
     POST   /files/{id}/uploadFile         multipart field `file` -> {"id": pending}
     POST   /files/{id}/FinalizeFiles      {pending_uploads:[{id,rank}], target_id, target_type:"thing"}
     POST   /things/{id}/publish
-The publish payload and the exact license enum are UNVERIFIED until the first
-real --apply: every response is printed, and any non-2xx stops the run.
+Verified 2026-09-23 on wick-solder-spool: license "cc-nc", category names,
+POST /publish with an empty body. The first re-run uploaded every file twice
+because it read `md5` (the field is `hash`) and never looked at /images —
+`--dedupe` exists to clean that up, and now runs after any replacement.
 Rate limit is 300 requests per 5 minutes; a run here is well under 30.
 """
 from __future__ import annotations
@@ -62,6 +67,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 import uuid
 from pathlib import Path
 from urllib import error, request
@@ -84,6 +90,7 @@ LICENSES = {
     "MIT": "bsd",   # Thingiverse has no MIT entry; BSD is the closest permissive one
 }
 DEFAULT_CATEGORY = "Tool Holders & Boxes"
+PACE_S = 60   # seconds between models in --all
 
 
 def die(msg: str, code: int = 1) -> None:
@@ -209,6 +216,47 @@ def normalize_md5(value: str | None) -> str | None:
         return None
 
 
+# ---- duplicates -------------------------------------------------------------------
+
+def dedupe(tv: "Thingiverse", thing_id: int, keep: str, dry: bool = False) -> int:
+    """Delete same-named files and previews, keeping one of each.
+
+    Only images at rank < 100 are considered: those are the ranks this tool
+    assigns (10, 11, ...). Anything ranked higher was arranged on the site by
+    hand and is never touched.
+
+    keep="oldest"  clean up a botched re-upload of identical files — the oldest
+                   copy keeps its download count
+    keep="newest"  after replacing a changed file — the new one wins
+    """
+    removed = 0
+    pick = min if keep == "oldest" else max
+    _, files = tv.json("GET", f"/things/{thing_id}/files")
+    _, images = tv.json("GET", f"/things/{thing_id}/images")
+    for kind, items, path in (("file", files or [], "files"),
+                              ("image", [i for i in (images or []) if (i.get("rank") or 0) < 100], "images")):
+        by_name: dict[str, list[dict]] = {}
+        for it in items:
+            by_name.setdefault(it.get("name"), []).append(it)
+        for name, group in sorted(by_name.items()):
+            if len(group) < 2:
+                continue
+            if kind == "file" and keep == "oldest":
+                hashes = {normalize_md5(g.get("hash") or g.get("md5")) for g in group}
+                if len(hashes) > 1:
+                    print(f"keep      {name}: {len(group)} copies differ in content — not touching")
+                    continue
+            winner = pick(group, key=lambda g: int(g["id"]))
+            for g in group:
+                if g is winner:
+                    continue
+                print(f"{'would delete' if dry else 'delete'}  {kind} {name} #{g['id']} (keeping #{winner['id']})")
+                if not dry:
+                    tv.json("DELETE", f"/things/{thing_id}/{path}/{g['id']}")
+                removed += 1
+    return removed
+
+
 # ---- login ----------------------------------------------------------------------
 
 def login() -> None:
@@ -266,20 +314,51 @@ def main() -> None:
     ap.add_argument("--login", action="store_true", help="one-time OAuth: store an access token for this account")
     ap.add_argument("--apply", action="store_true", help="talk to Thingiverse (default: dry run)")
     ap.add_argument("--publish", action="store_true", help="after --apply, take the thing out of draft")
+    ap.add_argument("--all", action="store_true", help="every released model, one at a time, paced for the rate limit")
+    ap.add_argument("--skip", help="with --all: comma-separated model slugs to leave out")
+    ap.add_argument("--dedupe", action="store_true",
+                    help="remove identical duplicate files/previews, keeping the oldest (dry run unless --apply)")
     args = ap.parse_args()
 
     if args.login:
         login()
         return
+    if args.all:
+        if args.dedupe:
+            ap.error("--dedupe works on one model at a time")
+        skip = {x.strip().rstrip("/") for x in (args.skip or "").split(",") if x.strip()}
+        slugs = [d.name for d in sorted(ROOT.iterdir())
+                 if (d / "README.md").exists() and d.name not in skip
+                 and subprocess.run(["git", "tag", "-l", f"{d.name}/v*"], cwd=ROOT,
+                                    capture_output=True, text=True).stdout.strip()]
+        print(f"{len(slugs)} released model(s); skipping {sorted(skip) or 'none'}\n")
+        for i, slug in enumerate(slugs):
+            print(f"==== [{i+1}/{len(slugs)}] {slug}")
+            publish_one(slug, args)
+            # 300 requests / 5 min. The biggest model is ~30 requests; a minute
+            # between models keeps any 5-minute window far under the limit.
+            if args.apply and i + 1 < len(slugs):
+                time.sleep(PACE_S)
+            print()
+        return
     if not args.slug:
-        ap.error("model slug required (or --login)")
+        ap.error("model slug required (or --all, or --login)")
+    publish_one(args.slug.rstrip("/"), args)
 
-    slug = args.slug.rstrip("/")
+
+def publish_one(slug: str, args) -> None:
     if not (ROOT / slug / "README.md").exists():
         die(f"no such model: {slug}")
 
     meta_path = ROOT / slug / "thingiverse.json"
     meta = json.loads(meta_path.read_text()) if meta_path.exists() else {}
+
+    if args.dedupe:
+        if not meta.get("thing_id"):
+            die(f"{slug} has no thing_id yet")
+        n = dedupe(Thingiverse(load_token()), int(meta["thing_id"]), keep="oldest", dry=not args.apply)
+        print(f"{n} duplicate(s) {'removed' if args.apply else 'found — re-run with --apply to remove'}")
+        return
     tag = latest_tag(slug)
     version = tag.split("/v")[-1]
     payload = {
@@ -325,11 +404,21 @@ def main() -> None:
         print(f"          https://www.thingiverse.com/thing:{thing_id}")
 
         _, existing = tv.json("GET", f"/things/{thing_id}/files")
-        have = {f.get("name"): normalize_md5(f.get("md5")) for f in (existing or [])}
+        _, images = tv.json("GET", f"/things/{thing_id}/images")
+        # STLs land in /files with a `hash` (base64 MD5). PNGs are sorted into
+        # /images, which carry no hash at all — so previews are re-sent only when
+        # the release changes, and the stored release tag is what tells us that.
+        have = {f.get("name"): normalize_md5(f.get("hash") or f.get("md5")) for f in (existing or [])}
+        have_img = {i.get("name") for i in (images or [])}
+        same_release = meta.get("release") == tag
 
         pending = []
         for name, (p, h) in local.items():
-            if have.get(name) == h:
+            if p.suffix.lower() == ".png":
+                if same_release and name in have_img:
+                    print(f"skip      {name} (release unchanged, preview already on the thing)")
+                    continue
+            elif have.get(name) == h:
                 print(f"skip      {name} (same md5 already uploaded)")
                 continue
             status, resp = tv.upload(thing_id, p)
@@ -343,12 +432,20 @@ def main() -> None:
             status, resp = tv.json("POST", f"/files/{thing_id}/FinalizeFiles",
                                    {"pending_uploads": pending, "target_id": thing_id, "target_type": "thing"})
             print(f"finalize  {len(pending)} file(s) -> {status}")
+            # a changed STL or a new release's preview replaces the old one of the same name
+            dedupe(tv, thing_id, keep="newest")
+        meta["release"] = tag
+        meta_path.write_text(json.dumps(meta, indent=2) + "\n")
 
         if args.publish:
             status, resp = tv.json("POST", f"/things/{thing_id}/publish", {})
             print(f"publish   -> {status} {json.dumps(resp)[:300] if resp else ''}")
         else:
-            print("left as draft — re-run with --publish, or publish from the site.")
+            _, cur = tv.json("GET", f"/things/{thing_id}")
+            if isinstance(cur, dict) and cur.get("is_published"):
+                print("already public — updated in place.")
+            else:
+                print("left as draft — re-run with --publish, or publish from the site.")
         print(f"\ndone: {slug} {version} -> https://www.thingiverse.com/thing:{thing_id}")
 
 
