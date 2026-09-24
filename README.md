@@ -106,6 +106,7 @@ Two licenses, split by what the thing *is*:
 | What | License | Why |
 |---|---|---|
 | **The models** — every `<model>/` directory, the `.scad` files that produce a printable object, and the previews | [CC BY-NC 4.0](LICENSE) | share and adapt with attribution, non-commercial |
+| **Exception:** [`bench-cleaning-station/`](bench-cleaning-station/) | [CC BY-NC-SA 4.0](bench-cleaning-station/LICENSE) | its swab bin remixes a CC BY-NC-SA design, and ShareAlike carries to the whole model |
 | **The code** — [`lib/`](lib/) and [`tools/`](tools/) | [MIT](LICENSE-MIT) | it's a software library; reuse it however you like, commercially included |
 
 Creative Commons [recommends against using CC licenses for software](https://creativecommons.org/faq/#can-i-apply-a-creative-commons-license-to-software) — they don't address source vs. object code and carry no patent grant. So the parametric library and the build tooling are MIT, and the finished designs stay NC.

@@ -13,6 +13,9 @@
 //
 // The aerosols are FLAMMABLE and this bench has a 400 °C iron on it. These cups
 // are for working cans only; bulk stock belongs away from the hood entirely.
+//
+// SPDX-License-Identifier: CC-BY-NC-SA-4.0
+// Copyright (c) 2026 Aaron Cupp
 
 include <../lib/vessel.scad>
 

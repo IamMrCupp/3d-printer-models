@@ -9,5 +9,8 @@
 // in 55.20, i.e. ~2 mm is the fit that works and ~0.5 mm is not.
 //
 // PRINT: as emitted, feet down. No supports.
+//
+// SPDX-License-Identifier: CC-BY-NC-SA-4.0
+// Copyright (c) 2026 Aaron Cupp
 include <cleaning_station_common.scad>
 collar_cup(2, 2, D_FREEZE_SPRAY, CAPTURE, clr = FREEZE_CLR);
