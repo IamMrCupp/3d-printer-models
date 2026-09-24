@@ -1,10 +1,10 @@
 {
-  "thing_id": 7413172,
+  "thing_id": 7413574,
   "category": "Tool Holders & Boxes",
   "tags": [
     "gridfinity",
     "openscad",
     "electronics bench"
   ],
-  "release": "baseplates/v1.1.0"
+  "release": "bench-cleaning-station/v1.9.0"
 }
