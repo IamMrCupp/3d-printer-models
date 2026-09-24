@@ -13,6 +13,9 @@
 // one deep per layer, so the height sets the stack.
 //
 // PRINT: as emitted, feet down. No supports.
+//
+// SPDX-License-Identifier: CC-BY-NC-SA-4.0
+// Copyright (c) 2026 Aaron Cupp
 include <cleaning_station_common.scad>
 include <../lib/gridfinity.scad>
 

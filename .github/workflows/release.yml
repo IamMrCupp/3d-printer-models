@@ -30,6 +30,11 @@ jobs:
           ref="${GITHUB_REF_NAME}"
           echo "slug=${ref%/v*}"      >> "$GITHUB_OUTPUT"
           echo "version=v${ref##*/v}" >> "$GITHUB_OUTPUT"
+          # The model's own SPDX header decides the license line; CC BY-NC 4.0
+          # (the repo default for models) when none is declared.
+          spdx="$(grep -ho 'SPDX-License-Identifier: CC-[A-Z-]*4\.0' "${ref%/v*}"/*.scad 2>/dev/null | sort -u | head -1 | sed 's/.*: //')"
+          spdx="${spdx:-CC-BY-NC-4.0}"
+          echo "license=CC ${spdx#CC-}" | sed 's/-4\.0$/ 4.0/' >> "$GITHUB_OUTPUT"
 
       - name: Install OpenSCAD + Blender
         timeout-minutes: 15
@@ -50,5 +55,5 @@ jobs:
             --title "${{ steps.tag.outputs.slug }} ${{ steps.tag.outputs.version }}" \
             --notes "Automated release of **${{ steps.tag.outputs.slug }}** ${{ steps.tag.outputs.version }}.
 
-          Rendered from OpenSCAD source; preview rendered with Blender. Licensed CC BY-NC 4.0." \
+          Rendered from OpenSCAD source; preview rendered with Blender. Licensed ${{ steps.tag.outputs.license }}." \
             dist/*

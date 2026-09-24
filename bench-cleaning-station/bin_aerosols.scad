@@ -5,5 +5,8 @@
 // part. The freeze spray is a larger can and lives in bin_freeze_spray.
 //
 // PRINT: as emitted, feet down. No supports.
+//
+// SPDX-License-Identifier: CC-BY-NC-SA-4.0
+// Copyright (c) 2026 Aaron Cupp
 include <cleaning_station_common.scad>
 collar_cup_row(5, 2, [BORE_DEOXIT, BORE_DEOXIT, BORE_DEOXIT], CAPTURE, clr = 0);

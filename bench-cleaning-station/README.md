@@ -4,6 +4,10 @@
 
 **Gridfinity** cups and bins for the IPA / contact-cleaner corner of an electronics repair bench — aerosols, wash bottle, dispenser pump, and melamine sponges.
 
+> **License: CC BY-NC-SA 4.0** — unlike the rest of this repo. `bin_swabs` is a remix of
+> [thing:7165275](https://www.thingiverse.com/thing:7165275) by **Haaneroth**, which is
+> CC BY-NC-SA 4.0, and ShareAlike carries to the whole model. Full text in [LICENSE](LICENSE).
+
 Every dimension here was taken off the actual item with calipers. Nothing is a nominal from a product page, which matters: a collar cup is entirely a millimetre problem.
 
 ## Design notes
@@ -159,6 +163,10 @@ openscad -o bin_aerosols.stl --export-format binstl bin_aerosols.scad
 ```
 
 Or render and validate everything at once with `tools/render.sh`.
+
+## License
+
+**CC BY-NC-SA 4.0** — see [LICENSE](LICENSE). The rest of this repository's models are CC BY-NC 4.0; this one differs because `bin_swabs` derives from Haaneroth's [thing:7165275](https://www.thingiverse.com/thing:7165275), licensed CC BY-NC-SA 4.0, and ShareAlike requires adaptations to carry the same license. Credit for the swab hopper's form — the closed hopper, the front wall as a dam, the scooped trough — goes to Haaneroth. The geometry here is re-authored in OpenSCAD to fit this bench's swabs and a 2×2 Gridfinity footprint.
 
 ## Recommended print settings
 
