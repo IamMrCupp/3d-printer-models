@@ -38,6 +38,7 @@ declare -a OVERRIDE=(
   "gridfinity-fillers:18-gridfinity-fillers"
   "wolfbox-nozzles:19-wolfbox-nozzles"
   "wick-solder-spool:21-wick-solder-spool"
+  "baseplates:24-baseplates"
   "hot-air-nozzles:22-hot-air-nozzles"
   "uv-mask-station:23-uv-mask-station"
 )
@@ -48,10 +49,10 @@ declare -a OVERRIDE=(
 # uv-mask-station came OFF this list 2026-09-08: plate_oiler is new and unprinted,
 # so the directory has to be queued again. Its other parts are already in service.
 declare -a NOT_QUEUED=(
-  # baseplates and psu-locators landed 2026-09-09 from worktree-bench-holders.
-  # They were printed from that worktree and are in service, so an STL in the
-  # print list would be noise.
-  baseplates psu-locators
+  # psu-locators landed 2026-09-09 from worktree-bench-holders, was printed from
+  # that worktree and is in service, so an STL in the print list would be noise.
+  # (baseplates came off this list 2026-09-23: new plate sizes and the keys.)
+  psu-locators
   syringe-holders instrument-holders engindot-shortkiller-topper
   owon-spm8104-tray drybox-splitter-stand bench-cleaning-station-legacy
 )
