@@ -1,32 +1,29 @@
 // bin_nozzles_mf50 — 4×2 Gridfinity bin, eight octagonal nozzle pockets for the
 // Wolfbox MF50.
 //
-// WHY THIS EXISTS: the MakerWorld model this replaces is labelled Gridfinity and
-// is not. Measured off its mesh: 90.00 × 133.00 footprint — 2.155 × 3.179 cells,
-// not a whole number of either — and NO FOOT AT ALL. Its footprint is a constant
-// 90 × 133 from 0.8 mm up to the rim, where a real bin steps 79.20 → 83.50 in
-// BOTH axes between 2.2 and 3.0 mm. It also carries 30 non-manifold edges. It
-// would sit loose in a 2×3 area with nothing to latch.
+// WHY THIS EXISTS: a real Gridfinity home for the aftermarket nozzle set — a
+// whole number of cells, a proper foot, one pocket per nozzle.
 //
-// THE POCKET GEOMETRY IS KEPT, BECAUSE THAT PART WAS RIGHT. Rastered
-// cross-sections of the original at two heights, six pockets on a 2×3 grid at a
-// clean 43 mm pitch:
+// THE POCKETS ARE SIZED FROM THE NOZZLE. Calipered on an aftermarket MF50
+// nozzle, 2026-09-25 (survey/MEASUREMENTS.md):
 //
-//     collar recess   36.8 across flats, 39.87 across corners, 9 mm deep
-//     bore            30.40, 8 mm deep
-//     floor           3 mm
+//     octagonal collar   36.6 across the flats
+//     round body         30.2 just below the collar
 //
-// ⚠️ THE RECESS IS AN OCTAGON, NOT A HEX. Corner-to-flat ratio measures 1.089;
-// a regular hexagon is 1.155 and a regular octagon 1.082. It reads as a hex in a
-// render and is not one. The user confirms the nozzles themselves are octagonal.
+// Each pocket is that plus NOZZLE_CLR: a recess the collar drops into and rests
+// on, over a bore the body hangs in. The depths are this design's choice: deep
+// enough to hold a nozzle upright, shallow enough to grab it.
+//
+// ⚠️ THE RECESS IS AN OCTAGON, NOT A HEX. For reference, the corner-to-flat
+// ratio of a regular hexagon is 1.155 and a regular octagon 1.082. It reads as a hex at a
+// glance and is not one — the nozzles themselves are octagonal.
 //
 // A REGULAR OCTAGON'S BOUNDING BOX IS ITS ACROSS-FLATS, NOT ITS ACROSS-CORNERS —
 // the corners sit at ±22.5° and fall inside the box. Sizing the pitch off 39.87
-// suggested 1.4 mm walls and nearly cost the layout; the real figure is 36.8,
-// which leaves 4.5 mm in X and 3.75 mm in Y.
+// suggests 1.4 mm walls; the real figure is the across-flats, which leaves
+// 4.5 mm in X and 3.75 mm in Y.
 //
-// EIGHT POCKETS, NOT SIX: the stock nozzles are covered by the other holder;
-// this one is for the aftermarket set.
+// EIGHT POCKETS: the aftermarket set. The stock nozzles live elsewhere.
 //
 // PRINT: as emitted, feet down. No supports — every pocket wall is vertical and
 // every floor faces up.
@@ -35,17 +32,22 @@
 // Copyright (c) 2026 Aaron Cupp
 include <../lib/gridfinity.scad>
 
-/* [Nozzles — measured off the original mesh] */
-OCTA_AF   = 36.8;   // [20:0.1:60] collar recess, ACROSS FLATS
+/* [Nozzle — calipered 2026-09-25] */
+NOZZLE_AF   = 36.6;   // octagonal collar, across the flats
+NOZZLE_BODY = 30.2;   // round body just below the collar
+NOZZLE_CLR  = 0.2;    // [0:0.05:0.6] added to both, on the diameter — 0.1 a side
+
+/* [Pockets] */
+OCTA_AF   = NOZZLE_AF + NOZZLE_CLR;     // 36.8 collar recess, ACROSS FLATS
 OCTA_DEEP = 9.0;    // [3:0.5:20] recess depth
-BORE_D    = 30.4;   // [10:0.1:50] barrel bore
+BORE_D    = NOZZLE_BODY + NOZZLE_CLR;   // 30.4 body bore
 BORE_DEEP = 8.0;    // [3:0.5:20] bore depth below the recess
 
 /* [Bin] */
 NX = 4; NY = 2;
 COLS = 4; ROWS = 2;   // 8 pockets
 WALL  = 1.2;
-FLOOR = 3.0;          // the original's floor, kept
+FLOOR = 3.0;          // solid under the bores — the nozzles are not light
 
 W  = NX*GF - 0.5;  D = NY*GF - 0.5;
 IW = W - 2*WALL;   ID = D - 2*WALL;
