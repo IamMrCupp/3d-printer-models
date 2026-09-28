@@ -15,6 +15,7 @@ Wiring is its own document: **[WIRING.md](WIRING.md)**, with the KiCad schematic
 | **Dock rail** | `rig_dock_rail.scad` | 10 × 47 × 6.4 mm | ×2 — pegs up. 0.7 cm³ each |
 | **Deck coupon** | `coupons/deck_coupon.scad` | 140 × 100 × 3 mm | **print first** — every panel hole with a fit ladder, plus a label. 27 cm³ |
 | **Rail ladder** | `coupons/dock_rail_ladder.scad` | 52 × 47 × 6.4 mm | **print first** — four rails at four peg sizes. 3 cm³ |
+| **Joint coupon** | `coupons/joint_coupon.scad` | 88 × 40 × 16.75 mm | **print first** — a corner of the base and the matching corner of the cup: skirt fit + screw. Two pieces. 16 cm³ |
 
 About 265 cm³ for the box, all PETG. Assembled it stands 51 mm above the plate's socket floor.
 
@@ -56,7 +57,8 @@ The hole sizes are nominal. **The coupon decides them.** The XT60 cutouts don't 
 
 1. **`coupons/deck_coupon.scad`** — 3 mm plate with the meter cutout, a three-step ladder for the rocker and for the binding post, and an engraved label to judge legibility. Push each part in, note which step fits, set `SW_HOLE` / `POST_HOLE` to match. When the XT60s arrive, caliper them, fill `XT60_*`, flip `XT60_MEASURED`, and the coupon grows an XT60 cutout to check too.
 2. **`coupons/dock_rail_ladder.scad`** — four rails at 3.6 / 3.7 / 3.8 / 3.9. Push the riser onto each; set `PEG_D` to the one that holds without a fight. Snap off the two you'll use — they're the real rails.
-3. Then the box: base, cup.
+3. **`coupons/joint_coupon.scad`** — a corner of each big part. Drop the cup corner over the base corner: it should go on by hand and not rattle. Run an M3 × 10 into the pilot: it should bite without splitting the boss. Adjust `JOINT_CLR` / `SCREW_TAP` if not.
+4. Then the box: base, cup. All three coupons fit one bed together; the base does not fit beside them.
 
 ## Verified
 
