@@ -24,7 +24,7 @@ SAMPLE = 40;                                  // corner sample, square
 CX = W/2 - SAMPLE/2;  CY = -(D/2 - SAMPLE/2); // centre of the front-right corner sample
 Z_BASE_TOP = Z_FLOOR + TONGUE_H;
 
-module corner_box(h) { translate([CX - SAMPLE/2, CY - SAMPLE/2, -1]) cube([SAMPLE, SAMPLE, h + 2]); }
+module corner_box(h) { translate([CX - SAMPLE/2, CY - SAMPLE/2, -1]) cube([SAMPLE, SAMPLE, h + 1]); }   // top face exactly at h
 
 module base_corner() { intersection() { rig_base(); corner_box(Z_BASE_TOP); } }
 module cup_corner()  { intersection() { rig_cup();  corner_box(SKIRT_H + 6); } }   // skirt + 6 mm of full wall
@@ -35,7 +35,7 @@ module cup_corner()  { intersection() { rig_cup();  corner_box(SKIRT_H + 6); } }
 // tighter fit than the part will have.
 GAP = 8;
 CUP_SAMPLE_H = SKIRT_H + 6;
-translate([-CX - SAMPLE/2 - GAP/2, -CY, 0]) base_corner();
-translate([ SAMPLE/2 + GAP/2 - CX, -CY, CUP_SAMPLE_H]) rotate([180, 0, 0]) translate([0, 2*CY, 0]) cup_corner();
+translate([-(SAMPLE/2 + GAP/2), 0, 0]) translate([-CX, -CY, 0]) base_corner();
+translate([ (SAMPLE/2 + GAP/2), 0, CUP_SAMPLE_H]) rotate([180, 0, 0]) translate([-CX, -CY, 0]) cup_corner();
 
 echo(str("joint_coupon: two ", SAMPLE, " mm corners; base top z=", Z_BASE_TOP, ", cup sample ", SKIRT_H + 6, " tall"));
