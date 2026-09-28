@@ -13,10 +13,10 @@
 //   rig_shelf     flat plate on the frame rim: drawer-bay ceiling, electronics
 //                 floor. Separate on purpose — see below.
 //   rig_cup       top deck + four walls, open bottom. EVERY electrical part
-//                 lives here (meter + switch + probe post on the deck, input
-//                 posts + fuse on the rear wall, pigtail exit on the right),
-//                 so the wiring never crosses a joint and the top is fixed.
-//                 Prints deck-down: the panel cutouts land on the bed.
+//                 lives here (meter + switch + probe post on the deck, XT60 +
+//                 banana input on the rear wall, XT60 + banana output on the
+//                 right), so the wiring never crosses a joint and the top is
+//                 fixed. Prints deck-down: the panel cutouts land on the bed.
 //   rig_dock_rail two small rails that CA into pockets on the deck; their
 //                 pegs hold the x16 riser board by its four mining holes.
 //                 Separate because a peg can't grow off a face that's on the bed.
@@ -38,6 +38,7 @@
 // Hole sizes carry a fit ladder on coupons/deck_coupon.scad; print that first.
 
 include <../lib/gridfinity.scad>
+include <../lib/label.scad>
 
 $fn = 48;
 
@@ -104,31 +105,47 @@ CUP_H        = SKIRT_H + CUP_IN_H + WALL;   // 55; the cup's z=0 is the skirt's 
 RISER_X = -15;  RISER_Y = 50;          // board centre. 126.55 x 43.20, holes 99 x 37
 METER_X = -25;  METER_Y = -38;         // housing 84.29 x 44.50, bezel 89 x 49
 SW_X    =  45;  SW_Y    = -38;         // rocker
-GND_X   =  66;  GND_Y   = -38;         // probe post
+GND_X   =  66;  GND_Y   = -64;         // probe post — front-right corner, clear of the
+                                       // RISER output's body coming through the right wall
 
 /* [Component dimensions — MEASURED] */
 METER_W = 84.29; METER_D = 44.50; METER_DEPTH = 24.45;   // housing behind the bezel
 METER_CLR = 0.30;                                        // per side; spring clips forgive slop
 SW_BODY   = 20.87;  SW_CLIP = 22.88;  SW_DEPTH = 23.3;   // body / relaxed clips / below deck
 POST_THREAD = 7.45; POST_LEN = 19;                       // 4 mm binding post
-FUSE_THREAD = 11.6; FUSE_LEN = 26;                       // 5x20 panel holder
-TAILS_W     = 18.25;                                     // both pigtail tails side by side
 RISER_L = 126.55; RISER_W = 43.20; RISER_T = 4.0;        // PCB + factory foam pad
 RISER_HOLE_PITCH_L = 99;  RISER_HOLE_PITCH_W = 37;  RISER_HOLE_D = 3.98;
+
+/* [XT60 panel connectors — NOT YET MEASURED] */
+// XT60E-M (rear, input) and XT60E-F (right, outputs) are ordered, not in hand.
+// Their cutout, ear pitch and screw size go in when calipered. Until then the
+// walls carry no XT60 cutout at all — a plausible number here is exactly how
+// two printed parts got scrapped in August. Positions are reserved below.
+XT60_MEASURED = false;
+XT60_CUT_W = undef;  XT60_CUT_H = undef;  XT60_EAR_PITCH = undef;  XT60_EAR_D = undef;
+XT60_BODY_IN = undef;                  // depth behind the panel, for check_assembly
 
 /* [Holes — nominal; the coupon's ladder picks the final value] */
 SW_HOLE   = 21.0;   // body 20.87. Ladder 20.9 / 21.1 / 21.3
 POST_HOLE = 7.7;    // thread 7.45. Ladder 7.6 / 7.8 / 8.0
-FUSE_HOLE = 11.9;   // thread 11.6. Ladder 11.8 / 12.0 / 12.2
-TAILS_HOLE = 19.0;  // 18.25 + 0.75. Round; a zip tie round both tails sits inside
 PEG_D     = 3.8;    // hole 3.98. Ladder 3.6 / 3.7 / 3.8 / 3.9 on coupons/dock_rail_ladder.scad
 
-/* [Rear + right wall layout] — z is height above the cup's skirt bottom */
+/* [Rear wall — 12 V input] — x across the wall, z above the cup's skirt bottom */
 WALL_Z   = SKIRT_H + CUP_IN_H/2;   // dead centre of the electronics bay wall
-J1_X     = -30;                // 12V IN +
-J2_X     = J1_X + 19.05;       // 12V IN -  (banana pair pitch)
-F1_X     =  30;                // fuse holder
-TAILS_Y  =  10;                // pigtail exit on the right wall
+XT60_IN_X = -45;                   // XT60E-M
+J2_PLUS_X =  15;                   // banana IN +  (red)
+J2_MINUS_X = J2_PLUS_X + 19.05;    // banana IN -  (black), standard pair pitch
+
+/* [Right wall — output] — y along the wall (front -, rear +) */
+XT60_OUT_N   = 2;                  // [1:2] XT60E-F outputs, in parallel behind the switch
+XT60_OUT_Y   = [-40, -10];         // RISER, CARD
+J5_PLUS_Y    =  22;                // banana OUT +  (red)
+J5_MINUS_Y   = J5_PLUS_Y + 19.05;  // banana OUT -  (black)
+
+/* [Labels] — engraved with lib/label.scad, single colour */
+LABEL_SIZE  = 5;
+LABEL_DEPTH = 0.6;
+LABEL_LIFT  = 9;                   // label baseline above a hole's centre
 
 /* [Riser dock rails] */
 RAIL_W = 10; RAIL_L = 47; RAIL_T = 1.2;

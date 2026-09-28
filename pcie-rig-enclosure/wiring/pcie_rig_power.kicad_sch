@@ -6,12 +6,110 @@
 	(paper "A4")
 	(title_block
 		(title "PCIe GPU test rig - power box wiring")
-		(date "2026-09-27")
-		(rev "B")
+		(date "2026-09-28")
+		(rev "C")
 		(company "IamMrCupp / 3d-printer-models")
-		(comment 1 "pcie-rig-enclosure/wiring - drawn 2026-09-27, edit in KiCad")
+		(comment 1 "pcie-rig-enclosure/wiring - rev C 2026-09-28, edit in KiCad")
 	)
 	(lib_symbols
+		(symbol
+			"Connector_Generic:Conn_01x02"
+			(pin_names (offset 1.016) (hide yes))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property
+				"Reference"
+				"J"
+				(at 0 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"Value"
+				"Conn_01x02"
+				(at 0 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"Footprint"
+				""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"Datasheet"
+				""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"Description"
+				"Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"ki_keywords"
+				"connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"ki_fp_filters"
+				"Connector*:*_1x??_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects (font (size 1.27 1.27)))
+			)
+			(symbol
+				"Conn_01x02_1_1"
+				(rectangle
+					(start -1.27 1.27)
+					(end 1.27 -3.81)
+					(stroke (width 0.254) (type default))
+					(fill (type background))
+				)
+				(rectangle (start -1.27 0.127) (end 0 -0.127) (stroke (width 0.1524) (type default)) (fill (type none)))
+				(rectangle (start -1.27 -2.413) (end 0 -2.667) (stroke (width 0.1524) (type default)) (fill (type none)))
+				(pin
+					passive
+					line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_1" (effects (font (size 1.27 1.27))))
+					(number "1" (effects (font (size 1.27 1.27))))
+				)
+				(pin
+					passive
+					line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_2" (effects (font (size 1.27 1.27))))
+					(number "2" (effects (font (size 1.27 1.27))))
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol
 			"Connector:Conn_01x01_Socket"
 			(pin_names (offset 1.016) (hide yes))
@@ -195,6 +293,162 @@
 					(length 1.27)
 					(name "" (effects (font (size 1.27 1.27))))
 					(number "2" (effects (font (size 1.27 1.27))))
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol
+			"Connector:Screw_Terminal_01x04"
+			(pin_names (offset 1.016) (hide yes))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property
+				"Reference"
+				"J"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"Value"
+				"Screw_Terminal_01x04"
+				(at 0 -7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"Footprint"
+				""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"Datasheet"
+				""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"Description"
+				"Generic screw terminal, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"ki_keywords"
+				"screw terminal"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects (font (size 1.27 1.27)))
+			)
+			(property
+				"ki_fp_filters"
+				"TerminalBlock*:*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects (font (size 1.27 1.27)))
+			)
+			(symbol
+				"Screw_Terminal_01x04_1_1"
+				(rectangle
+					(start -1.27 3.81)
+					(end 1.27 -6.35)
+					(stroke (width 0.254) (type default))
+					(fill (type background))
+				)
+				(polyline
+					(pts (xy -0.5334 2.8702) (xy 0.3302 2.032))
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -0.5334 0.3302) (xy 0.3302 -0.508))
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -0.5334 -2.2098) (xy 0.3302 -3.048))
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -0.5334 -4.7498) (xy 0.3302 -5.588))
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -0.3556 3.048) (xy 0.508 2.2098))
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -0.3556 0.508) (xy 0.508 -0.3302))
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -0.3556 -2.032) (xy 0.508 -2.8702))
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -0.3556 -4.572) (xy 0.508 -5.4102))
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(circle (center 0 2.54) (radius 0.635) (stroke (width 0.1524) (type default)) (fill (type none)))
+				(circle (center 0 0) (radius 0.635) (stroke (width 0.1524) (type default)) (fill (type none)))
+				(circle (center 0 -2.54) (radius 0.635) (stroke (width 0.1524) (type default)) (fill (type none)))
+				(circle (center 0 -5.08) (radius 0.635) (stroke (width 0.1524) (type default)) (fill (type none)))
+				(pin
+					passive
+					line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_1" (effects (font (size 1.27 1.27))))
+					(number "1" (effects (font (size 1.27 1.27))))
+				)
+				(pin
+					passive
+					line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_2" (effects (font (size 1.27 1.27))))
+					(number "2" (effects (font (size 1.27 1.27))))
+				)
+				(pin
+					passive
+					line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_3" (effects (font (size 1.27 1.27))))
+					(number "3" (effects (font (size 1.27 1.27))))
+				)
+				(pin
+					passive
+					line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_4" (effects (font (size 1.27 1.27))))
+					(number "4" (effects (font (size 1.27 1.27))))
 				)
 			)
 			(embedded_fonts no)
@@ -407,7 +661,7 @@
 			(embedded_fonts no)
 		)
 		(symbol
-			"Connector:Screw_Terminal_01x04"
+			"Connector_Generic:Conn_01x05"
 			(pin_names (offset 1.016) (hide yes))
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -417,14 +671,14 @@
 			(property
 				"Reference"
 				"J"
-				(at 0 5.08 0)
+				(at 0 7.62 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects (font (size 1.27 1.27)))
 			)
 			(property
 				"Value"
-				"Screw_Terminal_01x04"
+				"Conn_01x05"
 				(at 0 -7.62 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -450,163 +704,7 @@
 			)
 			(property
 				"Description"
-				"Generic screw terminal, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects (font (size 1.27 1.27)))
-			)
-			(property
-				"ki_keywords"
-				"screw terminal"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects (font (size 1.27 1.27)))
-			)
-			(property
-				"ki_fp_filters"
-				"TerminalBlock*:*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects (font (size 1.27 1.27)))
-			)
-			(symbol
-				"Screw_Terminal_01x04_1_1"
-				(rectangle
-					(start -1.27 3.81)
-					(end 1.27 -6.35)
-					(stroke (width 0.254) (type default))
-					(fill (type background))
-				)
-				(polyline
-					(pts (xy -0.5334 2.8702) (xy 0.3302 2.032))
-					(stroke (width 0.1524) (type default))
-					(fill (type none))
-				)
-				(polyline
-					(pts (xy -0.5334 0.3302) (xy 0.3302 -0.508))
-					(stroke (width 0.1524) (type default))
-					(fill (type none))
-				)
-				(polyline
-					(pts (xy -0.5334 -2.2098) (xy 0.3302 -3.048))
-					(stroke (width 0.1524) (type default))
-					(fill (type none))
-				)
-				(polyline
-					(pts (xy -0.5334 -4.7498) (xy 0.3302 -5.588))
-					(stroke (width 0.1524) (type default))
-					(fill (type none))
-				)
-				(polyline
-					(pts (xy -0.3556 3.048) (xy 0.508 2.2098))
-					(stroke (width 0.1524) (type default))
-					(fill (type none))
-				)
-				(polyline
-					(pts (xy -0.3556 0.508) (xy 0.508 -0.3302))
-					(stroke (width 0.1524) (type default))
-					(fill (type none))
-				)
-				(polyline
-					(pts (xy -0.3556 -2.032) (xy 0.508 -2.8702))
-					(stroke (width 0.1524) (type default))
-					(fill (type none))
-				)
-				(polyline
-					(pts (xy -0.3556 -4.572) (xy 0.508 -5.4102))
-					(stroke (width 0.1524) (type default))
-					(fill (type none))
-				)
-				(circle (center 0 2.54) (radius 0.635) (stroke (width 0.1524) (type default)) (fill (type none)))
-				(circle (center 0 0) (radius 0.635) (stroke (width 0.1524) (type default)) (fill (type none)))
-				(circle (center 0 -2.54) (radius 0.635) (stroke (width 0.1524) (type default)) (fill (type none)))
-				(circle (center 0 -5.08) (radius 0.635) (stroke (width 0.1524) (type default)) (fill (type none)))
-				(pin
-					passive
-					line
-					(at -5.08 2.54 0)
-					(length 3.81)
-					(name "Pin_1" (effects (font (size 1.27 1.27))))
-					(number "1" (effects (font (size 1.27 1.27))))
-				)
-				(pin
-					passive
-					line
-					(at -5.08 0 0)
-					(length 3.81)
-					(name "Pin_2" (effects (font (size 1.27 1.27))))
-					(number "2" (effects (font (size 1.27 1.27))))
-				)
-				(pin
-					passive
-					line
-					(at -5.08 -2.54 0)
-					(length 3.81)
-					(name "Pin_3" (effects (font (size 1.27 1.27))))
-					(number "3" (effects (font (size 1.27 1.27))))
-				)
-				(pin
-					passive
-					line
-					(at -5.08 -5.08 0)
-					(length 3.81)
-					(name "Pin_4" (effects (font (size 1.27 1.27))))
-					(number "4" (effects (font (size 1.27 1.27))))
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol
-			"Connector_Generic:Conn_01x08"
-			(pin_names (offset 1.016) (hide yes))
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property
-				"Reference"
-				"J"
-				(at 0 10.16 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects (font (size 1.27 1.27)))
-			)
-			(property
-				"Value"
-				"Conn_01x08"
-				(at 0 -12.7 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects (font (size 1.27 1.27)))
-			)
-			(property
-				"Footprint"
-				""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects (font (size 1.27 1.27)))
-			)
-			(property
-				"Datasheet"
-				""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects (font (size 1.27 1.27)))
-			)
-			(property
-				"Description"
-				"Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)"
+				"Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -632,25 +730,22 @@
 				(effects (font (size 1.27 1.27)))
 			)
 			(symbol
-				"Conn_01x08_1_1"
+				"Conn_01x05_1_1"
 				(rectangle
-					(start -1.27 8.89)
-					(end 1.27 -11.43)
+					(start -1.27 6.35)
+					(end 1.27 -6.35)
 					(stroke (width 0.254) (type default))
 					(fill (type background))
 				)
-				(rectangle (start -1.27 7.747) (end 0 7.493) (stroke (width 0.1524) (type default)) (fill (type none)))
 				(rectangle (start -1.27 5.207) (end 0 4.953) (stroke (width 0.1524) (type default)) (fill (type none)))
 				(rectangle (start -1.27 2.667) (end 0 2.413) (stroke (width 0.1524) (type default)) (fill (type none)))
 				(rectangle (start -1.27 0.127) (end 0 -0.127) (stroke (width 0.1524) (type default)) (fill (type none)))
 				(rectangle (start -1.27 -2.413) (end 0 -2.667) (stroke (width 0.1524) (type default)) (fill (type none)))
 				(rectangle (start -1.27 -4.953) (end 0 -5.207) (stroke (width 0.1524) (type default)) (fill (type none)))
-				(rectangle (start -1.27 -7.493) (end 0 -7.747) (stroke (width 0.1524) (type default)) (fill (type none)))
-				(rectangle (start -1.27 -10.033) (end 0 -10.287) (stroke (width 0.1524) (type default)) (fill (type none)))
 				(pin
 					passive
 					line
-					(at -5.08 7.62 0)
+					(at -5.08 5.08 0)
 					(length 3.81)
 					(name "Pin_1" (effects (font (size 1.27 1.27))))
 					(number "1" (effects (font (size 1.27 1.27))))
@@ -658,7 +753,7 @@
 				(pin
 					passive
 					line
-					(at -5.08 5.08 0)
+					(at -5.08 2.54 0)
 					(length 3.81)
 					(name "Pin_2" (effects (font (size 1.27 1.27))))
 					(number "2" (effects (font (size 1.27 1.27))))
@@ -666,7 +761,7 @@
 				(pin
 					passive
 					line
-					(at -5.08 2.54 0)
+					(at -5.08 0 0)
 					(length 3.81)
 					(name "Pin_3" (effects (font (size 1.27 1.27))))
 					(number "3" (effects (font (size 1.27 1.27))))
@@ -674,7 +769,7 @@
 				(pin
 					passive
 					line
-					(at -5.08 0 0)
+					(at -5.08 -2.54 0)
 					(length 3.81)
 					(name "Pin_4" (effects (font (size 1.27 1.27))))
 					(number "4" (effects (font (size 1.27 1.27))))
@@ -682,442 +777,596 @@
 				(pin
 					passive
 					line
-					(at -5.08 -2.54 0)
+					(at -5.08 -5.08 0)
 					(length 3.81)
 					(name "Pin_5" (effects (font (size 1.27 1.27))))
 					(number "5" (effects (font (size 1.27 1.27))))
-				)
-				(pin
-					passive
-					line
-					(at -5.08 -5.08 0)
-					(length 3.81)
-					(name "Pin_6" (effects (font (size 1.27 1.27))))
-					(number "6" (effects (font (size 1.27 1.27))))
-				)
-				(pin
-					passive
-					line
-					(at -5.08 -7.62 0)
-					(length 3.81)
-					(name "Pin_7" (effects (font (size 1.27 1.27))))
-					(number "7" (effects (font (size 1.27 1.27))))
-				)
-				(pin
-					passive
-					line
-					(at -5.08 -10.16 0)
-					(length 3.81)
-					(name "Pin_8" (effects (font (size 1.27 1.27))))
-					(number "8" (effects (font (size 1.27 1.27))))
 				)
 			)
 			(embedded_fonts no)
 		)
 	)
-	(junction (at 91.44 66.04) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000011"))
-	(junction (at 83.82 45.72) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000013"))
-	(junction (at 177.8 38.1) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000019"))
-	(junction (at 177.8 66.04) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000021"))
-	(junction (at 177.8 68.58) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000023"))
-	(junction (at 177.8 71.12) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000025"))
-	(junction (at 177.8 73.66) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000027"))
-	(junction (at 182.88 81.28) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000036"))
-	(junction (at 182.88 83.82) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000038"))
+	(junction (at 55.88 66.04) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000007"))
+	(junction (at 60.96 43.18) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000015"))
+	(junction (at 198.12 50.8) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000026"))
+	(junction (at 198.12 63.5) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000028"))
+	(junction (at 152.4 81.28) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000031"))
+	(junction (at 144.78 35.56) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000033"))
 	(wire
-		(pts (xy 40.64 66.04) (xy 52.07 66.04))
+		(pts (xy 35.56 66.04) (xy 72.39 66.04))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000001")
 	)
 	(wire
-		(pts (xy 59.69 66.04) (xy 71.12 66.04))
+		(pts (xy 80.01 66.04) (xy 116.84 66.04))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000002")
 	)
 	(wire
-		(pts (xy 81.28 66.04) (xy 127.0 66.04))
+		(pts (xy 50.8 76.2) (xy 55.88 76.2))
 		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000003")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000005")
 	)
 	(wire
-		(pts (xy 40.64 45.72) (xy 119.38 45.72))
+		(pts (xy 55.88 76.2) (xy 55.88 66.04))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000006")
 	)
 	(wire
-		(pts (xy 119.38 45.72) (xy 119.38 63.5))
-		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000007")
-	)
-	(wire
-		(pts (xy 119.38 63.5) (xy 127.0 63.5))
+		(pts (xy 35.56 63.5) (xy 40.64 63.5))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000008")
 	)
 	(wire
-		(pts (xy 91.44 66.04) (xy 91.44 55.88))
+		(pts (xy 40.64 63.5) (xy 40.64 43.18))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000009")
+	)
+	(wire
+		(pts (xy 40.64 43.18) (xy 106.68 43.18))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000010")
 	)
 	(wire
-		(pts (xy 83.82 55.88) (xy 83.82 45.72))
+		(pts (xy 106.68 43.18) (xy 106.68 63.5))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000011")
+	)
+	(wire
+		(pts (xy 106.68 63.5) (xy 116.84 63.5))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000012")
 	)
 	(wire
-		(pts (xy 127.0 60.96) (xy 123.19 60.96))
+		(pts (xy 50.8 33.02) (xy 60.96 33.02))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000013")
+	)
+	(wire
+		(pts (xy 60.96 33.02) (xy 60.96 43.18))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000014")
 	)
 	(wire
-		(pts (xy 123.19 60.96) (xy 123.19 38.1))
+		(pts (xy 116.84 68.58) (xy 114.3 68.58))
 		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000015")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000017")
 	)
 	(wire
-		(pts (xy 123.19 38.1) (xy 203.2 38.1))
-		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000016")
-	)
-	(wire
-		(pts (xy 177.8 38.1) (xy 177.8 76.2))
+		(pts (xy 114.3 68.58) (xy 114.3 81.28))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000018")
 	)
 	(wire
-		(pts (xy 187.96 66.04) (xy 177.8 66.04))
+		(pts (xy 114.3 81.28) (xy 142.24 81.28))
 		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000020")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000019")
 	)
 	(wire
-		(pts (xy 187.96 68.58) (xy 177.8 68.58))
+		(pts (xy 152.4 81.28) (xy 198.12 81.28))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000021")
+	)
+	(wire
+		(pts (xy 198.12 81.28) (xy 198.12 50.8))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000022")
 	)
 	(wire
-		(pts (xy 187.96 71.12) (xy 177.8 71.12))
+		(pts (xy 198.12 81.28) (xy 198.12 76.2))
 		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000024")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000023")
 	)
 	(wire
-		(pts (xy 187.96 73.66) (xy 177.8 73.66))
+		(pts (xy 198.12 50.8) (xy 213.36 50.8))
 		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000026")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000025")
 	)
 	(wire
-		(pts (xy 187.96 76.2) (xy 177.8 76.2))
+		(pts (xy 198.12 63.5) (xy 213.36 63.5))
 		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000028")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000027")
 	)
 	(wire
-		(pts (xy 127.0 68.58) (xy 123.19 68.58))
+		(pts (xy 198.12 76.2) (xy 213.36 76.2))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000029")
 	)
 	(wire
-		(pts (xy 123.19 68.58) (xy 123.19 96.52))
+		(pts (xy 152.4 73.66) (xy 152.4 81.28))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000030")
 	)
 	(wire
-		(pts (xy 123.19 96.52) (xy 182.88 96.52))
+		(pts (xy 144.78 73.66) (xy 144.78 35.56))
 		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000031")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000032")
 	)
 	(wire
-		(pts (xy 182.88 96.52) (xy 182.88 78.74))
-		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000033")
-	)
-	(wire
-		(pts (xy 187.96 78.74) (xy 182.88 78.74))
+		(pts (xy 116.84 60.96) (xy 111.76 60.96))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000034")
 	)
 	(wire
-		(pts (xy 187.96 81.28) (xy 182.88 81.28))
+		(pts (xy 111.76 60.96) (xy 111.76 35.56))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000035")
 	)
 	(wire
-		(pts (xy 187.96 83.82) (xy 182.88 83.82))
+		(pts (xy 111.76 35.56) (xy 187.96 35.56))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000036")
+	)
+	(wire
+		(pts (xy 187.96 35.56) (xy 187.96 101.6))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000037")
 	)
+	(wire
+		(pts (xy 187.96 101.6) (xy 182.88 101.6))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000038")
+	)
+	(wire
+		(pts (xy 182.88 104.14) (xy 203.2 104.14))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000040")
+	)
+	(wire
+		(pts (xy 203.2 104.14) (xy 203.2 53.34))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000041")
+	)
+	(wire
+		(pts (xy 203.2 53.34) (xy 213.36 53.34))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000042")
+	)
+	(wire
+		(pts (xy 182.88 106.68) (xy 205.74 106.68))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000043")
+	)
+	(wire
+		(pts (xy 205.74 106.68) (xy 205.74 66.04))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000044")
+	)
+	(wire
+		(pts (xy 205.74 66.04) (xy 213.36 66.04))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000045")
+	)
+	(wire
+		(pts (xy 182.88 109.22) (xy 208.28 109.22))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000046")
+	)
+	(wire
+		(pts (xy 208.28 109.22) (xy 208.28 83.82))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000047")
+	)
+	(wire
+		(pts (xy 208.28 83.82) (xy 213.36 83.82))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000048")
+	)
+	(wire
+		(pts (xy 182.88 111.76) (xy 210.82 111.76))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000049")
+	)
+	(wire
+		(pts (xy 210.82 111.76) (xy 210.82 93.98))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000050")
+	)
+	(wire
+		(pts (xy 210.82 93.98) (xy 213.36 93.98))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000051")
+	)
+	(label
+		"12V_IN"
+		(at 58.42 66.04 0)
+		(effects (font (size 1.27 1.27)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000003")
+	)
 	(label
 		"12V_IN_FUSED"
-		(at 60.96 66.04 0)
+		(at 91.44 66.04 0)
 		(effects (font (size 1.27 1.27)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000004")
 	)
 	(label
-		"12V_SW"
-		(at 96.52 66.04 0)
-		(effects (font (size 1.27 1.27)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000005")
-	)
-	(label
 		"GND_IN"
-		(at 60.96 45.72 0)
+		(at 71.12 43.18 0)
 		(effects (font (size 1.27 1.27)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000009")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000016")
 	)
 	(label
-		"GND_OUT"
-		(at 142.24 38.1 0)
+		"12V_METERED"
+		(at 121.92 81.28 0)
 		(effects (font (size 1.27 1.27)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000017")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000020")
 	)
 	(label
 		"+12V_OUT"
-		(at 142.24 96.52 0)
+		(at 162.56 81.28 0)
 		(effects (font (size 1.27 1.27)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000032")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000024")
+	)
+	(label
+		"GND_OUT"
+		(at 127.0 35.56 0)
+		(effects (font (size 1.27 1.27)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000039")
 	)
 	(text
 		"PCIe GPU test rig - power box wiring"
 		(exclude_from_sim no)
 		(at 20.32 22.86 0)
 		(effects (font (size 3.0 3.0) bold) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000039")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000052")
 	)
 	(text
-		"Rev B  2026-09-27.  Explicit wiring; meter terminals read off the PZEM-031 case label (top->bottom 1..4)."
+		"Rev C  2026-09-28.  XT60 panel connectors replace the pigtail; meter ahead of the switch; WAGO ground bus. PZEM-031 terminals top->bottom 1..4."
 		(exclude_from_sim no)
 		(at 20.32 27.94 0)
-		(effects (font (size 1.6 1.6)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000040")
+		(effects (font (size 1.5 1.5)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000053")
 	)
 	(text
-		"M1 PZEM-031:  shunt is internal between 2 (DC IN-) and 1 (LOAD-);  + passes straight through 3 -> 4.  Fed from the switched side so it sleeps with the rig.  8-100 V, 0-20 A."
+		"Path: 12V IN -> F1 -> M1 (3 in, 4 out) -> SW1 -> outputs.  The meter reads whenever the supply is on; the switch only gates the outputs."
 		(exclude_from_sim no)
-		(at 20.32 106.68 0)
+		(at 20.32 124.46 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000041")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000054")
 	)
 	(text
-		"SW1 Ampper 3-pin:  A = supply +,  B = load +,  yellow = LED -.  LED return goes to the INPUT negative so its current stays out of the reading."
+		"M1 PZEM-031: shunt is internal between 2 (DC IN-) and 1 (LOAD-). Input negative goes to 2, NOT to the bus - on the bus it would bypass the shunt and the meter would read 0 A."
 		(exclude_from_sim no)
-		(at 20.32 111.76 0)
+		(at 20.32 129.54 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000042")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000055")
 	)
 	(text
-		"J3 PROBE GND = the OUTPUT negative (LOAD-, after the shunt).  Never the input negative: the shunt drop would shift the probe reference under load."
-		(exclude_from_sim no)
-		(at 20.32 116.84 0)
-		(effects (font (size 1.4 1.4)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000043")
-	)
-	(text
-		"F1 in the + input line ahead of the switch.  15 A fast-blow, never above 20 A (meter / switch limit).  Whole path ~240 W: boot stages and rail checks, not a load tester."
-		(exclude_from_sim no)
-		(at 20.32 121.92 0)
-		(effects (font (size 1.4 1.4)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000044")
-	)
-	(text
-		"Internal bus 12 AWG tinned copper.  J4 is the cut Amangny cable, 18 AWG: 5 black = GND, 3 yellow = +12 V; exits the right wall, zip tie inside as strain relief."
-		(exclude_from_sim no)
-		(at 20.32 127.0 0)
-		(effects (font (size 1.4 1.4)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000045")
-	)
-	(text
-		"Panels:  REAR = J1, J2, F1.    TOP deck = SW1, M1, J3 (+ riser dock).    RIGHT wall = J4 pigtail exit.    FRONT = cord drawer only."
+		"W1 WAGO 221-415, five ports: 5 = LOAD-, 4 = RISER -, 3 = CARD -, 2 = OUT - post, 1 = PROBE GND. The rocker's yellow LED - rides on the OUT - post's terminal."
 		(exclude_from_sim no)
 		(at 20.32 134.62 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000046")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000056")
 	)
-	(symbol
-		(lib_id "Connector:Conn_01x01_Socket")
-		(at 35.56 45.72 180)
-		(unit 1)
+	(text
+		"SW1: A (power) from M1.4, B (load) to the outputs, yellow to ground. NEVER swap B and yellow - that is a dead short the moment it is switched on. Beep the pins first."
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000047")
-		(property "Reference" "J2" (at 32.56 42.72 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "12V IN -  black 4 mm post (REAR)" (at 27.56 49.72 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "" (at 35.56 45.72 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 35.56 45.72 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 35.56 45.72 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000048"))
-		(instances
-			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J2") (unit 1)))
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x01_Socket")
-		(at 35.56 66.04 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000049")
-		(property "Reference" "J1" (at 32.56 63.04 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "12V IN +  red 4 mm post (REAR)" (at 27.56 70.04 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "" (at 35.56 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 35.56 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 35.56 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000050"))
-		(instances
-			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J1") (unit 1)))
-		)
-	)
-	(symbol
-		(lib_id "Device:Fuse")
-		(at 55.88 66.04 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000051")
-		(property "Reference" "F1" (at 55.88 62.54 270) (effects (font (size 1.27 1.27))))
-		(property
-			"Value"
-			"5x20 15 A fast (panel holder, REAR)"
-			(at 55.88 59.04 270)
-			(effects (font (size 1.27 1.27)))
-		)
-		(property "Footprint" "" (at 55.88 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 55.88 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 55.88 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000052"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000053"))
-		(instances
-			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "F1") (unit 1)))
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_SPST")
-		(at 76.2 66.04 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000054")
-		(property "Reference" "SW1" (at 76.2 61.54 0) (effects (font (size 1.27 1.27))))
-		(property
-			"Value"
-			"Ampper 20 A rocker (TOP)  A=supply+  B=load+"
-			(at 76.2 72.04 0)
-			(effects (font (size 1.27 1.27)))
-		)
-		(property "Footprint" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000055"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000056"))
-		(instances
-			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "SW1") (unit 1)))
-		)
-	)
-	(symbol
-		(lib_id "Device:LED")
-		(at 87.63 55.88 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
+		(at 20.32 139.7 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000057")
-		(property "Reference" "D1" (at 87.63 52.38 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "LED in SW1 (yellow = LED -)" (at 107.63 57.38 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "" (at 87.63 55.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 87.63 55.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 87.63 55.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000058"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000059"))
-		(instances
-			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "D1") (unit 1)))
-		)
+	)
+	(text
+		"Ratings: OWON at 12.0 V, OVP ~12.6 V, current limit 5 A (CC for short hunting). F1 5 A blade (7.5 max). Switch 20 A, XT60 30 A, 14 AWG silicone inside. J4 is optional - fit one or two outputs."
+		(exclude_from_sim no)
+		(at 20.32 144.78 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000058")
+	)
+	(text
+		"Panels:  REAR = J1, J2a, J2b.   TOP deck = M1, SW1, J6 (+ riser dock).   RIGHT wall = J3, J4, J5a, J5b.   F1 and W1 are inline inside."
+		(exclude_from_sim no)
+		(at 20.32 152.4 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000059")
 	)
 	(symbol
-		(lib_id "Connector:Screw_Terminal_01x04")
-		(at 132.08 63.5 0)
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 30.48 66.04 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "6b2f0c1e-2000-4000-8000-000000000060")
-		(property "Reference" "M1" (at 134.08 55.0 0) (effects (font (size 1.27 1.27))))
+		(property "Reference" "J1" (at 27.48 60.04 0) (effects (font (size 1.27 1.27))))
 		(property
 			"Value"
-			"Peacefair PZEM-031 (TOP)  1 LOAD-  2 DC IN-  3 DC IN+  4 LOAD+"
-			(at 136.08 72.5 0)
+			"XT60E-M  12V IN  (REAR) - PSU lead ends in a female XT60H"
+			(at 52.48 73.04 0)
 			(effects (font (size 1.27 1.27)))
 		)
-		(property "Footprint" "" (at 132.08 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 132.08 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 132.08 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Footprint" "" (at 30.48 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 30.48 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 30.48 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000061"))
 		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000062"))
-		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000063"))
-		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000064"))
 		(instances
-			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "M1") (unit 1)))
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J1") (unit 1)))
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x08")
-		(at 193.04 73.66 0)
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 45.72 76.2 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6b2f0c1e-2000-4000-8000-000000000063")
+		(property "Reference" "J2a" (at 42.72 73.2 0) (effects (font (size 1.27 1.27))))
+		(property
+			"Value"
+			"12V IN +  red post (REAR, parallel with J1)"
+			(at 35.72 80.2 0)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Footprint" "" (at 45.72 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 45.72 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 45.72 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000064"))
+		(instances
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J2a") (unit 1)))
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 45.72 33.02 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "6b2f0c1e-2000-4000-8000-000000000065")
-		(property "Reference" "J4" (at 195.04 59.66 0) (effects (font (size 1.27 1.27))))
+		(property "Reference" "J2b" (at 42.72 29.02 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "12V IN -  black post (REAR)" (at 53.72 36.52 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 45.72 33.02 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 45.72 33.02 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 45.72 33.02 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000066"))
+		(instances
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J2b") (unit 1)))
+		)
+	)
+	(symbol
+		(lib_id "Device:Fuse")
+		(at 76.2 66.04 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6b2f0c1e-2000-4000-8000-000000000067")
+		(property "Reference" "F1" (at 76.2 62.54 270) (effects (font (size 1.27 1.27))))
+		(property "Value" "blade 5 A (7.5 max), inline holder" (at 76.2 59.04 270) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000068"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000069"))
+		(instances
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "F1") (unit 1)))
+		)
+	)
+	(symbol
+		(lib_id "Connector:Screw_Terminal_01x04")
+		(at 121.92 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6b2f0c1e-2000-4000-8000-000000000070")
+		(property "Reference" "M1" (at 123.92 55.0 0) (effects (font (size 1.27 1.27))))
 		(property
 			"Value"
-			"pigtail = cut Amangny cable (RIGHT wall exit): 5 black GND + 3 yellow +12 V -> 2x 8(6+2) male"
-			(at 191.04 87.66 0)
+			"Peacefair PZEM-031  1 LOAD-  2 DC IN-  3 DC IN+  4 LOAD+  (TOP)"
+			(at 127.92 72.5 0)
 			(effects (font (size 1.27 1.27)))
 		)
-		(property "Footprint" "" (at 193.04 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 193.04 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 193.04 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000066"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000067"))
-		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000068"))
-		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000069"))
-		(pin "5" (uuid "6b2f0c1e-2000-4000-8000-000000000070"))
-		(pin "6" (uuid "6b2f0c1e-2000-4000-8000-000000000071"))
-		(pin "7" (uuid "6b2f0c1e-2000-4000-8000-000000000072"))
-		(pin "8" (uuid "6b2f0c1e-2000-4000-8000-000000000073"))
+		(property "Footprint" "" (at 121.92 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 121.92 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 121.92 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000071"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000072"))
+		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000073"))
+		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000074"))
+		(instances
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "M1") (unit 1)))
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_SPST")
+		(at 147.32 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6b2f0c1e-2000-4000-8000-000000000075")
+		(property "Reference" "SW1" (at 147.32 76.78 0) (effects (font (size 1.27 1.27))))
+		(property
+			"Value"
+			"Ampper rocker (TOP)  A = from meter  B = to outputs  yellow = LED -"
+			(at 151.32 87.28 0)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Footprint" "" (at 147.32 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 147.32 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 147.32 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000076"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000077"))
+		(instances
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "SW1") (unit 1)))
+		)
+	)
+	(symbol
+		(lib_id "Device:LED")
+		(at 148.59 73.66 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6b2f0c1e-2000-4000-8000-000000000078")
+		(property "Reference" "D1" (at 148.59 70.16 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "LED in SW1 (yellow = LED -)" (at 126.59 75.16 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 148.59 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 148.59 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 148.59 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000079"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000080"))
+		(instances
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "D1") (unit 1)))
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x05")
+		(at 177.8 106.68 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6b2f0c1e-2000-4000-8000-000000000081")
+		(property "Reference" "W1" (at 171.8 97.68 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "WAGO 221-415 ground bus" (at 163.8 115.68 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 177.8 106.68 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 177.8 106.68 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 177.8 106.68 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000082"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000083"))
+		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000084"))
+		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000085"))
+		(pin "5" (uuid "6b2f0c1e-2000-4000-8000-000000000086"))
+		(instances
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "W1") (unit 1)))
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 218.44 50.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6b2f0c1e-2000-4000-8000-000000000087")
+		(property "Reference" "J3" (at 220.44 44.8 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "XT60E-F  RISER  (RIGHT)" (at 234.44 48.8 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 218.44 50.8 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 218.44 50.8 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 218.44 50.8 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000088"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000089"))
+		(instances
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J3") (unit 1)))
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 218.44 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6b2f0c1e-2000-4000-8000-000000000090")
+		(property "Reference" "J4" (at 220.44 57.5 0) (effects (font (size 1.27 1.27))))
+		(property
+			"Value"
+			"XT60E-F  CARD  (RIGHT) - optional 2nd output, parallel"
+			(at 244.44 61.5 0)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Footprint" "" (at 218.44 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 218.44 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 218.44 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000091"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000092"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J4") (unit 1)))
 		)
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x01_Socket")
-		(at 208.28 38.1 0)
+		(at 218.44 76.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000074")
-		(property "Reference" "J3" (at 210.28 35.1 0) (effects (font (size 1.27 1.27))))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000093")
+		(property "Reference" "J5a" (at 220.44 73.2 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "OUT +  red post (RIGHT)" (at 230.44 77.2 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 218.44 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 218.44 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 218.44 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000094"))
+		(instances
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J5a") (unit 1)))
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 218.44 83.82 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6b2f0c1e-2000-4000-8000-000000000095")
+		(property "Reference" "J5b" (at 220.44 80.82 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "OUT -  black post (RIGHT)" (at 230.44 84.82 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 218.44 83.82 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 218.44 83.82 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 218.44 83.82 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000096"))
+		(instances
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J5b") (unit 1)))
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 218.44 93.98 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6b2f0c1e-2000-4000-8000-000000000097")
+		(property "Reference" "J6" (at 220.44 90.98 0) (effects (font (size 1.27 1.27))))
 		(property
 			"Value"
-			"PROBE GND  4 mm post (TOP) - scope / DMM reference"
-			(at 210.28 42.1 0)
+			"PROBE GND  post (TOP) - scope / DMM reference"
+			(at 238.44 94.98 0)
 			(effects (font (size 1.27 1.27)))
 		)
-		(property "Footprint" "" (at 208.28 38.1 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 208.28 38.1 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 208.28 38.1 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000075"))
+		(property "Footprint" "" (at 218.44 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 218.44 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 218.44 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000098"))
 		(instances
-			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J3") (unit 1)))
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J6") (unit 1)))
 		)
 	)
 	(sheet_instances (path "/" (page "1")))

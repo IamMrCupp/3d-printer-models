@@ -1,83 +1,107 @@
 # PCIe test rig — wiring guide
 
-The power box for a bench PCIe GPU test rig: a fused, switched, metered 12 V feed with a keyed output for the card and the riser, and a ground post for your scope or DMM. This guide is the build order and the wire-by-wire list. The schematic it follows is [`wiring/pcie_rig_power.kicad_sch`](wiring/pcie_rig_power.kicad_sch) — open it in KiCad, or read the [PDF](wiring/pcie_rig_power.pdf) / [SVG](wiring/pcie_rig_power.svg).
+The power box for a bench PCIe GPU test rig: a fused, switched, metered 12 V feed with keyed XT60 outputs for the riser and the card, banana pairs on both ends for probing and for a bench supply with plain leads, and a ground post for your scope or DMM. This guide is the build order and the wire-by-wire list. The schematic it follows is [`wiring/pcie_rig_power.kicad_sch`](wiring/pcie_rig_power.kicad_sch) — open it in KiCad, or read the [PDF](wiring/pcie_rig_power.pdf) / [SVG](wiring/pcie_rig_power.svg). Rev C.
 
 ![Schematic](wiring/pcie_rig_power.svg)
 
-**What it is, and isn't.** Everything in the path — meter, switch, fuse — is rated 20 A, so this is a ~240 W supply. That's plenty for watching boot stages and checking rails. It is not a load tester; don't run a card flat out through it.
+**What it is, and isn't.** The source is an OWON bench supply set to **12.0 V, OVP ~12.6 V, current limit 5 A** — Northwest Repair's ceiling, and the right one for watching a card come up without letting a short cook anything. A 5 A blade fuse in the box is the backstop. Everything else in the path is overrated on purpose: 20 A switch, 30 A connectors, 14 AWG wire. This is a diagnostic rig, not a load tester.
 
 ## Parts
 
 | Ref | Part | Where it mounts | Source |
 |---|---|---|---|
-| **J1, J2** | 4 mm binding posts, red + black — 12 V IN | rear wall | uxcell 10-pack, [B08LN5T9D7](https://www.amazon.com/dp/B08LN5T9D7) |
-| **J3** | 4 mm binding post, black — PROBE GND | top deck | same pack |
-| **F1** | 5×20 mm panel-mount fuse holder + **15 A fast-blow** glass fuse | rear wall | Gebildet kit, [B07VT4VRW7](https://www.amazon.com/dp/B07VT4VRW7) |
-| **SW1** | Ampper 20 mm round rocker, 12 V 20 A, 3-pin, illuminated dot | top deck | [B0BZPY5D9L](https://www.amazon.com/dp/B0BZPY5D9L) |
+| **J1** | **XT60E-M** panel-mount, male — 12 V IN. The PSU lead ends in a female XT60H | rear wall | ordered ×2 (1 spare) |
+| **J2a, J2b** | 4 mm binding posts, red + black — 12 V IN, in parallel with J1 | rear wall | uxcell 10-pack, [B08LN5T9D7](https://www.amazon.com/dp/B08LN5T9D7) |
+| **F1** | inline blade fuse holder + **5 A** fuse (7.5 A at most) | inside, on the + input wire | to get |
 | **M1** | Peacefair **PZEM-031** — DC 8–100 V / 0–20 A, LCD, built-in shunt | top deck | sold as HiLetgo, [B079JVGRSL](https://www.amazon.com/dp/B079JVGRSL) |
-| **J4** | Amangny 8-pin female → 2× 8(6+2) male, 22 cm, 18 AWG — **one cable becomes the pigtail** | exits the right wall | 6-pack, [B094QSRK98](https://www.amazon.com/dp/B094QSRK98) |
-| — | Kingwin PCIe 1x→16x riser kit (x16 board, x1 card, USB 3.0 lead, SATA→6-pin) | docks on the top deck / drawer | [B07QBF2X6C](https://www.amazon.com/dp/B07QBF2X6C) |
-| — | 12VHPWR 16-pin → 4× 8-pin, for cards with the 16-pin connector | drawer | [B0GYHKK5WS](https://www.amazon.com/dp/B0GYHKK5WS) |
+| **SW1** | Ampper 20 mm round rocker, 12 V 20 A, 3-pin, illuminated dot | top deck | [B0BZPY5D9L](https://www.amazon.com/dp/B0BZPY5D9L) |
+| **W1** | **WAGO 221-415** five-port lever nut — the ground bus | inside | from the 221 assortment |
+| **J3** | **XT60E-F** panel-mount, female — OUT, **RISER** | right wall | ordered ×2 |
+| **J4** | XT60E-F — OUT, **CARD**. Optional second output, wired in parallel with J3 | right wall | same |
+| **J5a, J5b** | 4 mm binding posts, red + black — OUT +/− | right wall | same pack as J2 |
+| **J6** | 4 mm binding post, black — PROBE GND | top deck | same pack |
+| — | Kingwin PCIe 1x→16x riser kit (x16 board, x1 card, USB 3.0 lead, SATA→6-pin) | docks on the top deck | [B07QBF2X6C](https://www.amazon.com/dp/B07QBF2X6C) |
 
-**Wire and consumables:** 12 AWG stranded copper for the internal bus (tinned is nice, not required). Heat-shrink. One zip tie. Ferrules and a crimper, or solder — either is fine at these currents. Four **M3 × 10** screws hold the electronics cup to the footed frame — they self-tap into printed pilots, no inserts. A drop of CA for the two riser dock rails.
+**Wire and terminations.** 14 AWG silicone, red and black, for everything inside. 6.3 mm insulated female spades (blue, 16–14 AWG) on the rocker's tabs. Ferrules into the meter's screw terminals and the WAGO. Ring terminals or solder on the binding posts. Heat-shrink over every splice. Four **M3 × 10** screws hold the cup to the frame (self-tapping into printed pilots, no inserts) and a drop of CA fixes the two riser dock rails.
 
 ## Where things go
 
 | Face | Carries |
 |---|---|
-| **Rear** | J1 (+, red), J2 (−, black), F1 |
-| **Top deck** | SW1, M1, J3, and the riser dock |
-| **Right wall** | J4 pigtail exit |
-| **Front** | the cord drawer, nothing else |
+| **Top deck** | M1, SW1, J6, and the riser dock |
+| **Rear** | J1, J2a, J2b |
+| **Right** | J3, J4, J5a, J5b |
+| **Inside** | F1 on the + input wire, W1 wherever it lands |
+| **Front** | the drawer, nothing else |
 
-The top deck is fixed — service access is from the bottom, so nothing that carries current lives on a removable part.
+The top is fixed — service is four screws on the sides and the cup lifts off with all its wiring intact. Nothing that carries current is on a part you remove to get at something else.
+
+## Signal path
+
+**12 V IN → F1 → M1 → SW1 → outputs.** The meter sits *ahead* of the switch, so it reads the supply whenever the supply is on; the switch only gates the outputs. That's deliberate: you see 12.0 V on the box before you ever enable the card.
 
 ## Wire by wire
 
-Net names match the schematic. Every internal run is 12 AWG unless noted.
+Net names match the schematic. All 14 AWG unless noted.
 
 | # | From | To | Net | Notes |
 |---|---|---|---|---|
-| 1 | J1 (red post) | F1, either terminal | `12V_IN` | fuse sits in the + line, ahead of the switch |
-| 2 | F1, other terminal | SW1 **A** (supply +) | `12V_IN_FUSED` | |
-| 3 | SW1 **B** (load +) | M1 terminal **3** — DC IN + | `12V_SW` | meter self-powers from here, so it sleeps with the rig |
-| 4 | J2 (black post) | M1 terminal **2** — DC IN − | `GND_IN` | the shunt is inside M1, between 2 and 1 |
-| 5 | SW1 **yellow** pin | `GND_IN` (M1 terminal 2, or J2) | `GND_IN` | LED return; 18 AWG is fine. On the input side so the dot's current stays out of the reading |
-| 6 | M1 terminal **4** — LOAD + | pigtail, all **3 yellow** | `+12V_OUT` | |
-| 7 | M1 terminal **1** — LOAD − | pigtail, all **5 black** | `GND_OUT` | |
-| 8 | M1 terminal **1** — LOAD − | J3 (probe post) | `GND_OUT` | **output** negative, after the shunt — see below |
+| 1 | J1 **+** | F1, either end | `12V_IN` | J2a (red post) ties to the same point — parallel input |
+| 2 | F1, other end | M1 terminal **3** — DC IN + | `12V_IN_FUSED` | |
+| 3 | J1 **−** | M1 terminal **2** — DC IN − | `GND_IN` | J2b (black post) ties here too. **Not to the WAGO** — see below |
+| 4 | M1 terminal **4** — LOAD + | SW1 **A** (power) | `12V_METERED` | |
+| 5 | SW1 **B** (load) | J3 +, J4 +, J5a | `+12V_OUT` | three wires off the B tab, or B → J5a and daisy from there |
+| 6 | M1 terminal **1** — LOAD − | W1 port **5** | `GND_OUT` | the ground bus starts here |
+| 7 | W1 port **4** | J3 − | `GND_OUT` | RISER |
+| 8 | W1 port **3** | J4 − | `GND_OUT` | CARD |
+| 9 | W1 port **2** | J5b (black post) | `GND_OUT` | |
+| 10 | W1 port **1** | J6 (probe post) | `GND_OUT` | |
+| 11 | SW1 **yellow** (LED −) | J5b's terminal | `GND_OUT` | 18 AWG is fine; it shares the OUT − post's ring terminal |
 
-PZEM-031 terminals, top to bottom as printed on its back: **1 LOAD −, 2 DC IN −, 3 DC IN +, 4 LOAD +.** The + side passes straight through 3 → 4; the shunt sits between 2 and 1.
+**PZEM-031 terminals**, top to bottom as printed on its back: **1 LOAD −, 2 DC IN −, 3 DC IN +, 4 LOAD +.** The + side passes straight through 3 → 4; the shunt sits between 2 and 1.
 
-**Why J3 is the output negative.** The meter measures current by the voltage drop across its internal shunt, and that shunt is in the negative leg. Reference a probe to the *input* negative and your ground floats by the shunt drop every time the card draws current. Tie it to LOAD − and the probe sees exactly what the card sees.
+**Why the input negative does not go on the WAGO.** The meter measures current as the drop across its internal shunt, which is in the negative leg between terminals 2 and 1. Land the input negative on the bus and the current bypasses the shunt: the meter reads 0.00 A forever and the rig looks dead when it isn't. Input − goes to terminal 2, the bus hangs off terminal 1, and the probe post — J6 — is on that bus, so a scope reference sees exactly what the card sees.
+
+**Why the rocker's B and yellow must never swap.** A = supply, B = load, yellow = LED return to ground. Put the load wire on yellow and ground on B and the first flick of the switch is a dead short across the meter. Beep the three pins in continuity mode before you crimp: A–B closes when the rocker is on, yellow never closes to either.
+
+## Leads (you build these, they live in the drawer)
+
+All from the six-pack of 6+2 dual-output PCIe cords. Cut the PSU-side 8-pin off each and put a **male XT60H** (AMASS, with the sheath housing) on the cut end: yellows to +, blacks to −.
+
+- **Dual lead.** One cord → XT60H → 2 × 8(6+2). Feeds the riser's 6-pin (leave the +2 tail off) and one card connector, or two card connectors.
+- **Quad lead.** Two cords → 4 × 8-pin, for the 4×8-pin → 12VHPWR adapter. Twelve 18 AWG wires won't go in one XT60 solder cup — splice them to a short **12 AWG XT60 pigtail** instead, heat-shrunk.
+- **Riser lead.** Only if the riser gets its own 12 V feed rather than sharing the dual lead.
+
+Beep every lead end-to-end before it touches a card: + to every yellow pin, − to every black, nothing between.
 
 ## Build order
 
-1. **Make the pigtail.** Take one Amangny cable and cut the 8-pin *female* end off, leaving the two 8(6+2) males on the other end intact. Strip back the sleeve and separate the bundle: 3 yellow (+12 V), 5 black (GND). Twist and tin each bundle, or ferrule them.
-2. **Dry-fit the panel parts** in the printed cup before wiring anything — meter, rocker, fuse holder, three posts. If something doesn't fit, fix the print, not the part.
-3. **Feed the pigtail** through the right-wall hole from the outside, males out — both tails go through the one hole, the Y-split stays inside. Leave ~80 mm inside. Cinch a zip tie round both tails just inside the wall — that's the strain relief. Trim the tie's tail.
-4. **Wire the rear**: J1 → F1 → SW1 A (rows 1–2). J2 → M1 terminal 2 (row 4).
-5. **Wire the top**: SW1 B → M1 terminal 3 (row 3). SW1 yellow → GND_IN (row 5).
-6. **Wire the output**: M1 terminal 4 → yellow bundle (row 6). M1 terminal 1 → black bundle *and* J3 (rows 7–8). Heat-shrink every splice.
-7. **Leave slack.** For service the four side screws come out and the cup lifts off with the shelf; nothing crosses that joint, but make sure no wire pulls tight against the shelf's edge when it does.
-8. **Fuse in, cap on.** 15 A fast-blow.
+1. **Dry-fit every panel part** in the printed cup before wiring anything — meter, rocker, XT60s, five posts. If something doesn't fit, fix the print, not the part.
+2. **Mount the panel parts.** Posts get their nuts and a ring terminal each. XT60E panels screw to their ears.
+3. **Input side** (rows 1–3): J1 + and J2a → F1 → M1.3. J1 − and J2b → M1.2. Ferrules into the meter.
+4. **Meter to switch** (row 4): M1.4 → spade → SW1 A.
+5. **Outputs** (row 5): SW1 B → J3 +, J4 +, J5a.
+6. **Ground bus** (rows 6–11): M1.1 into W1 port 5, then one lever per consumer. LED yellow onto J5b's terminal.
+7. **Fuse in.** 5 A blade.
+8. **Leave slack.** For service the four side screws come out and the cup lifts off with the shelf; nothing crosses that joint, but make sure no wire pulls tight against the shelf's edge when it does.
 
 ## Before first power
 
-Do these with the input posts unplugged.
+Do these with nothing plugged into J1 or J2.
 
-- **Continuity, meter off.** J1 to F1 to SW1 A. With the rocker on: SW1 A to M1 terminal 3. Rocker off: open.
-- **Polarity.** Yellow bundle to M1 terminal 4, and *only* terminal 4. Black bundle to M1 terminal 1. J3 to M1 terminal 1.
-- **No shorts.** Resistance between the yellow and black bundles reads open. Between J1 and J2 reads open.
-- **Check the 6+2 males against the card's pinout diagram** before you ever plug one in — the Amangny colour code is the standard PCIe one (yellow = +12 V, black = GND), but confirm it on the actual connector with a continuity beep.
+- **Continuity.** J1 + to M1.3 through the fuse. M1.4 to SW1 A. Rocker on: SW1 A to every output +. Rocker off: open. M1.1 to every output −, J5b and J6.
+- **Polarity.** Every + is on the meter's LOAD + side of the switch and *only* there. Every − lands on M1.1's bus and nowhere else. J1 − and J2b go to M1.2, not to the bus.
+- **No shorts.** + bus to − bus reads open, rocker on and off. J1 + to J1 − reads open.
+- **The rocker's yellow** does not beep to A or B.
 
-Then: bench supply set to 12.0 V, current limit low (1 A is plenty), connected to J1/J2, **nothing on the output.** Rocker on — the dot lights and the PZEM-031 wakes up reading ~12 V, 0.00 A. Rocker off — everything dark. Only now does the riser go on.
+Then: OWON at 12.0 V, OVP 12.6 V, current limit turned down to 0.5 A for this step, into J1 or J2 — **nothing on the outputs.** The meter wakes reading ~12 V, 0.00 A. Rocker on: the dot lights, outputs read 12 V. Rocker off: outputs dead, meter still lit. Raise the limit to 5 A. Only now does a lead go on.
 
 ## Limits
 
-- 20 A end to end. **Fuse at 15 A** and leave it there.
+- **5 A working limit**, set at the supply. Fuse at 5 A, 7.5 A at most. Never above the meter's 20 A.
 - The meter needs ≥ 8 V to run. Below that it goes dark; the rig still passes power.
-- Every downstream connector hangs off the pigtail's three 18 AWG yellows. That's fine at 20 A. It's not fine at 30.
+- Everything downstream of an XT60 runs on the lead's 18 AWG yellows. Fine at 5 A. Fine at 20. Not at 30.
+- If the rig is ever fed from something other than the OWON, add a reverse-polarity module on the input first. XT60 is keyed; banana posts are not.
 
 ## Files
 

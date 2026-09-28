@@ -27,13 +27,13 @@ except ImportError:
 
 # Everything the check needs to know, expressed in OpenSCAD so it stays in
 # lock-step with rig_common.scad rather than copying numbers here.
-PRELUDE = f"""
-use <{HERE}/rig_frame.scad>
-use <{HERE}/rig_shelf.scad>
-use <{HERE}/rig_cup.scad>
-use <{HERE}/rig_drawer.scad>
-use <{HERE}/rig_dock_rail.scad>
-include <{HERE}/rig_common.scad>
+PRELUDE = """
+use <@HERE@/rig_frame.scad>
+use <@HERE@/rig_shelf.scad>
+use <@HERE@/rig_cup.scad>
+use <@HERE@/rig_drawer.scad>
+use <@HERE@/rig_dock_rail.scad>
+include <@HERE@/rig_common.scad>
 $fn = 48;
 Z_FLOOR = BIN_BASE_H + FLOOR_T;
 Z_RIM   = Z_FLOOR + BAY_H;
@@ -53,15 +53,32 @@ module C_meter()  translate([METER_X, METER_Y, Z_DECK - METER_DEPTH + IN])
     linear_extrude(METER_DEPTH - 2*IN) square([METER_W, METER_D], center = true);
 module C_switch() translate([SW_X, SW_Y, Z_DECK - SW_DEPTH + IN]) cylinder(d = SW_BODY, h = SW_DEPTH - 2*IN);
 module C_gnd()    translate([GND_X, GND_Y, Z_DECK - POST_LEN + IN]) cylinder(d = POST_THREAD, h = POST_LEN - 2*IN);
-module C_posts()  for (x = [J1_X, J2_X])
-    translate([x, D/2 - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) cylinder(d = POST_THREAD, h = POST_LEN - 2*IN);
-module C_fuse()   translate([F1_X, D/2 - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) cylinder(d = FUSE_THREAD, h = FUSE_LEN - 2*IN);
-module C_tails()  translate([W/2 - WALL - 30, TAILS_Y, Z_CUP0 + WALL_Z]) rotate([0, 90, 0]) cylinder(d = TAILS_W, h = 30 + WALL + 20);
+module C_posts()  {
+    for (x = [J2_PLUS_X, J2_MINUS_X])
+        translate([x, D/2 - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) cylinder(d = POST_THREAD, h = POST_LEN - 2*IN);
+    for (y = [J5_PLUS_Y, J5_MINUS_Y])
+        translate([W/2 - IN, y, Z_CUP0 + WALL_Z]) rotate([0, -90, 0]) cylinder(d = POST_THREAD, h = POST_LEN - 2*IN);
+}
+// post nuts (~12 across) — the thing that actually collides with a neighbour
+module C_nuts() {
+    for (x = [J2_PLUS_X, J2_MINUS_X])
+        translate([x, D/2 - WALL - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) cylinder(d = 12, h = 4);
+    for (y = [J5_PLUS_Y, J5_MINUS_Y])
+        translate([W/2 - WALL - IN, y, Z_CUP0 + WALL_Z]) rotate([0, -90, 0]) cylinder(d = 12, h = 4);
+    translate([GND_X, GND_Y, Z_DECK - WALL - IN - 4]) cylinder(d = 12, h = 4);
+}
+// XT60 bodies behind the panel — only once measured (undef otherwise)
+module C_xt60() if (XT60_MEASURED) {
+    translate([XT60_IN_X, D/2 - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) translate([0, 0, 0]) linear_extrude(XT60_BODY_IN) square([XT60_CUT_W, XT60_CUT_H], center = true);
+    for (i = [0 : XT60_OUT_N - 1])
+        translate([W/2 - IN, XT60_OUT_Y[i], Z_CUP0 + WALL_Z]) rotate([0, -90, 0]) linear_extrude(XT60_BODY_IN) square([XT60_CUT_H, XT60_CUT_W], center = true);
+}
 module C_riser()  translate([RISER_X, RISER_Y, Z_DECK + IN]) linear_extrude(RISER_T) square([RISER_L, RISER_W], center = true);
 // a 2.5 rod down every screw axis: passes the 3.4 clearance AND the 2.6 pilot
 module C_screws() for (s = [-1, 1], y = [-BOSS_Y, BOSS_Y])
     translate([s * (W/2 + 2), y, Z_CUP0 + SCREW_Z]) rotate([0, -s*90, 0]) cylinder(d = 2.5, h = 2 + WALL + BOSS_IN + 1);
 """
+PRELUDE = PRELUDE.replace("@HERE@", str(HERE))
 
 CHECKS = [
     # (name, A, B) — render intersection(A, B); must be empty
@@ -76,11 +93,11 @@ CHECKS = [
     ("meter x shelf",        "C_meter()",  "P_shelf()"),
     ("switch x cup",         "C_switch()", "P_cup()"),
     ("gnd post x cup",       "C_gnd()",    "P_cup()"),
-    ("in posts x cup",       "C_posts()",  "P_cup()"),
-    ("fuse x cup",           "C_fuse()",   "P_cup()"),
-    ("fuse x meter",         "C_fuse()",   "C_meter()"),
-    ("tails x cup",          "C_tails()",  "P_cup()"),
-    ("tails x switch/gnd",   "C_tails()",  "union() { C_switch(); C_gnd(); }"),
+    ("posts x cup",          "C_posts()",  "P_cup()"),
+    ("nuts x cup",           "C_nuts()",   "P_cup()"),
+    ("nuts x meter/switch",  "C_nuts()",   "union() { C_meter(); C_switch(); }"),
+    ("xt60 x cup",           "C_xt60()",   "P_cup()"),
+    ("xt60 x nuts/switch/gnd", "C_xt60()", "union() { C_nuts(); C_switch(); C_gnd(); }"),
     ("riser x cup",          "C_riser()",  "P_cup()"),
     ("screw rods x frame+cup", "C_screws()", "union() { P_frame(); P_cup(); }"),
 ]
@@ -92,7 +109,8 @@ def volume(stl):
     return abs(m.volume) if len(m.faces) else 0.0
 
 SELFTEST = ["P_frame()", "P_shelf()", "P_cup()", "P_drawer()", "P_rails()",
-            "C_meter()", "C_switch()", "C_gnd()", "C_posts()", "C_fuse()", "C_tails()", "C_riser()", "C_screws()"]
+            "C_meter()", "C_switch()", "C_gnd()", "C_posts()", "C_nuts()", "C_riser()", "C_screws()"]
+# C_xt60() is empty until XT60_MEASURED — it is exercised, not self-tested
 
 def render(scad, stl):
     r = subprocess.run(["openscad", "-o", str(stl), "--export-format", "binstl", str(scad)],
