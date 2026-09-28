@@ -13,7 +13,7 @@ Sized for the **On-Stage SS8800B+** upper shaft (**34.9 mm** / 38.1 mm with slee
 | `clamp.scad` | Split C-clamp, generic (set `tube_d`; default 35 mm ≈ universal speaker pole / SS8800B+ shaft). Pops over the pole; M5 bolt + **wingnut** cinches it (bolt head captured in a hex pocket — only the wingnut turns). Dovetail mount on the face. |
 | `clamp_leg.scad` | Clamp sized for the On-Stage SS8800B+ **tripod legs** (35.38 mm). |
 | `clamp_column.scad` | Clamp sized for the On-Stage SS8800B+ **crank-up column** (41.41 mm). |
-| `head_hook.scad` | Open J-hook — drape/loop cables |
+| `head_hook.scad` | J-hook — a flat arm straight out from the mount and an upturned lip; cables drape into the 25 mm trough between them |
 | `head_clip.scad` | Snap C-clip — grips a single cable (`CABLE_D`) |
 | `head_comb.scad` | Multi-cable comb — a row of cable slots |
 | `head_velcro.scad` | Velcro-strap slot — thread a hook-and-loop strap to bundle |
@@ -21,6 +21,10 @@ Sized for the **On-Stage SS8800B+** upper shaft (**34.9 mm** / 38.1 mm with slee
 Heads are **universal** — they all share the dovetail, independent of `tube_d`. Slide on/off; no tools.
 
 Built from `stand_cable_clamp_common.scad` (clamp + dovetail + head modules).
+
+## Hook head, v1.1.1
+
+The hook in v1.1.0 was a 250° ring centred on the head's mounting plate, so it looped back round the mount and into the clamp body. It overlapped the clamp by 340 mm³ and could not slide into the dovetail. The hook is now a J-profile that sits entirely in front of the mounting plate, and it prints dovetail-down with no supports like the other heads.
 
 ## Hardware
 
