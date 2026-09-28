@@ -31,10 +31,9 @@ The power box for a bench PCIe GPU test rig: a fused, switched, metered 12 V fee
 | **Top deck** | M1, SW1, J6, and the riser dock |
 | **Rear** | J1, J2a, J2b |
 | **Right** | J3, J4, J5a, J5b |
-| **Inside** | F1 on the + input wire, W1 wherever it lands |
-| **Front** | the drawer, nothing else |
+| **Inside** | F1 on the + input wire, W1 on the base floor |
 
-The top is fixed — service is four screws on the sides and the cup lifts off with all its wiring intact. Nothing that carries current is on a part you remove to get at something else.
+The top is fixed — service is four screws on the sides and the cup lifts off its base with all its wiring intact. Nothing that carries current is on a part you remove to get at something else.
 
 ## Signal path
 
@@ -64,7 +63,7 @@ Net names match the schematic. All 14 AWG unless noted.
 
 **Why the rocker's B and yellow must never swap.** A = supply, B = load, yellow = LED return to ground. Put the load wire on yellow and ground on B and the first flick of the switch is a dead short across the meter. Beep the three pins in continuity mode before you crimp: A–B closes when the rocker is on, yellow never closes to either.
 
-## Leads (you build these, they live in the drawer)
+## Leads (you build these; they live in a parts drawer)
 
 All from the six-pack of 6+2 dual-output PCIe cords. Cut the PSU-side 8-pin off each and put a **male XT60H** (AMASS, with the sheath housing) on the cut end: yellows to +, blacks to −.
 
@@ -83,7 +82,7 @@ Beep every lead end-to-end before it touches a card: + to every yellow pin, − 
 5. **Outputs** (row 5): SW1 B → J3 +, J4 +, J5a.
 6. **Ground bus** (rows 6–11): M1.1 into W1 port 5, then one lever per consumer. LED yellow onto J5b's terminal.
 7. **Fuse in.** 5 A blade.
-8. **Leave slack.** For service the four side screws come out and the cup lifts off with the shelf; nothing crosses that joint, but make sure no wire pulls tight against the shelf's edge when it does.
+8. **Leave slack.** For service the four side screws come out and the cup lifts off the base. F1 and W1 stay on the base floor, so the wires to them need enough length to lift the cup clear without pulling on a terminal.
 
 ## Before first power
 

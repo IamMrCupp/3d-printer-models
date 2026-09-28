@@ -9,9 +9,9 @@
 //   rear   XT60E-M input (cutout gated on XT60_MEASURED) + 12V IN +/- posts
 //   right  XT60E-F output(s) (gated) + OUT +/- posts
 //   labels engraved: 12V IN, RISER / CARD, OUT, GND, and +/- by every post
-//   skirt  the bottom SKIRT_H of wall is REBATE thinner on the inside: it wraps
-//          the frame's tongue and the shelf's edge. Four clearance holes for
-//          the horizontal screws. No skirt on the front — nothing there to wrap.
+//   skirt  the bottom SKIRT_H of wall is REBATE thinner on the inside, all
+//          four sides: it wraps the base's tongue. Four clearance holes for
+//          the horizontal screws.
 
 include <rig_common.scad>
 
@@ -19,21 +19,9 @@ module cup_body() {
     difference() {
         linear_extrude(CUP_H) rrect(W, D);
         // interior, open at the bottom
-        translate([0, 0, -1]) linear_extrude(SKIRT_H + CUP_IN_H + 1) rrect(W - 2*WALL, D - 2*WALL, BIN_R - WALL);
-        // skirt: thin the wall from the inside over the bottom SKIRT_H, but
-        // only where there is a tongue to wrap (left / right / rear)
-        translate([0, 0, -1]) linear_extrude(SKIRT_H + 1) intersection() {
-            rrect(SKIRT_IN_W, SKIRT_IN_D, SKIRT_IN_R);
-            translate([-W, -(D/2 - WALL)]) square([2*W, 2*D]);
-        }
-        // front: no tongue below, and the drawer opening is right there — the
-        // front wall stops at the tongue top, outer strip included (the first
-        // cut of this kept a 1.5 mm lip across the opening; check_assembly.py
-        // caught it). The side skirts end square at the rebate line.
-        translate([0, 0, -1]) linear_extrude(TONGUE_H + 1) {
-            translate([-W, -D]) square([2*W, D - (D/2 - REBATE)]);                 // y < rebate line
-            translate([-SKIRT_IN_W/2, -D]) square([SKIRT_IN_W, D - (D/2 - WALL)]); // inside the skirts, y < wall
-        }
+        translate([0, 0, -1]) linear_extrude(CUP_IN_H + 1) rrect(W - 2*WALL, D - 2*WALL, BIN_R - WALL);
+        // skirt: thin the wall from the inside over the bottom SKIRT_H
+        translate([0, 0, -1]) linear_extrude(SKIRT_H + 1) rrect(SKIRT_IN_W, SKIRT_IN_D, SKIRT_IN_R);
     }
 }
 
@@ -42,7 +30,7 @@ module rear_hole(x, z, d)  { translate([x, D/2, z]) rotate([90, 0, 0]) cylinder(
 module right_hole(y, z, d) { translate([W/2, y, z]) rotate([0, 90, 0]) cylinder(d = d, h = WALL*3, center = true); }
 
 module deck_cutouts() {
-    z0 = SKIRT_H + CUP_IN_H - 1; h = WALL + 2;
+    z0 = CUP_IN_H - 1; h = WALL + 2;
     // meter housing, with clearance per side
     translate([METER_X, METER_Y, z0]) linear_extrude(h)
         square([METER_W + 2*METER_CLR, METER_D + 2*METER_CLR], center = true);
@@ -118,4 +106,4 @@ assert(GND_X + 6 < W/2 - WALL && GND_Y - 6 > -(D/2 - WALL), "probe post nut hits
 assert(GND_Y + 6 < XT60_OUT_Y[0] - 12, "probe post nut sits where the RISER output's body comes through");
 assert(XT60_OUT_N == 1 || XT60_OUT_Y[1] - XT60_OUT_Y[0] >= 25, "XT60 outputs too close together");
 if (!XT60_MEASURED) echo("WARNING: XT60 cutouts NOT cut — XT60_MEASURED is false. Caliper the connectors and fill XT60_* in rig_common.scad.");
-echo(str("rig_cup: ", W, " x ", D, " x ", CUP_H, " mm, deck ", WALL, " thick, ", CUP_IN_H, " clear above the shelf, skirt ", SKIRT_H));
+echo(str("rig_cup: ", W, " x ", D, " x ", CUP_H, " mm, deck ", WALL, " thick, ", CUP_IN_H, " clear above the base floor, skirt ", SKIRT_H));

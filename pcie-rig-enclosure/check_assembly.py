@@ -4,7 +4,8 @@
 """Intersect the assembled rig — parts against parts, components against parts.
 
 Per-part validation can't see two parts overlapping, and 2,330 mm3 of
-interference once shipped that way. So this places every part where it
+interference once shipped that way (and this script's first run caught a
+768 mm3 lip on this very box). So this places every part where it
 lives in the finished box, adds a solid for every electrical component
 where it mounts, and renders the pairwise intersections. Every one must be
 empty.
@@ -28,23 +29,17 @@ except ImportError:
 # Everything the check needs to know, expressed in OpenSCAD so it stays in
 # lock-step with rig_common.scad rather than copying numbers here.
 PRELUDE = """
-use <@HERE@/rig_frame.scad>
-use <@HERE@/rig_shelf.scad>
+use <@HERE@/rig_base.scad>
 use <@HERE@/rig_cup.scad>
-use <@HERE@/rig_drawer.scad>
 use <@HERE@/rig_dock_rail.scad>
 include <@HERE@/rig_common.scad>
 $fn = 48;
-Z_FLOOR = BIN_BASE_H + FLOOR_T;
-Z_RIM   = Z_FLOOR + BAY_H;
-Z_CUP0  = Z_RIM - TONGUE_H;            // cup's skirt bottom
+Z_CUP0  = Z_FLOOR;                     // cup's skirt bottom = base floor top
 Z_DECK  = Z_CUP0 + CUP_H;              // deck top face
 IN      = 0.05;                         // probe inset from shared faces
 
-module P_frame()  rig_frame();
-module P_shelf()  translate([0, 0, Z_RIM]) rig_shelf();
+module P_base()   rig_base();
 module P_cup()    translate([0, 0, Z_CUP0]) rig_cup();
-module P_drawer() translate([0, -(D/2) + DRAWER_D/2, Z_FLOOR]) rig_drawer();
 module P_rails()  for (sx = [-1, 1])
     translate([RISER_X + sx*RISER_HOLE_PITCH_L/2, RISER_Y, Z_DECK - RAIL_POCKET]) rig_dock_rail();
 
@@ -82,15 +77,12 @@ PRELUDE = PRELUDE.replace("@HERE@", str(HERE))
 
 CHECKS = [
     # (name, A, B) — render intersection(A, B); must be empty
-    ("frame x shelf",        "P_frame()",  "P_shelf()"),
-    ("frame x cup",          "P_frame()",  "P_cup()"),
-    ("shelf x cup",          "P_shelf()",  "P_cup()"),
-    ("drawer x frame",       "P_drawer()", "P_frame()"),
-    ("drawer x shelf",       "P_drawer()", "P_shelf()"),
-    ("drawer x cup",         "P_drawer()", "P_cup()"),
+    ("base x cup",           "P_base()",   "P_cup()"),
     ("rails x cup",          "P_rails()",  "P_cup()"),
     ("meter x cup",          "C_meter()",  "P_cup()"),
-    ("meter x shelf",        "C_meter()",  "P_shelf()"),
+    ("meter x base",         "C_meter()",  "P_base()"),
+    ("switch x base",        "C_switch()", "P_base()"),
+    ("nuts x base",          "C_nuts()",   "P_base()"),
     ("switch x cup",         "C_switch()", "P_cup()"),
     ("gnd post x cup",       "C_gnd()",    "P_cup()"),
     ("posts x cup",          "C_posts()",  "P_cup()"),
@@ -99,7 +91,7 @@ CHECKS = [
     ("xt60 x cup",           "C_xt60()",   "P_cup()"),
     ("xt60 x nuts/switch/gnd", "C_xt60()", "union() { C_nuts(); C_switch(); C_gnd(); }"),
     ("riser x cup",          "C_riser()",  "P_cup()"),
-    ("screw rods x frame+cup", "C_screws()", "union() { P_frame(); P_cup(); }"),
+    ("screw rods x base+cup", "C_screws()", "union() { P_base(); P_cup(); }"),
 ]
 
 def volume(stl):
@@ -108,7 +100,7 @@ def volume(stl):
     m = trimesh.load(stl)
     return abs(m.volume) if len(m.faces) else 0.0
 
-SELFTEST = ["P_frame()", "P_shelf()", "P_cup()", "P_drawer()", "P_rails()",
+SELFTEST = ["P_base()", "P_cup()", "P_rails()",
             "C_meter()", "C_switch()", "C_gnd()", "C_posts()", "C_nuts()", "C_riser()", "C_screws()"]
 # C_xt60() is empty until XT60_MEASURED — it is exercised, not self-tested
 
