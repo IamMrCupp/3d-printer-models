@@ -6,7 +6,7 @@
 // heads, so one clamp accepts any attachment.
 //
 //   clamp(tube_d)   — the pole clamp (set tube_d to your pole OD)
-//   head_hook()     — open J-hook
+//   head_hook()     — J-hook: arm out front, upturned lip
 //   head_clip()     — snap cable clip
 //   head_comb()     — multi-cable comb
 //   head_velcro()   — velcro-strap slot
@@ -62,10 +62,41 @@ module clamp(tube_d = TUBE_D) {
 // ---- heads (universal; mount via the dovetail tongue at x=0..DT_DEPTH) ----
 module _backplate(t = 4) { translate([-t, -DT_BACK / 2, 0]) cube([t, DT_BACK, DT_H]); }
 
+// J-hook: a flat arm straight out from the backplate and an upturned lip at its
+// end. Cables drape into the trough between the backplate and the lip.
+//
+// v1.1.0 had a 250° ring CENTRED ON THE BACKPLATE, so the ring looped round the
+// mount itself: it joined the head only where it crossed the backplate, and it
+// ran back past the tongue into the clamp body — 340 mm³ of interference, so the
+// head could not slide into the dovetail at all. This profile lives entirely in
+// front of the backplate (x < -4), so nothing reaches behind the mount.
+//
+// It prints dovetail-down like every head: the arm lies on the bed and every
+// other face is vertical, so there is still nothing to support.
+HOOK_OPEN = 25;   // trough width, backplate face to lip
+HOOK_LIP  = 16;   // lip height from the bed
+HOOK_T    = 5;    // arm and lip thickness
+HOOK_W    = 12;   // across the hook (Y)
+HOOK_FIL  = 3;    // fillet where the arm meets the lip, inside the trough
+
+module _hook_profile() {
+    x_lip = -(HOOK_OPEN + HOOK_T);
+    // arm runs 1 mm INTO the backplate (x -4..0): a partial-area join, so it
+    // overlaps volumetrically rather than butting on the backplate's face
+    // grow then shrink: fills the concave corner with a HOOK_FIL radius and
+    // leaves the 5 mm arm alone (shrink-then-grow would erase anything thinner
+    // than 2 × HOOK_FIL — which the first cut of this did)
+    offset(r = -HOOK_FIL) offset(delta = HOOK_FIL)
+        union() {
+            translate([x_lip, 0]) square([HOOK_OPEN + HOOK_T + 1, HOOK_T]);   // arm
+            translate([x_lip, 0]) square([HOOK_T, HOOK_LIP]);                 // lip
+        }
+}
+
 module head_hook() {
     dt_tongue(); _backplate();
-    translate([-4, 0, DT_H / 2]) rotate([90, 0, 0])
-        rotate_extrude(angle = 250) translate([16, 0]) circle(d = 7);
+    translate([-4, HOOK_W / 2, 0]) rotate([90, 0, 0])
+        linear_extrude(HOOK_W) _hook_profile();
 }
 module head_clip(clip_w = 12) {
     dt_tongue(); _backplate();
