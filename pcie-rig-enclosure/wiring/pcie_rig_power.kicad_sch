@@ -1031,53 +1031,305 @@
 		(uuid "6b2f0c1e-2000-4000-8000-000000000052")
 	)
 	(text
-		"Rev C  2026-09-28.  XT60 panel connectors replace the pigtail; meter ahead of the switch; WAGO ground bus. PZEM-031 terminals top->bottom 1..4."
+		"Rev C  2026-09-28.  12V IN -> F1 -> M1 -> SW1 -> outputs.  One common ground bus on the meter's LOAD- (W1)."
 		(exclude_from_sim no)
 		(at 20.32 27.94 0)
 		(effects (font (size 1.5 1.5)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000053")
 	)
 	(text
-		"Path: 12V IN -> F1 -> M1 (3 in, 4 out) -> SW1 -> outputs.  The meter reads whenever the supply is on; the switch only gates the outputs."
+		"Ref"
 		(exclude_from_sim no)
-		(at 20.32 124.46 0)
-		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(at 20.32 114.3 0)
+		(effects (font (size 1.4 1.4) bold) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000054")
 	)
 	(text
-		"M1 PZEM-031: shunt is internal between 2 (DC IN-) and 1 (LOAD-). Input negative goes to 2, NOT to the bus - on the bus it would bypass the shunt and the meter would read 0 A."
+		"Part"
 		(exclude_from_sim no)
-		(at 20.32 129.54 0)
-		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(at 33.019999999999996 114.3 0)
+		(effects (font (size 1.4 1.4) bold) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000055")
 	)
 	(text
-		"W1 WAGO 221-415, five ports: 5 = LOAD-, 4 = RISER -, 3 = CARD -, 2 = OUT - post, 1 = PROBE GND. The rocker's yellow LED - rides on the OUT - post's terminal."
+		"Where"
 		(exclude_from_sim no)
-		(at 20.32 134.62 0)
-		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(at 170.18 114.3 0)
+		(effects (font (size 1.4 1.4) bold) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000056")
 	)
 	(text
-		"SW1: A (power) from M1.4, B (load) to the outputs, yellow to ground. NEVER swap B and yellow - that is a dead short the moment it is switched on. Beep the pins first."
+		"J1"
 		(exclude_from_sim no)
-		(at 20.32 139.7 0)
+		(at 20.32 118.11 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000057")
 	)
 	(text
-		"Ratings: OWON at 12.0 V, OVP ~12.6 V, current limit 5 A (CC for short hunting). F1 5 A blade (7.5 max). Switch 20 A, XT60 30 A, 14 AWG silicone inside. J4 is optional - fit one or two outputs."
+		"XT60E-M panel mount, male - 12 V IN. PSU lead ends in a female XT60H"
 		(exclude_from_sim no)
-		(at 20.32 144.78 0)
+		(at 33.019999999999996 118.11 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000058")
 	)
 	(text
-		"Panels:  REAR = J1, J2a, J2b.   TOP deck = M1, SW1, J6 (+ riser dock).   RIGHT wall = J3, J4, J5a, J5b.   F1 and W1 are inline inside."
+		"rear wall"
+		(exclude_from_sim no)
+		(at 170.18 118.11 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000059")
+	)
+	(text
+		"J2a/b"
+		(exclude_from_sim no)
+		(at 20.32 121.92 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000060")
+	)
+	(text
+		"4 mm binding posts, red / black - 12 V IN, parallel with J1"
+		(exclude_from_sim no)
+		(at 33.019999999999996 121.92 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000061")
+	)
+	(text
+		"rear wall"
+		(exclude_from_sim no)
+		(at 170.18 121.92 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000062")
+	)
+	(text
+		"F1"
+		(exclude_from_sim no)
+		(at 20.32 125.72999999999999 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000063")
+	)
+	(text
+		"inline blade fuse holder, 5 A (7.5 A max)"
+		(exclude_from_sim no)
+		(at 33.019999999999996 125.72999999999999 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000064")
+	)
+	(text
+		"inside, on the + input wire"
+		(exclude_from_sim no)
+		(at 170.18 125.72999999999999 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000065")
+	)
+	(text
+		"M1"
+		(exclude_from_sim no)
+		(at 20.32 129.54 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000066")
+	)
+	(text
+		"Peacefair PZEM-031 meter, 8-100 V / 0-20 A, built-in shunt"
+		(exclude_from_sim no)
+		(at 33.019999999999996 129.54 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000067")
+	)
+	(text
+		"top deck"
+		(exclude_from_sim no)
+		(at 170.18 129.54 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000068")
+	)
+	(text
+		"SW1"
+		(exclude_from_sim no)
+		(at 20.32 133.35 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000069")
+	)
+	(text
+		"Ampper 20 mm illuminated rocker, 12 V 20 A, 3-pin"
+		(exclude_from_sim no)
+		(at 33.019999999999996 133.35 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000070")
+	)
+	(text
+		"top deck"
+		(exclude_from_sim no)
+		(at 170.18 133.35 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000071")
+	)
+	(text
+		"D1"
+		(exclude_from_sim no)
+		(at 20.32 137.16 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000072")
+	)
+	(text
+		"the dot LED inside SW1 (yellow pin = LED -)"
+		(exclude_from_sim no)
+		(at 33.019999999999996 137.16 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000073")
+	)
+	(text
+		"-"
+		(exclude_from_sim no)
+		(at 170.18 137.16 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000074")
+	)
+	(text
+		"W1"
+		(exclude_from_sim no)
+		(at 20.32 140.97 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000075")
+	)
+	(text
+		"WAGO 221-415 five-port lever nut - ground bus"
+		(exclude_from_sim no)
+		(at 33.019999999999996 140.97 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000076")
+	)
+	(text
+		"inside, on the base floor"
+		(exclude_from_sim no)
+		(at 170.18 140.97 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000077")
+	)
+	(text
+		"J3"
+		(exclude_from_sim no)
+		(at 20.32 144.78 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000078")
+	)
+	(text
+		"XT60E-F panel mount, female - OUT, RISER"
+		(exclude_from_sim no)
+		(at 33.019999999999996 144.78 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000079")
+	)
+	(text
+		"right wall"
+		(exclude_from_sim no)
+		(at 170.18 144.78 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000080")
+	)
+	(text
+		"J4"
+		(exclude_from_sim no)
+		(at 20.32 148.59 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000081")
+	)
+	(text
+		"XT60E-F panel mount, female - OUT, CARD (optional 2nd, parallel)"
+		(exclude_from_sim no)
+		(at 33.019999999999996 148.59 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000082")
+	)
+	(text
+		"right wall"
+		(exclude_from_sim no)
+		(at 170.18 148.59 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000083")
+	)
+	(text
+		"J5a/b"
 		(exclude_from_sim no)
 		(at 20.32 152.4 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000059")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000084")
+	)
+	(text
+		"4 mm binding posts, red / black - OUT +/-"
+		(exclude_from_sim no)
+		(at 33.019999999999996 152.4 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000085")
+	)
+	(text
+		"right wall"
+		(exclude_from_sim no)
+		(at 170.18 152.4 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000086")
+	)
+	(text
+		"J6"
+		(exclude_from_sim no)
+		(at 20.32 156.21 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000087")
+	)
+	(text
+		"4 mm binding post, black - PROBE GND (scope / DMM reference)"
+		(exclude_from_sim no)
+		(at 33.019999999999996 156.21 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000088")
+	)
+	(text
+		"top deck"
+		(exclude_from_sim no)
+		(at 170.18 156.21 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000089")
+	)
+	(text
+		"M1: the shunt is internal between 2 (DC IN-) and 1 (LOAD-). Input negative goes to 2, never to W1 -"
+		(exclude_from_sim no)
+		(at 20.32 163.82999999999998 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000090")
+	)
+	(text
+		"    on the bus it bypasses the shunt and the meter reads 0 A."
+		(exclude_from_sim no)
+		(at 20.32 167.64 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000091")
+	)
+	(text
+		"SW1: A from M1.4, B to the outputs, yellow to ground. Never swap B and yellow: dead short when switched on."
+		(exclude_from_sim no)
+		(at 20.32 171.45 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000092")
+	)
+	(text
+		"    Beep the pins before crimping."
+		(exclude_from_sim no)
+		(at 20.32 175.26 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000093")
+	)
+	(text
+		"W1 ports: 5 = LOAD-, 4 = RISER -, 3 = CARD -, 2 = OUT - post, 1 = PROBE GND. LED - rides on the OUT - post."
+		(exclude_from_sim no)
+		(at 20.32 179.07 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000094")
+	)
+	(text
+		"Supply: OWON at 12.0 V, OVP 12.6 V, 5 A current limit. F1 5 A blade. J4 is optional."
+		(exclude_from_sim no)
+		(at 20.32 182.88 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000095")
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
@@ -1087,19 +1339,14 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000060")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000096")
 		(property "Reference" "J1" (at 27.48 60.04 0) (effects (font (size 1.27 1.27))))
-		(property
-			"Value"
-			"XT60E-M  12V IN  (REAR) - PSU lead ends in a female XT60H"
-			(at 52.48 73.04 0)
-			(effects (font (size 1.27 1.27)))
-		)
+		(property "Value" "XT60E-M" (at 30.48 73.04 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 30.48 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 30.48 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 30.48 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000061"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000062"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000097"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000098"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J1") (unit 1)))
 		)
@@ -1112,18 +1359,13 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000063")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000099")
 		(property "Reference" "J2a" (at 42.72 73.2 0) (effects (font (size 1.27 1.27))))
-		(property
-			"Value"
-			"12V IN +  red post (REAR, parallel with J1)"
-			(at 35.72 80.2 0)
-			(effects (font (size 1.27 1.27)))
-		)
+		(property "Value" "post +" (at 41.72 80.2 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 45.72 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 45.72 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 45.72 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000064"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000100"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J2a") (unit 1)))
 		)
@@ -1136,13 +1378,13 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000065")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000101")
 		(property "Reference" "J2b" (at 42.72 29.02 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "12V IN -  black post (REAR)" (at 53.72 36.52 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "post -" (at 41.72 37.02 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 45.72 33.02 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 45.72 33.02 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 45.72 33.02 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000066"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000102"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J2b") (unit 1)))
 		)
@@ -1155,14 +1397,14 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000067")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000103")
 		(property "Reference" "F1" (at 76.2 62.54 270) (effects (font (size 1.27 1.27))))
-		(property "Value" "blade 5 A (7.5 max), inline holder" (at 76.2 59.04 270) (effects (font (size 1.27 1.27))))
+		(property "Value" "5 A blade" (at 76.2 59.04 270) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000068"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000069"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000104"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000105"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "F1") (unit 1)))
 		)
@@ -1175,21 +1417,16 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000070")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000106")
 		(property "Reference" "M1" (at 123.92 55.0 0) (effects (font (size 1.27 1.27))))
-		(property
-			"Value"
-			"Peacefair PZEM-031  1 LOAD-  2 DC IN-  3 DC IN+  4 LOAD+  (TOP)"
-			(at 127.92 72.5 0)
-			(effects (font (size 1.27 1.27)))
-		)
+		(property "Value" "PZEM-031" (at 123.92 72.5 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 121.92 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 121.92 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 121.92 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000071"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000072"))
-		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000073"))
-		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000074"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000107"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000108"))
+		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000109"))
+		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000110"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "M1") (unit 1)))
 		)
@@ -1202,19 +1439,14 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000075")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000111")
 		(property "Reference" "SW1" (at 147.32 76.78 0) (effects (font (size 1.27 1.27))))
-		(property
-			"Value"
-			"Ampper rocker (TOP)  A = from meter  B = to outputs  yellow = LED -"
-			(at 151.32 87.28 0)
-			(effects (font (size 1.27 1.27)))
-		)
+		(property "Value" "rocker" (at 147.32 87.28 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 147.32 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 147.32 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 147.32 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000076"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000077"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000112"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000113"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "SW1") (unit 1)))
 		)
@@ -1227,14 +1459,14 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000078")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000114")
 		(property "Reference" "D1" (at 148.59 70.16 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "LED in SW1 (yellow = LED -)" (at 126.59 75.16 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "LED in SW1" (at 134.59 75.16 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 148.59 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 148.59 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 148.59 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000079"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000080"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000115"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000116"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "D1") (unit 1)))
 		)
@@ -1247,17 +1479,17 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000081")
-		(property "Reference" "W1" (at 171.8 97.68 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "WAGO 221-415 ground bus" (at 163.8 115.68 0) (effects (font (size 1.27 1.27))))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000117")
+		(property "Reference" "W1" (at 171.8 97.18 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "WAGO 221-415" (at 171.8 100.18 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 177.8 106.68 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 177.8 106.68 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 177.8 106.68 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000082"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000083"))
-		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000084"))
-		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000085"))
-		(pin "5" (uuid "6b2f0c1e-2000-4000-8000-000000000086"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000118"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000119"))
+		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000120"))
+		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000121"))
+		(pin "5" (uuid "6b2f0c1e-2000-4000-8000-000000000122"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "W1") (unit 1)))
 		)
@@ -1270,14 +1502,14 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000087")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000123")
 		(property "Reference" "J3" (at 220.44 44.8 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "XT60E-F  RISER  (RIGHT)" (at 234.44 48.8 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "XT60E-F  RISER" (at 232.44 48.8 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 218.44 50.8 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 218.44 50.8 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 218.44 50.8 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000088"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000089"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000124"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000125"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J3") (unit 1)))
 		)
@@ -1290,19 +1522,14 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000090")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000126")
 		(property "Reference" "J4" (at 220.44 57.5 0) (effects (font (size 1.27 1.27))))
-		(property
-			"Value"
-			"XT60E-F  CARD  (RIGHT) - optional 2nd output, parallel"
-			(at 244.44 61.5 0)
-			(effects (font (size 1.27 1.27)))
-		)
+		(property "Value" "XT60E-F  CARD" (at 232.44 61.5 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 218.44 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 218.44 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 218.44 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000091"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000092"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000127"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000128"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J4") (unit 1)))
 		)
@@ -1315,13 +1542,13 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000093")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000129")
 		(property "Reference" "J5a" (at 220.44 73.2 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "OUT +  red post (RIGHT)" (at 230.44 77.2 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "post +" (at 226.44 77.2 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 218.44 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 218.44 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 218.44 76.2 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000094"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000130"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J5a") (unit 1)))
 		)
@@ -1334,13 +1561,13 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000095")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000131")
 		(property "Reference" "J5b" (at 220.44 80.82 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "OUT -  black post (RIGHT)" (at 230.44 84.82 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "post -" (at 226.44 84.82 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 218.44 83.82 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 218.44 83.82 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 218.44 83.82 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000096"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000132"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J5b") (unit 1)))
 		)
@@ -1353,18 +1580,13 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000097")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000133")
 		(property "Reference" "J6" (at 220.44 90.98 0) (effects (font (size 1.27 1.27))))
-		(property
-			"Value"
-			"PROBE GND  post (TOP) - scope / DMM reference"
-			(at 238.44 94.98 0)
-			(effects (font (size 1.27 1.27)))
-		)
+		(property "Value" "PROBE GND" (at 228.44 94.98 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 218.44 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 218.44 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 218.44 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000098"))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000134"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J6") (unit 1)))
 		)
