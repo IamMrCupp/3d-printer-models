@@ -7,7 +7,7 @@
 	(title_block
 		(title "PCIe GPU test rig - power box wiring")
 		(date "2026-09-27")
-		(rev "A")
+		(rev "B")
 		(company "IamMrCupp / 3d-printer-models")
 		(comment 1 "pcie-rig-enclosure/wiring - drawn 2026-09-27, edit in KiCad")
 	)
@@ -715,487 +715,407 @@
 			(embedded_fonts no)
 		)
 	)
+	(junction (at 91.44 66.04) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000011"))
+	(junction (at 83.82 45.72) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000013"))
+	(junction (at 177.8 38.1) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000019"))
+	(junction (at 177.8 66.04) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000021"))
+	(junction (at 177.8 68.58) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000023"))
+	(junction (at 177.8 71.12) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000025"))
+	(junction (at 177.8 73.66) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000027"))
+	(junction (at 182.88 81.28) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000036"))
+	(junction (at 182.88 83.82) (diameter 0) (color 0 0 0 0) (uuid "6b2f0c1e-2000-4000-8000-000000000038"))
 	(wire
-		(pts (xy 50.8 60.96) (xy 67.31 60.96))
+		(pts (xy 40.64 66.04) (xy 52.07 66.04))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000001")
 	)
 	(wire
-		(pts (xy 74.93 60.96) (xy 96.52 60.96))
+		(pts (xy 59.69 66.04) (xy 71.12 66.04))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000002")
 	)
 	(wire
-		(pts (xy 106.68 60.96) (xy 111.76 60.96))
+		(pts (xy 81.28 66.04) (xy 127.0 66.04))
 		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000004")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000003")
 	)
 	(wire
-		(pts (xy 105.41 81.28) (xy 110.49 81.28))
+		(pts (xy 40.64 45.72) (xy 119.38 45.72))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000006")
 	)
 	(wire
-		(pts (xy 97.79 81.28) (xy 92.71 81.28))
+		(pts (xy 119.38 45.72) (xy 119.38 63.5))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000007")
+	)
+	(wire
+		(pts (xy 119.38 63.5) (xy 127.0 63.5))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000008")
 	)
 	(wire
-		(pts (xy 50.8 111.76) (xy 55.88 111.76))
+		(pts (xy 91.44 66.04) (xy 91.44 55.88))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000010")
 	)
 	(wire
-		(pts (xy 167.64 81.28) (xy 162.56 81.28))
+		(pts (xy 83.82 55.88) (xy 83.82 45.72))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000012")
 	)
 	(wire
-		(pts (xy 167.64 83.82) (xy 162.56 83.82))
+		(pts (xy 127.0 60.96) (xy 123.19 60.96))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000014")
 	)
 	(wire
-		(pts (xy 167.64 86.36) (xy 162.56 86.36))
+		(pts (xy 123.19 60.96) (xy 123.19 38.1))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000015")
+	)
+	(wire
+		(pts (xy 123.19 38.1) (xy 203.2 38.1))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000016")
 	)
 	(wire
-		(pts (xy 167.64 88.9) (xy 162.56 88.9))
+		(pts (xy 177.8 38.1) (xy 177.8 76.2))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000018")
 	)
 	(wire
-		(pts (xy 233.68 83.82) (xy 228.6 83.82))
+		(pts (xy 187.96 66.04) (xy 177.8 66.04))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000020")
 	)
 	(wire
-		(pts (xy 233.68 86.36) (xy 228.6 86.36))
+		(pts (xy 187.96 68.58) (xy 177.8 68.58))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000022")
 	)
 	(wire
-		(pts (xy 233.68 88.9) (xy 228.6 88.9))
+		(pts (xy 187.96 71.12) (xy 177.8 71.12))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000024")
 	)
 	(wire
-		(pts (xy 233.68 91.44) (xy 228.6 91.44))
+		(pts (xy 187.96 73.66) (xy 177.8 73.66))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000026")
 	)
 	(wire
-		(pts (xy 233.68 93.98) (xy 228.6 93.98))
+		(pts (xy 187.96 76.2) (xy 177.8 76.2))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000028")
 	)
 	(wire
-		(pts (xy 233.68 96.52) (xy 228.6 96.52))
+		(pts (xy 127.0 68.58) (xy 123.19 68.58))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000029")
+	)
+	(wire
+		(pts (xy 123.19 68.58) (xy 123.19 96.52))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000030")
 	)
 	(wire
-		(pts (xy 233.68 99.06) (xy 228.6 99.06))
+		(pts (xy 123.19 96.52) (xy 182.88 96.52))
 		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000032")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000031")
 	)
 	(wire
-		(pts (xy 233.68 101.6) (xy 228.6 101.6))
+		(pts (xy 182.88 96.52) (xy 182.88 78.74))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000033")
+	)
+	(wire
+		(pts (xy 187.96 78.74) (xy 182.88 78.74))
 		(stroke (width 0) (type default))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000034")
 	)
 	(wire
-		(pts (xy 233.68 132.08) (xy 228.6 132.08))
+		(pts (xy 187.96 81.28) (xy 182.88 81.28))
 		(stroke (width 0) (type default))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000036")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000035")
+	)
+	(wire
+		(pts (xy 187.96 83.82) (xy 182.88 83.82))
+		(stroke (width 0) (type default))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000037")
 	)
 	(label
 		"12V_IN_FUSED"
-		(at 76.2 60.96 0)
+		(at 60.96 66.04 0)
 		(effects (font (size 1.27 1.27)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000003")
+		(uuid "6b2f0c1e-2000-4000-8000-000000000004")
 	)
 	(label
 		"12V_SW"
-		(at 111.76 60.96 0)
+		(at 96.52 66.04 0)
 		(effects (font (size 1.27 1.27)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000005")
 	)
 	(label
-		"12V_SW"
-		(at 110.49 81.28 0)
-		(effects (font (size 1.27 1.27)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000007")
-	)
-	(label
 		"GND_IN"
-		(at 92.71 81.28 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
+		(at 60.96 45.72 0)
+		(effects (font (size 1.27 1.27)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000009")
 	)
 	(label
-		"GND_IN"
-		(at 55.88 111.76 0)
-		(effects (font (size 1.27 1.27)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000011")
-	)
-	(label
 		"GND_OUT"
-		(at 162.56 81.28 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000013")
-	)
-	(label
-		"GND_IN"
-		(at 162.56 83.82 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000015")
-	)
-	(label
-		"12V_SW"
-		(at 162.56 86.36 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
+		(at 142.24 38.1 0)
+		(effects (font (size 1.27 1.27)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000017")
 	)
 	(label
 		"+12V_OUT"
-		(at 162.56 88.9 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000019")
-	)
-	(label
-		"+12V_OUT"
-		(at 228.6 83.82 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000021")
-	)
-	(label
-		"+12V_OUT"
-		(at 228.6 86.36 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000023")
-	)
-	(label
-		"+12V_OUT"
-		(at 228.6 88.9 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000025")
-	)
-	(label
-		"GND_OUT"
-		(at 228.6 91.44 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000027")
-	)
-	(label
-		"GND_OUT"
-		(at 228.6 93.98 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000029")
-	)
-	(label
-		"GND_OUT"
-		(at 228.6 96.52 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000031")
-	)
-	(label
-		"GND_OUT"
-		(at 228.6 99.06 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000033")
-	)
-	(label
-		"GND_OUT"
-		(at 228.6 101.6 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000035")
-	)
-	(label
-		"GND_OUT"
-		(at 228.6 132.08 0)
-		(effects (font (size 1.27 1.27)) (justify right bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000037")
+		(at 142.24 96.52 0)
+		(effects (font (size 1.27 1.27)) (justify left bottom))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000032")
 	)
 	(text
 		"PCIe GPU test rig - power box wiring"
 		(exclude_from_sim no)
-		(at 20.32 25.4 0)
+		(at 20.32 22.86 0)
 		(effects (font (size 3.0 3.0) bold) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000038")
-	)
-	(text
-		"Rev A  2026-09-27.  Meter terminals read off the PZEM-031 case label (top->bottom 1..4)."
-		(exclude_from_sim no)
-		(at 20.32 30.48 0)
-		(effects (font (size 1.6 1.6)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000039")
 	)
 	(text
-		"M1 PZEM-031:  1 = LOAD -   2 = DC IN -   3 = DC IN +   4 = LOAD +."
+		"Rev B  2026-09-27.  Explicit wiring; meter terminals read off the PZEM-031 case label (top->bottom 1..4)."
 		(exclude_from_sim no)
-		(at 142.24 66.04 0)
-		(effects (font (size 1.3 1.3)) (justify left bottom))
+		(at 20.32 27.94 0)
+		(effects (font (size 1.6 1.6)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000040")
 	)
 	(text
-		"Shunt is internal between 2 and 1; + passes straight through 3 -> 4."
+		"M1 PZEM-031:  shunt is internal between 2 (DC IN-) and 1 (LOAD-);  + passes straight through 3 -> 4.  Fed from the switched side so it sleeps with the rig.  8-100 V, 0-20 A."
 		(exclude_from_sim no)
-		(at 142.24 69.85 0)
-		(effects (font (size 1.3 1.3)) (justify left bottom))
+		(at 20.32 106.68 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000041")
 	)
 	(text
-		"Fed from the switched side (3 = 12V_SW) so it powers down with the rig. Range 8-100 V, 0-20 A."
+		"SW1 Ampper 3-pin:  A = supply +,  B = load +,  yellow = LED -.  LED return goes to the INPUT negative so its current stays out of the reading."
 		(exclude_from_sim no)
-		(at 142.24 73.66 0)
-		(effects (font (size 1.3 1.3)) (justify left bottom))
+		(at 20.32 111.76 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000042")
 	)
 	(text
-		"SW1 (Ampper 3-pin): A = supply +, B = load +, yellow = LED - to GND_IN. Dot lights when ON."
+		"J3 PROBE GND = the OUTPUT negative (LOAD-, after the shunt).  Never the input negative: the shunt drop would shift the probe reference under load."
 		(exclude_from_sim no)
-		(at 83.82 96.52 0)
-		(effects (font (size 1.3 1.3)) (justify left bottom))
+		(at 20.32 116.84 0)
+		(effects (font (size 1.4 1.4)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000043")
 	)
 	(text
-		"J3 PROBE GND ties to GND_OUT (LOAD -, after the shunt), not GND_IN - otherwise the probe reference shifts by the shunt drop under load."
+		"F1 in the + input line ahead of the switch.  15 A fast-blow, never above 20 A (meter / switch limit).  Whole path ~240 W: boot stages and rail checks, not a load tester."
 		(exclude_from_sim no)
-		(at 20.32 152.4 0)
+		(at 20.32 121.92 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000044")
 	)
 	(text
-		"F1 in the +12 V input line ahead of the switch. 15 A fast-blow; never above 20 A (meter / switch limit)."
+		"Internal bus 12 AWG tinned copper.  J4 is the cut Amangny cable, 18 AWG: 5 black = GND, 3 yellow = +12 V; exits the right wall, zip tie inside as strain relief."
 		(exclude_from_sim no)
-		(at 20.32 157.48 0)
+		(at 20.32 127.0 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000045")
 	)
 	(text
-		"Internal bus 12 AWG tinned copper. Pigtail = Amangny 18 AWG with the female end cut off: 3 yellow = +12 V, 5 black = GND. Zip tie inside the wall as strain relief."
+		"Panels:  REAR = J1, J2, F1.    TOP deck = SW1, M1, J3 (+ riser dock).    RIGHT wall = J4 pigtail exit.    FRONT = cord drawer only."
 		(exclude_from_sim no)
-		(at 20.32 162.56 0)
+		(at 20.32 134.62 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000046")
 	)
-	(text
-		"Whole path rated 20 A -> ~240 W. Diagnostic rig for boot stages and rail checks, not a load tester."
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 35.56 45.72 180)
+		(unit 1)
 		(exclude_from_sim no)
-		(at 20.32 167.64 0)
-		(effects (font (size 1.4 1.4)) (justify left bottom))
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(uuid "6b2f0c1e-2000-4000-8000-000000000047")
-	)
-	(text
-		"Panels:  REAR = J1, J2, F1.   TOP deck = SW1, M1 (+ riser dock).   RIGHT wall = J4 pigtail exit, J3.   FRONT = cord drawer only."
-		(exclude_from_sim no)
-		(at 20.32 175.26 0)
-		(effects (font (size 1.4 1.4)) (justify left bottom))
-		(uuid "6b2f0c1e-2000-4000-8000-000000000048")
+		(property "Reference" "J2" (at 32.56 42.72 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "12V IN -  black 4 mm post (REAR)" (at 27.56 49.72 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 35.56 45.72 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 35.56 45.72 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 35.56 45.72 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000048"))
+		(instances
+			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J2") (unit 1)))
+		)
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x01_Socket")
-		(at 45.72 60.96 180)
+		(at 35.56 66.04 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "6b2f0c1e-2000-4000-8000-000000000049")
-		(property "Reference" "J1" (at 42.72 56.96 0) (effects (font (size 1.27 1.27))))
-		(property
-			"Value"
-			"12V IN +  (red 4 mm binding post, REAR)"
-			(at 39.72 65.96 0)
-			(effects (font (size 1.27 1.27)))
-		)
-		(property "Footprint" "" (at 45.72 60.96 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 45.72 60.96 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 45.72 60.96 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Reference" "J1" (at 32.56 63.04 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "12V IN +  red 4 mm post (REAR)" (at 27.56 70.04 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 35.56 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 35.56 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 35.56 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000050"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J1") (unit 1)))
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x01_Socket")
-		(at 45.72 111.76 180)
+		(lib_id "Device:Fuse")
+		(at 55.88 66.04 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "6b2f0c1e-2000-4000-8000-000000000051")
-		(property "Reference" "J2" (at 42.72 107.76 0) (effects (font (size 1.27 1.27))))
+		(property "Reference" "F1" (at 55.88 62.54 270) (effects (font (size 1.27 1.27))))
 		(property
 			"Value"
-			"12V IN -  (black 4 mm binding post, REAR)"
-			(at 39.72 116.76 0)
+			"5x20 15 A fast (panel holder, REAR)"
+			(at 55.88 59.04 270)
 			(effects (font (size 1.27 1.27)))
 		)
-		(property "Footprint" "" (at 45.72 111.76 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 45.72 111.76 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 45.72 111.76 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Footprint" "" (at 55.88 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 55.88 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 55.88 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000052"))
-		(instances
-			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J2") (unit 1)))
-		)
-	)
-	(symbol
-		(lib_id "Device:Fuse")
-		(at 71.12 60.96 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000053")
-		(property "Reference" "F1" (at 71.12 56.96 270) (effects (font (size 1.27 1.27))))
-		(property
-			"Value"
-			"5x20 glass 15 A fast (panel-mount holder, REAR)"
-			(at 71.12 52.96 270)
-			(effects (font (size 1.27 1.27)))
-		)
-		(property "Footprint" "" (at 71.12 60.96 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 71.12 60.96 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 71.12 60.96 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000054"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000055"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000053"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "F1") (unit 1)))
 		)
 	)
 	(symbol
 		(lib_id "Switch:SW_SPST")
-		(at 101.6 60.96 0)
+		(at 76.2 66.04 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000056")
-		(property "Reference" "SW1" (at 101.6 55.96 0) (effects (font (size 1.27 1.27))))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000054")
+		(property "Reference" "SW1" (at 76.2 61.54 0) (effects (font (size 1.27 1.27))))
 		(property
 			"Value"
-			"Ampper 20 A rocker  A=supply+  B=load+  (TOP deck)"
-			(at 87.6 67.96 0)
+			"Ampper 20 A rocker (TOP)  A=supply+  B=load+"
+			(at 76.2 72.04 0)
 			(effects (font (size 1.27 1.27)))
 		)
-		(property "Footprint" "" (at 101.6 60.96 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 101.6 60.96 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 101.6 60.96 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000057"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000058"))
+		(property "Footprint" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000055"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000056"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "SW1") (unit 1)))
 		)
 	)
 	(symbol
 		(lib_id "Device:LED")
-		(at 101.6 81.28 0)
+		(at 87.63 55.88 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000059")
-		(property "Reference" "D1" (at 101.6 77.28 0) (effects (font (size 1.27 1.27))))
-		(property
-			"Value"
-			"dot LED inside SW1 (yellow pin = LED -)"
-			(at 89.6 86.28 0)
-			(effects (font (size 1.27 1.27)))
-		)
-		(property "Footprint" "" (at 101.6 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 101.6 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 101.6 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000060"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000061"))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000057")
+		(property "Reference" "D1" (at 87.63 52.38 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "LED in SW1 (yellow = LED -)" (at 107.63 57.38 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 87.63 55.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 87.63 55.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 87.63 55.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000058"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000059"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "D1") (unit 1)))
 		)
 	)
 	(symbol
 		(lib_id "Connector:Screw_Terminal_01x04")
-		(at 172.72 83.82 0)
+		(at 132.08 63.5 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000062")
-		(property "Reference" "M1" (at 174.72 74.82 0) (effects (font (size 1.27 1.27))))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000060")
+		(property "Reference" "M1" (at 134.08 55.0 0) (effects (font (size 1.27 1.27))))
 		(property
 			"Value"
-			"Peacefair PZEM-031  DC 8-100 V / 0-20 A, built-in shunt  (TOP deck)"
-			(at 148.72 93.82 0)
+			"Peacefair PZEM-031 (TOP)  1 LOAD-  2 DC IN-  3 DC IN+  4 LOAD+"
+			(at 136.08 72.5 0)
 			(effects (font (size 1.27 1.27)))
 		)
-		(property "Footprint" "" (at 172.72 83.82 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 172.72 83.82 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 172.72 83.82 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000063"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000064"))
-		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000065"))
-		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000066"))
+		(property "Footprint" "" (at 132.08 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 132.08 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 132.08 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000061"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000062"))
+		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000063"))
+		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000064"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "M1") (unit 1)))
 		)
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x08")
-		(at 238.76 91.44 0)
+		(at 193.04 73.66 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000067")
-		(property "Reference" "J4" (at 240.76 77.44 0) (effects (font (size 1.27 1.27))))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000065")
+		(property "Reference" "J4" (at 195.04 59.66 0) (effects (font (size 1.27 1.27))))
 		(property
 			"Value"
-			"Amangny pigtail  3x yellow +12 V / 5x black GND  ->  2x 8(6+2) male  (RIGHT wall exit)"
-			(at 208.76 105.44 0)
+			"pigtail = cut Amangny cable (RIGHT wall exit): 5 black GND + 3 yellow +12 V -> 2x 8(6+2) male"
+			(at 191.04 87.66 0)
 			(effects (font (size 1.27 1.27)))
 		)
-		(property "Footprint" "" (at 238.76 91.44 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 238.76 91.44 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 238.76 91.44 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000068"))
-		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000069"))
-		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000070"))
-		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000071"))
-		(pin "5" (uuid "6b2f0c1e-2000-4000-8000-000000000072"))
-		(pin "6" (uuid "6b2f0c1e-2000-4000-8000-000000000073"))
-		(pin "7" (uuid "6b2f0c1e-2000-4000-8000-000000000074"))
-		(pin "8" (uuid "6b2f0c1e-2000-4000-8000-000000000075"))
+		(property "Footprint" "" (at 193.04 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 193.04 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 193.04 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000066"))
+		(pin "2" (uuid "6b2f0c1e-2000-4000-8000-000000000067"))
+		(pin "3" (uuid "6b2f0c1e-2000-4000-8000-000000000068"))
+		(pin "4" (uuid "6b2f0c1e-2000-4000-8000-000000000069"))
+		(pin "5" (uuid "6b2f0c1e-2000-4000-8000-000000000070"))
+		(pin "6" (uuid "6b2f0c1e-2000-4000-8000-000000000071"))
+		(pin "7" (uuid "6b2f0c1e-2000-4000-8000-000000000072"))
+		(pin "8" (uuid "6b2f0c1e-2000-4000-8000-000000000073"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J4") (unit 1)))
 		)
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x01_Socket")
-		(at 238.76 132.08 0)
+		(at 208.28 38.1 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6b2f0c1e-2000-4000-8000-000000000076")
-		(property "Reference" "J3" (at 240.76 128.08 0) (effects (font (size 1.27 1.27))))
+		(uuid "6b2f0c1e-2000-4000-8000-000000000074")
+		(property "Reference" "J3" (at 210.28 35.1 0) (effects (font (size 1.27 1.27))))
 		(property
 			"Value"
-			"PROBE GND  (4 mm binding post, RIGHT wall)"
-			(at 228.76 137.08 0)
+			"PROBE GND  4 mm post (TOP) - scope / DMM reference"
+			(at 210.28 42.1 0)
 			(effects (font (size 1.27 1.27)))
 		)
-		(property "Footprint" "" (at 238.76 132.08 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "" (at 238.76 132.08 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Description" "" (at 238.76 132.08 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000077"))
+		(property "Footprint" "" (at 208.28 38.1 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 208.28 38.1 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Description" "" (at 208.28 38.1 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6b2f0c1e-2000-4000-8000-000000000075"))
 		(instances
 			(project "pcie_rig_power" (path "/6b2f0c1e-1000-4000-8000-000000000000" (reference "J3") (unit 1)))
 		)
