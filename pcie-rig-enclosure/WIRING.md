@@ -19,7 +19,7 @@ The power box for a bench PCIe GPU test rig: a fused, switched, metered 12 V fee
 | — | Kingwin PCIe 1x→16x riser kit (x16 board, x1 card, USB 3.0 lead, SATA→6-pin) | docks on the top deck / drawer | [B07QBF2X6C](https://www.amazon.com/dp/B07QBF2X6C) |
 | — | 12VHPWR 16-pin → 4× 8-pin, for cards with the 16-pin connector | drawer | [B0GYHKK5WS](https://www.amazon.com/dp/B0GYHKK5WS) |
 
-**Wire and consumables:** 12 AWG stranded copper for the internal bus (tinned is nice, not required). Heat-shrink. One zip tie. Ferrules and a crimper, or solder — either is fine at these currents. Four M3 heat-set inserts and M3 screws hold the electronics cup to the footed frame.
+**Wire and consumables:** 12 AWG stranded copper for the internal bus (tinned is nice, not required). Heat-shrink. One zip tie. Ferrules and a crimper, or solder — either is fine at these currents. Four **M3 × 10** screws hold the electronics cup to the footed frame — they self-tap into printed pilots, no inserts. A drop of CA for the two riser dock rails.
 
 ## Where things go
 
@@ -55,11 +55,11 @@ PZEM-031 terminals, top to bottom as printed on its back: **1 LOAD −, 2 DC IN 
 
 1. **Make the pigtail.** Take one Amangny cable and cut the 8-pin *female* end off, leaving the two 8(6+2) males on the other end intact. Strip back the sleeve and separate the bundle: 3 yellow (+12 V), 5 black (GND). Twist and tin each bundle, or ferrule them.
 2. **Dry-fit the panel parts** in the printed cup before wiring anything — meter, rocker, fuse holder, three posts. If something doesn't fit, fix the print, not the part.
-3. **Feed the pigtail** through the right-wall hole from the outside, males out. Leave ~80 mm inside. Cinch a zip tie on the sleeve just inside the wall — that's the strain relief. Trim the tail.
+3. **Feed the pigtail** through the right-wall hole from the outside, males out — both tails go through the one hole, the Y-split stays inside. Leave ~80 mm inside. Cinch a zip tie round both tails just inside the wall — that's the strain relief. Trim the tie's tail.
 4. **Wire the rear**: J1 → F1 → SW1 A (rows 1–2). J2 → M1 terminal 2 (row 4).
 5. **Wire the top**: SW1 B → M1 terminal 3 (row 3). SW1 yellow → GND_IN (row 5).
 6. **Wire the output**: M1 terminal 4 → yellow bundle (row 6). M1 terminal 1 → black bundle *and* J3 (rows 7–8). Heat-shrink every splice.
-7. **Leave slack.** The cup lifts off the frame for service; make sure nothing pulls tight when it does.
+7. **Leave slack.** For service the four side screws come out and the cup lifts off with the shelf; nothing crosses that joint, but make sure no wire pulls tight against the shelf's edge when it does.
 8. **Fuse in, cap on.** 15 A fast-blow.
 
 ## Before first power
