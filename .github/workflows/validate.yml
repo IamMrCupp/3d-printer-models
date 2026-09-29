@@ -30,24 +30,21 @@ jobs:
         with:
           python-version: "3.x"
 
-      # Stock Ubuntu openscad (2021.01). An attempt to use ppa:openscad/releases
-      # for a newer build landed here by accident and broke every PR — that PPA
-      # has no noble (24.04) archive and apt 404s. Reproduce this exact renderer
-      # locally before blaming a model:
-      #   docker run --rm -v "$PWD":/w -w /w ubuntu:24.04 bash -c \
-      #     'apt-get update -qq && apt-get install -y -qq --no-install-recommends \
-      #      openscad xvfb python3 && xvfb-run -a tools/render.sh'
+      # A pinned OpenSCAD development snapshot, not Ubuntu's 2021.01 — the last
+      # stable release, which disagrees with current builds about what's
+      # manifold. Version + sha256 live in tools/install_openscad.sh (shared
+      # with release.yml); it extracts the AppImage, so no FUSE. The earlier
+      # ppa:openscad/releases attempt (658bc7c) 404'd on noble and broke every
+      # PR. Reproduce this exact renderer locally before blaming a model:
+      #   docker run --rm --platform linux/amd64 -v "$PWD":/w -w /w ubuntu:24.04 \
+      #     bash -c 'tools/install_openscad.sh && tools/render.sh'
       - name: Install OpenSCAD + mesh validator
         # Its own tighter cap: this step is ~1 minute healthy, so 10 separates
         # "mirror is stalling" from "a model is slow to render" without reading
-        # logs. DEBIAN_FRONTEND stops apt blocking on a prompt nobody can answer.
+        # logs.
         timeout-minutes: 10
-        env:
-          DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt-get update -o Acquire::Retries=3
-          sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 openscad xvfb
-          openscad --version
+          tools/install_openscad.sh
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
@@ -57,4 +54,4 @@ jobs:
         run: python3 tools/check_catalog.py
 
       - name: Render + validate models
-        run: xvfb-run -a tools/render.sh
+        run: tools/render.sh

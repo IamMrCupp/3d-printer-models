@@ -40,7 +40,7 @@ Rastered cross-sections of the finished bin:
 - **8 pockets**, evenly spaced; octagon **36.40 × 36.40**, corner-⌀ **39.52**; bore **30.40** — matching the modelled pockets within raster resolution
 - single connected body
 - **no supports**: 9.4% overhang against a plain `bin_blank(4,2)`'s 12.8%, with an *identical* 306.7 mm² above 50°. The pockets add no steep overhang — all of it is the standard Gridfinity foot
-- clean on **OpenSCAD 2021.01**, what CI runs
+- clean on **OpenSCAD 2021.01**, CI's renderer until [#166](https://github.com/IamMrCupp/3d-printer-models/issues/166)
 
 ## Eight, not six
 

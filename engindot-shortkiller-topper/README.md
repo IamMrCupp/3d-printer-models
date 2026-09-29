@@ -132,7 +132,7 @@ Butt them together and the coincident faces leave sliver triangles that read as
 non-manifold — and the two OpenSCAD builds this repo has to satisfy disagree
 about *which* rounding construction triggers it, in opposite directions:
 
-| construction | OpenSCAD 2021.01 (CI) | OpenSCAD 2026.06 (dev) |
+| construction | OpenSCAD 2021.01 (CI until [#166](https://github.com/IamMrCupp/3d-printer-models/issues/166)) | OpenSCAD 2026.06 (dev) |
 |---|---|---|
 | hull of four circles | non-manifold | clean |
 | `offset(R) offset(-R)` | clean | non-manifold |
@@ -141,12 +141,13 @@ So neither rounding is at fault and chasing `$fn` is a dead end — an earlier
 version of this file had a whole `$fn` failure map that was really measuring this.
 `lib/gridfinity.scad` had the same bug in its own foot hulls; fixed in #58.
 
-Reproduce CI's exact renderer before blaming a model:
+CI now renders with one pinned OpenSCAD snapshot (`tools/install_openscad.sh`),
+the same build the dev machine runs, so this split no longer gates a PR. Reproduce
+CI's exact renderer before blaming a model:
 
 ```sh
-docker run --rm -v "$PWD":/w -w /w ubuntu:24.04 bash -c \
-  'apt-get update -qq && apt-get install -y -qq --no-install-recommends \
-   openscad xvfb python3 && xvfb-run -a tools/render.sh'
+docker run --rm --platform linux/amd64 -v "$PWD":/w -w /w ubuntu:24.04 \
+  bash -c 'tools/install_openscad.sh && tools/render.sh'
 ```
 
 ## Test coupons — `coupons/`
