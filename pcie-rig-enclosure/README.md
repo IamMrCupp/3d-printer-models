@@ -4,7 +4,7 @@
 
 A **fused, switched, metered 12 V feed** for a bench PCIe GPU test rig, in a 4×4 Clickfinity-footed box. Run a card off external 12 V plus the slot, watch it boot, probe the rails. Keyed **XT60** in and out, banana pairs beside them, a probe-ground post on top, and the riser docked on the deck. Two printed parts plus two small rails; four screws open it.
 
-Wiring is its own document: **[WIRING.md](WIRING.md)**, with the KiCad schematic in [`wiring/`](wiring/).
+The electrical side — KiCad schematic, wiring guide, parts, lead builds — is its own repo: **[pcie-gpu-test-rig](https://github.com/IamMrCupp/pcie-gpu-test-rig)**. This directory is the box it goes in; the panel cutouts here are sized to the parts listed there.
 
 ## Parts
 
@@ -84,4 +84,4 @@ The cup is emitted deck-down. The base is feet-down. Don't flip either.
 
 ## License
 
-CC BY-NC 4.0, like the rest of the models here. The wiring schematic and check script are MIT.
+CC BY-NC 4.0, like the rest of the models here. The check script is MIT. The schematic is MIT, in [pcie-gpu-test-rig](https://github.com/IamMrCupp/pcie-gpu-test-rig).
