@@ -140,7 +140,7 @@ J5_MINUS_Y   = J5_PLUS_Y + 19.05;  // banana OUT -  (black)
 
 /* [Labels] — engraved with lib/label.scad, single colour */
 LABEL_SIZE  = 5;
-LABEL_DEPTH = 0.6;
+LABEL_DEPTH = 0.8;                 // lib default: 4 layers. 0.6 let a two-colour inlay's base show through
 LABEL_LIFT  = 9;                   // label baseline above a hole's centre
 
 /* [Riser dock rails] */

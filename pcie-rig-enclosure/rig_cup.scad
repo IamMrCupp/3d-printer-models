@@ -8,12 +8,15 @@
 //   deck   meter (housing cutout), rocker, probe post, two rail pockets
 //   rear   XT60E-M input (cutout gated on XT60_MEASURED) + 12V IN +/- posts + 5x20 fuse
 //   right  XT60E-F output(s) (gated) + OUT +/- posts
-//   labels engraved: 12V IN, RISER / CARD, OUT, GND, and +/- by every post
+//   labels engraved: 12V IN, FUSE, RISER / CARD, OUT, GND, and +/- by every post.
+//          rig_cup_inlay.scad emits the matching inlays for a second colour.
 //   skirt  the bottom SKIRT_H of wall is REBATE thinner on the inside, all
 //          four sides: it wraps the base's tongue. Four clearance holes for
 //          the horizontal screws.
 
 include <rig_common.scad>
+
+INLAY = false;   // rig_cup_inlay.scad sets this true: emit the label inlays only, same origin
 
 module cup_body() {
     difference() {
@@ -57,12 +60,30 @@ module right_xt60(y, z) { translate([W/2, y, z]) rotate([90, 0, 90]) xt60_cut();
 // read from outside the rear wall. The right wall's outside faces +X: same
 // mirrored label rotated -90 about Z. Deck labels use the flat pocket on the
 // top face and read for someone standing at the front.
-module rear_label(txt, x, z)  { translate([x, D/2, z]) mirror([1, 0, 0]) label_pocket_v(txt, LABEL_SIZE, LABEL_DEPTH); }
-module right_label(txt, y, z) { translate([W/2, y, z]) rotate([0, 0, -90]) mirror([1, 0, 0]) label_pocket_v(txt, LABEL_SIZE, LABEL_DEPTH); }
-module deck_label(txt, x, y)  { translate([x, y, CUP_H]) label_pocket(txt, LABEL_SIZE, LABEL_DEPTH); }
+module _pocket_v(txt) { if (INLAY) label_inlay_v(txt, LABEL_SIZE, LABEL_DEPTH); else label_pocket_v(txt, LABEL_SIZE, LABEL_DEPTH); }
+module _pocket_h(txt) { if (INLAY) label_inlay(txt, LABEL_SIZE, LABEL_DEPTH);   else label_pocket(txt, LABEL_SIZE, LABEL_DEPTH); }
+module rear_label(txt, x, z)  { translate([x, D/2, z]) mirror([1, 0, 0]) _pocket_v(txt); }
+module right_label(txt, y, z) { translate([W/2, y, z]) rotate([0, 0, -90]) mirror([1, 0, 0]) _pocket_v(txt); }
+module deck_label(txt, x, y)  { translate([x, y, CUP_H]) _pocket_h(txt); }
+
+// Every label on the cup, placed once: subtracted from the part, or emitted
+// alone as the second-colour inlay.
+module cup_labels() {
+    rear_label("12V IN", (XT60_IN_X + J2_MINUS_X)/2, WALL_Z + LABEL_LIFT + 2);
+    rear_label("+", J2_PLUS_X, WALL_Z - LABEL_LIFT);
+    rear_label("-", J2_MINUS_X, WALL_Z - LABEL_LIFT);
+    rear_label("FUSE", F1_X, WALL_Z + LABEL_LIFT + 2);
+    for (i = [0 : XT60_OUT_N - 1])
+        right_label(i == 0 ? "RISER" : "CARD", XT60_OUT_Y[i], WALL_Z + LABEL_LIFT + 2);
+    right_label("OUT", (J5_PLUS_Y + J5_MINUS_Y)/2, WALL_Z + LABEL_LIFT + 2);
+    right_label("+", J5_PLUS_Y, WALL_Z - LABEL_LIFT);
+    right_label("-", J5_MINUS_Y, WALL_Z - LABEL_LIFT);
+    deck_label("GND", GND_X, GND_Y - LABEL_LIFT);
+}
 
 module rig_cup() {
-    difference() {
+    if (INLAY) cup_labels();
+    else difference() {
         cup_body();
         deck_cutouts();
         // rear: input
@@ -70,28 +91,15 @@ module rig_cup() {
         rear_hole(J2_PLUS_X, WALL_Z, POST_HOLE);
         rear_hole(J2_MINUS_X, WALL_Z, POST_HOLE);
         rear_hole(F1_X, WALL_Z, FUSE_HOLE);
-        rear_label("FUSE", F1_X, WALL_Z + LABEL_LIFT + 2);
-        rear_label("12V IN", (XT60_IN_X + J2_MINUS_X)/2, WALL_Z + LABEL_LIFT + 2);
-        rear_label("+", J2_PLUS_X, WALL_Z - LABEL_LIFT);
-        rear_label("-", J2_MINUS_X, WALL_Z - LABEL_LIFT);
         // right: outputs
-        for (i = [0 : XT60_OUT_N - 1]) {
-            right_xt60(XT60_OUT_Y[i], WALL_Z);
-            right_label(i == 0 ? "RISER" : "CARD", XT60_OUT_Y[i], WALL_Z + LABEL_LIFT + 2);
-        }
-        rear_or_right_posts();
+        for (i = [0 : XT60_OUT_N - 1]) right_xt60(XT60_OUT_Y[i], WALL_Z);
+        right_hole(J5_PLUS_Y, WALL_Z, POST_HOLE);
+        right_hole(J5_MINUS_Y, WALL_Z, POST_HOLE);
+        cup_labels();
         // skirt screw clearance
         for (s = [-1, 1], y = [-BOSS_Y, BOSS_Y])
             translate([s * (W/2 + 1), y, SCREW_Z]) rotate([0, -s*90, 0]) cylinder(d = SCREW_CLR, h = REBATE + 2);
     }
-}
-module rear_or_right_posts() {
-    right_hole(J5_PLUS_Y, WALL_Z, POST_HOLE);
-    right_hole(J5_MINUS_Y, WALL_Z, POST_HOLE);
-    right_label("OUT", (J5_PLUS_Y + J5_MINUS_Y)/2, WALL_Z + LABEL_LIFT + 2);
-    right_label("+", J5_PLUS_Y, WALL_Z - LABEL_LIFT);
-    right_label("-", J5_MINUS_Y, WALL_Z - LABEL_LIFT);
-    deck_label("GND", GND_X, GND_Y - LABEL_LIFT);
 }
 
 // Print orientation: flip so the deck is on the bed.

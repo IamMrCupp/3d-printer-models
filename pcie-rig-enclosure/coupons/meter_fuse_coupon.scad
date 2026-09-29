@@ -21,9 +21,16 @@
 // the tightest one it goes into without forcing a clip AND whose clips still
 // catch the 3 mm edge. Set METER_CLR_L and FUSE_HOLE in rig_common.scad.
 // The rocker and post should simply fit; if either doesn't, say so before the cup prints.
-// Four separate pieces on the bed, ~20 cm3 together.
+// Four separate pieces on the bed, ~27 cm3 together.
 
+// TWO-COLOUR: coupons/meter_fuse_coupon_inlay.scad emits the letters that fill
+// every pocket flush, at the same origin. Load both STLs as parts of one object
+// in the slicer and give the inlay the second filament. The inlays are the
+// first 4 layers only (text is on the bed face), so it costs a few tool
+// changes at the start of the print.
 include <../rig_common.scad>
+
+INLAY = false;                 // meter_fuse_coupon_inlay.scad sets this true
 
 T      = WALL;                 // same 3 mm the deck is
 BORDER = 6;
@@ -32,38 +39,60 @@ FUSE_LADDER = [11.8, 12.0, 12.2];
 FUSE_TXT    = ["11.8", "12.0", "12.2"];   // str(12.0) prints "12"
 TXT = 3;
 
-// Engraved into the BOTTOM face (z = 0 .. depth), mirrored in X so it reads
-// correctly once the piece is flipped over.
-module bed_label(txt, size) { mirror([1, 0, 0]) mirror([0, 0, 1]) label_pocket(txt, size, LABEL_DEPTH); }
+cut_w   = METER_D + 2*METER_CLR_S;        // short axis, as fitted
+PITCH_Y = cut_w + 2*BORDER + 6;
+STRIP_Y = -2*PITCH_Y - 2;
 
-cut_w  = METER_D + 2*METER_CLR_S;          // short axis, as fitted
+// Text on the BOTTOM face (z = 0 .. depth), mirrored in X so it reads correctly
+// once the piece is turned over. Pocket for the part, inlay for the second colour.
+module bed_text(txt, size) {
+    mirror([1, 0, 0]) mirror([0, 0, 1])
+        if (INLAY) label_inlay(txt, size, LABEL_DEPTH); else label_pocket(txt, size, LABEL_DEPTH);
+}
+
+// Every label on the coupon, placed once, used by both files.
+module labels() {
+    for (i = [0 : 2])
+        translate([0, (i - 1)*PITCH_Y - (cut_w/2 + BORDER/2), 0])
+            bed_text(str(round((METER_W + 2*LADDER_L[i])*100)/100), TXT);
+    translate([0, STRIP_Y, 0]) {
+        translate([-35, -4, 0]) bed_text(str(SW_HOLE), TXT);
+        translate([-15, -4, 0]) bed_text(str(POST_HOLE), TXT);
+        for (i = [0 : 2]) translate([5 + i*17, -4, 0]) bed_text(FUSE_TXT[i], TXT);
+        // the box's real panel words, at the real size and depth
+        translate([0, -16, 0]) bed_text("12V IN  GND  FUSE  OUT  + -", LABEL_SIZE);
+    }
+}
+
 module frame(clr) {
     cut_l = METER_W + 2*clr;
     difference() {
         translate([-(cut_l/2 + BORDER), -(cut_w/2 + BORDER), 0]) cube([cut_l + 2*BORDER, cut_w + 2*BORDER, T]);
         translate([0, 0, -1]) linear_extrude(T + 2) square([cut_l, cut_w], center = true);
-        translate([0, -(cut_w/2 + BORDER/2), 0]) bed_label(str(round(cut_l*100)/100), TXT);
     }
 }
 
-PITCH_Y = cut_w + 2*BORDER + 6;
-for (i = [0 : 2]) translate([0, (i - 1)*PITCH_Y, 0]) frame(LADDER_L[i]);
-
-// hole strip: rocker and post at their chosen sizes, then the fuse ladder,
-// then a row of the box's real panel words at full size
-translate([0, -2*PITCH_Y - 2, 0]) difference() {
-    translate([-(METER_W/2 + LADDER_L[2] + BORDER), -24, 0])
-        cube([METER_W + 2*LADDER_L[2] + 2*BORDER, 48, T]);
-    translate([-35, 12, -1]) cylinder(d = SW_HOLE, h = T + 2);
-    translate([-35, -4, 0]) bed_label(str(SW_HOLE), TXT);
-    translate([-15, 12, -1]) cylinder(d = POST_HOLE, h = T + 2);
-    translate([-15, -4, 0]) bed_label(str(POST_HOLE), TXT);
-    for (i = [0 : 2]) {
-        translate([5 + i*17, 12, -1]) cylinder(d = FUSE_LADDER[i], h = T + 2);
-        translate([5 + i*17, -4, 0]) bed_label(FUSE_TXT[i], TXT);
+// hole strip: rocker and post at their chosen sizes, then the fuse ladder
+module strip() {
+    difference() {
+        translate([-(METER_W/2 + LADDER_L[2] + BORDER), -24, 0])
+            cube([METER_W + 2*LADDER_L[2] + 2*BORDER, 48, T]);
+        translate([-35, 12, -1]) cylinder(d = SW_HOLE, h = T + 2);
+        translate([-15, 12, -1]) cylinder(d = POST_HOLE, h = T + 2);
+        for (i = [0 : 2]) translate([5 + i*17, 12, -1]) cylinder(d = FUSE_LADDER[i], h = T + 2);
     }
-    // panel words, as the box uses them. Negative x reads left once flipped.
-    translate([0, -16, 0]) bed_label("12V IN  GND  FUSE  OUT  + -", LABEL_SIZE);
 }
 
-echo(str("meter_fuse_coupon: meter long axis ", METER_W + 2*LADDER_L[0], " / ", METER_W + 2*LADDER_L[1], " / ", METER_W + 2*LADDER_L[2], " x ", cut_w, "; fuse ", FUSE_LADDER));
+if (INLAY) {
+    labels();
+} else {
+    difference() {
+        union() {
+            for (i = [0 : 2]) translate([0, (i - 1)*PITCH_Y, 0]) frame(LADDER_L[i]);
+            translate([0, STRIP_Y, 0]) strip();
+        }
+        labels();
+    }
+}
+
+echo(str("meter_fuse_coupon", INLAY ? " INLAY" : "", ": meter long axis ", METER_W + 2*LADDER_L[0], " / ", METER_W + 2*LADDER_L[1], " / ", METER_W + 2*LADDER_L[2], " x ", cut_w, "; fuse ", FUSE_LADDER));

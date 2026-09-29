@@ -12,10 +12,11 @@ Wiring is its own document: **[WIRING.md](WIRING.md)**, with the KiCad schematic
 |---|---|---|---|
 | **Base** | `rig_base.scad` | 167.5 × 167.5 × 16.75 mm | ×1 — feet down, no supports. 126 cm³ |
 | **Cup** | `rig_cup.scad` | 167.5 × 167.5 × 43 mm | ×1 — emitted deck-down, no supports. 139 cm³ |
+| **Cup labels** | `rig_cup_inlay.scad` | — | optional second colour — load as a part of the cup, same origin, assign the second filament. 28 letters, 0.2 cm³ |
 | **Dock rail** | `rig_dock_rail.scad` | 10 × 47 × 6.4 mm | ×2 — pegs up. 0.7 cm³ each |
 | **Deck coupon** | `coupons/deck_coupon.scad` | 140 × 100 × 3 mm | **print first** — every panel hole with a fit ladder, plus a label. 27 cm³ |
 | **Rail ladder** | `coupons/dock_rail_ladder.scad` | 52 × 47 × 6.4 mm | **print first** — four rails at four peg sizes. 3 cm³ |
-| **Meter + fuse coupon** | `coupons/meter_fuse_coupon.scad` | 98 × 244 × 3 mm | **print second** — three meter frames stepping the long axis, the fuse ladder, the rocker + post at their chosen sizes, and a row of the panel words at full size. All text is on the **bed face**, mirrored, the way the deck's labels print. Four pieces. 27 cm³ |
+| **Meter + fuse coupon** | `coupons/meter_fuse_coupon.scad` | 98 × 244 × 3 mm | **print second** — three meter frames stepping the long axis, the fuse ladder, the rocker + post at their chosen sizes, and a row of the panel words at full size. All text is on the **bed face**, mirrored, the way the deck's labels print. Four pieces. 27 cm³. `meter_fuse_coupon_inlay.scad` is its second colour |
 | **Joint coupon** | `coupons/joint_coupon.scad` | 88 × 40 × 16.75 mm | **print first** — a corner of the base and the matching corner of the cup: skirt fit + screw. Two pieces. 16 cm³ |
 
 About 265 cm³ for the box, all PETG. Assembled it stands 51 mm above the plate's socket floor.
@@ -23,7 +24,7 @@ About 265 cm³ for the box, all PETG. Assembled it stands 51 mm above the plate'
 ## How it goes together
 
 - **Base.** A footed floor plate with a 1.5 mm tongue standing 9 mm up round its edge and four screw bosses behind it. Latching feet in the four corners only — sixteen would need ~195 N to lift — with ribs bearing on the plate's grid walls between them, the same pattern as the filler tiles. The WAGO ground bus sits on this floor, on its wires.
-- **Cup.** Deck plus four walls, open bottom, with its bottom 9 mm thinned into a skirt that wraps the tongue, flush outside. **Every electrical part is on this one piece** — meter, switch and probe post on the deck, XT60 and banana input on the rear wall, XT60 and banana output on the right — so the wiring never crosses a joint. Labels are engraved 0.6 deep. Prints upside down, deck on the bed, so the cutouts come out in the first layers.
+- **Cup.** Deck plus four walls, open bottom, with its bottom 9 mm thinned into a skirt that wraps the tongue, flush outside. **Every electrical part is on this one piece** — meter, switch and probe post on the deck, XT60, banana input and fuse on the rear wall, XT60 and banana output on the right — so the wiring never crosses a joint. Labels are engraved 0.8 deep, and `rig_cup_inlay.scad` fills them flush in a second colour: the deck's GND is the first four layers on the bed, the wall labels cost a tool change per layer they cross. Prints upside down, deck on the bed, so the cutouts come out in the first layers.
 - **Joint.** Four **M3 × 10** screws go in horizontally from outside, through the skirt and tongue, self-tapping into the bosses. The box stays latched to the grid for service: screws out, cup lifts off with its wiring intact. No heat-set inserts.
 - **Riser dock.** The x16 board has its slot flush along one edge, capacitors crowding the other and the 6-pin and USB filling an end, so there's no edge to clip. It has four mounting holes on a 99 × 37 pitch instead. Two rails, two pegs each, CA'd into flush pockets on the deck; the board lies on its own foam pad with the pegs through it. Separate parts because a peg can't grow off the face that's on the bed.
 
