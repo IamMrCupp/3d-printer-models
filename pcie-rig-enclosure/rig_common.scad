@@ -1,8 +1,8 @@
 // rig_common.scad — shared dimensions and modules for the PCIe test-rig power box.
 //
 // A fused, switched, metered 12 V feed for a bench PCIe GPU test rig, in a
-// 4x4 Clickfinity-footed box. Wiring is in WIRING.md and
-// wiring/pcie_rig_power.kicad_sch; this file is the geometry.
+// 4x4 Clickfinity-footed box. Wiring lives in github.com/IamMrCupp/pcie-gpu-test-rig
+// (WIRING.md, wiring/pcie_rig_power.kicad_sch); this file is the geometry.
 //
 // TWO PRINTED PARTS + two small rails:
 //
