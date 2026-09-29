@@ -101,9 +101,8 @@ GND_X   =  66;  GND_Y   = -64;         // probe post — front-right corner, cle
 /* [Component dimensions — MEASURED] */
 METER_W = 84.29; METER_D = 44.50; METER_DEPTH = 24.45;   // housing behind the bezel
 METER_CLR_S = 0.30;   // per side, SHORT axis — fitted on the deck coupon 2026-09-28
-METER_CLR_L = 0.75;   // per side, LONG axis. 0.30 bound so hard a retainer clip nearly broke
-                      // (deck coupon, 2026-09-28). Ladder 0.50 / 0.75 / 1.00 on
-                      // coupons/meter_fuse_coupon.scad decides; 0.75 is its middle step.
+METER_CLR_L = 0.75;   // per side, LONG axis. FITTED 2026-09-29: 85.79 snaps in tight and
+                      // comes out clean (meter_fuse_coupon). 0.30 bound so hard a clip nearly broke.
 SW_BODY   = 20.87;  SW_CLIP = 22.88;  SW_DEPTH = 23.3;   // body / relaxed clips / below deck
 POST_THREAD = 7.45; POST_LEN = 19;                       // 4 mm binding post
 FUSE_THREAD = 11.6; FUSE_LEN = 26;                       // 5x20 panel fuse holder (owned)
@@ -122,7 +121,7 @@ XT60_BODY_IN = undef;                  // depth behind the panel, for check_asse
 /* [Holes — nominal; the coupon's ladder picks the final value] */
 SW_HOLE   = 21.3;   // body 20.87. FITTED: largest step of the deck coupon ladder, 2026-09-28
 POST_HOLE = 7.6;    // thread 7.45. FITTED: all three steps passed; tightest wins, the nut clamps
-FUSE_HOLE = 11.9;   // 5x20 panel holder, thread 11.6. Ladder 11.8 / 12.0 / 12.2 on meter_fuse_coupon
+FUSE_HOLE = 11.8;   // 5x20 panel holder, thread 11.6. FITTED 2026-09-29 (tight); 12.0 is the fallback
 PEG_D     = 3.8;    // hole 3.98. Ladder 3.6 / 3.7 / 3.8 / 3.9 on coupons/dock_rail_ladder.scad
 
 /* [Rear wall — 12 V input] — x across the wall, z above the cup's skirt bottom */

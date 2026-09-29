@@ -48,13 +48,13 @@ Every component number came off calipers on the real part (survey 2026-09-27):
 | Part | Measured | Hole in the model |
 |---|---|---|
 | Ampper rocker | body 20.87, clips relaxed 22.88, 23.3 below deck | `SW_HOLE` **21.3** — fitted on the deck coupon |
-| PZEM-031 meter | housing 84.29 × 44.50, 24.45 deep; bezel 89 × 49 | short axis +0.30/side (fitted); long axis +0.30 **bound hard enough to nearly break a clip** → `METER_CLR_L` 0.75, ladder on the second coupon |
+| PZEM-031 meter | housing 84.29 × 44.50, 24.45 deep; bezel 89 × 49 | short axis +0.30/side, long axis **+0.75/side** (85.79 — tight snap, clean removal). Both fitted. The first try at +0.30 long nearly broke a clip |
 | 4 mm binding post | thread 7.45, 19 long | `POST_HOLE` **7.6** — all three steps passed, tightest wins |
-| 5×20 panel fuse holder | thread 11.6, 26 long | `FUSE_HOLE` 11.9, ladder on the second coupon |
+| 5×20 panel fuse holder | thread 11.6, 26 long | `FUSE_HOLE` **11.8** — fitted (tight) |
 | XT60E-M / XT60E-F panel connectors | **not yet in hand** | **no cutout** — `XT60_MEASURED = false` gates them; positions are reserved |
 | riser x16 board | 126.55 × 43.20, holes ⌀3.98 on 99 × 37, 4.0 thick with its foam | `PEG_D` 3.8 |
 
-The hole sizes are nominal. **The coupon decides them.** The XT60 cutouts don't exist in the model until the connectors have been calipered — a plausible number there is exactly how two printed parts got scrapped in August.
+Every panel hole except the XT60s has now been fitted on a printed coupon. The XT60 cutouts don't exist in the model until the connectors have been calipered — a plausible number there is exactly how two printed parts got scrapped in August.
 
 ## Print order
 
