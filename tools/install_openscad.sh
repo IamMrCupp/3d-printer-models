@@ -7,7 +7,9 @@
 #     tools/install_openscad.sh        # then: openscad --version
 #
 # Shared by .github/workflows/validate.yml, release.yml, and the local Docker
-# repro, so every renderer that gates or ships a model is the same build:
+# repro, so every renderer that gates or ships a model is the same build. The
+# dev machine's own 2026.09.23 renders identical meshes, so it needs none of
+# this; the Docker line is for any other machine:
 #
 #     docker run --rm --platform linux/amd64 -v "$PWD":/w -w /w ubuntu:24.04 \
 #       bash -c 'tools/install_openscad.sh && tools/render.sh'

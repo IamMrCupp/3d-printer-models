@@ -142,8 +142,10 @@ version of this file had a whole `$fn` failure map that was really measuring thi
 `lib/gridfinity.scad` had the same bug in its own foot hulls; fixed in #58.
 
 CI now renders with one pinned OpenSCAD snapshot (`tools/install_openscad.sh`),
-the same build the dev machine runs, so this split no longer gates a PR. Reproduce
-CI's exact renderer before blaming a model:
+the same build the dev machine runs, so this split no longer gates a PR and a local
+`tools/render.sh` on that build is the CI check. Anywhere else, reproduce CI's exact
+renderer before blaming a model (faithful under amd64 emulation on Apple Silicon too;
+the old 2021.01 repro was not — it disagreed with native CI on 13 files):
 
 ```sh
 docker run --rm --platform linux/amd64 -v "$PWD":/w -w /w ubuntu:24.04 \

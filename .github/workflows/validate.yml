@@ -35,7 +35,9 @@ jobs:
       # manifold. Version + sha256 live in tools/install_openscad.sh (shared
       # with release.yml); it extracts the AppImage, so no FUSE. The earlier
       # ppa:openscad/releases attempt (658bc7c) 404'd on noble and broke every
-      # PR. Reproduce this exact renderer locally before blaming a model:
+      # PR. The dev machine's own 2026.09.23 build renders identical volumes
+      # and bounding boxes (all 121 model files, #166), so a local
+      # tools/render.sh is the CI check. Anywhere else, reproduce it with:
       #   docker run --rm --platform linux/amd64 -v "$PWD":/w -w /w ubuntu:24.04 \
       #     bash -c 'tools/install_openscad.sh && tools/render.sh'
       - name: Install OpenSCAD + mesh validator
