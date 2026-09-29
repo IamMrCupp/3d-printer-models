@@ -122,7 +122,7 @@ XT60_BODY_IN = undef;                  // depth behind the panel, for check_asse
 SW_HOLE   = 21.3;   // body 20.87. FITTED: largest step of the deck coupon ladder, 2026-09-28
 POST_HOLE = 7.6;    // thread 7.45. FITTED: all three steps passed; tightest wins, the nut clamps
 FUSE_HOLE = 11.8;   // 5x20 panel holder, thread 11.6. FITTED 2026-09-29 (tight); 12.0 is the fallback
-PEG_D     = 3.8;    // hole 3.98. Ladder 3.6 / 3.7 / 3.8 / 3.9 on coupons/dock_rail_ladder.scad
+PEG_D     = 3.8;    // hole 3.98. FITTED 2026-09-29: every rail on the ladder held; 3.8 chosen for margin
 
 /* [Rear wall — 12 V input] — x across the wall, z above the cup's skirt bottom */
 WALL_Z   = CUP_IN_H/2;             // dead centre of the electronics bay wall
