@@ -46,20 +46,16 @@ module deck_cutouts() {
 }
 
 // An XT60E panel cutout: body rectangle + two ear holes. Only once measured.
-module xt60_cut() {
+//   x = [cut W, cut H, ear pitch, ear dia, depth]
+module xt60_cut(x) {
     if (XT60_MEASURED) {
-        cube([XT60_CUT_W, XT60_CUT_H, WALL*3], center = true);
-        for (sx = [-1, 1]) translate([sx*XT60_EAR_PITCH/2, 0, 0]) cylinder(d = XT60_EAR_D, h = WALL*3, center = true);
+        cube([x[0], x[1], WALL*3], center = true);
+        for (sx = [-1, 1]) translate([sx*x[2]/2, 0, 0]) cylinder(d = x[3], h = WALL*3, center = true);
     }
 }
-module rear_xt60(x, z)  { translate([x, D/2, z]) rotate([90, 0, 0]) xt60_cut(); }
-module right_xt60(y, z) { translate([W/2, y, z]) rotate([90, 0, 90]) xt60_cut(); }
+module rear_xt60(x, z)  { translate([x, D/2, z]) rotate([90, 0, 0]) xt60_cut(XT60M); }
+module right_xt60(y, z) { translate([W/2, y, z]) rotate([90, 0, 90]) xt60_cut(XT60F); }
 
-// Engraved labels. lib's label_pocket_v() faces +Y but reads correctly from
-// INSIDE (-Y) — checked by projecting an "L" — so it is mirrored in X here to
-// read from outside the rear wall. The right wall's outside faces +X: same
-// mirrored label rotated -90 about Z. Deck labels use the flat pocket on the
-// top face and read for someone standing at the front.
 module _pocket_v(txt) { if (INLAY) label_inlay_v(txt, LABEL_SIZE, LABEL_DEPTH); else label_pocket_v(txt, LABEL_SIZE, LABEL_DEPTH); }
 module _pocket_h(txt) { if (INLAY) label_inlay(txt, LABEL_SIZE, LABEL_DEPTH);   else label_pocket(txt, LABEL_SIZE, LABEL_DEPTH); }
 module rear_label(txt, x, z)  { translate([x, D/2, z]) mirror([1, 0, 0]) _pocket_v(txt); }
@@ -116,5 +112,5 @@ assert(SW_X - 23/2 > METER_X + 89/2, "rocker bezel overlaps the meter bezel");
 assert(GND_X + 6 < W/2 - WALL && GND_Y - 6 > -(D/2 - WALL), "probe post nut hits a wall");
 assert(GND_Y + 6 < XT60_OUT_Y[0] - 12, "probe post nut sits where the RISER output's body comes through");
 assert(XT60_OUT_N == 1 || XT60_OUT_Y[1] - XT60_OUT_Y[0] >= 25, "XT60 outputs too close together");
-if (!XT60_MEASURED) echo("WARNING: XT60 cutouts NOT cut — XT60_MEASURED is false. Caliper the connectors and fill XT60_* in rig_common.scad.");
+if (!XT60_MEASURED) echo("WARNING: XT60 cutouts NOT cut — XT60_MEASURED is false. Caliper both connectors, fill XT60M / XT60F in rig_common.scad, print coupons/xt60_coupon.scad.");
 echo(str("rig_cup: ", W, " x ", D, " x ", CUP_H, " mm, deck ", WALL, " thick, ", CUP_IN_H, " clear above the base floor, skirt ", SKIRT_H));

@@ -69,9 +69,9 @@ module C_fuse() translate([F1_X, D/2 - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) 
 }
 // XT60 bodies behind the panel — only once measured (undef otherwise)
 module C_xt60() if (XT60_MEASURED) {
-    translate([XT60_IN_X, D/2 - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) translate([0, 0, 0]) linear_extrude(XT60_BODY_IN) square([XT60_CUT_W, XT60_CUT_H], center = true);
+    translate([XT60_IN_X, D/2 - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) linear_extrude(XT60M[4]) square([XT60M[0], XT60M[1]], center = true);
     for (i = [0 : XT60_OUT_N - 1])
-        translate([W/2 - IN, XT60_OUT_Y[i], Z_CUP0 + WALL_Z]) rotate([0, -90, 0]) linear_extrude(XT60_BODY_IN) square([XT60_CUT_H, XT60_CUT_W], center = true);
+        translate([W/2 - IN, XT60_OUT_Y[i], Z_CUP0 + WALL_Z]) rotate([0, -90, 0]) linear_extrude(XT60F[4]) square([XT60F[1], XT60F[0]], center = true);
 }
 module C_riser()  translate([RISER_X, RISER_Y, Z_DECK + IN]) linear_extrude(RISER_T) square([RISER_L, RISER_W], center = true);
 // a 2.5 rod down every screw axis: passes the 3.4 clearance AND the 2.6 pilot

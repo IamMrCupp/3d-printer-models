@@ -115,8 +115,11 @@ RISER_HOLE_PITCH_L = 99;  RISER_HOLE_PITCH_W = 37;  RISER_HOLE_D = 3.98;
 // walls carry no XT60 cutout at all — a plausible number here is exactly how
 // two printed parts got scrapped in August. Positions are reserved below.
 XT60_MEASURED = false;
-XT60_CUT_W = undef;  XT60_CUT_H = undef;  XT60_EAR_PITCH = undef;  XT60_EAR_D = undef;
-XT60_BODY_IN = undef;                  // depth behind the panel, for check_assembly
+// Filled per gender from calipers — they may differ. Each is
+//   [body cut W, body cut H, ear hole pitch, ear hole dia, depth behind panel]
+// W runs along the wall, H up it.
+XT60M = [undef, undef, undef, undef, undef];   // XT60E-M, rear wall (input)
+XT60F = [undef, undef, undef, undef, undef];   // XT60E-F, right wall (outputs)
 
 /* [Holes — nominal; the coupon's ladder picks the final value] */
 SW_HOLE   = 21.3;   // body 20.87. FITTED: largest step of the deck coupon ladder, 2026-09-28
