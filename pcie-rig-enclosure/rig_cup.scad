@@ -6,7 +6,7 @@
 // the first layers and the walls carry straight up. No supports.
 //
 //   deck   meter (housing cutout), rocker, probe post, two rail pockets
-//   rear   XT60E-M input (cutout gated on XT60_MEASURED) + 12V IN +/- posts
+//   rear   XT60E-M input (cutout gated on XT60_MEASURED) + 12V IN +/- posts + 5x20 fuse
 //   right  XT60E-F output(s) (gated) + OUT +/- posts
 //   labels engraved: 12V IN, RISER / CARD, OUT, GND, and +/- by every post
 //   skirt  the bottom SKIRT_H of wall is REBATE thinner on the inside, all
@@ -33,7 +33,7 @@ module deck_cutouts() {
     z0 = CUP_IN_H - 1; h = WALL + 2;
     // meter housing, with clearance per side
     translate([METER_X, METER_Y, z0]) linear_extrude(h)
-        square([METER_W + 2*METER_CLR, METER_D + 2*METER_CLR], center = true);
+        square([METER_W + 2*METER_CLR_L, METER_D + 2*METER_CLR_S], center = true);
     translate([SW_X, SW_Y, z0])  cylinder(d = SW_HOLE, h = h);
     translate([GND_X, GND_Y, z0]) cylinder(d = POST_HOLE, h = h);
     // rail pockets, recessed into the deck's top face
@@ -69,6 +69,8 @@ module rig_cup() {
         rear_xt60(XT60_IN_X, WALL_Z);
         rear_hole(J2_PLUS_X, WALL_Z, POST_HOLE);
         rear_hole(J2_MINUS_X, WALL_Z, POST_HOLE);
+        rear_hole(F1_X, WALL_Z, FUSE_HOLE);
+        rear_label("FUSE", F1_X, WALL_Z + LABEL_LIFT + 2);
         rear_label("12V IN", (XT60_IN_X + J2_MINUS_X)/2, WALL_Z + LABEL_LIFT + 2);
         rear_label("+", J2_PLUS_X, WALL_Z - LABEL_LIFT);
         rear_label("-", J2_MINUS_X, WALL_Z - LABEL_LIFT);
@@ -96,8 +98,9 @@ module rear_or_right_posts() {
 translate([0, 0, CUP_H]) rotate([180, 0, 0]) rig_cup();
 
 // Fit sanity, so a layout edit can't silently walk a part into a wall.
-assert(abs(METER_X) + METER_W/2 + METER_CLR < W/2 - WALL, "meter housing hits a side wall");
-assert(abs(METER_Y) + METER_D/2 + METER_CLR < D/2 - WALL, "meter housing hits the front/rear wall");
+assert(abs(METER_X) + METER_W/2 + METER_CLR_L < W/2 - WALL, "meter housing hits a side wall");
+assert(abs(METER_Y) + METER_D/2 + METER_CLR_S < D/2 - WALL, "meter housing hits the front/rear wall");
+assert(F1_X - 8 > J2_MINUS_X + 6 && F1_X + 8 < W/2 - WALL, "fuse holder crowds a post or the wall");
 assert(METER_DEPTH < CUP_IN_H - 5, "meter needs more room under the deck");
 assert(abs(RISER_X) + RISER_L/2 <= W/2, "riser board overhangs the deck");
 assert(RISER_Y - RISER_W/2 > METER_Y + 49/2, "riser board sits on the meter bezel");

@@ -100,9 +100,13 @@ GND_X   =  66;  GND_Y   = -64;         // probe post — front-right corner, cle
 
 /* [Component dimensions — MEASURED] */
 METER_W = 84.29; METER_D = 44.50; METER_DEPTH = 24.45;   // housing behind the bezel
-METER_CLR = 0.30;                                        // per side; spring clips forgive slop
+METER_CLR_S = 0.30;   // per side, SHORT axis — fitted on the deck coupon 2026-09-28
+METER_CLR_L = 0.75;   // per side, LONG axis. 0.30 bound so hard a retainer clip nearly broke
+                      // (deck coupon, 2026-09-28). Ladder 0.50 / 0.75 / 1.00 on
+                      // coupons/meter_fuse_coupon.scad decides; 0.75 is its middle step.
 SW_BODY   = 20.87;  SW_CLIP = 22.88;  SW_DEPTH = 23.3;   // body / relaxed clips / below deck
 POST_THREAD = 7.45; POST_LEN = 19;                       // 4 mm binding post
+FUSE_THREAD = 11.6; FUSE_LEN = 26;                       // 5x20 panel fuse holder (owned)
 RISER_L = 126.55; RISER_W = 43.20; RISER_T = 4.0;        // PCB + factory foam pad
 RISER_HOLE_PITCH_L = 99;  RISER_HOLE_PITCH_W = 37;  RISER_HOLE_D = 3.98;
 
@@ -116,8 +120,9 @@ XT60_CUT_W = undef;  XT60_CUT_H = undef;  XT60_EAR_PITCH = undef;  XT60_EAR_D = 
 XT60_BODY_IN = undef;                  // depth behind the panel, for check_assembly
 
 /* [Holes — nominal; the coupon's ladder picks the final value] */
-SW_HOLE   = 21.0;   // body 20.87. Ladder 20.9 / 21.1 / 21.3
-POST_HOLE = 7.7;    // thread 7.45. Ladder 7.6 / 7.8 / 8.0
+SW_HOLE   = 21.3;   // body 20.87. FITTED: largest step of the deck coupon ladder, 2026-09-28
+POST_HOLE = 7.6;    // thread 7.45. FITTED: all three steps passed; tightest wins, the nut clamps
+FUSE_HOLE = 11.9;   // 5x20 panel holder, thread 11.6. Ladder 11.8 / 12.0 / 12.2 on meter_fuse_coupon
 PEG_D     = 3.8;    // hole 3.98. Ladder 3.6 / 3.7 / 3.8 / 3.9 on coupons/dock_rail_ladder.scad
 
 /* [Rear wall — 12 V input] — x across the wall, z above the cup's skirt bottom */
@@ -125,6 +130,7 @@ WALL_Z   = CUP_IN_H/2;             // dead centre of the electronics bay wall
 XT60_IN_X = -45;                   // XT60E-M
 J2_PLUS_X =  15;                   // banana IN +  (red)
 J2_MINUS_X = J2_PLUS_X + 19.05;    // banana IN -  (black), standard pair pitch
+F1_X      =  60;                   // 5x20 panel fuse holder — swap a fuse without opening the box
 
 /* [Right wall — output] — y along the wall (front -, rear +) */
 XT60_OUT_N   = 2;                  // [1:2] XT60E-F outputs, in parallel behind the switch

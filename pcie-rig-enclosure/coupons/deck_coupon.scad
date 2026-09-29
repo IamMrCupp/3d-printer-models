@@ -11,6 +11,9 @@
 //
 // Push each part into its ladder, note which hole fits, set SW_HOLE /
 // POST_HOLE in rig_common.scad to match, then print the box.
+//
+// RESULT 2026-09-28: rocker 21.3, posts 7.6 (all passed), meter cutout too
+// tight on the long axis -> coupons/meter_fuse_coupon.scad. Kept as printed.
 // About 34 cm3 — a fraction of the 600 g it protects.
 
 include <../rig_common.scad>
@@ -24,7 +27,7 @@ difference() {
     translate([-PLATE_W/2, -PLATE_D/2, 0]) cube([PLATE_W, PLATE_D, T]);
     // meter housing
     translate([-15, 22, -1]) linear_extrude(T + 2)
-        square([METER_W + 2*METER_CLR, METER_D + 2*METER_CLR], center = true);
+        square([METER_W + 2*0.30, METER_D + 2*0.30], center = true);   // as printed 2026-09-28: long axis too tight
     // rocker ladder
     for (i = [0 : 2]) translate([-48 + i*27, -16, -1]) cylinder(d = SW_LADDER[i], h = T + 2);
     // binding post ladder

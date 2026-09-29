@@ -4,7 +4,7 @@ The power box for a bench PCIe GPU test rig: a fused, switched, metered 12 V fee
 
 ![Schematic](wiring/pcie_rig_power.svg)
 
-**What it is, and isn't.** The source is an OWON bench supply set to **12.0 V, OVP ~12.6 V, current limit 5 A** — Northwest Repair's ceiling, and the right one for watching a card come up without letting a short cook anything. A 5 A blade fuse in the box is the backstop. Everything else in the path is overrated on purpose: 20 A switch, 30 A connectors, 14 AWG wire. This is a diagnostic rig, not a load tester.
+**What it is, and isn't.** The source is an OWON bench supply set to **12.0 V, OVP ~12.6 V, current limit 6 A** — the rig's working ceiling, and plenty for watching a card come up without letting a short cook anything. It never carries full boot current. An **8 A** fast-blow fuse on the rear panel is the backstop; the kit goes 5 → 8 A, and 5 would blow in normal use. Everything else in the path is overrated on purpose: 20 A switch, 30 A connectors, 14 AWG wire. This is a diagnostic rig, not a load tester.
 
 ## Parts
 
@@ -12,7 +12,7 @@ The power box for a bench PCIe GPU test rig: a fused, switched, metered 12 V fee
 |---|---|---|---|
 | **J1** | **XT60E-M** panel-mount, male — 12 V IN. The PSU lead ends in a female XT60H | rear wall | ordered ×2 (1 spare) |
 | **J2a, J2b** | 4 mm binding posts, red + black — 12 V IN, in parallel with J1 | rear wall | uxcell 10-pack, [B08LN5T9D7](https://www.amazon.com/dp/B08LN5T9D7) |
-| **F1** | inline blade fuse holder + **5 A** fuse (7.5 A at most) | inside, on the + input wire | to get |
+| **F1** | 5×20 mm panel-mount fuse holder, screw cap + **8 A** fast-blow glass fuse | rear wall | Gebildet kit (owned), [B07VT4VRW7](https://www.amazon.com/dp/B07VT4VRW7) |
 | **M1** | Peacefair **PZEM-031** — DC 8–100 V / 0–20 A, LCD, built-in shunt | top deck | sold as HiLetgo, [B079JVGRSL](https://www.amazon.com/dp/B079JVGRSL) |
 | **SW1** | Ampper 20 mm round rocker, 12 V 20 A, 3-pin, illuminated dot | top deck | [B0BZPY5D9L](https://www.amazon.com/dp/B0BZPY5D9L) |
 | **W1** | **WAGO 221-415** five-port lever nut — the ground bus | inside | from the 221 assortment |
@@ -29,9 +29,9 @@ The power box for a bench PCIe GPU test rig: a fused, switched, metered 12 V fee
 | Face | Carries |
 |---|---|
 | **Top deck** | M1, SW1, J6, and the riser dock |
-| **Rear** | J1, J2a, J2b |
+| **Rear** | J1, J2a, J2b, F1 — swap a fuse without opening the box |
 | **Right** | J3, J4, J5a, J5b |
-| **Inside** | F1 on the + input wire, W1 on the base floor |
+| **Inside** | W1 on the base floor |
 
 The top is fixed — service is four screws on the sides and the cup lifts off its base with all its wiring intact. Nothing that carries current is on a part you remove to get at something else.
 
@@ -81,8 +81,8 @@ Beep every lead end-to-end before it touches a card: + to every yellow pin, − 
 4. **Meter to switch** (row 4): M1.4 → spade → SW1 A.
 5. **Outputs** (row 5): SW1 B → J3 +, J4 +, J5a.
 6. **Ground bus** (rows 6–11): M1.1 into W1 port 5, then one lever per consumer. LED yellow onto J5b's terminal.
-7. **Fuse in.** 5 A blade.
-8. **Leave slack.** For service the four side screws come out and the cup lifts off the base. F1 and W1 stay on the base floor, so the wires to them need enough length to lift the cup clear without pulling on a terminal.
+7. **Fuse in.** 8 A fast-blow, 5×20, through the cap on the rear panel.
+8. **Leave slack.** For service the four side screws come out and the cup lifts off the base. W1 stays on the base floor, so the wires to it need enough length to lift the cup clear without pulling on a lever.
 
 ## Before first power
 
@@ -93,13 +93,13 @@ Do these with nothing plugged into J1 or J2.
 - **No shorts.** + bus to − bus reads open, rocker on and off. J1 + to J1 − reads open.
 - **The rocker's yellow** does not beep to A or B.
 
-Then: OWON at 12.0 V, OVP 12.6 V, current limit turned down to 0.5 A for this step, into J1 or J2 — **nothing on the outputs.** The meter wakes reading ~12 V, 0.00 A. Rocker on: the dot lights, outputs read 12 V. Rocker off: outputs dead, meter still lit. Raise the limit to 5 A. Only now does a lead go on.
+Then: OWON at 12.0 V, OVP 12.6 V, current limit turned down to 0.5 A for this step, into J1 or J2 — **nothing on the outputs.** The meter wakes reading ~12 V, 0.00 A. Rocker on: the dot lights, outputs read 12 V. Rocker off: outputs dead, meter still lit. Raise the limit to 6 A. Only now does a lead go on.
 
 ## Limits
 
-- **5 A working limit**, set at the supply. Fuse at 5 A, 7.5 A at most. Never above the meter's 20 A.
+- **6 A working limit**, set at the supply. Fuse at 8 A fast-blow. Never above the meter's 20 A.
 - The meter needs ≥ 8 V to run. Below that it goes dark; the rig still passes power.
-- Everything downstream of an XT60 runs on the lead's 18 AWG yellows. Fine at 5 A. Fine at 20. Not at 30.
+- Everything downstream of an XT60 runs on the lead's 18 AWG yellows. Fine at 6 A. Fine at 20. Not at 30.
 - If the rig is ever fed from something other than the OWON, add a reverse-polarity module on the input first. XT60 is keyed; banana posts are not.
 
 ## Files

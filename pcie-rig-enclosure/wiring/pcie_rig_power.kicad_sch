@@ -1108,14 +1108,14 @@
 		(uuid "6b2f0c1e-2000-4000-8000-000000000063")
 	)
 	(text
-		"inline blade fuse holder, 5 A (7.5 A max)"
+		"5x20 mm panel fuse holder, 8 A fast-blow glass fuse"
 		(exclude_from_sim no)
 		(at 33.019999999999996 125.72999999999999 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
 		(uuid "6b2f0c1e-2000-4000-8000-000000000064")
 	)
 	(text
-		"inside, on the + input wire"
+		"rear wall"
 		(exclude_from_sim no)
 		(at 170.18 125.72999999999999 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
@@ -1325,7 +1325,7 @@
 		(uuid "6b2f0c1e-2000-4000-8000-000000000094")
 	)
 	(text
-		"Supply: OWON at 12.0 V, OVP 12.6 V, 5 A current limit. F1 5 A blade. J4 is optional."
+		"Supply: OWON at 12.0 V, OVP 12.6 V, 6 A current limit (the working max). F1 8 A fast 5x20. J4 is optional."
 		(exclude_from_sim no)
 		(at 20.32 182.88 0)
 		(effects (font (size 1.4 1.4)) (justify left bottom))
@@ -1399,7 +1399,7 @@
 		(dnp no)
 		(uuid "6b2f0c1e-2000-4000-8000-000000000103")
 		(property "Reference" "F1" (at 76.2 62.54 270) (effects (font (size 1.27 1.27))))
-		(property "Value" "5 A blade" (at 76.2 59.04 270) (effects (font (size 1.27 1.27))))
+		(property "Value" "5x20  8 A" (at 76.2 59.04 270) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "" (at 76.2 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))

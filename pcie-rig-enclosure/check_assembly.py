@@ -62,6 +62,11 @@ module C_nuts() {
         translate([W/2 - WALL - IN, y, Z_CUP0 + WALL_Z]) rotate([0, -90, 0]) cylinder(d = 12, h = 4);
     translate([GND_X, GND_Y, Z_DECK - WALL - IN - 4]) cylinder(d = 12, h = 4);
 }
+// 5x20 fuse holder body, from the rear wall inward, and its nut
+module C_fuse() translate([F1_X, D/2 - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) {
+    cylinder(d = FUSE_THREAD, h = FUSE_LEN - 2*IN);
+    translate([0, 0, WALL]) cylinder(d = 16, h = 4);
+}
 // XT60 bodies behind the panel — only once measured (undef otherwise)
 module C_xt60() if (XT60_MEASURED) {
     translate([XT60_IN_X, D/2 - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) translate([0, 0, 0]) linear_extrude(XT60_BODY_IN) square([XT60_CUT_W, XT60_CUT_H], center = true);
@@ -88,6 +93,9 @@ CHECKS = [
     ("posts x cup",          "C_posts()",  "P_cup()"),
     ("nuts x cup",           "C_nuts()",   "P_cup()"),
     ("nuts x meter/switch",  "C_nuts()",   "union() { C_meter(); C_switch(); }"),
+    ("fuse x cup",           "C_fuse()",   "P_cup()"),
+    ("fuse x meter/nuts",    "C_fuse()",   "union() { C_meter(); C_nuts(); C_switch(); }"),
+    ("fuse x base",          "C_fuse()",   "P_base()"),
     ("xt60 x cup",           "C_xt60()",   "P_cup()"),
     ("xt60 x nuts/switch/gnd", "C_xt60()", "union() { C_nuts(); C_switch(); C_gnd(); }"),
     ("riser x cup",          "C_riser()",  "P_cup()"),
@@ -101,7 +109,7 @@ def volume(stl):
     return abs(m.volume) if len(m.faces) else 0.0
 
 SELFTEST = ["P_base()", "P_cup()", "P_rails()",
-            "C_meter()", "C_switch()", "C_gnd()", "C_posts()", "C_nuts()", "C_riser()", "C_screws()"]
+            "C_meter()", "C_switch()", "C_gnd()", "C_posts()", "C_nuts()", "C_fuse()", "C_riser()", "C_screws()"]
 # C_xt60() is empty until XT60_MEASURED — it is exercised, not self-tested
 
 def render(scad, stl):
