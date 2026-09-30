@@ -27,9 +27,9 @@
 // off with all its wiring intact, base stays latched to the grid. Nothing
 // that carries current is on a part you remove to get at something else.
 //
-// FEET ARE CORNER-ONLY. A Clickfinity cell grips ~12 N; sixteen of them would
-// need ~195 N to lift. Four corner feet + ribs bearing on the plate walls, the
-// same pattern as lib's filler_tile(). See that module's comment.
+// LATCHING FEET ARE CORNER-ONLY. A Clickfinity cell grips ~12 N; sixteen of
+// them would need ~195 N to lift. The other twelve cells carry non-latching
+// bearing feet so the part prints feet-down without bridging — see rig_base.
 //
 // EVERY COMPONENT DIMENSION BELOW WAS CALIPERED 2026-09-27 — survey/MEASUREMENTS.md.
 // Hole sizes carry a fit ladder on coupons/deck_coupon.scad; print that first.
@@ -46,8 +46,7 @@ W  = NX*GF - 0.5;   // 167.5
 D  = NY*GF - 0.5;
 
 /* [Plate] */
-PLATE_TOP = 2.80;   // Clickfinity shallow plate. 4.65 for a standard baseplate.
-RIB_T     = 1.60;   // underside ribs, bear on the plate's grid walls
+PLATE_TOP = 2.80;   // Clickfinity shallow plate top above the socket floor (reference only)
 
 /* [Walls] */
 WALL    = 3.0;      // cup walls + deck. The rocker's clips catch ~1 mm/side
