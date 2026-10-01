@@ -18,7 +18,7 @@ The electrical side — KiCad schematic, wiring guide, parts, lead builds — is
 | **Rail ladder** | `coupons/dock_rail_ladder.scad` | 52 × 47 × 6.4 mm | **print first** — four rails at four peg sizes. 3 cm³ |
 | **Meter + fuse coupon** | `coupons/meter_fuse_coupon.scad` | 98 × 244 × 3 mm | **print second** — three meter frames stepping the long axis, the fuse ladder, the rocker + post at their chosen sizes, and a row of the panel words at full size. All text is on the **bed face**, mirrored, the way the deck's labels print. Four pieces. 27 cm³. `meter_fuse_coupon_inlay.scad` is its second colour |
 | **XT60 coupon** | `coupons/xt60_coupon.scad` | 90 × 72 × 3 mm | **print before the cup** — both XT60E cutouts at two clearances each, with ear holes to bolt the flanges on. 16 cm³ |
-| **XT60 ear ladder** | `coupons/xt60_ear_ladder.scad` | 90 × 54 × 3 mm | **print if the XT60 coupon's ear bolts bind** — ear-hole pairs at both pitches at 3.0 / 3.2 / 3.4. 14 cm³ |
+| **XT60 ear ladder** | `coupons/xt60_ear_ladder.scad` | 90 × 54 × 3 mm | **print after the XT60 coupon** — ear-hole pairs for both connectors with the pitch pulled in by 0 / 0.4 / 0.8 mm, 3.2 holes. The first coupon's pairs sat too far apart. 14 cm³ |
 | **Joint coupon** | `coupons/joint_coupon.scad` | 88 × 40 × 16.75 mm | **print first** — a corner of the base and the matching corner of the cup: skirt fit + screw. Two pieces. 16 cm³ |
 
 About 280 cm³ for the box, all PETG. Assembled it stands 51 mm above the plate's socket floor.
