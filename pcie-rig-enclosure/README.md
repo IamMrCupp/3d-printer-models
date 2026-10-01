@@ -70,6 +70,7 @@ Every panel hole has now been fitted on a printed coupon except the two XT60s, w
 
 - All five parts render **single-body, watertight**, at the sizes in the table
 - **`check_assembly.py`** places every part and every component where it lives and renders 15 pairwise intersections: base against cup, meter / switch / posts and their nuts / riser against both, a 2.5 mm rod down every screw axis through both the clearance and the pilot. All empty. (Its first run, on the drawer-bay revision, caught a 1.5 mm lip of the cup's front wall hanging across the opening — 768 mm³ that the per-part checks were happy with.) The XT60 bodies join the check the moment they're measured.
+- **`check_printable.py`** slices every part in its print orientation and flags any layer whose material is more than 10 mm from support below it. The first base failed this at 63 mm — ribs hanging between corner feet — and printed as spaghetti before the check existed; the bearing-foot base passes.
 - Clean on **OpenSCAD 2021.01**, what CI runs
 
 ## Recommended print settings
