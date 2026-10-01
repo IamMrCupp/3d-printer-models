@@ -238,10 +238,14 @@ module divided_bin(nx, ny, h, cols = 1, rows = 1, wall = 1.2, floor = 1.4, div =
     W = nx*GF - 0.5; D = ny*GF - 0.5;
     union() {
         bin(nx, ny, h, wall, floor);
-        // internal divider walls (from the floor up to the rim)
+        // internal divider walls (from the floor up to the rim). Guarded: with a
+        // single column or row the range is [1:0], which OpenSCAD 2021.01
+        // swapped and iterated as 0,1 — two extra dividers flush against the
+        // walls, 1.8 mm instead of 1.2, in every release of the single-row bins
+        // until #167. Current builds treat [1:0] as empty; say so explicitly.
         iw = W - 2*wall; id = D - 2*wall; z0 = BIN_BASE_H + floor;
-        for (c = [1 : cols-1]) translate([-iw/2 + c*iw/cols - div/2, -id/2, z0]) cube([div, id, h - z0]);
-        for (r = [1 : rows-1]) translate([-iw/2, -id/2 + r*id/rows - div/2, z0]) cube([iw, div, h - z0]);
+        if (cols > 1) for (c = [1 : cols-1]) translate([-iw/2 + c*iw/cols - div/2, -id/2, z0]) cube([div, id, h - z0]);
+        if (rows > 1) for (r = [1 : rows-1]) translate([-iw/2, -id/2 + r*id/rows - div/2, z0]) cube([iw, div, h - z0]);
     }
 }
 
