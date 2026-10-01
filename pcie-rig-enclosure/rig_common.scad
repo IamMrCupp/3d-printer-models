@@ -123,9 +123,9 @@ XT60_EAR_HOLE = 3.2;   // M2.5 bolt. 2.7 printed too small to pass a bolt (coupo
                        // a 2.7 vertical hole in PETG comes out ~2.4. The flange is nutted, slop is free.
                        // Ladder 3.0 / 3.2 / 3.4 on coupons/xt60_ear_ladder.scad
 XT60F_MEASURED = true;
-XT60F = [18.75, 11.67, 27.25, XT60_EAR_HOLE, 12.10, 34.25, 15.85];   // XT60E-F, right wall (outputs)
+XT60F = [18.75, 11.67, 26.65, XT60_EAR_HOLE, 12.10, 34.25, 15.85];   // XT60E-F, right wall (outputs). Pitch calipered 27.25, FITTED 26.65 (ear ladder)
 XT60M_MEASURED = true;
-XT60M = [15.61, 8.08, 22.60, XT60_EAR_HOLE, 7.17, 27.21, 12.07];      // XT60E-M, rear wall (input)
+XT60M = [15.61, 8.08, 22.00, XT60_EAR_HOLE, 7.17, 27.21, 12.07];      // XT60E-M, rear wall (input). Pitch calipered 22.60, FITTED 22.00 (ear ladder)
 XT60_CLR = 0.30;    // per side on the body cutout. FITTED 2026-09-30 on xt60_coupon (0.30 of 0.30 / 0.60).
                     // coupons/xt60_coupon.scad tries 0.30 and 0.60 as well
 

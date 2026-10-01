@@ -53,8 +53,8 @@ Every component number came off calipers on the real part (survey 2026-09-27):
 | PZEM-031 meter | housing 84.29 × 44.50, 24.45 deep; bezel 89 × 49 | short axis +0.30/side, long axis **+0.75/side** (85.79 — tight snap, clean removal). Both fitted. The first try at +0.30 long nearly broke a clip |
 | 4 mm binding post | thread 7.45, 19 long | `POST_HOLE` **7.6** — all three steps passed, tightest wins |
 | 5×20 panel fuse holder | thread 11.6, 26 long | `FUSE_HOLE` **11.8** — fitted (tight) |
-| XT60E-F output | body 18.75 × 11.67 behind a 34.25 × 15.85 flange, ears 27.25 apart, 12.10 deep | cutout **+0.30/side** (fitted); ear holes 3.2 — 2.7 printed too small for an M2.5 |
-| XT60E-M input | body 15.61 × 8.08 behind a 27.21 × 12.07 flange, ears 22.60 apart, 7.17 deep; shroud 3.06 proud | cutout **+0.30/side** (fitted); ear holes 3.2 |
+| XT60E-F output | body 18.75 × 11.67 behind a 34.25 × 15.85 flange, ears calipered 27.25 apart, 12.10 deep | cutout **+0.30/side** (fitted); ear holes 3.2 at **26.65** pitch (fitted — the calipers read 0.6 long) |
+| XT60E-M input | body 15.61 × 8.08 behind a 27.21 × 12.07 flange, ears calipered 22.60 apart, 7.17 deep; shroud 3.06 proud | cutout **+0.30/side** (fitted); ear holes 3.2 at **22.00** pitch (fitted) |
 | riser x16 board | 126.55 × 43.20, holes ⌀3.98 on 99 × 37, 4.0 thick with its foam | `PEG_D` **3.8** — every ladder rail held; the second-largest chosen for margin |
 
 Every panel hole has now been fitted on a printed coupon except the two XT60s, which are calipered and on their own coupon. Both connectors mount flange-outside with M2.5 bolts — the male's shroud stands only 3.06 ahead of its flange, so a flange-inside mount would leave it flush with the wall and unmateable.
