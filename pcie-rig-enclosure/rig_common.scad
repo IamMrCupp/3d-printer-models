@@ -121,8 +121,8 @@ RISER_HOLE_PITCH_L = 99;  RISER_HOLE_PITCH_W = 37;  RISER_HOLE_D = 3.98;
 // W runs along the wall, H up it. Calipers 2026-09-30, survey/MEASUREMENTS.md.
 XT60F_MEASURED = true;
 XT60F = [18.75, 11.67, 27.25, 2.7, 12.10, 34.25, 15.85];   // XT60E-F, right wall (outputs)
-XT60M_MEASURED = false;                                     // body behind the flange still owed
-XT60M = [undef, undef, 22.60, 2.7, 7.17, 27.21, 12.07];     // XT60E-M, rear wall (input)
+XT60M_MEASURED = true;
+XT60M = [15.61, 8.08, 22.60, 2.7, 7.17, 27.21, 12.07];      // XT60E-M, rear wall (input)
 XT60_CLR = 0.40;    // per side on the body cutout. Bolted flange, so slop is harmless;
                     // coupons/xt60_coupon.scad tries 0.30 and 0.60 as well
 
