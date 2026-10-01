@@ -17,7 +17,7 @@ The electrical side — KiCad schematic, wiring guide, parts, lead builds — is
 | **Deck coupon** | `coupons/deck_coupon.scad` | 140 × 100 × 3 mm | **print first** — every panel hole with a fit ladder, plus a label. 27 cm³ |
 | **Rail ladder** | `coupons/dock_rail_ladder.scad` | 52 × 47 × 6.4 mm | **print first** — four rails at four peg sizes. 3 cm³ |
 | **Meter + fuse coupon** | `coupons/meter_fuse_coupon.scad` | 98 × 244 × 3 mm | **print second** — three meter frames stepping the long axis, the fuse ladder, the rocker + post at their chosen sizes, and a row of the panel words at full size. All text is on the **bed face**, mirrored, the way the deck's labels print. Four pieces. 27 cm³. `meter_fuse_coupon_inlay.scad` is its second colour |
-| **XT60 coupon** | `coupons/xt60_coupon.scad` | 80 × 36 × 3 mm | **print before the cup** — the XT60E-M and XT60E-F cutouts side by side, from the calipers. Blank until `XT60_MEASURED`. 8 cm³ |
+| **XT60 coupon** | `coupons/xt60_coupon.scad` | 90 × 36 × 3 mm | **print before the cup** — each measured XT60E cutout at two clearances, with ear holes to bolt the flange on. Grows a second row when the male is measured. 8 cm³ |
 | **Joint coupon** | `coupons/joint_coupon.scad` | 88 × 40 × 16.75 mm | **print first** — a corner of the base and the matching corner of the cup: skirt fit + screw. Two pieces. 16 cm³ |
 
 About 280 cm³ for the box, all PETG. Assembled it stands 51 mm above the plate's socket floor.
@@ -52,14 +52,15 @@ Every component number came off calipers on the real part (survey 2026-09-27):
 | PZEM-031 meter | housing 84.29 × 44.50, 24.45 deep; bezel 89 × 49 | short axis +0.30/side, long axis **+0.75/side** (85.79 — tight snap, clean removal). Both fitted. The first try at +0.30 long nearly broke a clip |
 | 4 mm binding post | thread 7.45, 19 long | `POST_HOLE` **7.6** — all three steps passed, tightest wins |
 | 5×20 panel fuse holder | thread 11.6, 26 long | `FUSE_HOLE` **11.8** — fitted (tight) |
-| XT60E-M / XT60E-F panel connectors | **not yet in hand** | **no cutout** — `XT60_MEASURED = false` gates them; positions are reserved |
+| XT60E-F output | body 18.75 × 11.67 behind a 34.25 × 15.85 flange, ears 27.25 apart, 12.10 deep | cutout +0.40/side, 2.7 ear holes; coupon tries 0.30 / 0.60 |
+| XT60E-M input | shroud 15.61 × 8.08 × 3.06 ahead of a 27.21 × 12.07 flange, ears 22.60 apart, 7.17 deep | **body behind the flange still owed** — `XT60M_MEASURED = false` gates the cutout |
 | riser x16 board | 126.55 × 43.20, holes ⌀3.98 on 99 × 37, 4.0 thick with its foam | `PEG_D` **3.8** — every ladder rail held; the second-largest chosen for margin |
 
-Every panel hole except the XT60s has now been fitted on a printed coupon. The XT60 cutouts don't exist in the model until the connectors have been calipered — a plausible number there is exactly how two printed parts got scrapped in August.
+Every panel hole has now been fitted on a printed coupon except the two XT60s, which are calipered and on their own coupon; the male's cutout waits on one more number. Both connectors mount flange-outside with M2.5 bolts — the male's shroud stands only 3.06 ahead of its flange, so a flange-inside mount would leave it flush with the wall and unmateable.
 
 ## Print order
 
-1. **`coupons/deck_coupon.scad`** — 3 mm plate with the meter cutout, a three-step ladder for the rocker and for the binding post, and an engraved label to judge legibility. Push each part in, note which step fits, set `SW_HOLE` / `POST_HOLE` to match. When the XT60s arrive, caliper both, fill `XT60M` / `XT60F` (cut W, cut H, ear pitch, ear dia, depth), flip `XT60_MEASURED`, and print `coupons/xt60_coupon.scad` before the cup.
+1. **`coupons/deck_coupon.scad`** — 3 mm plate with the meter cutout, a three-step ladder for the rocker and for the binding post, and an engraved label to judge legibility. Push each part in, note which step fits, set `SW_HOLE` / `POST_HOLE` to match. `XT60F` is filled; fill `XT60M`'s body cutout, flip `XT60M_MEASURED`, and print `coupons/xt60_coupon.scad` before the cup.
 2. **`coupons/dock_rail_ladder.scad`** — four rails at 3.6 / 3.7 / 3.8 / 3.9. Push the riser onto each; set `PEG_D` to the one that holds without a fight. Snap off the two you'll use — they're the real rails.
 3. **`coupons/meter_fuse_coupon.scad`** — the deck coupon's follow-up. Pick the tightest meter frame the display goes into without forcing a clip and whose clips still catch; pick the fuse hole that takes the holder. Set `METER_CLR_L` / `FUSE_HOLE`. The rocker and post holes should simply fit.
 4. **`coupons/joint_coupon.scad`** — a corner of each big part. Drop the cup corner over the base corner: it should go on by hand and not rattle. Run an M3 × 10 into the pilot: it should bite without splitting the boss. Adjust `JOINT_CLR` / `SCREW_TAP` if not.

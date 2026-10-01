@@ -5,26 +5,30 @@
 // XT60M / XT60F calipers in rig_common.scad. Labels on the bed face, mirrored.
 // Push each connector in and screw it to its ears; if both seat, print the cup.
 //
-// Until XT60_MEASURED is true this is a blank plate and says so.
+// Each measured connector gets a row with two clearances (0.30 / 0.60 per side);
+// the model uses XT60_CLR. Bolt the flange on through the ear holes too.
 
 include <../rig_common.scad>
-use <../rig_cup.scad>
 
 T = WALL;
-module xt60_hole(x) {
-    if (XT60_MEASURED) {
-        translate([0, 0, T/2]) cube([x[0], x[1], T*3], center = true);
-        for (sx = [-1, 1]) translate([sx*x[2]/2, 0, -1]) cylinder(d = x[3], h = T + 2);
+CLRS = [0.30, 0.60];           // per side; the model's XT60_CLR is 0.40 — pick from these
+module bed_text(txt) { mirror([1, 0, 0]) mirror([0, 0, 1]) label_pocket(txt, 4, LABEL_DEPTH); }
+module xt60_hole(x, clr) {
+    translate([0, 0, T/2]) cube([x[0] + 2*clr, x[1] + 2*clr, T*3], center = true);
+    for (sx = [-1, 1]) translate([sx*x[2]/2, 0, -1]) cylinder(d = x[3], h = T + 2);
+}
+
+// one row per connector that is measured; two clearances side by side
+module row(x, name) {
+    for (i = [0 : 1]) translate([(i - 0.5)*44, 0, 0]) {
+        xt60_hole(x, CLRS[i]);
+        translate([0, -x[1]/2 - 5, 0]) bed_text(str(name, " +", CLRS[i]));
     }
 }
-module bed_text(txt) { mirror([1, 0, 0]) mirror([0, 0, 1]) label_pocket(txt, 4, LABEL_DEPTH); }
 
 difference() {
-    translate([-40, -18, 0]) cube([80, 36, T]);
-    translate([-20, 3, 0]) xt60_hole(XT60M);
-    translate([ 20, 3, 0]) xt60_hole(XT60F);
-    translate([-20, -12, 0]) bed_text("M IN");
-    translate([ 20, -12, 0]) bed_text("F OUT");
+    translate([-45, -18, 0]) cube([90, 36 * (XT60M_MEASURED ? 2 : 1), T]);
+    translate([0, 4, 0]) row(XT60F, "F");
+    if (XT60M_MEASURED) translate([0, 40, 0]) row(XT60M, "M");
 }
-
-if (!XT60_MEASURED) echo("WARNING: xt60_coupon is a blank plate — XT60_MEASURED is false.");
+if (!XT60M_MEASURED) echo("NOTE: xt60_coupon carries the F cutouts only — the M body is not yet measured.");

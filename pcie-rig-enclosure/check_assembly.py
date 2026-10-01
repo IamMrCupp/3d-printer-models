@@ -68,10 +68,16 @@ module C_fuse() translate([F1_X, D/2 - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) 
     translate([0, 0, WALL]) cylinder(d = 16, h = 4);
 }
 // XT60 bodies behind the panel — only once measured (undef otherwise)
-module C_xt60() if (XT60_MEASURED) {
-    translate([XT60_IN_X, D/2 - IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) linear_extrude(XT60M[4]) square([XT60M[0], XT60M[1]], center = true);
-    for (i = [0 : XT60_OUT_N - 1])
-        translate([W/2 - IN, XT60_OUT_Y[i], Z_CUP0 + WALL_Z]) rotate([0, -90, 0]) linear_extrude(XT60F[4]) square([XT60F[1], XT60F[0]], center = true);
+module C_xt60() {
+    if (XT60M_MEASURED) translate([XT60_IN_X, D/2 - WALL + IN, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) linear_extrude(XT60M[4]) square([XT60M[0], XT60M[1]], center = true);
+    if (XT60F_MEASURED) for (i = [0 : XT60_OUT_N - 1])
+        translate([W/2 - WALL + IN, XT60_OUT_Y[i], Z_CUP0 + WALL_Z]) rotate([0, -90, 0]) linear_extrude(XT60F[4]) square([XT60F[1], XT60F[0]], center = true);
+}
+// the flanges, OUTSIDE the walls — must not overlap each other or the posts' nuts outside
+module C_xt60_flanges() {
+    if (XT60M_MEASURED) translate([XT60_IN_X, D/2 + 1, Z_CUP0 + WALL_Z]) rotate([90, 0, 0]) linear_extrude(1) square([XT60M[5], XT60M[6]], center = true);
+    if (XT60F_MEASURED) for (i = [0 : XT60_OUT_N - 1])
+        translate([W/2 + 1, XT60_OUT_Y[i], Z_CUP0 + WALL_Z]) rotate([0, -90, 0]) linear_extrude(1) square([XT60F[6], XT60F[5]], center = true);
 }
 module C_riser()  translate([RISER_X, RISER_Y, Z_DECK + IN]) linear_extrude(RISER_T) square([RISER_L, RISER_W], center = true);
 // a 2.5 rod down every screw axis: passes the 3.4 clearance AND the 2.6 pilot
@@ -96,7 +102,8 @@ CHECKS = [
     ("fuse x cup",           "C_fuse()",   "P_cup()"),
     ("fuse x meter/nuts",    "C_fuse()",   "union() { C_meter(); C_nuts(); C_switch(); }"),
     ("fuse x base",          "C_fuse()",   "P_base()"),
-    ("xt60 x cup",           "C_xt60()",   "P_cup()"),
+    ("xt60 bodies x cup",    "C_xt60()",   "P_cup()"),
+    ("xt60 flanges x cup",   "C_xt60_flanges()", "P_cup()"),
     ("xt60 x nuts/switch/gnd", "C_xt60()", "union() { C_nuts(); C_switch(); C_gnd(); }"),
     ("riser x cup",          "C_riser()",  "P_cup()"),
     ("screw rods x base+cup", "C_screws()", "union() { P_base(); P_cup(); }"),
@@ -110,7 +117,7 @@ def volume(stl):
 
 SELFTEST = ["P_base()", "P_cup()", "P_rails()",
             "C_meter()", "C_switch()", "C_gnd()", "C_posts()", "C_nuts()", "C_fuse()", "C_riser()", "C_screws()"]
-# C_xt60() is empty until XT60_MEASURED — it is exercised, not self-tested
+# C_xt60() / C_xt60_flanges() are empty for an unmeasured connector — exercised, not self-tested
 
 def render(scad, stl):
     r = subprocess.run(["openscad", "-o", str(stl), "--export-format", "binstl", str(scad)],

@@ -113,12 +113,18 @@ RISER_HOLE_PITCH_L = 99;  RISER_HOLE_PITCH_W = 37;  RISER_HOLE_D = 3.98;
 // Their cutout, ear pitch and screw size go in when calipered. Until then the
 // walls carry no XT60 cutout at all — a plausible number here is exactly how
 // two printed parts got scrapped in August. Positions are reserved below.
-XT60_MEASURED = false;
-// Filled per gender from calipers — they may differ. Each is
-//   [body cut W, body cut H, ear hole pitch, ear hole dia, depth behind panel]
-// W runs along the wall, H up it.
-XT60M = [undef, undef, undef, undef, undef];   // XT60E-M, rear wall (input)
-XT60F = [undef, undef, undef, undef, undef];   // XT60E-F, right wall (outputs)
+// Both mount FLANGE OUTSIDE, body through the wall, M2.5 bolts: the female
+// takes loose nuts inside; the male has captive nuts on the back of its flange,
+// so its bolts go in from inside the box. (A flange-inside male was ruled out:
+// its shroud stands only 3.06 ahead of the flange, flush with a 3 mm wall.)
+// Each is  [body cut W, body cut H, ear pitch, ear hole dia, depth behind flange, flange W, flange H]
+// W runs along the wall, H up it. Calipers 2026-09-30, survey/MEASUREMENTS.md.
+XT60F_MEASURED = true;
+XT60F = [18.75, 11.67, 27.25, 2.7, 12.10, 34.25, 15.85];   // XT60E-F, right wall (outputs)
+XT60M_MEASURED = false;                                     // body behind the flange still owed
+XT60M = [undef, undef, 22.60, 2.7, 7.17, 27.21, 12.07];     // XT60E-M, rear wall (input)
+XT60_CLR = 0.40;    // per side on the body cutout. Bolted flange, so slop is harmless;
+                    // coupons/xt60_coupon.scad tries 0.30 and 0.60 as well
 
 /* [Holes — nominal; the coupon's ladder picks the final value] */
 SW_HOLE   = 21.3;   // body 20.87. FITTED: largest step of the deck coupon ladder, 2026-09-28
@@ -135,7 +141,7 @@ F1_X      =  60;                   // 5x20 panel fuse holder — swap a fuse wit
 
 /* [Right wall — output] — y along the wall (front -, rear +) */
 XT60_OUT_N   = 2;                  // [1:2] XT60E-F outputs, in parallel behind the switch
-XT60_OUT_Y   = [-40, -10];         // RISER, CARD
+XT60_OUT_Y   = [-44, -6];          // RISER, CARD — flanges are 34.25 wide; 38 apart leaves 3.75 between
 J5_PLUS_Y    =  22;                // banana OUT +  (red)
 J5_MINUS_Y   = J5_PLUS_Y + 19.05;  // banana OUT -  (black)
 
