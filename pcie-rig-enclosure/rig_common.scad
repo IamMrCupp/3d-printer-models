@@ -123,7 +123,7 @@ XT60F_MEASURED = true;
 XT60F = [18.75, 11.67, 27.25, 2.7, 12.10, 34.25, 15.85];   // XT60E-F, right wall (outputs)
 XT60M_MEASURED = true;
 XT60M = [15.61, 8.08, 22.60, 2.7, 7.17, 27.21, 12.07];      // XT60E-M, rear wall (input)
-XT60_CLR = 0.40;    // per side on the body cutout. Bolted flange, so slop is harmless;
+XT60_CLR = 0.30;    // per side on the body cutout. FITTED 2026-09-30 on xt60_coupon (0.30 of 0.30 / 0.60).
                     // coupons/xt60_coupon.scad tries 0.30 and 0.60 as well
 
 /* [Holes — nominal; the coupon's ladder picks the final value] */
