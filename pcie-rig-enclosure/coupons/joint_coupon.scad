@@ -22,7 +22,7 @@ include <../rig_common.scad>
 
 SAMPLE = 40;                                  // corner sample, square
 CX = W/2 - SAMPLE/2;  CY = -(D/2 - SAMPLE/2); // centre of the front-right corner sample
-Z_BASE_TOP = Z_FLOOR + TONGUE_H;
+Z_BASE_TOP = Z_FLOOR + TONGUE_H;   // 18.3 now the floor sits on the flared feet
 
 module corner_box(h) { translate([CX - SAMPLE/2, CY - SAMPLE/2, -1]) cube([SAMPLE, SAMPLE, h + 1]); }   // top face exactly at h
 

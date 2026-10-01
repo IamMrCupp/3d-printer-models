@@ -52,7 +52,18 @@ PLATE_TOP = 2.80;   // Clickfinity shallow plate top above the socket floor (ref
 WALL    = 3.0;      // cup walls + deck. The rocker's clips catch ~1 mm/side
                     // behind it and the PZEM's spring clips take it; the coupon
                     // confirms both.
-FLOOR_T = 3.0;      // base plate above the feet
+FLOOR_T = 3.0;      // base plate thickness
+// The floor's underside. Not the foot top (4.75): the bearing feet flare out at
+// 45 degrees from the plate top (2.80) to 0.4 mm short of the cell line, which
+// takes 3.0 mm of height, so the floor at 5.80 spans nothing wider than one
+// extrusion line. The corner latching feet carry a straight column
+// up to it. See rig_base.scad.
+PLATE_TOP_Z = PLATE_TOP;
+BEAR_HW     = 17.60;             // bearing foot half-width below the plate top; catch reaches 18.25
+FLARE_OUT   = GF/2 - BEAR_HW - 0.4;   // 3.0: out to 20.6, leaving 0.8 mm between neighbours.
+                                     // Overlapping them by 0.2 made CGAL (2021.01) sliver where
+                                     // the two 45-degree faces crossed; 0.8 mm is one extrusion line
+FLOOR_Z0    = PLATE_TOP_Z + FLARE_OUT; // 5.80
 
 /* [Electronics bay] */
 // The meter hangs 24.45 below the deck; the rest is room for its screw
@@ -87,7 +98,7 @@ SKIRT_IN_W   = W - 2*REBATE;                 // skirt inner outline
 SKIRT_IN_D   = D - 2*REBATE;
 SKIRT_IN_R   = BIN_R - REBATE;
 CUP_H        = CUP_IN_H + WALL;              // 43; the cup's z=0 is the base floor top
-Z_FLOOR      = BIN_BASE_H + FLOOR_T;         // base floor top, above the plate's socket floor
+Z_FLOOR      = FLOOR_Z0 + FLOOR_T;           // 8.80 — base floor top, above the plate's socket floor
 
 /* [Deck layout] — x across, y front(-) to back(+), all centred on the box */
 // Riser board along the rear half, meter + switch + probe post across the front.

@@ -10,7 +10,7 @@ The electrical side — KiCad schematic, wiring guide, parts, lead builds — is
 
 | Part | File | Size | Print |
 |---|---|---|---|
-| **Base** | `rig_base.scad` | 167.5 × 167.5 × 16.75 mm | ×1 — feet down, no supports. 142 cm³ |
+| **Base** | `rig_base.scad` | 167.5 × 167.5 × 17.8 mm | ×1 — feet down, no supports. 223 cm³ in the model; the slicer's infill makes most of that cheap |
 | **Cup** | `rig_cup.scad` | 167.5 × 167.5 × 43 mm | ×1 — emitted deck-down, no supports. 139 cm³ |
 | **Cup labels** | `rig_cup_inlay.scad` | — | optional second colour — load as a part of the cup, same origin, assign the second filament. 28 letters, 0.2 cm³ |
 | **Dock rail** | `rig_dock_rail.scad` | 10 × 47 × 6.4 mm | ×2 — pegs up. 0.7 cm³ each |
@@ -21,11 +21,11 @@ The electrical side — KiCad schematic, wiring guide, parts, lead builds — is
 | **XT60 ear ladder** | `coupons/xt60_ear_ladder.scad` | 90 × 54 × 3 mm | **print after the XT60 coupon** — ear-hole pairs for both connectors with the pitch pulled in by 0 / 0.4 / 0.8 mm, 3.2 holes. The first coupon's pairs sat too far apart. 14 cm³ |
 | **Joint coupon** | `coupons/joint_coupon.scad` | 88 × 40 × 16.75 mm | **print first** — a corner of the base and the matching corner of the cup: skirt fit + screw. Two pieces. 16 cm³ |
 
-About 280 cm³ for the box, all PETG. Assembled it stands 51 mm above the plate's socket floor.
+About 360 cm³ for the box in the model, all PETG. Assembled it stands 52 mm above the plate's socket floor.
 
 ## How it goes together
 
-- **Base.** A footed floor plate with a 1.5 mm tongue standing 9 mm up round its edge and four screw bosses behind it. Latching feet in the four corners only — sixteen would need ~195 N to lift. The twelve middle cells carry **bearing feet**: a ring with a cross inside that stands on the socket floor but stops 0.65 mm short of where the click catches reach, so it holds the floor up without ever gripping. Every cell has something on the bed and nothing on the part bridges. (The first print used the filler tile's corner-feet-plus-ribs pattern, which only works upside down; printed feet-down its ribs hung in mid-air and it came off the bed with strings and droop along every edge.) The WAGO ground bus sits on this floor, on its wires.
+- **Base.** A footed floor plate with a 1.5 mm tongue standing 9 mm up round its edge and four screw bosses behind it. Latching feet in the four corners only — sixteen would need ~195 N to lift. The twelve middle cells carry **solid bearing feet**: a column that stands on the socket floor but stops 0.65 mm short of where the click catches reach, then flares out at 45° above the plate top to within 0.4 mm of its neighbours. The floor sits on that and spans nothing wider than one extrusion line. Two earlier versions were scrapped on the printer: corner feet plus ribs (the filler tile's pattern, which only works upside down) hung 84 mm bridges along every edge, and a ring-and-cross bearing foot left the floor bridging 12,000 mm² of 15 mm squares. `check_printable.py` now fails both and passes this. The WAGO ground bus sits on this floor, on its wires.
 - **Cup.** Deck plus four walls, open bottom, with its bottom 9 mm thinned into a skirt that wraps the tongue, flush outside. **Every electrical part is on this one piece** — meter, switch and probe post on the deck, XT60, banana input and fuse on the rear wall, XT60 and banana output on the right — so the wiring never crosses a joint. Labels are engraved 0.8 deep, and `rig_cup_inlay.scad` fills them flush in a second colour: the deck's GND is the first four layers on the bed, the wall labels cost a tool change per layer they cross. Prints upside down, deck on the bed, so the cutouts come out in the first layers.
 - **Joint.** Four **M3 × 10** screws go in horizontally from outside, through the skirt and tongue, self-tapping into the bosses. The box stays latched to the grid for service: screws out, cup lifts off with its wiring intact. No heat-set inserts.
 - **Riser dock.** The x16 board has its slot flush along one edge, capacitors crowding the other and the 6-pin and USB filling an end, so there's no edge to clip. It has four mounting holes on a 99 × 37 pitch instead. Two rails, two pegs each, CA'd into flush pockets on the deck; the board lies on its own foam pad with the pegs through it. Separate parts because a peg can't grow off the face that's on the bed.
@@ -71,7 +71,7 @@ Every panel hole has now been fitted on a printed coupon except the two XT60s, w
 
 - All five parts render **single-body, watertight**, at the sizes in the table
 - **`check_assembly.py`** places every part and every component where it lives and renders 15 pairwise intersections: base against cup, meter / switch / posts and their nuts / riser against both, a 2.5 mm rod down every screw axis through both the clearance and the pilot. All empty. (Its first run, on the drawer-bay revision, caught a 1.5 mm lip of the cup's front wall hanging across the opening — 768 mm³ that the per-part checks were happy with.) The XT60 bodies join the check the moment they're measured.
-- **`check_printable.py`** slices every part in its print orientation and flags any layer whose material is more than 10 mm from support below it. The first base failed this at 63 mm — ribs hanging between corner feet — and printed as spaghetti before the check existed; the bearing-foot base passes.
+- **`check_printable.py`** slices every part in its print orientation and flags any layer whose unsupported material is more than 10 mm from support, or more than 1,500 mm² in total. The first scrapped base fails the first rule (ribs 63 mm from anything), the second fails the second (12,000 mm² of short bridges); the current base has no unsupported area at all.
 - Clean on **OpenSCAD 2021.01**, what CI runs
 
 ## Recommended print settings

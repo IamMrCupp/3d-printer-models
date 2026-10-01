@@ -19,9 +19,11 @@ bin (2026-09-30). This check would have flagged 2,000+ mm2 at z = 2.8.
     pcie-rig-enclosure/check_printable.py            # all parts, exits 1 on a flag
     pcie-rig-enclosure/check_printable.py rig_base   # one part
 
-Tolerances: unsupported material whose farthest point is within MAX_REACH mm
-of support is accepted — bridges across holes, label pockets, the floor over
-a bearing foot's cross. Beyond that it is flagged with its height and reach.
+Tolerances: a layer is accepted only if its unsupported material is both
+within MAX_REACH of support AND under MAX_AREA in total. The first rule
+catches a rib hanging in air; the second catches a floor made of many short
+bridges — which is what the second scrapped base was, and which the first
+version of this check waved through.
 Needs openscad on PATH and trimesh + shapely (the repo's .venv has both).
 """
 import subprocess, sys, tempfile
@@ -39,7 +41,11 @@ except ImportError:
 
 DZ = 1.0          # mm between slices; also the 45-degree growth allowance
 MIN_AREA = 40.0   # mm2 of unsupported material per layer before it is even looked at
-MAX_REACH = 10.0  # mm from the farthest unsupported point to the nearest support (= a 20 mm bridge)
+MAX_REACH = 10.0  # mm from the farthest unsupported point to support (= a 20 mm bridge — a
+                  # one-layer bridge over a wall cutout is fine; a rib hanging 63 mm is not)
+MAX_AREA = 1500.0 # mm2 of unsupported material in ONE layer, whatever its reach. The
+                  # second scrapped base had 12,000 mm2 of 15 mm bridges — every span
+                  # "short", the layer still a sheet of PETG hanging in air (2026-10-01)
 GRID = 1.0        # mm sampling for the reach measurement
 Z_TOP = 60.0      # highest layer worth checking (all parts are shorter)
 
@@ -79,7 +85,7 @@ def check(stl):
         unsupported = here.difference(below.buffer(DZ))
         if unsupported.area >= MIN_AREA:
             r = reach(unsupported, below)
-            if r > MAX_REACH:
+            if r > MAX_REACH or unsupported.area > MAX_AREA:
                 flags.append((z, unsupported.area, r))
         below = here
         z += DZ
