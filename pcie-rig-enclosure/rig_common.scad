@@ -119,10 +119,13 @@ RISER_HOLE_PITCH_L = 99;  RISER_HOLE_PITCH_W = 37;  RISER_HOLE_D = 3.98;
 // its shroud stands only 3.06 ahead of the flange, flush with a 3 mm wall.)
 // Each is  [body cut W, body cut H, ear pitch, ear hole dia, depth behind flange, flange W, flange H]
 // W runs along the wall, H up it. Calipers 2026-09-30, survey/MEASUREMENTS.md.
+XT60_EAR_HOLE = 3.2;   // M2.5 bolt. 2.7 printed too small to pass a bolt (coupon, 2026-09-30) —
+                       // a 2.7 vertical hole in PETG comes out ~2.4. The flange is nutted, slop is free.
+                       // Ladder 3.0 / 3.2 / 3.4 on coupons/xt60_ear_ladder.scad
 XT60F_MEASURED = true;
-XT60F = [18.75, 11.67, 27.25, 2.7, 12.10, 34.25, 15.85];   // XT60E-F, right wall (outputs)
+XT60F = [18.75, 11.67, 27.25, XT60_EAR_HOLE, 12.10, 34.25, 15.85];   // XT60E-F, right wall (outputs)
 XT60M_MEASURED = true;
-XT60M = [15.61, 8.08, 22.60, 2.7, 7.17, 27.21, 12.07];      // XT60E-M, rear wall (input)
+XT60M = [15.61, 8.08, 22.60, XT60_EAR_HOLE, 7.17, 27.21, 12.07];      // XT60E-M, rear wall (input)
 XT60_CLR = 0.30;    // per side on the body cutout. FITTED 2026-09-30 on xt60_coupon (0.30 of 0.30 / 0.60).
                     // coupons/xt60_coupon.scad tries 0.30 and 0.60 as well
 

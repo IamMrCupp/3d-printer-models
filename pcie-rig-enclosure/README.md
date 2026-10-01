@@ -18,6 +18,7 @@ The electrical side — KiCad schematic, wiring guide, parts, lead builds — is
 | **Rail ladder** | `coupons/dock_rail_ladder.scad` | 52 × 47 × 6.4 mm | **print first** — four rails at four peg sizes. 3 cm³ |
 | **Meter + fuse coupon** | `coupons/meter_fuse_coupon.scad` | 98 × 244 × 3 mm | **print second** — three meter frames stepping the long axis, the fuse ladder, the rocker + post at their chosen sizes, and a row of the panel words at full size. All text is on the **bed face**, mirrored, the way the deck's labels print. Four pieces. 27 cm³. `meter_fuse_coupon_inlay.scad` is its second colour |
 | **XT60 coupon** | `coupons/xt60_coupon.scad` | 90 × 72 × 3 mm | **print before the cup** — both XT60E cutouts at two clearances each, with ear holes to bolt the flanges on. 16 cm³ |
+| **XT60 ear ladder** | `coupons/xt60_ear_ladder.scad` | 90 × 54 × 3 mm | **print if the XT60 coupon's ear bolts bind** — ear-hole pairs at both pitches at 3.0 / 3.2 / 3.4. 14 cm³ |
 | **Joint coupon** | `coupons/joint_coupon.scad` | 88 × 40 × 16.75 mm | **print first** — a corner of the base and the matching corner of the cup: skirt fit + screw. Two pieces. 16 cm³ |
 
 About 280 cm³ for the box, all PETG. Assembled it stands 51 mm above the plate's socket floor.
@@ -52,8 +53,8 @@ Every component number came off calipers on the real part (survey 2026-09-27):
 | PZEM-031 meter | housing 84.29 × 44.50, 24.45 deep; bezel 89 × 49 | short axis +0.30/side, long axis **+0.75/side** (85.79 — tight snap, clean removal). Both fitted. The first try at +0.30 long nearly broke a clip |
 | 4 mm binding post | thread 7.45, 19 long | `POST_HOLE` **7.6** — all three steps passed, tightest wins |
 | 5×20 panel fuse holder | thread 11.6, 26 long | `FUSE_HOLE` **11.8** — fitted (tight) |
-| XT60E-F output | body 18.75 × 11.67 behind a 34.25 × 15.85 flange, ears 27.25 apart, 12.10 deep | cutout +0.40/side, 2.7 ear holes; coupon tries 0.30 / 0.60 |
-| XT60E-M input | body 15.61 × 8.08 behind a 27.21 × 12.07 flange, ears 22.60 apart, 7.17 deep; shroud 3.06 proud | cutout +0.40/side, 2.7 ear holes; coupon tries 0.30 / 0.60 |
+| XT60E-F output | body 18.75 × 11.67 behind a 34.25 × 15.85 flange, ears 27.25 apart, 12.10 deep | cutout **+0.30/side** (fitted); ear holes 3.2 — 2.7 printed too small for an M2.5 |
+| XT60E-M input | body 15.61 × 8.08 behind a 27.21 × 12.07 flange, ears 22.60 apart, 7.17 deep; shroud 3.06 proud | cutout **+0.30/side** (fitted); ear holes 3.2 |
 | riser x16 board | 126.55 × 43.20, holes ⌀3.98 on 99 × 37, 4.0 thick with its foam | `PEG_D` **3.8** — every ladder rail held; the second-largest chosen for margin |
 
 Every panel hole has now been fitted on a printed coupon except the two XT60s, which are calipered and on their own coupon. Both connectors mount flange-outside with M2.5 bolts — the male's shroud stands only 3.06 ahead of its flange, so a flange-inside mount would leave it flush with the wall and unmateable.
