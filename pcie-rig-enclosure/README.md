@@ -13,7 +13,8 @@ The electrical side — KiCad schematic, wiring guide, parts, lead builds — is
 | **Base** | `rig_base.scad` | 167.5 × 167.5 × 17.8 mm | ×1 — feet down, no supports. 223 cm³ in the model; the slicer's infill makes most of that cheap |
 | **Cup** | `rig_cup.scad` | 167.5 × 167.5 × 43 mm | ×1 — emitted deck-down, no supports. 139 cm³ |
 | **Cup labels** | `rig_cup_inlay.scad` | — | optional second colour — load as a part of the cup, same origin, assign the second filament. 28 letters, 0.2 cm³ |
-| **Storage bin** | `rig_storage_bin.scad` | 131.75 × 92.25 × 30 mm | ×1 — floor down, no supports. CA-glued flat on the deck, back edge flush with the deck's. Bays: the x16 board on its long edge (19 slot), the x1 card flat (35 wide), the USB lead in the rest. 48 cm³ |
+| **Storage bin** | `rig_storage_bin.scad` | 131.75 × 92.25 × 30 mm | ×1 — floor down, no supports. CA-glued on the deck over the two keys, back edge flush with the deck's. Bays: the x16 board on its long edge (19 slot), the x1 card flat (35 wide), the USB lead in the rest. 56 cm³ |
+| **Bin key** | `rig_bin_key.scad` | 10 × 47 × 2 mm | ×2 — CA'd into the deck's empty rail pockets, 0.8 proud; the bin's underside recesses drop over them. Separate so the bin's floor doesn't bridge |
 | ~~Dock rail~~ | `rig_dock_rail.scad` | 10 × 47 × 6.4 mm | **superseded by the storage bin** — the 99 × 37 hole pitch was calipered, never coupon-tested for pitch, and missed in both directions on the printed cup. The empty rail pockets stay under the bin |
 | **Deck coupon** | `coupons/deck_coupon.scad` | 140 × 100 × 3 mm | **print first** — every panel hole with a fit ladder, plus a label. 27 cm³ |
 | **Rail ladder** | `coupons/dock_rail_ladder.scad` | 52 × 47 × 6.4 mm | **print first** — four rails at four peg sizes. 3 cm³ |

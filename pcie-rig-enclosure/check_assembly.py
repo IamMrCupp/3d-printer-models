@@ -33,6 +33,7 @@ use <@HERE@/rig_base.scad>
 use <@HERE@/rig_cup.scad>
 use <@HERE@/rig_dock_rail.scad>
 use <@HERE@/rig_storage_bin.scad>
+use <@HERE@/rig_bin_key.scad>
 include <@HERE@/rig_common.scad>
 $fn = 48;
 Z_CUP0  = Z_FLOOR;                     // cup's skirt bottom = base floor top
@@ -42,6 +43,7 @@ IN      = 0.05;                         // probe inset from shared faces
 module P_base()   rig_base();
 module P_cup()    translate([0, 0, Z_CUP0]) rig_cup();
 module P_bin()    translate([BIN_X, BIN_Y, Z_DECK + IN]) rig_storage_bin();
+module P_keys()   for (x = POCKET_XS) translate([x, POCKET_Y, Z_DECK - RAIL_POCKET + IN]) rig_bin_key();
 module P_rails()  for (sx = [-1, 1])
     translate([RISER_X + sx*RISER_HOLE_PITCH_L/2, RISER_Y, Z_DECK - RAIL_POCKET]) rig_dock_rail();
 
@@ -93,6 +95,8 @@ CHECKS = [
     ("base x cup",           "P_base()",   "P_cup()"),
     ("rails x cup",          "P_rails()",  "P_cup()"),
     ("bin x cup",            "P_bin()",    "P_cup()"),
+    ("keys x cup",           "P_keys()",   "P_cup()"),
+    ("keys x bin",           "P_keys()",   "P_bin()"),
     ("bin x meter/switch/gnd", "P_bin()",  "union() { translate([METER_X, METER_Y, Z_DECK]) linear_extrude(3) square([89, 49], center = true); translate([SW_X, SW_Y, Z_DECK]) cylinder(d = 23, h = 3); translate([GND_X, GND_Y, Z_DECK]) cylinder(d = 12, h = 3); }"),
     ("meter x cup",          "C_meter()",  "P_cup()"),
     ("meter x base",         "C_meter()",  "P_base()"),
@@ -119,7 +123,7 @@ def volume(stl):
     m = trimesh.load(stl)
     return abs(m.volume) if len(m.faces) else 0.0
 
-SELFTEST = ["P_base()", "P_cup()", "P_bin()", "P_rails()",
+SELFTEST = ["P_base()", "P_cup()", "P_bin()", "P_keys()", "P_rails()",
             "C_meter()", "C_switch()", "C_gnd()", "C_posts()", "C_nuts()", "C_fuse()", "C_riser()", "C_screws()"]
 # C_xt60() / C_xt60_flanges() are empty for an unmeasured connector — exercised, not self-tested
 

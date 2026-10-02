@@ -49,7 +49,7 @@ MAX_AREA = 1500.0 # mm2 of unsupported material in ONE layer, whatever its reach
 GRID = 1.0        # mm sampling for the reach measurement
 Z_TOP = 60.0      # highest layer worth checking (all parts are shorter)
 
-PARTS = ["rig_base", "rig_cup", "rig_storage_bin", "rig_dock_rail",
+PARTS = ["rig_base", "rig_cup", "rig_storage_bin", "rig_bin_key", "rig_dock_rail",
          "coupons/deck_coupon", "coupons/meter_fuse_coupon", "coupons/xt60_coupon",
          "coupons/joint_coupon", "coupons/dock_rail_ladder"]
 

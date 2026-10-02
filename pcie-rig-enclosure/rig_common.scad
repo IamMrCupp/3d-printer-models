@@ -192,7 +192,7 @@ X1_W  = 33;      X1_D  = 31;   // x1 card bay (user 2026-10-01)
 
 /* [Storage bin] */
 BW    = 1.6;      // walls and dividers — four 0.4 lines
-BF    = 1.6;      // floor
+BF    = 2.4;      // floor — thick enough to keep 1.4 over the key recesses
 BH    = 30;       // wall height; the x16 board stands 43.20
 BCLR  = 1.0;      // per side
 FRONT_CLEAR = 5;  // gap to the meter bezel's back edge
@@ -207,4 +207,18 @@ X1_BAY = X1_W + 2*BCLR;                    // 35
 BIN_X = RISER_X;                           // where the dock was
 BIN_Y = D/2 - OD/2;                        // back edge flush with the deck's
 
+/* [Storage bin — locating keys] */
+// The deck's two rail pockets (left from the abandoned dock) locate the bin
+// through two separate keys: CA'd into the pockets, standing KEY_PROUD above
+// the deck, with matching recesses in the bin's underside. Separate parts,
+// because tabs moulded onto the bin would make it print standing on two pads
+// with its whole floor bridging between them.
+POCKET_XS   = [RISER_X - RISER_HOLE_PITCH_L/2, RISER_X + RISER_HOLE_PITCH_L/2];
+POCKET_Y    = RISER_Y;
+POCKET_W    = RAIL_W + 0.4;   POCKET_L = RAIL_L + 0.4;   // 10.4 x 47.4, RAIL_POCKET deep
+KEY_CLR     = 0.2;            // per side, key in pocket and recess over key
+KEY_W       = POCKET_W - 2*KEY_CLR;   KEY_L = POCKET_L - 2*KEY_CLR;
+KEY_PROUD   = 0.8;
+KEY_H       = RAIL_POCKET + KEY_PROUD;
+RECESS_D    = KEY_PROUD + 0.2;
 

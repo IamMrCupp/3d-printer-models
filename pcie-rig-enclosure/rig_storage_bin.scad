@@ -10,10 +10,12 @@
 //   front-left  the x1 card, lying flat in a 33 x 31 bay
 //   front-right the USB 3.0 lead, coiled in whatever is left
 //
-// Glued flat on the deck, its back edge flush with the deck's back edge. NO
-// locating tabs into the empty rail pockets: with tabs the bin would print
-// standing on two small pads and its whole floor would bridge between them —
-// the exact failure that scrapped two bases. Floor on the bed, nothing bridges.
+// Glued flat on the deck, its back edge flush with the deck's back edge, and
+// located by two separate keys (rig_bin_key.scad) that sit in the deck's empty
+// rail pockets and stand 0.8 proud; the bin's underside has matching recesses.
+// The keys are separate on purpose: moulded on, they would make the bin print
+// standing on two pads with its whole floor bridging between them — the exact
+// failure that scrapped two bases. The recesses bridge 10.6 mm, which is fine.
 //
 // Print as emitted: floor down, no supports. PETG.
 
@@ -33,12 +35,16 @@ module rig_storage_bin() {
         // finger scoops in the front wall of both front bays
         scoop(-LEN/2 + X1_BAY/2, -OD/2 + BW/2);
         scoop(-LEN/2 + X1_BAY + BW + (LEN - X1_BAY - BW)/2, -OD/2 + BW/2);
+        // key recesses in the underside, over the deck's rail pockets
+        for (x = POCKET_XS) translate([x - BIN_X, POCKET_Y - BIN_Y, -1])
+            linear_extrude(RECESS_D + 1) square([KEY_W + 2*KEY_CLR, KEY_L + 2*KEY_CLR], center = true);
     }
 }
 
 rig_storage_bin();
 
 assert(ROW2 >= X1_D + 2*BCLR, "front row too shallow for the x1 card");
+assert(BF - RECESS_D >= 1.2, "floor too thin over the key recesses");
 assert(abs(BIN_X) + OW/2 <= W/2, "bin overhangs the deck's side edge");
 assert(BIN_Y - OD/2 >= BEZEL_BACK + FRONT_CLEAR - 0.01, "bin sits on the meter bezel");
 assert(BIN_X + OW/2 < SW_X - 23/2 || BIN_Y - OD/2 > SW_Y + 23/2, "bin sits on the rocker bezel");
