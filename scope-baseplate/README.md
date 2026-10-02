@@ -163,7 +163,7 @@ Measured on the rendered mesh, not asserted:
 - **Slides on** — a plateau solid swept the full insertion path, 14 positions, no contact until seated
 - **Seats and stops** — clear at 0 mm, bears on the far wall at +1 mm
 - **Every socket clear** — `tools/check_sockets.py`, the check that was missing from v2.0.0
-- Clean on **OpenSCAD 2021.01** (what CI runs) as well as current builds
+- Clean on **OpenSCAD 2021.01** (CI's renderer until [#166](https://github.com/IamMrCupp/3d-printer-models/issues/166)) as well as current builds
 
 ## Source
 
