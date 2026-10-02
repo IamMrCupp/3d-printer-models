@@ -1,0 +1,66 @@
+// rig_storage_bin.scad — a three-bay bin glued to the cup's deck for the riser kit.
+//
+// Replaces the riser dock. The dock's pegs sat on the calipered 99 x 37 hole
+// pitch, which was never coupon-tested for pitch, and it was wrong in both
+// directions on the printed cup (2026-10-01). Not reprinting the cup, so the
+// kit stores in a bin on top instead:
+//
+//   rear bay    the x16 board on its long edge (slot 17 + clearance, 126.55 long),
+//               standing 43.20 — sticks up ~13 above the 30 mm walls to grab
+//   front-left  the x1 card, lying flat in a 33 x 31 bay
+//   front-right the USB 3.0 lead, coiled in whatever is left
+//
+// Glued flat on the deck, its back edge flush with the deck's back edge. NO
+// locating tabs into the empty rail pockets: with tabs the bin would print
+// standing on two small pads and its whole floor would bridge between them —
+// the exact failure that scrapped two bases. Floor on the bed, nothing bridges.
+//
+// Print as emitted: floor down, no supports. PETG.
+
+include <rig_common.scad>
+
+/* [Measured] */
+X16_L = 126.55;  X16_T = 17;   // board on edge: length, thickness lying flat (user 2026-10-01)
+X1_W  = 33;      X1_D  = 31;   // x1 card bay (user 2026-10-01)
+
+/* [Bin] */
+BW    = 1.6;      // walls and dividers — four 0.4 lines
+BF    = 1.6;      // floor
+BH    = 30;       // wall height; the x16 board stands 43.20
+BCLR  = 1.0;      // per side
+FRONT_CLEAR = 5;  // gap to the meter bezel's back edge
+
+ROW1  = X16_T + 2*BCLR;                    // 19 — x16 slot
+LEN   = X16_L + 2*BCLR;                    // 128.55 inner length
+OW    = LEN + 2*BW;                        // 131.75
+BEZEL_BACK = METER_Y + 49/2;               // -13.5, the meter bezel's back edge
+OD    = D/2 - (BEZEL_BACK + FRONT_CLEAR);  // as deep as the deck allows
+ROW2  = OD - ROW1 - 3*BW;                  // front row depth
+X1_BAY = X1_W + 2*BCLR;                    // 35
+BIN_X = RISER_X;                           // where the dock was
+BIN_Y = D/2 - OD/2;                        // back edge flush with the deck's
+
+module scoop(x, y_wall) { translate([x, y_wall, BH]) rotate([90, 0, 0]) cylinder(r = 10, h = BW*4, center = true); }
+
+module rig_storage_bin() {
+    difference() {
+        translate([-OW/2, -OD/2, 0]) cube([OW, OD, BH]);
+        // rear bay: x16 board on its long edge
+        translate([-LEN/2, OD/2 - BW - ROW1, BF]) cube([LEN, ROW1, BH]);
+        // front-left: x1 card, flat
+        translate([-LEN/2, -OD/2 + BW, BF]) cube([X1_BAY, ROW2, BH]);
+        // front-right: USB lead
+        translate([-LEN/2 + X1_BAY + BW, -OD/2 + BW, BF]) cube([LEN - X1_BAY - BW, ROW2, BH]);
+        // finger scoops in the front wall of both front bays
+        scoop(-LEN/2 + X1_BAY/2, -OD/2 + BW/2);
+        scoop(-LEN/2 + X1_BAY + BW + (LEN - X1_BAY - BW)/2, -OD/2 + BW/2);
+    }
+}
+
+rig_storage_bin();
+
+assert(ROW2 >= X1_D + 2*BCLR, "front row too shallow for the x1 card");
+assert(abs(BIN_X) + OW/2 <= W/2, "bin overhangs the deck's side edge");
+assert(BIN_Y - OD/2 >= BEZEL_BACK + FRONT_CLEAR - 0.01, "bin sits on the meter bezel");
+assert(BIN_X + OW/2 < SW_X - 23/2 || BIN_Y - OD/2 > SW_Y + 23/2, "bin sits on the rocker bezel");
+echo(str("rig_storage_bin: ", OW, " x ", OD, " x ", BH, " mm; x16 slot ", ROW1, ", x1 bay ", X1_BAY, " x ", ROW2, ", USB bay ", LEN - X1_BAY - BW, " x ", ROW2, "; deck position x=", BIN_X, " y=", BIN_Y));
