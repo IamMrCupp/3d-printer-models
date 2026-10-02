@@ -6,7 +6,7 @@
 // holds without a fight. Snap the rails off the sprue; the two you keep are
 // the two you glue in.
 
-use <../rig_dock_rail.scad>
+use <rig_dock_rail.scad>
 include <../rig_common.scad>
 
 LADDER = [3.6, 3.7, 3.8, 3.9];

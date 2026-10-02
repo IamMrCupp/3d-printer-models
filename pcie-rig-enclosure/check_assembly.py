@@ -31,7 +31,7 @@ except ImportError:
 PRELUDE = """
 use <@HERE@/rig_base.scad>
 use <@HERE@/rig_cup.scad>
-use <@HERE@/rig_dock_rail.scad>
+use <@HERE@/coupons/rig_dock_rail.scad>
 use <@HERE@/rig_storage_bin.scad>
 use <@HERE@/rig_bin_key.scad>
 include <@HERE@/rig_common.scad>

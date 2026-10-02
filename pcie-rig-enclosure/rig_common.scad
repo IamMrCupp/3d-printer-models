@@ -4,20 +4,21 @@
 // 4x4 Clickfinity-footed box. Wiring lives in github.com/IamMrCupp/pcie-gpu-test-rig
 // (WIRING.md, wiring/pcie_rig_power.kicad_sch); this file is the geometry.
 //
-// TWO PRINTED PARTS + two small rails:
+// THREE PRINTED PARTS + two small keys:
 //
 //   rig_base      footed floor plate with a raised tongue round its edge and
-//                 four screw bosses. The electronics floor — the fuse holder
-//                 and WAGO sit on it. Prints feet-down, like any bin.
+//                 four screw bosses. The electronics floor — the WAGO bus
+//                 sits on it. Prints feet-down, like any bin.
 //   rig_cup       top deck + four walls, open bottom, skirted to wrap the
 //                 base's tongue. EVERY electrical part lives here (meter +
 //                 switch + probe post on the deck, XT60 + banana input on the
 //                 rear wall, XT60 + banana output on the right), so the wiring
 //                 never crosses a joint and the top is fixed. Prints deck-down:
 //                 the panel cutouts land on the bed.
-//   rig_dock_rail two small rails that CA into pockets on the deck; their
-//                 pegs hold the x16 riser board by its four mining holes.
-//                 Separate because a peg can't grow off a face that's on the bed.
+//   rig_storage_bin  a three-bay bin glued to the deck for the riser kit, located
+//                 by two rig_bin_key keys in the deck's empty rail pockets. It
+//                 replaced the riser dock (now coupons/rig_dock_rail.scad), whose
+//                 calipered peg pitch missed the board in both directions.
 //
 // The leads live in a parts drawer, not in the box — the drawer bay that
 // earlier revisions carried underneath (frame + shelf + drawer, ~450 cm3 and
