@@ -19,27 +19,6 @@
 
 include <rig_common.scad>
 
-/* [Measured] */
-X16_L = 126.55;  X16_T = 17;   // board on edge: length, thickness lying flat (user 2026-10-01)
-X1_W  = 33;      X1_D  = 31;   // x1 card bay (user 2026-10-01)
-
-/* [Bin] */
-BW    = 1.6;      // walls and dividers — four 0.4 lines
-BF    = 1.6;      // floor
-BH    = 30;       // wall height; the x16 board stands 43.20
-BCLR  = 1.0;      // per side
-FRONT_CLEAR = 5;  // gap to the meter bezel's back edge
-
-ROW1  = X16_T + 2*BCLR;                    // 19 — x16 slot
-LEN   = X16_L + 2*BCLR;                    // 128.55 inner length
-OW    = LEN + 2*BW;                        // 131.75
-BEZEL_BACK = METER_Y + 49/2;               // -13.5, the meter bezel's back edge
-OD    = D/2 - (BEZEL_BACK + FRONT_CLEAR);  // as deep as the deck allows
-ROW2  = OD - ROW1 - 3*BW;                  // front row depth
-X1_BAY = X1_W + 2*BCLR;                    // 35
-BIN_X = RISER_X;                           // where the dock was
-BIN_Y = D/2 - OD/2;                        // back edge flush with the deck's
-
 module scoop(x, y_wall) { translate([x, y_wall, BH]) rotate([90, 0, 0]) cylinder(r = 10, h = BW*4, center = true); }
 
 module rig_storage_bin() {
