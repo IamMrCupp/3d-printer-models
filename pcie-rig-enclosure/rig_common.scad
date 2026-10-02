@@ -204,7 +204,8 @@ BEZEL_BACK = METER_Y + 49/2;               // -13.5, the meter bezel's back edge
 OD    = D/2 - (BEZEL_BACK + FRONT_CLEAR);  // as deep as the deck allows
 ROW2  = OD - ROW1 - 3*BW;                  // front row depth
 X1_BAY = X1_W + 2*BCLR;                    // 35
-BIN_X = RISER_X;                           // where the dock was
+BIN_X = RISER_X + 1;                       // 1 mm right of the old dock: at RISER_X the back-left
+                                           // corner hung 0.1 mm past the deck's rounded corner
 BIN_Y = D/2 - OD/2;                        // back edge flush with the deck's
 
 /* [Storage bin — locating keys] */

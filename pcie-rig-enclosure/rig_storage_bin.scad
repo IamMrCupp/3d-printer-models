@@ -45,7 +45,8 @@ rig_storage_bin();
 
 assert(ROW2 >= X1_D + 2*BCLR, "front row too shallow for the x1 card");
 assert(BF - RECESS_D >= 1.2, "floor too thin over the key recesses");
-assert(abs(BIN_X) + OW/2 <= W/2, "bin overhangs the deck's side edge");
+assert(BIN_X - OW/2 >= -(W/2 - BIN_R), "bin's back-left corner hangs past the deck's rounded corner");
+assert(BIN_X + OW/2 <= W/2 - BIN_R, "bin's back-right corner hangs past the deck's rounded corner");
 assert(BIN_Y - OD/2 >= BEZEL_BACK + FRONT_CLEAR - 0.01, "bin sits on the meter bezel");
 assert(BIN_X + OW/2 < SW_X - 23/2 || BIN_Y - OD/2 > SW_Y + 23/2, "bin sits on the rocker bezel");
 echo(str("rig_storage_bin: ", OW, " x ", OD, " x ", BH, " mm; x16 slot ", ROW1, ", x1 bay ", X1_BAY, " x ", ROW2, ", USB bay ", LEN - X1_BAY - BW, " x ", ROW2, "; deck position x=", BIN_X, " y=", BIN_Y));
