@@ -1,4 +1,10 @@
-// rig_dock_rail.scad — one of two rails that hold the x16 riser on the deck.
+// rig_dock_rail.scad — SUPERSEDED by rig_storage_bin. Kept for the record.
+//
+// Its pegs sat on the calipered 99 x 37 hole pitch, which was never coupon-tested
+// for pitch, and missed the board's holes in both directions on the printed cup
+// (2026-10-01). Lives in coupons/ so releases don't ship it as a part.
+//
+// Original note: one of two rails that hold the x16 riser on the deck.
 //
 // The board (PCE164P-N03 VER 006C) has the x16 slot flush along one long edge,
 // capacitors crowding the other, and the 6-pin + USB filling a short end, so
@@ -13,7 +19,7 @@
 //
 // PEG_D is the fit that matters — print coupons/dock_rail_ladder.scad first.
 
-include <rig_common.scad>
+include <../rig_common.scad>
 
 module rig_dock_rail(peg_d = PEG_D) {
     peg_h = PEG_H_ABOVE_DECK - (RAIL_T - RAIL_POCKET);   // above the rail's top
