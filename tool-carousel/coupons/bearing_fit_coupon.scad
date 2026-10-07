@@ -13,8 +13,8 @@
 //                     Want: the bearing slides on with no rocking and spins
 //                     freely all the way down to the shoulder.
 //
-// WHICH IS WHICH: raised dots count 1-4, smallest size = 1 dot. Seat dots run
-// along the seat-side edge of the spine, post dots along the post-side edge. Seats and posts both run small → large from the left.
+// WHICH IS WHICH: raised dots on each feature count 1-4, smallest size = 1 dot —
+// on the top rim of each seat, and on the shoulder around each post. Seats and posts both run small → large from the left.
 //
 // PRINT: flat as emitted, no supports. ~12 g.
 //
@@ -54,10 +54,13 @@ assert(PAD_D > max(POSTS) + 4, "Post foot too small to be a shoulder.");
 function seat_x(i) = ring_pitch*(i + 0.5);
 function post_x(i) = post_pitch*(i + 0.5);
 
-module dots(n, x, y) {
+// n dots on an arc of radius r about the feature's centre, at height z, centred
+// on angle a0 — so each count sits ON the feature it labels, not near it.
+module dots(n, r, z, a0) {
+    step = 2.4 / r * 180 / PI;          // 2.4 mm apart along the arc
     for (k = [0:n-1])
-        translate([x + (k - (n-1)/2)*2.4, y, SPINE_T - 0.01])
-            cylinder(d = DOT_D, h = DOT_H + 0.01, $fn = 16);
+        rotate([0, 0, a0 + (k - (n-1)/2) * step])
+            translate([r, 0, z - 0.01]) cylinder(d = DOT_D, h = DOT_H + 0.01, $fn = 16);
 }
 
 module seat(d) {
@@ -79,12 +82,16 @@ module post(d) {
 
 union() {
     cube([spine_l, SPINE_W, SPINE_T]);
-    for (i = [0:n_seat-1]) {
-        translate([seat_x(i), -ring_od/2 + JOIN, 0]) seat(SEATS[i]);
-        dots(i + 1, seat_x(i), SPINE_W*0.27);      // seat side of the spine
-    }
-    for (i = [0:n_post-1]) {
-        translate([post_x(i), SPINE_W + PAD_D/2 - JOIN, 0]) post(POSTS[i]);
-        dots(i + 1, post_x(i), SPINE_W*0.73);      // post side of the spine
-    }
+    for (i = [0:n_seat-1])
+        translate([seat_x(i), -ring_od/2 + JOIN, 0]) {
+            seat(SEATS[i]);
+            // on the ring's top rim, on the side away from the spine
+            dots(i + 1, (max(SEATS)/2 + ring_od/2) / 2, ring_h, 270);
+        }
+    for (i = [0:n_post-1])
+        translate([post_x(i), SPINE_W + PAD_D/2 - JOIN, 0]) {
+            post(POSTS[i]);
+            // on the shoulder, on the side away from the spine
+            dots(i + 1, (max(POSTS)/2 + PAD_D/2) / 2, SPINE_T, 90);
+        }
 }
