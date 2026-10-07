@@ -13,8 +13,8 @@
 //                     Want: the bearing slides on with no rocking and spins
 //                     freely all the way down to the shoulder.
 //
-// WHICH IS WHICH: the dots on the spine beside each feature count 1-4, smallest
-// size = 1 dot. Seats and posts both run small → large from the left.
+// WHICH IS WHICH: raised dots count 1-4, smallest size = 1 dot. Seat dots run
+// along the seat-side edge of the spine, post dots along the post-side edge. Seats and posts both run small → large from the left.
 //
 // PRINT: flat as emitted, no supports. ~12 g.
 //
@@ -81,8 +81,10 @@ union() {
     cube([spine_l, SPINE_W, SPINE_T]);
     for (i = [0:n_seat-1]) {
         translate([seat_x(i), -ring_od/2 + JOIN, 0]) seat(SEATS[i]);
-        dots(i + 1, seat_x(i), SPINE_W/2);
+        dots(i + 1, seat_x(i), SPINE_W*0.27);      // seat side of the spine
     }
-    for (i = [0:n_post-1])
+    for (i = [0:n_post-1]) {
         translate([post_x(i), SPINE_W + PAD_D/2 - JOIN, 0]) post(POSTS[i]);
+        dots(i + 1, post_x(i), SPINE_W*0.73);      // post side of the spine
+    }
 }
