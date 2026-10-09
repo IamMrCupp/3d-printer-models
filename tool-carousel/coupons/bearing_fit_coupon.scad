@@ -6,23 +6,26 @@
 // a PETG print makes of a 22 mm hole or an 8 mm pin is not, and that is all this
 // answers.
 //
-//   4 SEATS (rings)   bore 21.9 / 22.1 / 22.3 / 22.5, 7 mm deep on a 1 mm ledge.
+//   SEATS (rings)     round 1 bores 21.9 / 22.1 / 22.3 / 22.5, 7 mm deep on a 1 mm ledge.
 //                     Want: the bearing presses in by thumb and stays put upside
 //                     down. Push it back out through the bottom opening.
-//   4 POSTS           8 mm-nominal pins at 7.7 / 7.8 / 7.9 / 8.0, 10 mm tall.
+//   POSTS             8 mm-nominal pins, 10 mm tall; round 2 runs 8.1 / 8.2 / 8.3 / 8.4.
 //                     Want: the bearing slides on with no rocking and spins
 //                     freely all the way down to the shoulder.
 //
 // WHICH IS WHICH: raised dots on each feature count 1-4, smallest size = 1 dot —
 // on the top rim of each seat, and on the shoulder around each post. Seats and posts both run small → large from the left.
 //
-// PRINT: flat as emitted, no supports. ~12 g.
+// PRINT: flat as emitted, no supports. Round 1 ~14 g; round 2 (posts only) ~4 g.
 //
 // SPDX-License-Identifier: CC-BY-NC-4.0
 // Copyright (c) 2026 Aaron Cupp
 
-SEATS = [21.9, 22.1, 22.3, 22.5];   // bore, on the diameter
-POSTS = [7.7, 7.8, 7.9, 8.0];       // pin diameter
+// Round 1 (2026-10-09): seat 2 (22.1) is the press fit; ALL FOUR POSTS were loose,
+// 8.0 included — printed pins run undersize. Round 2 drops the seats (answered)
+// and moves the post ladder up. Set SEATS = [] to print posts only.
+SEATS = [];                         // round 1: [21.9, 22.1, 22.3, 22.5] → 22.1
+POSTS = [8.1, 8.2, 8.3, 8.4];       // round 1: [7.7, 7.8, 7.9, 8.0] → all loose
 
 BEARING_W  = 7.0;     // 608 width — the seat depth
 LEDGE      = 1.0;     // floor ring the bearing's outer race rests on
@@ -40,14 +43,14 @@ JOIN       = 1.0;     // how far rings and pads overlap the spine — partial-ar
                       //   joins, so they overlap volumetrically, never butt
 $fn = 128;
 
-ring_od   = max(SEATS) + 2*RING_WALL;
+ring_od   = (len(SEATS) ? max(SEATS) : 22) + 2*RING_WALL;
 ring_h    = LEDGE + BEARING_W;
 ring_pitch = ring_od + 3;
 post_pitch = PAD_D + 3;
 n_seat = len(SEATS); n_post = len(POSTS);
-spine_l = max(n_seat*ring_pitch, n_post*post_pitch);
+spine_l = max(n_seat*ring_pitch, n_post*post_pitch);   // posts-only: just the posts' length
 
-assert(LEDGE_ID < min(SEATS) - 1.5, "Ledge too narrow to hold the outer race.");
+assert(len(SEATS) == 0 || LEDGE_ID < min(SEATS) - 1.5, "Ledge too narrow to hold the outer race.");
 assert(LEDGE_ID > 19.0, "Ledge would touch the inner race / seals.");
 assert(PAD_D > max(POSTS) + 4, "Post foot too small to be a shoulder.");
 
@@ -82,11 +85,11 @@ module post(d) {
 
 union() {
     cube([spine_l, SPINE_W, SPINE_T]);
-    for (i = [0:n_seat-1])
+    if (n_seat > 0) for (i = [0:n_seat-1])
         translate([seat_x(i), -ring_od/2 + JOIN, 0]) {
             seat(SEATS[i]);
             // on the ring's top rim, on the side away from the spine
-            dots(i + 1, (max(SEATS)/2 + ring_od/2) / 2, ring_h, 270);
+            dots(i + 1, (SEATS[i]/2 + ring_od/2) / 2, ring_h, 270);
         }
     for (i = [0:n_post-1])
         translate([post_x(i), SPINE_W + PAD_D/2 - JOIN, 0]) {
