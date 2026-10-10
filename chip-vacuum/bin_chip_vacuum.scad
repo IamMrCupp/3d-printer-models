@@ -1,6 +1,6 @@
 // bin_chip_vacuum — 1×2: one cell stands the handheld chip-puller vacuum upright,
-// bottom end down; the other is an open well for its spare tip and suction cups,
-// so the tool and its bits lift out together.
+// bottom end down; the other is a LOW tray — a quarter of the vacuum side's height —
+// for its spare tip and suction cups, so the tool and its bits lift out together.
 //
 // MEASURED (survey/MEASUREMENTS.md, user's calipers, 2026-10-09):
 //   34 × 24 × 170 mm with its tip on; rectangular, slightly rounded corners;
@@ -37,7 +37,7 @@ CAPTURE  = 45;     // [30:1:80] how much of the body sits in the cup
 FLOOR    = 1.4;
 WALL     = 1.2;
 DIVIDER  = 3.0;    // between the vacuum pocket and the well
-WELL_DEPTH = 30;   // [15:1:45] shallower than the pocket so small parts are easy to pick out
+LOW_FRAC = 0.25;   // the parts side stands this fraction of the vacuum side's height (user, 2026-10-09)
 WELL_R   = 3;      // well corner radius
 
 POCKET_W = VAC_W + CLR;            // along X, the 1-cell width
@@ -45,20 +45,25 @@ POCKET_D = VAC_D + CLR;            // along Y
 H   = BIN_BASE_H + FLOOR + CAPTURE;
 W   = NX*GF - 0.5;  D = NY*GF - 0.5;
 POCKET_Y = -GF/2;                   // centred in the -Y cell
-WELL_Y0  = POCKET_Y + POCKET_D/2 + DIVIDER;
+WELL_Y0  = POCKET_Y + POCKET_D/2 + DIVIDER;   // also where the tall part ends
+H_LOW    = H * LOW_FRAC;
+WELL_DEPTH = H_LOW - BIN_BASE_H - FLOOR;
 WELL_Y1  = D/2 - WALL;
 WELL_W   = W - 2*WALL;
 
 assert(POCKET_W < W - 2*WALL, "Pocket breaks the side walls.");
 assert(POCKET_Y - POCKET_D/2 > -D/2 + WALL, "Pocket breaks the end wall.");
 assert(WELL_Y1 - WELL_Y0 > 25, "Well too short to be useful.");
+assert(WELL_DEPTH >= 5, "Parts tray under 5 mm deep — raise LOW_FRAC.");
 echo(str("bin ", W, " × ", D, " × ", H, "; pocket ", POCKET_W, " × ", POCKET_D, " × ", CAPTURE,
-         "; well ", WELL_W, " × ", WELL_Y1 - WELL_Y0, " × ", WELL_DEPTH));
+         "; parts side ", H_LOW, " tall, tray ", WELL_W, " × ", WELL_Y1 - WELL_Y0, " × ", WELL_DEPTH, " deep"));
 
 difference() {
     bin_blank(NX, NY, H);
+    // step the parts side down to H_LOW; the tall part ends at the divider
+    translate([-W, WELL_Y0, H_LOW]) cube([2*W, D, H]);
     translate([-POCKET_W/2, POCKET_Y - POCKET_D/2, BIN_BASE_H + FLOOR]) cube([POCKET_W, POCKET_D, CAPTURE + 1]);
-    translate([0, (WELL_Y0 + WELL_Y1)/2, H - WELL_DEPTH])
+    translate([0, (WELL_Y0 + WELL_Y1)/2, H_LOW - WELL_DEPTH])
         linear_extrude(WELL_DEPTH + 1) offset(r = WELL_R, $fn = 32) offset(delta = -WELL_R)
             square([WELL_W, WELL_Y1 - WELL_Y0], center = true);
 }
