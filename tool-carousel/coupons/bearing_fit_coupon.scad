@@ -21,9 +21,9 @@
 // SPDX-License-Identifier: CC-BY-NC-4.0
 // Copyright (c) 2026 Aaron Cupp
 
-// Round 1 (2026-10-09): seat 2 (22.1) is the press fit; ALL FOUR POSTS were loose,
-// 8.0 included — printed pins run undersize. Round 2 drops the seats (answered)
-// and moves the post ladder up. Set SEATS = [] to print posts only.
+// RESULT (2026-10-09): seat 22.1 is the press fit; post 8.1 is the snug fit.
+// Round 1 had every post loose (7.7-8.0); round 2 found 8.1, with 8.2-8.4 too
+// tight to go on. The carousel uses 22.1 / 8.1.
 SEATS = [];                         // round 1: [21.9, 22.1, 22.3, 22.5] → 22.1
 POSTS = [8.1, 8.2, 8.3, 8.4];       // round 1: [7.7, 7.8, 7.9, 8.0] → all loose
 
