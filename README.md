@@ -40,7 +40,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="soldering-station/preview.png" width="150"> | [**Soldering station mounts**](soldering-station/) | 2×5 plate anchoring the iron/desoldering stand. Tapered side rails wedge it, so the base's unmeasured rounded end never has to be known. |
 | <img src="reel-brackets/preview.png" width="150"> | [**Reel brackets**](reel-brackets/) | Shelf-edge clamps carrying an 8 mm rod of tape or wire reels. Print two; any rod length works. Hooks rather than sticks, so the load tightens the grip. |
 | <img src="tool-carousel/preview.png" width="150"> | [**Tool carousel**](tool-carousel/) | Spinning three-tier carousel on two 608 bearings for the hand tools by the board: drivers, bit blocks, picks, brushes and a ring of tweezers. Round base works on a bare desk; drops into a 3×3 Gridfinity dock on the bench. |
-| <img src="chip-vacuum/preview.png" width="150"> | [**Chip-puller vacuum cup**](chip-vacuum/) | 1×1 cup that stands a handheld chip-puller vacuum upright, bottom end down. Square-cornered pocket so its rounded corners stay clear and the flats do the holding. |
+| <img src="chip-vacuum/preview.png" width="150"> | [**Chip-puller vacuum bin**](chip-vacuum/) | 1×2: one cell stands a handheld chip-puller vacuum upright, bottom end down; the other is an open well for its spare tip and suction cups. Square-cornered pocket so the vacuum's rounded corners stay clear and the flats do the holding. |
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
 ## Downloading prints
