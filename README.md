@@ -39,6 +39,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="heat-gun-holder/preview.png" width="150"> | [**Heat gun holder**](heat-gun-holder/) | 2×2 plate the heat gun's magnetic bracket screws onto. Four cells because pulling the gun off the magnet beats what two cells will hold. |
 | <img src="soldering-station/preview.png" width="150"> | [**Soldering station mounts**](soldering-station/) | 2×5 plate anchoring the iron/desoldering stand. Tapered side rails wedge it, so the base's unmeasured rounded end never has to be known. |
 | <img src="reel-brackets/preview.png" width="150"> | [**Reel brackets**](reel-brackets/) | Shelf-edge clamps carrying an 8 mm rod of tape or wire reels. Print two; any rod length works. Hooks rather than sticks, so the load tightens the grip. |
+| <img src="tool-carousel/preview.png" width="150"> | [**Tool carousel**](tool-carousel/) | Spinning three-tier carousel on two 608 bearings for the hand tools by the board: drivers, bit blocks, picks, brushes and a ring of tweezers. Round base works on a bare desk; drops into a 3×3 Gridfinity dock on the bench. |
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
 ## Downloading prints
