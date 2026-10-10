@@ -12,11 +12,11 @@ A **1×2 Gridfinity bin** for a handheld, rechargeable chip-puller vacuum. One c
 
 ## Sized from the vacuum
 
-Calipered (`survey/MEASUREMENTS.md`, 2026-10-09): **34 × 24 × 170 mm** with its tip on, rectangular with slightly rounded corners. The bottom end is the largest part and goes into the cup.
+Calipered (`survey/MEASUREMENTS.md`, 2026-10-09): **34 × 24 × 170 mm** with its tip on, rectangular with slightly rounded corners. The bottom end is the largest part and goes into the pocket.
 
 - **Pocket 34.6 × 24.6, 45 mm deep.** 0.6 mm of clearance each way. The pocket's corners are square, so the vacuum's rounded corners never touch and the four flat sides do the holding.
-- **Closed floor.** The charge port is on the bottom face, but it won't charge standing in the cup, so there's no cable slot.
-- **45 mm of a 170 mm body** is a comfort choice. The cup latches into the grid, so nothing tips. It leans less than a degree and leaves plenty to grab.
+- **Closed floor.** The charge port is on the bottom face, but it won't charge standing in the bin, so there's no cable slot.
+- **45 mm of a 170 mm body** is a comfort choice. The bin latches into the grid, so nothing tips. It leans less than a degree and leaves plenty to grab.
 
 - **Open well, 39 × 46 mm, 30 mm deep** for the spare tip and suction cups. It's shallower than the vacuum pocket so small parts are easy to pick out, and it needs no measurements, since it's a compartment, not a fit.
 
