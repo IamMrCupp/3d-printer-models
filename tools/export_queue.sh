@@ -40,6 +40,7 @@ declare -a OVERRIDE=(
   "wick-solder-spool:21-wick-solder-spool"
   "baseplates:24-baseplates"
   "tool-carousel:25-tool-carousel"
+  "chip-vacuum:26-chip-vacuum"
   "hot-air-nozzles:22-hot-air-nozzles"
   "uv-mask-station:23-uv-mask-station"
 )
