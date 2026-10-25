@@ -70,14 +70,22 @@ module rack() {
     }
 }
 
-// A 20 mm slice through all three slots, flat-bottomed, walls COUPON_H tall: the
-// same slot widths and dividers as the rack, for a few grams.
-COUPON_L = 20;
-COUPON_H = 15;
-module coupon() {
-    difference() {
-        translate([-COUPON_L/2, -D/2, 0]) cube([COUPON_L, D, FLOOR + COUPON_H]);
-        for (i = [0:2])
-            translate([-COUPON_L, y_top(i) - slots[i], FLOOR]) cube([2*COUPON_L, slots[i], COUPON_H + 1]);
+// LAYOUT COUPON: the rack's exact top-view outline — outer walls, dividers, end
+// walls, the RL-605's open ends — at full length but only FRAME_H tall, with no
+// floor and no feet. Lay each fixture in its slot to check length AND thickness
+// for ~25 g instead of the whole rack.
+FRAME_H = 5;
+TIE_T   = 1;   // floor strip under the RL-605 slot only. Its open ends would
+               // otherwise cut the frame into two loose halves; the rack's own
+               // floor does this job. It runs 1 mm under each divider, a
+               // partial-area join, so it overlaps rather than butts.
+module layout_coupon() {
+    translate([-W/2, y_top(1) - slots[1] - 1, 0]) cube([W, slots[1] + 2, TIE_T]);
+    linear_extrude(FRAME_H) difference() {
+        offset(r = BIN_R) offset(delta = -BIN_R) square([W, D], center = true);
+        for (i = [0:2]) {
+            l = (i == 1) ? W + 2 : IN_X;     // RL-605 runs out both ends
+            translate([-l/2, y_top(i) - slots[i]]) square([l, slots[i]]);
+        }
     }
 }
