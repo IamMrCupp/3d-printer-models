@@ -18,17 +18,17 @@ Back to front, measured by the user:
 | Slot | Piece | Size | Stands | Slot width |
 |---|---|---|---|---|
 | back | AMAOE M81 heat mat | 190 × 245 × 8 | on its 190 edge, 245 tall | 12 |
-| middle | RELIFE RL-605 Pro | 179 × 210 × 24 | on its 210 edge, 179 tall | 28 |
+| middle | RELIFE RL-605 Pro | 179 × 210 × 24 | on its long edge, 179 tall | 28 |
 | front | RELIFE TF5 | 60 × 182 × 20 | on its 182 edge, 60 tall | 24 |
 
-**The RL-605's slot is open at both ends.** Five cells is 209.5 mm outside but about 207 inside the end walls, and the RL-605 is 210 long. So its plate sits across the full length, and the knobs halfway up each end hang over the ends, well above the rim. The other two fit between end walls.
+**Every slot has end walls,** so nothing slides out. The RL-605's slot uses thinner, 1.2 mm end walls to give it the most length five cells allow, about 207 mm inside. Its knobs are halfway up each end, well above the walls. The 210 above was measured in pieces with a 155 mm caliper and ran long; all three pieces fit the layout coupon.
 
 **Stepped:** the back section, holding the mat and RL-605, stands 60 mm above the floor, a third of the RL-605's height. The front section, holding the TF5, steps down to 30. The dividers beside the RL-605 are 3 mm and the floor is 2 mm, because it's the heavy one.
 
 ## Checked
 
 - **Layout coupon:** printed first. Everything fit with room to spare, TF5 included.
-- **Fit check:** each piece standing in its slot touches no wall and rests on the floor, and the RL-605's knobs clear the rack. A piece 5 mm too thick collides, which confirms the check can fail.
+- **Fit check:** each piece standing in its slot touches no wall and rests on the floor. The RL-605's slot has both end walls in place, and a full 210 mm piece would hit them, which confirms the check can fail.
 
 ## Recommended print settings
 
