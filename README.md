@@ -42,6 +42,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="tool-carousel/preview.png" width="150"> | [**Tool carousel**](tool-carousel/) | Spinning three-tier carousel on two 608 bearings for the hand tools by the board: drivers, bit blocks, picks, brushes and a ring of tweezers. Round base works on a bare desk; drops into a 3×3 Gridfinity dock on the bench. |
 | <img src="chip-vacuum/preview.png" width="150"> | [**Chip-puller vacuum bin**](chip-vacuum/) | 1×2: one cell stands a handheld chip-puller vacuum upright, bottom end down; the other is a low tray, a quarter of the height, for its spare tip and suction cups. Square-cornered pocket so the vacuum's rounded corners stay clear and the flats do the holding. |
 | <img src="fixture-rack/preview.png" width="150"> | [**Fixture rack**](fixture-rack/) | 5×2 storage rack standing three repair fixtures on edge: a heat mat, an RL-605 board holder and a TF5 fixture. Stepped low at the front; every slot walled at both ends so nothing slides out. |
+| <img src="mail-holder/preview.png" width="150"> | [**Oversized mail tray**](mail-holder/) | 265 × 215 × 38 mm tray for the shelf under the mail slot, with OVERSIZED MAIL inlaid in its floor in a second colour so the carrier puts big envelopes there instead of through the slot. |
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
 ## Downloading prints
