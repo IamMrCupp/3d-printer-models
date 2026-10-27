@@ -2,8 +2,9 @@
 // the mail slot, with OVERSIZED MAIL on its floor so the carrier stops stuffing
 // big envelopes through the slot.
 //
-// SIZE IS THE USER'S (2026-10-25): 265 × 215 footprint, 38 tall (1.5 in) — the largest
-// rectangle that fits the U1's 270 × 270 bed with room for a brim. Mail lies flat;
+// SIZE (user, 2026-10-25/26): 265 × 200 footprint, 38 tall (1.5 in). 265 is the
+// long side the user chose; the short side is what leaves room on the 270 bed for
+// the prime tower a two-colour print needs. Mail lies flat;
 // a 9 × 12 envelope (229 × 305) overhangs the long side a little, as in any tray.
 //
 // THE LABEL IS ON THE FLOOR, read from above, as a FLUSH TWO-COLOUR INLAY
@@ -23,7 +24,11 @@
 include <../lib/label.scad>
 
 W = 265;        // long side
-D = 215;        // short side
+D = 200;        // short side — was 215 in v1.0.0, which left no room on the
+                //   270 bed for the prime tower a two-colour print needs (user,
+                //   2026-10-26: auto-arrange pushed the tray off the plate). 200
+                //   leaves a 70 mm strip: ~30 tower + 5 brim each side + spacing.
+PRIME_STRIP = 70;   // what the bed must still have beside the tray
 H = 38;         // tall: 1.5 in (user, 2026-10-25)
 WALL  = 2.4;
 FLOOR = 2.4;    // carries the 0.8 mm label pocket
@@ -36,6 +41,7 @@ TXT_SIZE  = 26;
 LINE_GAP  = 14;  // between the two lines
 
 assert(W <= 270 && D <= 270, "Footprint over the U1's 270 × 270 bed.");
+assert(270 - D >= PRIME_STRIP, "No room left beside the tray for a two-colour prime tower.");
 assert(FLOOR > LABEL_T + 1.2, "Floor too thin under the label pocket.");
 
 $fn = 48;
