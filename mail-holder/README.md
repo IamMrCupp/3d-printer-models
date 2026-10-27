@@ -8,14 +8,14 @@ A **flat tray for oversized mail** that sits on the shelf below the mail slot, w
 
 | Part | File | Size | Print |
 |---|---|---|---|
-| **Tray** | `mail_holder.scad` | 265 × 215 × 38 mm (1.5 in) | ×1 — floor down, no supports |
+| **Tray** | `mail_holder.scad` | 265 × 200 × 38 mm (1.5 in) | ×1 — floor down, no supports |
 | **Letters** | `mail_holder_inlay.scad` | fills the 0.8 mm label pocket in the floor | with the tray, second colour |
 
-**Two colours:** load both STLs at the same origin, then give the tray one filament and the letters another. The letters fill a 0.8 mm pocket in the floor's top face, flush, so the colour change is only the top few layers of the floor. Print the tray alone for a one-colour engraved label.
+**Two colours:** load the tray, then add the letters to it **as a part of the same object**, not as a second object, or auto-arrange separates them. Give the tray one filament and the letters another. The letters fill a 0.8 mm pocket in the floor's top face, flush, so the colour change is only the top few layers of the floor. Print the tray alone for a one-colour engraved label.
 
 ## Sizes
 
-The footprint is the largest rectangle that fits the U1's 270 × 270 mm bed with room for a brim. Mail lies flat. A 9 × 12 inch envelope, 229 × 305 mm, overhangs the long side a little, as in any tray.
+The 265 mm length is the user's. The short side is 200 so the U1's 270 × 270 bed still has a 70 mm strip beside the tray for the **prime tower a two-colour print needs**. At 215 (v1.0.0), auto-arrange pushed the tray off the plate. Mail lies flat. A 9 × 12 inch envelope, 229 × 305 mm, overhangs the long side a little, as in any tray.
 
 - **Walls:** 2.4 mm. **Floor:** 2.4 mm, which leaves 1.6 under the label.
 - **Drain holes:** four, 6 mm, in the corners clear of the lettering, since an outside mail slot lets rain in.
