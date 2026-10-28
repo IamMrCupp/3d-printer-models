@@ -43,6 +43,7 @@ declare -a OVERRIDE=(
   "chip-vacuum:26-chip-vacuum"
   "fixture-rack:27-fixture-rack"
   "mail-holder:28-mail-holder"
+  "helping-hands-feet:29-helping-hands-feet"
   "hot-air-nozzles:22-hot-air-nozzles"
   "uv-mask-station:23-uv-mask-station"
 )
