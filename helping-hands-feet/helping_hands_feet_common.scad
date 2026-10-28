@@ -15,8 +15,8 @@
 // v1.0.0's plain press-fit peg fell out. foot(lip_d) adds a barb past the 3 mm
 // shank: a cone that squeezes through the hole, then a flat ledge that springs out
 // behind the steel. A slit across the barb lets its halves fold in on the way
-// through. LIP_D is undecided until coupons/lip_fit_coupon.scad says which pops
-// through and holds — 0 means no lip, as v1.0.0.
+// through. On coupons/lip_fit_coupon.scad the 4.8 lip worked and the user wanted
+// "a lil bigger" (2026-10-28), so 5.0 — one coupon step on. 0 means no lip, as v1.0.0.
 //
 // PRINT: in TPU 95A, pads down, pegs up, as emitted. No supports.
 //
@@ -32,7 +32,7 @@ FOOT_CHAM = 0.6;   // softens the bottom edge so it doesn't curl or catch
 N_FEET   = 2;
 GAP      = 6;      // between feet on the bed
 
-LIP_D    = 0;      // ❓ from the lip coupon; 0 = plain peg (v1.0.0)
+LIP_D    = 5.0;    // 4.8 worked on the coupon; one 0.2 step bigger, per the user
 LIP_L    = 1.5;    // barb length past the shank
 LIP_TIP  = 3.4;    // under the 3.83 hole, so the tip finds it
 SLIT_W   = 1.0;
