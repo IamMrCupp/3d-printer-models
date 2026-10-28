@@ -43,6 +43,7 @@ A collection of 3D-printable models authored as **OpenSCAD source**. STLs are re
 | <img src="chip-vacuum/preview.png" width="150"> | [**Chip-puller vacuum bin**](chip-vacuum/) | 1×2: one cell stands a handheld chip-puller vacuum upright, bottom end down; the other is a low tray, a quarter of the height, for its spare tip and suction cups. Square-cornered pocket so the vacuum's rounded corners stay clear and the flats do the holding. |
 | <img src="fixture-rack/preview.png" width="150"> | [**Fixture rack**](fixture-rack/) | 5×2 storage rack standing three repair fixtures on edge: a heat mat, an RL-605 board holder and a TF5 fixture. Stepped low at the front; every slot walled at both ends so nothing slides out. |
 | <img src="mail-holder/preview.png" width="150"> | [**Oversized mail tray**](mail-holder/) | 265 × 200 × 38 mm tray for the shelf under the mail slot, with OVERSIZED MAIL inlaid in its floor in a second colour so the carrier puts big envelopes there instead of through the slot. |
+| <img src="helping-hands-feet/preview.png" width="150"> | [**Helping-hands plate feet**](helping-hands-feet/) | Two pegged TPU feet that press into a helping-hands plate's foot holes instead of glued-on pads. Peg size chosen from a printed TPU coupon. |
 Each model lives in its own directory with the parametric `.scad` source, a `README.md` (dimensions, print settings, parameters), and a Blender `preview.png`.
 
 ## Downloading prints

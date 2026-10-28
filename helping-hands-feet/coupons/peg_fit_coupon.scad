@@ -15,6 +15,7 @@
 // SPDX-License-Identifier: CC-BY-NC-4.0
 // Copyright (c) 2026 Aaron Cupp
 
+// RESULT (2026-10-27): the 4.1 (4 dots) pressed in best — helping_hands_feet uses it.
 PEGS   = [3.8, 3.9, 4.0, 4.1];
 PEG_L  = 3.0;     // short enough for a blind hole of unknown depth
 PEG_CHAM = 0.4;   // lead-in at the tip
