@@ -1,4 +1,4 @@
-// joint_coupon.scad — one corner of the base and the matching corner of the
+// rig_joint_coupon.scad — one corner of the base and the matching corner of the
 // cup, so the skirt-over-tongue fit and the self-tapping screw get tried on
 // 13 g of plastic instead of two 130 cm3 parts.
 //
@@ -38,4 +38,4 @@ CUP_SAMPLE_H = SKIRT_H + 6;
 translate([-(SAMPLE/2 + GAP/2), 0, 0]) translate([-CX, -CY, 0]) base_corner();
 translate([ (SAMPLE/2 + GAP/2), 0, CUP_SAMPLE_H]) rotate([180, 0, 0]) translate([-CX, -CY, 0]) cup_corner();
 
-echo(str("joint_coupon: two ", SAMPLE, " mm corners; base top z=", Z_BASE_TOP, ", cup sample ", SKIRT_H + 6, " tall"));
+echo(str("rig_joint_coupon: two ", SAMPLE, " mm corners; base top z=", Z_BASE_TOP, ", cup sample ", SKIRT_H + 6, " tall"));

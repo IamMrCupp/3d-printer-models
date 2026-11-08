@@ -21,7 +21,7 @@ The electrical side — KiCad schematic, wiring guide, parts, lead builds — is
 | **Meter + fuse coupon** | `coupons/meter_fuse_coupon.scad` | 98 × 244 × 3 mm | **print second** — three meter frames stepping the long axis, the fuse ladder, the rocker + post at their chosen sizes, and a row of the panel words at full size. All text is on the **bed face**, mirrored, the way the deck's labels print. Four pieces. 27 cm³. `meter_fuse_coupon_inlay.scad` is its second colour |
 | **XT60 coupon** | `coupons/xt60_coupon.scad` | 90 × 72 × 3 mm | **print before the cup** — both XT60E cutouts at two clearances each, with ear holes to bolt the flanges on. 16 cm³ |
 | **XT60 ear ladder** | `coupons/xt60_ear_ladder.scad` | 90 × 54 × 3 mm | **print after the XT60 coupon** — ear-hole pairs for both connectors with the pitch pulled in by 0 / 0.4 / 0.8 mm, 3.2 holes. The first coupon's pairs sat too far apart. 14 cm³ |
-| **Joint coupon** | `coupons/joint_coupon.scad` | 88 × 40 × 16.75 mm | **print first** — a corner of the base and the matching corner of the cup: skirt fit + screw. Two pieces. 16 cm³ |
+| **Joint coupon** | `coupons/rig_joint_coupon.scad` | 88 × 40 × 16.75 mm | **print first** — a corner of the base and the matching corner of the cup: skirt fit + screw. Two pieces. 16 cm³ |
 
 About 360 cm³ for the box in the model, all PETG. Assembled it stands 52 mm above the plate's socket floor.
 
@@ -67,7 +67,7 @@ Every panel hole has now been fitted on a printed coupon except the two XT60s, w
 1. **`coupons/deck_coupon.scad`** — 3 mm plate with the meter cutout, a three-step ladder for the rocker and for the binding post, and an engraved label to judge legibility. Push each part in, note which step fits, set `SW_HOLE` / `POST_HOLE` to match. Print `coupons/xt60_coupon.scad` before the cup and set `XT60_CLR` to the clearance that bolts up without forcing.
 2. **`coupons/dock_rail_ladder.scad`** — four rails at 3.6 / 3.7 / 3.8 / 3.9. Push the riser onto each; set `PEG_D` to the one that holds without a fight. Snap off the two you'll use — they're the real rails.
 3. **`coupons/meter_fuse_coupon.scad`** — the deck coupon's follow-up. Pick the tightest meter frame the display goes into without forcing a clip and whose clips still catch; pick the fuse hole that takes the holder. Set `METER_CLR_L` / `FUSE_HOLE`. The rocker and post holes should simply fit.
-4. **`coupons/joint_coupon.scad`** — a corner of each big part. Drop the cup corner over the base corner: it should go on by hand and not rattle. Run an M3 × 10 into the pilot: it should bite without splitting the boss. Adjust `JOINT_CLR` / `SCREW_TAP` if not.
+4. **`coupons/rig_joint_coupon.scad`** — a corner of each big part. Drop the cup corner over the base corner: it should go on by hand and not rattle. Run an M3 × 10 into the pilot: it should bite without splitting the boss. Adjust `JOINT_CLR` / `SCREW_TAP` if not.
 5. Then the box: base, cup. The coupons fit a bed together; the base does not fit beside them.
 
 ## Verified

@@ -51,7 +51,7 @@ Z_TOP = 60.0      # highest layer worth checking (all parts are shorter)
 
 PARTS = ["rig_base", "rig_cup", "rig_storage_bin", "rig_bin_key", "coupons/rig_dock_rail",
          "coupons/deck_coupon", "coupons/meter_fuse_coupon", "coupons/xt60_coupon",
-         "coupons/joint_coupon", "coupons/dock_rail_ladder"]
+         "coupons/rig_joint_coupon", "coupons/dock_rail_ladder"]
 
 def slice_at(mesh, z):
     """The solid cross-section at height z, in WORLD x/y (not the library's
