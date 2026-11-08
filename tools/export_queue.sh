@@ -46,21 +46,20 @@ declare -a OVERRIDE=(
   "helping-hands-feet:29-helping-hands-feet"
   "hot-air-nozzles:22-hot-air-nozzles"
   "uv-mask-station:23-uv-mask-station"
+  "instrument-holders:30-instrument-holders"
+  "psu-locators:31-psu-locators"
+  "syringe-holders:32-syringe-holders"
+  "engindot-shortkiller-topper:33-engindot-shortkiller-topper"
+  "owon-spm8104-tray:34-owon-spm8104-tray"
+  "drybox-splitter-stand:35-drybox-splitter-stand"
+  "pcie-rig-enclosure:36-pcie-rig-enclosure"
 )
 
-# Models deliberately NOT in the queue: printed and confirmed in service, so an
-# STL sitting in the print list is noise. See the queue README's "Not here, and
-# why". Listed rather than silently skipped, so removing one is a decision.
-# uv-mask-station came OFF this list 2026-09-08: plate_oiler is new and unprinted,
-# so the directory has to be queued again. Its other parts are already in service.
-declare -a NOT_QUEUED=(
-  # psu-locators landed 2026-09-09 from worktree-bench-holders, was printed from
-  # that worktree and is in service, so an STL in the print list would be noise.
-  # (baseplates came off this list 2026-09-23: new plate sizes and the keys.)
-  psu-locators
-  syringe-holders instrument-holders engindot-shortkiller-topper
-  owon-spm8104-tray drybox-splitter-stand bench-cleaning-station-legacy
-)
+# Models deliberately NOT in the queue. Empty since 2026-11-07: the user wants
+# EVERY model in the queue, printed or not — parts already in service were
+# being left out, and then couldn't be found when a reprint was needed. Only add
+# one back on the user's say-so.
+declare -a NOT_QUEUED=()
 
 # Models whose CURRENT source lives on an unmerged branch. Exporting these from
 # main would overwrite a newer STL with an older one — the exact regression this
