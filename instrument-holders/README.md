@@ -17,6 +17,7 @@ cable dresses away. Nothing coils up inside.
 | **DSLogic dock** | `bin_dslogic.scad` | 2×3, 18 mm | ×1 — **open front**, rear cord notch |
 | **T48 dock** | `bin_t48.scad` | 2×3, 34 mm | ×1 — rear cord notch |
 | **T48 adapter pocket** | `bin_t48_adapters.scad` | 2×3, 30 mm | ×1 |
+| **Programmer adapter tray** | `bin_programmer_adapters.scad` | 6×2, 30 mm | ×1 — all T48 + T76 adapters |
 | **LCR-P1 dock** | `bin_lcr_p1.scad` | 2×3, 26 mm | ×1 |
 | **T48 tool bin** | `bin_t48_tools.scad` | 3×2, 28 mm | ×1 — extractors + ribbon adapter |
 | **DSLogic kit bin** | `bin_dslogic_kit.scad` | 3×3, 51 mm | ×1 — **divided**, harness + clips |
